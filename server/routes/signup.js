@@ -1,13 +1,14 @@
-import { Router } from "express";
-import userSchema from "../models/userSchema";
+const express = require("express");
+const userSchema = require("../models/userSchema");
 
-const router = new Router();
+const router = express.Router();
 
 // import all controllers
-// import SessionController from './app/controllers/SessionController';
 
 // Add routes
-// routes.get('/', SessionController.store);
+router.get("/", (req, res) => {
+  res.json({ message: "signup page" });
+});
 router.post("/", async (req, res) => {
   const newUser = new userSchema({
     name: req.body.name,

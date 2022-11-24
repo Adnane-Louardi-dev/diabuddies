@@ -1,7 +1,6 @@
-import { Router } from "express";
-import userSchema from "../models/userSchema";
-
-const router = new Router();
+const express = require("express");
+const router = express.Router();
+const userSchema = require("../models/userSchema");
 
 //gets all profiles
 router.get("/", async (req, res) => {
