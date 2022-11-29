@@ -1,9 +1,23 @@
+/** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ["./node_modules/flowbite-react/**/*.js", "./pages/**/*.{ts,tsx}", "./public/**/*.html"],
-  plugins: [require("flowbite/plugin")],
+  content: ["./node_modules/flowbite-react/**/*.js", "./pages/**/*.{js,ts,jsx,tsx}", "./components/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    colors: {
-      diabetesGreen: "#3AB0FF",
+    extend: {
+      fontFamily: {
+        inter: ["Inter", "sans-serif"],
+        poppins: ["Poppins", "sans-serif"],
+        roboto: ["Roboto", "sans-serif"],
+        rubik: ["Rubik", "sans-serif"],
+      },
+      colors: {
+        diaBlue: "#3AB0FF",
+        diaGray: "#666666",
+        diaOrange: "#FFB562",
+        diaRed: "#F87474",
+        diaGreen: "#93FFD8",
+      },
     },
   },
+
+  plugins: [require("flowbite/plugin")],
 };
