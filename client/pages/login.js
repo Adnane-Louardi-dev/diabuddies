@@ -6,11 +6,14 @@ export default function Login() {
     <div className="h-full h-screen">
       <div className="flex flex-row items-center h-screen ">
         <div className="flex-none justify-center content-center basis-1/3 px-20">
-          <h1 className="my-5 text-2xl font-inter font-semibold">Create an Account</h1>
+          <div className="my-5 py-5">
+            <h1 className="mb-2 -left-1text-2xl font-inter font-semibold">Create an Account</h1>
+            <span className="text-md text-gray-400 font-inter">Let's manage your diabetes together.</span>
+          </div>
           <form className="flex flex-col gap-4 font-rubik">
             <div className="pb-5 border-b-2">
               <Link href={"/login/auth/google"} passHref>
-                <Button className="flex justify-center w-full bg-transparent hover:bg-diaGray border-2xl border-diaGray text-diaGray hover:text-white rounded-full ">
+                <Button className="flex justify-center w-full bg-diaGreen hover:bg-transparent text-white hover:text-diaGray hover:border-diaGray rounded-full">
                   <Icon icon="fa:google" />
                   <span className="mx-3">Sign up with Google</span>
                 </Button>
@@ -43,7 +46,7 @@ export default function Login() {
                 </Link>
               </Label>
             </div>
-            <Button type="submit" className="bg-diaGray hover:bg-transparent hover:border-2 border-diaGray text-white hover:text-diaGray rounded-full">
+            <Button type="submit" className="bg-diaGray hover:bg-diaGreen text-white rounded-full">
               Register new account
             </Button>
           </form>
