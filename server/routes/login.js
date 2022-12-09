@@ -9,7 +9,7 @@ passport.use(
     {
       clientID: process.env.GOOGLE_CLIENT_ID,
       clientSecret: process.env.GOOGLE_CLIENT_KEY,
-      callbackURL: "http://localhost:3001/login/auth/google/callback",
+      callbackURL: "http://localhost:3000/login/auth/google/callback",
     },
     async (accessToken, refreshToken, profile, cb) => {
       // try {
@@ -52,10 +52,14 @@ passport.deserializeUser((user, done) => {
   done(null, user);
 });
 
-router.get("/", passport.authenticate("google", { scope: ["profile"] }));
+router.get("/auth/google", passport.authenticate("google", { scope: ["profile"] }));
 
-router.get("/auth/google/callback", passport.authenticate("google", { successRedirect: "/", failureRedirect: "/login" }), function (req, res) {
-  // Successful authentication, redirect home.
-  res.redirect("/");
-});
+router.get(
+  "/auth/google/callback",
+  passport.authenticate("google", { successRedirect: "http://localhost:3001/", failureRedirect: "/login" }),
+  function (req, res) {
+    // Successful authentication, redirect home.
+    res.redirect("/");
+  }
+);
 module.exports = router;
