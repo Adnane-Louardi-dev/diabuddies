@@ -9,24 +9,21 @@ export default function Home() {
   const [Data, setData] = useState({});
   useEffect(() => {
     axios
-      .get("http://localhost:3000/")
+      .get("http://localhost:3000/", { withCredentials: true })
       .then((fullData) => {
         const data = JSON.stringify(fullData.data);
-
-        setData(data);
-        return data;
-      })
-      .then((data) => {
-        console.log(data);
-        if (!data) {
+        console.log(fullData);
+        if (!data || data === "{}") {
           router.push({
             pathname: "/login",
+            query: { returnUrl: router.asPath },
           });
         }
+        setData(data);
       })
       .catch((e) => {
         console.log(e);
       });
-  }, []);
-  return <div className="text-greeno">hello</div>;
+  }, [Data]);
+  return <div className="">hello user</div>;
 }

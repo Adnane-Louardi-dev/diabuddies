@@ -15,15 +15,21 @@ mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD
 );
 
 //middleswares
-app.use(cors());
+app.use(
+  cors({
+    origin: "http://localhost:3001",
+    methods: ["POST", "PUT", "GET", "OPTIONS", "HEAD"],
+    credentials: true,
+  })
+);
 app.use(express.json());
 app.use(
   session({
     resave: true,
     saveUninitialized: true,
     secret: process.env.SESSION_SECRET,
-    maxAge: new Date(Date.now() + 3600000), //1 Hour
-    expires: new Date(Date.now() + 3600000), //1 Hour
+    maxAge: new Date(Date.now() + 3600000 * 5), //5 Hours
+    expires: new Date(Date.now() + 3600000 * 24), //24 Hours
   })
 );
 app.use(passport.session());
@@ -35,13 +41,13 @@ app.use("/signup", signup);
 //ensure that user is log in
 const isLoggedIn = (req, res, next) => {
   // req.user ? next() : res.redirect("/login");
-  req.user ? next() : res.redirect("/login/auth/google");
+  req.user ? next() : res.redirect("http://localhost:3001/login");
 };
 //
-app.get("/", isLoggedIn, (req, res) => {
-  res.res({ user: req.user });
+app.get("/", (req, res) => {
+  res.json({ user: req.user });
 });
-app.get("/dashboard", isLoggedIn, (req, res) => {
+app.get("/dashboard", (req, res) => {
   res.json({ message: `hi ${req.user.name.givenName}` });
 });
 app.get("/logout", function (req, res, next) {

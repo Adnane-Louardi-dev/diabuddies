@@ -12,12 +12,6 @@ passport.use(
       callbackURL: "http://localhost:3000/login/auth/google/callback",
     },
     async (accessToken, refreshToken, profile, cb) => {
-      // try {
-      //   const existUser = await userSchema.findOne({ googleId: profile.user?.id });
-      //   return cb(null, existUser);
-      // } catch (e) {
-      //   console.log({ error: e });
-      // }
       userSchema.findOne({ googleId: profile.id }, function (err, user) {
         //create a new user if the user doesn't exist in the DB
         if (!user) {
@@ -29,19 +23,11 @@ passport.use(
             return cb(err, newUser);
           });
         } else {
+          console.log(accessToken);
+          console.log(refreshToken);
           return cb(err, user);
         }
       });
-
-      // if (existUser) {
-      //   return cb(null, existUser);
-      // } else {
-      //   // const newUser = new userSchema({
-      //   //   id: profile.user.id,
-      //   //   name: profile.user.displayName,
-      //   // }).save();
-      //   return cb(null, profile);
-      // }
     }
   )
 );
