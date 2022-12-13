@@ -12,18 +12,18 @@ export default function Home() {
       .get("http://localhost:3000/", { withCredentials: true })
       .then((fullData) => {
         const data = JSON.stringify(fullData.data);
-        console.log(fullData);
+        console.log(data);
         if (!data || data === "{}") {
           router.push({
             pathname: "/login",
             query: { returnUrl: router.asPath },
           });
         }
-        setData(data);
+        setData(JSON.parse(data));
       })
       .catch((e) => {
         console.log(e);
       });
-  }, [Data]);
-  return <div className="">hello user</div>;
+  }, []);
+  return <div className="">{`hello ${Data?.user?.givenName}`}</div>;
 }
