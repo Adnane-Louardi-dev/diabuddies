@@ -12,9 +12,8 @@ const signup = require("./routes/signup");
 const profileRoute = require("./routes/profile");
 
 //DB connect
-mongoose.connect(`mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.dgq8q.mongodb.net/?retryWrites=true&w=majority&ssl=true`, () =>
-  console.log("DB connected!")
-);
+const DBConnection = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.dgq8q.mongodb.net/?retryWrites=true&w=majority&ssl=true`;
+mongoose.connect(DBConnection, () => console.log("DB connected!"));
 
 //middleswares
 app.use(
@@ -34,7 +33,7 @@ app.use(
     httpOnly: false, //if it true the client can't see the cookie in document.cookie in diabuddies
     maxAge: null,
     cookie: { secure: false }, //if it true the client can't send the cookie back to the server if the browser don't support HTTPS
-    // store:MongoStore.create({mongoUrl:}),
+    store: MongoStore.create({ mongoUrl: DBConnection, ttl: 20 * 24 * 60 * 60 }), //20 days
   })
 );
 app.use(passport.session());
@@ -46,25 +45,21 @@ app.use("/signup", signup);
 //ensure that user is log in
 const isLoggedIn = (req, res, next) => {
   // req.user ? next() : res.redirect("/login");
-  req.user ? next() : res.redirect("http://localhost:3000/login/auth/google");
+  req.user ? next() : res.sendStatus(401);
 };
-//
-app.get("/", (req, res) => {
-  if (req.user) {
-    res.status(200).json({ message: "auth", user: req.user, locals: res.locals.user });
-  } else {
-    res.status(401).json({ message: "no auth" });
-  }
+app.get("/", isLoggedIn, (req, res) => {
+  res.status(200).json({ message: "auth", user: req.user, locals: req.session });
+
   console.log(`locals ${res.user}`);
 });
 app.get("/dashboard", (req, res) => {
   res.json({ message: `hi ${req.user.name.givenName}` });
 });
-app.get("/logout", function (req, res, next) {
-  req.logout(function (err) {
-    if (err) {
-      return next(err);
-    }
+
+//logout
+app.get("/logout", (req, res) => {
+  req.session.destroy(function () {
+    res.clearCookie("connect.sid");
     res.redirect("/");
   });
 });
