@@ -1,25 +1,31 @@
 {
-    "user": {
-        "id": "101071742110053935290",
-        "displayName": "Adnane Louardi",
-        "name": {
-            "familyName": "Louardi",
-            "givenName": "Adnane"
-        },
-        "photos": [
-            {
-                "value": "https://lh3.googleusercontent.com/a/ALm5wu0zsnepZ9pahwqtWPY-jMJBYImGU-j1i-jVfpqF=s96-c"
-            }
-        ],
-        "provider": "google",
-        "_raw": "{\n  \"sub\": \"101071742110053935290\",\n  \"name\": \"Adnane Louardi\",\n  \"given_name\": \"Adnane\",\n  \"family_name\": \"Louardi\",\n  \"picture\": \"https://lh3.googleusercontent.com/a/ALm5wu0zsnepZ9pahwqtWPY-jMJBYImGU-j1i-jVfpqF\\u003ds96-c\",\n  \"locale\": \"en-GB\"\n}",
-        "_json": {
-            "sub": "101071742110053935290",
-            "name": "Adnane Louardi",
-            "given_name": "Adnane",
-            "family_name": "Louardi",
-            "picture": "https://lh3.googleusercontent.com/a/ALm5wu0zsnepZ9pahwqtWPY-jMJBYImGU-j1i-jVfpqF=s96-c",
-            "locale": "en-GB"
+    "id": "116082558373277882702",
+    "displayName": "Adnane Louardi",
+    "name": {
+        "familyName": "Louardi",
+        "givenName": "Adnane"
+    },
+    "emails": [
+        {
+            "value": "adnanelouardiaws@gmail.com",
+            "verified": true
         }
+    ],
+    "photos": [
+        {
+            "value": "https://lh3.googleusercontent.com/a/AEdFTp7GarhRCwCPDga4w5nXNPvbXvAFVu7sXRTc0wyCdQ=s96-c"
+        }
+    ],
+    "provider": "google",
+    "_raw": "{\n  \"sub\": \"116082558373277882702\",\n  \"name\": \"Adnane Louardi\",\n  \"given_name\": \"Adnane\",\n  \"family_name\": \"Louardi\",\n  \"picture\": \"https://lh3.googleusercontent.com/a/AEdFTp7GarhRCwCPDga4w5nXNPvbXvAFVu7sXRTc0wyCdQ\\u003ds96-c\",\n  \"email\": \"adnanelouardiaws@gmail.com\",\n  \"email_verified\": true,\n  \"locale\": \"en\"\n}",
+    "_json": {
+        "sub": "116082558373277882702",
+        "name": "Adnane Louardi",
+        "given_name": "Adnane",
+        "family_name": "Louardi",
+        "picture": "https://lh3.googleusercontent.com/a/AEdFTp7GarhRCwCPDga4w5nXNPvbXvAFVu7sXRTc0wyCdQ=s96-c",
+        "email": "adnanelouardiaws@gmail.com",
+        "email_verified": true,
+        "locale": "en"
     }
 }

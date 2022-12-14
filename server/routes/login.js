@@ -12,6 +12,7 @@ passport.use(
       callbackURL: "http://localhost:3000/login/auth/google/callback",
     },
     async (accessToken, refreshToken, profile, cb) => {
+      console.log(profile);
       userSchema.findOne({ googleId: profile.id }, function (err, user) {
         //create a new user if the user doesn't exist in the DB
         if (!user) {
@@ -19,6 +20,8 @@ passport.use(
             googleId: profile.id,
             givenName: profile.name.givenName,
             familyName: profile.name.familyName,
+            email: profile.emails[0].value,
+            photo: profile.photos[0].value,
           }).save((err, newUser) => {
             return cb(err, newUser);
           });
@@ -38,14 +41,7 @@ passport.deserializeUser((user, done) => {
   done(null, user);
 });
 
-router.get("/auth/google", passport.authenticate("google", { scope: ["profile"] }));
+router.get("/auth/google", passport.authenticate("google", { scope: ["profile", "email"] }));
 
-router.get(
-  "/auth/google/callback",
-  passport.authenticate("google", { successRedirect: "http://localhost:3001/", failureRedirect: "/login" }),
-  function (req, res) {
-    // Successful authentication, redirect home.
-    res.redirect("/");
-  }
-);
+router.get("/auth/google/callback", passport.authenticate("google", { successRedirect: "http://localhost:3001/", failureRedirect: "/login" }));
 module.exports = router;
