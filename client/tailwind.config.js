@@ -16,6 +16,9 @@ module.exports = {
         diaRed: "#F87474",
         diaGreen: "#93FFD8",
       },
+      blur: {
+        xs: "2px",
+      },
     },
   },
 };
