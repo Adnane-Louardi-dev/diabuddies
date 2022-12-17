@@ -48,7 +48,7 @@ const isLoggedIn = (req, res, next) => {
   req.user ? next() : res.sendStatus(401);
 };
 app.get("/", isLoggedIn, (req, res) => {
-  res.status(200).json({ message: "auth", user: req.user, locals: req.session });
+  res.status(200).json({ user: req.user });
 
   console.log(`locals ${res.user}`);
 });
