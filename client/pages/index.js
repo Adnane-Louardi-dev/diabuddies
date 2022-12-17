@@ -10,8 +10,8 @@ export default function Home() {
   const [Data, setData] = useState({});
   useEffect(() => {
     axios.get("http://localhost:3000/", { withCredentials: true }).then((fullData) => {
-      console.log(Data);
-      return setData(fullData.data.user);
+      // console.log(Data);
+      setData(fullData.data.user);
     });
     return () => {
       setData({});

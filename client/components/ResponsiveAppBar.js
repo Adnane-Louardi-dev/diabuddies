@@ -37,10 +37,9 @@ function ResponsiveAppBar({ props }) {
   };
 
   return (
-    <AppBar position="static">
-      <Container maxWidth="xl">
+    <AppBar position="static" className="bg-white shadow-none rounded-lg p-5">
+      <Container maxWidth="xl" className="bg-diaBlue rounded-lg shadow-lg">
         <Toolbar disableGutters>
-          <AdbIcon sx={{ display: { xs: "none", md: "flex" }, mr: 1 }} />
           <Typography
             variant="h6"
             noWrap
@@ -56,9 +55,9 @@ function ResponsiveAppBar({ props }) {
               textDecoration: "none",
             }}
           >
-            LOGO
+            <span className="text-white">DIA</span>
+            <span className="text-diaOrange">BUDDIES</span>
           </Typography>
-
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
@@ -95,7 +94,6 @@ function ResponsiveAppBar({ props }) {
               ))}
             </Menu>
           </Box>
-
           <Typography
             variant="h5"
             noWrap
@@ -122,7 +120,6 @@ function ResponsiveAppBar({ props }) {
               </Button>
             ))}
           </Box>
-
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
