@@ -9,7 +9,7 @@ export default function Home() {
   const router = useRouter();
   const [Data, setData] = useState({});
   useEffect(() => {
-    axios.get("http://localhost:3000/", { withCredentials: true }).then((fullData) => {
+    axios.get("/api/", { withCredentials: true }).then((fullData) => {
       // console.log(Data);
       setData(fullData.data.user);
     });
