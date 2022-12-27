@@ -12,34 +12,36 @@ export default function Login() {
   const onSubmit = (data) => setFormData(JSON.stringify(data));
   return (
     <div className="h-full h-screen">
-      <div className="relative lg:hidden h-64 w-screen pt-8 px-8">
+      <div className="relative lg:hidden h-96 w-screen pt-16 px-8">
         {/* <h1 className="text-6xl text-white font-rubik font-semibold tracking-wider">Login to your panel</h1> */}
-        <p className="text-3xl text-white font-poppins">
+        <p className="text-4xl text-white tracking-wide leading-relaxed font-poppins">
           With <span className="font-semibold hover:underline hover:text-diaBlue decoration-diaOrange">DIABUDDIES</span> you can easily control <br />
           and track your diabetes in one single platform.
+          <Button endIcon={<EastIcon />} className="my-6 font-roboto text-white hover:text-diaOrange text-4xl underline hover:decoration-diaOrange">
+            Discover why and how
+          </Button>
         </p>
 
-        <Button endIcon={<EastIcon />} className="my-6 font-roboto text-white hover:text-diaOrange text-xl underline hover:decoration-diaOrange">
-          Discover why and how
-        </Button>
-        <Image src={"/signup_promo.jpg"} className="brightness-50 -z-50" fill objectFit="cover" cover alt={"black woman checking blood sugar"} />
+        <Image src={"/signup_promo.jpg"} className="brightness-50 -z-50" fill objectFit="cover" alt={"black woman checking blood sugar"} />
       </div>
       <div className="flex flex-row -mt-12 bg-white justify-center lg:items-center h-full w-full rounded-t-[25px] lg:rounded-none">
-        <div className="absolute my-12">
-          <div className="text-inter text-diaBlue text-5xl font-semibold">
+        <div className="absolute my-16">
+          <div className="text-inter text-diaBlue text-7xl font-semibold">
             DIA<span className="text-diaOrange">BUDDIES</span>
           </div>
         </div>
-        <div className="flex-none w-full lg:basis-2/5 px-20 my-14">
+        <div className="flex-none w-full lg:basis-2/5 my-48">
           <div className="my-5 p-10">
-            <div className="my-5 border-b">
-              <Link href="http://localhost:3000/login/auth/google" passHref>
-                <Button fullWidth variant="outlined" className="mb-5 p-3 text-diaGray border-diaGray" startIcon={<GoogleIcon />}>
+            <div className="mb-12 pb-10 border-b-4">
+              <Link href="/api/login/auth/google" passHref>
+                <Button fullWidth variant="outlined" className="mb-7 p-7 text-diaGray text-4xl rounded-full border-4 border-diaGray">
+                  <GoogleIcon className="text-5xl mx-5" />
                   Sign up with Google
                 </Button>
               </Link>
-              <Link href="http://localhost:3000/login/auth/facebook" to="http://localhost:3000/login/auth/facebook" as="/login" passHref>
-                <Button fullWidth variant="outlined" className="mb-5 p-3 text-diaGray border-diaGray" startIcon={<FacebookIcon />}>
+              <Link href="/api/login/auth/facebook" to="http://localhost:3000/login/auth/facebook" as="/login" passHref>
+                <Button fullWidth variant="outlined" className="mb-5 p-7 text-diaGray text-4xl rounded-full border-4 border-diaGray">
+                  <FacebookIcon className="text-5xl mx-5" />
                   Sign up with Facebook
                 </Button>
               </Link>
@@ -48,6 +50,20 @@ export default function Login() {
             <form onSubmit={handleSubmit(onSubmit)}>
               <TextField
                 required
+                InputLabelProps={{
+                  style: {
+                    fontSize: 45,
+                    backgroundColor: "transparent",
+                    color: "#666666",
+                  },
+                }}
+                inputProps={{
+                  style: {
+                    fontSize: 45,
+                    backgroundColor: "transparent",
+                    margin: "25px 0",
+                  },
+                }}
                 {...register("email", { pattern: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ })}
                 fullWidth
                 id="standard-required"
@@ -57,6 +73,20 @@ export default function Login() {
               />
               <TextField
                 required
+                InputLabelProps={{
+                  style: {
+                    fontSize: 45,
+                    backgroundColor: "transparent",
+                    color: "#666666",
+                  },
+                }}
+                inputProps={{
+                  style: {
+                    fontSize: 45,
+                    backgroundColor: "transparent",
+                    margin: "25px 0",
+                  },
+                }}
                 {...register("password")}
                 fullWidth
                 id="standard-password-input"
@@ -66,7 +96,13 @@ export default function Login() {
                 variant="standard"
                 margin="normal"
               />
-              <Button fullWidth className="my-5 p-3 text-diaGray border-diaGray" variant="outlined" type="submit" margin="normal">
+              <Button
+                fullWidth
+                className="my-10 p-7 text-diaGray text-4xl rounded-full border-4 border-diaGray"
+                variant="outlined"
+                type="submit"
+                margin="normal"
+              >
                 Sign in
               </Button>
             </form>
