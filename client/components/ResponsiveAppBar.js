@@ -11,25 +11,15 @@ import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import AdbIcon from "@mui/icons-material/Adb";
+import Image from "next/image";
 
-const pages = ["DiaStore", "Home", "DiaJourney"];
-const settings = ["Settings", "Logout"];
+const settings = ["Profile", "Account", "Logout"];
 
 function ResponsiveAppBar({ props }) {
-  console.log(props);
-  const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
 
-  const handleOpenNavMenu = (event) => {
-    setAnchorElNav(event.currentTarget);
-  };
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
-  };
-
-  const handleCloseNavMenu = () => {
-    setAnchorElNav(null);
   };
 
   const handleCloseUserMenu = () => {
@@ -37,89 +27,21 @@ function ResponsiveAppBar({ props }) {
   };
 
   return (
-    <AppBar position="static" className="bg-white shadow-none rounded-lg p-5">
-      <Container maxWidth="xl" className="bg-diaBlue rounded-lg shadow-lg">
+    <AppBar position="static" className="bg-white shadow-none">
+      <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Typography
-            variant="h6"
-            noWrap
-            component="a"
-            href="/"
-            sx={{
-              mr: 2,
-              display: { xs: "none", md: "flex" },
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            <span className="text-white">DIA</span>
-            <span className="text-diaOrange">BUDDIES</span>
-          </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
-            <IconButton
-              size="large"
-              aria-label="account of current user"
-              aria-controls="menu-appbar"
-              aria-haspopup="true"
-              onClick={handleOpenNavMenu}
-              color="inherit"
-            >
-              <MenuIcon />
+          <Box sx={{ flexGrow: 1, ml: -2, display: { xs: "flex", md: "none" } }}>
+            <IconButton size="small" aria-label="account of current user" aria-controls="menu-appbar" aria-haspopup="true" className="text-diaGray">
+              <Image src={"/diabuddies_logo_D.png"} height={70} width={75} className="bg-transparent" />
             </IconButton>
-            <Menu
-              id="menu-appbar"
-              anchorEl={anchorElNav}
-              anchorOrigin={{
-                vertical: "bottom",
-                horizontal: "left",
-              }}
-              keepMounted
-              transformOrigin={{
-                vertical: "top",
-                horizontal: "left",
-              }}
-              open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
-              sx={{
-                display: { xs: "block", md: "none" },
-              }}
-            >
-              {pages.map((page) => (
-                <MenuItem key={page} onClick={handleCloseNavMenu}>
-                  <Typography textAlign="center">{page}</Typography>
-                </MenuItem>
-              ))}
-            </Menu>
           </Box>
-          <Typography
-            variant="h5"
-            noWrap
-            component="a"
-            href=""
-            sx={{
-              mr: 2,
-              display: { xs: "flex", md: "none" },
-              flexGrow: 1,
-              fontFamily: "monospace",
-              fontWeight: 700,
-              letterSpacing: ".3rem",
-              color: "inherit",
-              textDecoration: "none",
-            }}
-          >
-            <span className="text-diaBlue">DIA</span>
-            <span className="text-diaOrange">BUDDIES</span>
-          </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
-            {pages.map((page) => (
-              <Button key={page} onClick={handleCloseNavMenu} sx={{ my: 2, color: "white", display: "block" }}>
-                {page}
-              </Button>
-            ))}
+
+          <Box sx={{ flexGrow: 1, ml: -2, display: { xs: "none", md: "flex" } }}>
+            <div className="relative">
+              <Image src={"/diabuddies_logo.png"} objectFit="cover" width={120} height={90} className="bg-transparent my-0" />
+            </div>
           </Box>
+
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
