@@ -2,40 +2,49 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
 import Image from "next/image";
-import AddIcon from "@mui/icons-material/Add";
 import ResponsiveAppBar from "../components/ResponsiveAppBar";
 import Glucose from "../components/glucose";
 import ActiveInsulin from "../components/activeInsulin";
+import LogBookItem from "../components/logBookItem";
+import LoadingCircle from "../components/loadingCircle";
+import NewLogDialog from "../components/newLogDialog";
 
 export default function Home() {
   const router = useRouter();
-  const [Data, setData] = useState({});
+  const [Data, setData] = useState();
   useEffect(() => {
     axios.get("/api/", { withCredentials: true }).then((fullData) => {
-      // console.log(Data);
-      setData(fullData.data.user);
+      const data = fullData.data;
+      console.log(data);
+      setData(data);
     });
-    return () => {
-      setData({});
-    };
   }, []);
 
   return (
     <>
-      <ResponsiveAppBar props={Data} />
-      <div className="p-5">
-        <span className="font-inter text-2xl text-semibold">{`Good evening, ${Data?.givenName}`}</span>
-        <div className="flex justify-around my-5">
-          <Glucose />
-          <ActiveInsulin />
+      {Data ? (
+        <>
+          <ResponsiveAppBar props={Data?.user} />
+          <main className="p-5">
+            <span className="font-inter text-2xl text-semibold">{`Good evening, ${Data?.user?.givenName}`}</span>
+            <section className="flex justify-around my-5">
+              <Glucose />
+              <ActiveInsulin />
+            </section>
+            <section className="w-full rounded-xl shadow-sm p-3">
+              <div className="flex justify-between">
+                <h3 className="text-lg text-diaGray font-rubik">Log book</h3>
+                <NewLogDialog />
+              </div>
+              <LogBookItem props={Data.logBook} />
+            </section>
+          </main>
+        </>
+      ) : (
+        <div className="grid h-screen justify-center content-center">
+          <LoadingCircle />
         </div>
-        <div className="w-full rounded-xl shadow-md">
-          <div className="flex justify-between">
-            <h3 className="text-lg text-diaGray font-rubik">Log book</h3>
-            <AddIcon />
-          </div>
-        </div>
-      </div>
+      )}
     </>
   );
 }
