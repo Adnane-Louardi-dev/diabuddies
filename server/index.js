@@ -48,9 +48,44 @@ const isLoggedIn = (req, res, next) => {
   req.user ? next() : res.sendStatus(401);
 };
 app.get("/", isLoggedIn, (req, res) => {
-  res.status(200).json({ user: req.user });
-
-  console.log(`locals ${res.user}`);
+  res.status(200).json({
+    user: req.user,
+    logBook: {
+      implicit: {
+        time: "22:30",
+        meal: "Dinner",
+        carbs: "25g",
+        FastActingInsulinUnits: "10ui",
+        glucose: 90,
+      },
+      explicit: [
+        {
+          name: "Glucose(mg/dl)",
+          value: 90,
+        },
+        {
+          name: "Novorapid(ui)",
+          value: 10,
+        },
+        {
+          name: "calories(kcal)",
+          value: 250,
+        },
+        {
+          name: "Carbs(g)",
+          value: 25,
+        },
+        {
+          name: "Protein(g)",
+          value: 15,
+        },
+        {
+          name: "Fat(g)",
+          value: 25,
+        },
+      ],
+    },
+  });
 });
 app.get("/dashboard", (req, res) => {
   res.json({ message: `hi ${req.user.name.givenName}` });
