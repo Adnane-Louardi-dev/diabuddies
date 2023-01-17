@@ -32,20 +32,20 @@ function ResponsiveAppBar({ props }) {
         <Toolbar disableGutters>
           <Box sx={{ flexGrow: 1, ml: -2, display: { xs: "flex", md: "none" } }}>
             <IconButton size="small" aria-label="account of current user" aria-controls="menu-appbar" aria-haspopup="true" className="text-diaGray">
-              <Image src={"/diabuddies_logo_D.png"} height={70} width={75} className="bg-transparent" />
+              <Image src={"/diabuddies_logo_D.png"} height={70} width={75} className="bg-transparent" alt="diabuddies logo" />
             </IconButton>
           </Box>
 
           <Box sx={{ flexGrow: 1, ml: -2, display: { xs: "none", md: "flex" } }}>
             <div className="relative">
-              <Image src={"/diabuddies_logo.png"} objectFit="cover" width={120} height={90} className="bg-transparent my-0" />
+              <Image src={"/diabuddies_logo.png"} objectFit="cover" width={120} height={90} className="bg-transparent my-0" alt="diabuddies logo" />
             </div>
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src={props.photo} />
+                <Avatar alt="Profile photo" src={props.photo} />
               </IconButton>
             </Tooltip>
             <Menu
