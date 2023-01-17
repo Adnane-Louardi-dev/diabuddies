@@ -1,7 +1,7 @@
 const ActiveInsulin = () => {
   return (
     <div className="py-2 w-1/2 mx-1">
-      <div className="rounded-3xl shadow-md bg-gray-800 text-white p-3">
+      <div className="rounded-3xl shadow-md bg-diaOrange text-white p-3">
         <div className="flex justify-between w-full items-center mb-3">
           <h3 className="font-inter text-md text-semibold ">Active insulin </h3>
         </div>
@@ -14,7 +14,7 @@ const ActiveInsulin = () => {
           </div>
         </div>
         <div className="mt-7">
-          <span className="px-3 py-0.5 rounded-full bg-white font-poppins text-semibold text-gray-800">18:15 Today</span>
+          <span className="px-3 py-0.5 rounded-full bg-white font-poppins text-semibold text-diaOrange">18:15 Today</span>
         </div>
       </div>
     </div>
