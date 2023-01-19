@@ -7,9 +7,12 @@ const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const passport = require("passport");
 const morgan = require("morgan");
+const validation = require("./models/validationSchemas");
+const { validate } = require("./middlewares/validationMiddleware");
 const login = require("./routes/login");
 const signup = require("./routes/signup");
 const profileRoute = require("./routes/profile");
+const logBookItemsSchema = require("./models/logBookItemsSchema");
 
 //DB connect
 const DBConnection = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.dgq8q.mongodb.net/?retryWrites=true&w=majority&ssl=true`;
@@ -48,48 +51,35 @@ const isLoggedIn = (req, res, next) => {
   req.user ? next() : res.sendStatus(401);
 };
 app.get("/", isLoggedIn, (req, res) => {
-  res.status(200).json({
-    user: req.user,
-    logBook: {
-      implicit: {
-        time: "22:30",
-        meal: "Dinner",
-        carbs: "25g",
-        FastActingInsulinUnits: "10ui",
-        glucose: 90,
-      },
-      explicit: [
-        {
-          name: "Glucose(mg/dl)",
-          value: 90,
-        },
-        {
-          name: "Novorapid(ui)",
-          value: 10,
-        },
-        {
-          name: "calories(kcal)",
-          value: 250,
-        },
-        {
-          name: "Carbs(g)",
-          value: 25,
-        },
-        {
-          name: "Protein(g)",
-          value: 15,
-        },
-        {
-          name: "Fat(g)",
-          value: 25,
-        },
-      ],
-    },
-  });
+  //get collection items and return the response
+  logBookItemsSchema
+    .find()
+    .then((logs) => {
+      res.status(200).json({
+        user: req.user,
+        logBook: logs,
+      });
+    })
+    .catch((err) => res.json({ err }));
 });
-app.get("/dashboard", (req, res) => {
-  res.json({ message: `hi ${req.user.name.givenName}` });
+app.post("/", [isLoggedIn, validate(validation.dialogValidation)], (req, res) => {
+  // const [time,glucose,meal,fastActingInsulinUnits,carbs,protein,fat]=req.body;
+  logBookItemsSchema
+    .create({
+      time: new Date(req.body.time),
+      glucose: req.body.glucose,
+      meal: req.body.meal,
+      fastActingInsulinUnits: req.body.fastActingInsulinUnits,
+      carbs: req.body.carbs,
+      protein: req.body.protein,
+      fat: req.body.fat,
+    })
+    .then((log) => res.json(log))
+    .catch((err) => res.json({ err }));
 });
+// app.get("/dashboard", (req, res) => {
+//   res.json({ message: `hi ${req.user.name.givenName}` });
+// });
 
 //logout
 app.get("/logout", (req, res) => {

@@ -10,41 +10,6 @@ import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 const LogBookItem = ({ props }) => {
-  const rows = {
-    implicit: {
-      time: "22:30",
-      meal: "Dinner",
-      carbs: "25g",
-      FastActingInsulinUnits: "10ui",
-      glucose: 90,
-    },
-    explicit: [
-      {
-        name: "Glucose(mg/dl)",
-        value: 90,
-      },
-      {
-        name: "Novorapid(ui)",
-        value: 10,
-      },
-      {
-        name: "calories(kcal)",
-        value: 250,
-      },
-      {
-        name: "Carbs(g)",
-        value: 25,
-      },
-      {
-        name: "Protein(g)",
-        value: 15,
-      },
-      {
-        name: "Fat(g)",
-        value: 25,
-      },
-    ],
-  };
   const [data, setData] = useState(props);
 
   return (
@@ -71,7 +36,7 @@ const LogBookItem = ({ props }) => {
             <p className="font-inter text-white text-xl">{data.implicit.carbs}</p>
           </div>
           <div className="rounded-2xl p-3 bg-diaOrange">
-            <p className="font-inter text-white text-xl">{data.implicit.FastActingInsulinUnits}</p>
+            <p className="font-inter text-white text-xl">{data.implicit.fastActingInsulinUnits}</p>
           </div>
           <div className="rounded-2xl p-3 bg-diaGreen">
             <p className="font-inter text-white text-xl">{data.implicit.glucose}</p>

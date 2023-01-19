@@ -1,5 +1,6 @@
 import * as React from "react";
 import AddIcon from "@mui/icons-material/Add";
+import SaveIcon from "@mui/icons-material/Save";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -29,8 +30,13 @@ export default function NewLogDialog() {
           <TextField autoFocus margin="dense" id="name" label="Email Address" type="email" fullWidth variant="standard" />
         </DialogContent>
         <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleClose}>Subscribe</Button>
+          <Button onClick={handleClose} className="font-rubik text-diaGray">
+            Cancel
+          </Button>
+          <Button onClick={handleClose} className="flex justify-between px-2 mx-4 font-rubik text-white bg-diaBlue rounded-lg shadow-md">
+            <SaveIcon className="mr-2" />
+            Save
+          </Button>
         </DialogActions>
       </Dialog>
     </>

@@ -1,14 +1,14 @@
 const Glucose = () => {
   return (
     <div className="py-2 w-1/2 mx-1">
-      <div className="rounded-3xl shadow-md bg-diaGreen text-white p-3">
+      <div className="rounded-3xl shadow-md bg-diaGreen text-gray-800 p-3">
         <div className="flex justify-between w-full items-center mb-3">
           <h3 className="font-inter text-md text-semibold ">Glucose</h3>
         </div>
 
         <div className="my-3">
           <div className="mx-2">
-            <p className="font-inter text-bold text-4xl text-white">
+            <p className="font-inter text-bold text-4xl text-gray-800">
               95 <span className="text-sm text-semibold"> mg/dl</span>
             </p>
           </div>
