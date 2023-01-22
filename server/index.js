@@ -10,7 +10,6 @@ const morgan = require("morgan");
 const validation = require("./models/validationSchemas");
 const { validate } = require("./middlewares/validationMiddleware");
 const login = require("./routes/login");
-const signup = require("./routes/signup");
 const profileRoute = require("./routes/profile");
 const logBookItemsSchema = require("./models/logBookItemsSchema");
 
@@ -27,7 +26,7 @@ app.use(
   })
 );
 app.use(express.json());
-app.use(morgan("tiny"));
+app.use(morgan("dev"));
 app.use(
   session({
     resave: true,
@@ -43,17 +42,27 @@ app.use(passport.session());
 app.use(passport.initialize());
 app.use("/login", login);
 app.use("/profile", profileRoute);
-app.use("/signup", signup);
 
 //ensure that user is log in
 const isLoggedIn = (req, res, next) => {
   // req.user ? next() : res.redirect("/login");
   req.user ? next() : res.sendStatus(401);
 };
+
+//get the objectId from time stamp
+const objectIdFromDate = function (date) {
+  return Math.floor(date.getTime() / 1000).toString(16) + "0000000000000000";
+};
+
+//get time from time stamp of objectid
+const dateFromObjectId = function (objectId) {
+  return new Date(parseInt(objectId.substring(0, 8), 16) * 1000);
+};
+
 app.get("/", isLoggedIn, (req, res) => {
   //get collection items and return the response
   logBookItemsSchema
-    .find()
+    .find({ userId: req.user._id })
     .then((logs) => {
       res.status(200).json({
         user: req.user,
@@ -62,10 +71,11 @@ app.get("/", isLoggedIn, (req, res) => {
     })
     .catch((err) => res.json({ err }));
 });
+
 app.post("/", [isLoggedIn, validate(validation.dialogValidation)], (req, res) => {
-  // const [time,glucose,meal,fastActingInsulinUnits,carbs,protein,fat]=req.body;
   logBookItemsSchema
     .create({
+      userId: req.user._id,
       time: new Date(req.body.time),
       glucose: req.body.glucose,
       meal: req.body.meal,
@@ -77,17 +87,14 @@ app.post("/", [isLoggedIn, validate(validation.dialogValidation)], (req, res) =>
     .then((log) => res.json(log))
     .catch((err) => res.json({ err }));
 });
-// app.get("/dashboard", (req, res) => {
-//   res.json({ message: `hi ${req.user.name.givenName}` });
-// });
 
-//logout
 app.get("/logout", (req, res) => {
   req.session.destroy(function () {
     res.clearCookie("connect.sid");
     res.redirect("/");
   });
 });
+
 app.listen(process.env.PORT, () => {
   console.log(`Server listening on ${process.env.PORT}`);
 });

@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 
 const logBookItemsSchema = mongoose.Schema({
+  userId: String,
   time: String,
   glucose: Number,
   meal: String,

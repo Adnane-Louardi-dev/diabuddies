@@ -26,8 +26,6 @@ passport.use(
             return cb(err, newUser);
           });
         } else {
-          console.log(accessToken);
-          console.log(refreshToken);
           return cb(err, user);
         }
       });
@@ -41,7 +39,12 @@ passport.deserializeUser((user, done) => {
   done(null, user);
 });
 
-router.get("/auth/google", passport.authenticate("google", { scope: ["profile", "email"] }));
+router.get(
+  "/auth/google",
+  passport.authenticate("google", {
+    scope: ["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email"],
+  })
+);
 
 router.get("/auth/google/callback", passport.authenticate("google", { successRedirect: "http://localhost:3001/", failureRedirect: "/login" }));
 module.exports = router;

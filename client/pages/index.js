@@ -36,7 +36,7 @@ export default function Home() {
                 <h3 className="text-lg text-diaGray font-rubik">Log book</h3>
                 <NewLogDialog />
               </div>
-              <LogBookItem props={Data.logBook} />
+              {/* <LogBookItem props={Data.logBook} /> */}
             </section>
           </main>
         </>
