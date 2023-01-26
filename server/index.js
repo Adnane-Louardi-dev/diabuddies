@@ -88,10 +88,31 @@ app.post("/", [isLoggedIn, validate(validation.dialogValidation)], (req, res) =>
     .catch((err) => res.json({ err }));
 });
 
+app.get("/logbook", isLoggedIn, async (req, res) => {
+  //get logbooks that are less than query cursor
+  let lastLogId,
+    hasNext,
+    limit = 3;
+
+  const logBooks = await logBookItemsSchema
+    .find({ _id: { $lt: req.query.previousCursor } })
+    .sort({ _id: -1 })
+    .limit(limit);
+
+  if (logBooks.length) {
+    firstLogId = logBooks[0];
+    lastLogId = logBooks[logBooks.length - 1]._id;
+
+    //checking if the last log is the last in the DB
+    hasNext = !!(await logBookItemsSchema.findOne({ _id: { $lt: lastLogId } }));
+  }
+  res.json({ logBooks, previous_cursor: req.query.previousCursor, next_cursor: lastLogId, hasNext });
+  // console.log(req.query);
+});
+
 app.get("/logout", (req, res) => {
   req.session.destroy(function () {
     res.clearCookie("connect.sid");
-    res.redirect("/");
   });
 });
 
