@@ -59,17 +59,30 @@ const dateFromObjectId = function (objectId) {
   return new Date(parseInt(objectId.substring(0, 8), 16) * 1000);
 };
 
-app.get("/", isLoggedIn, (req, res) => {
-  //get collection items and return the response
-  logBookItemsSchema
-    .find({ userId: req.user._id })
-    .then((logs) => {
-      res.status(200).json({
-        user: req.user,
-        logBook: logs,
-      });
+app.get("/", isLoggedIn, async (req, res) => {
+  const timeElapsed = Date.now();
+  //time provided by user or default date (today)
+  const today = req.query.date ? new Date(req.query.date) : new Date(timeElapsed);
+  const todayMax = new Date(today.setHours(23, 59, 59, 999));
+  const todayMin = new Date(today.setHours(0, 0, 0, 0));
+  // const reqDate = today.toISOString().substring(0, 10);
+  console.log(today);
+  console.log(todayMax);
+  console.log(todayMin);
+
+  //get the logs of specific day
+  const logs = await logBookItemsSchema
+    .find({
+      userId: req.user._id,
+      time: { $gte: todayMin, $lt: todayMax },
     })
-    .catch((err) => res.json({ err }));
+    // descending sorting
+    .sort({ time: -1 });
+
+  res.status(200).json({
+    user: req.user,
+    logBook: logs,
+  });
 });
 
 app.post("/", [isLoggedIn, validate(validation.dialogValidation)], (req, res) => {
@@ -89,11 +102,11 @@ app.post("/", [isLoggedIn, validate(validation.dialogValidation)], (req, res) =>
 });
 
 app.get("/logbook", isLoggedIn, async (req, res) => {
-  //get logbooks that are less than query cursor
   let lastLogId,
     hasNext,
     limit = 3;
 
+  //get logbooks that are less than query cursor
   const logBooks = await logBookItemsSchema
     .find({ _id: { $lt: req.query.previousCursor } })
     .sort({ _id: -1 })
@@ -102,12 +115,10 @@ app.get("/logbook", isLoggedIn, async (req, res) => {
   if (logBooks.length) {
     firstLogId = logBooks[0];
     lastLogId = logBooks[logBooks.length - 1]._id;
-
     //checking if the last log is the last in the DB
     hasNext = !!(await logBookItemsSchema.findOne({ _id: { $lt: lastLogId } }));
   }
   res.json({ logBooks, previous_cursor: req.query.previousCursor, next_cursor: lastLogId, hasNext });
-  // console.log(req.query);
 });
 
 app.get("/logout", (req, res) => {
