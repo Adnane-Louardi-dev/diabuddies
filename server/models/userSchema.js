@@ -18,8 +18,9 @@ const userSchema = mongoose.Schema({
   weight: Number,
   diabetesType: String,
   hb1ac: String,
-  createdAt: { type: String, default: Date.now() },
-  updateAt: { type: String, default: Date.now() },
+  newUser: { type: Boolean, default: true },
+  createdAt: { type: String, default: new Date() },
+  updateAt: { type: String, default: new Date() },
 });
 
 module.exports = mongoose.model("userSchema", userSchema);
