@@ -10,9 +10,9 @@ const morgan = require("morgan");
 const validation = require("./models/validationSchemas");
 const { validate } = require("./middlewares/validationMiddleware");
 const login = require("./routes/login");
-const profileRoute = require("./routes/profile");
 const logBookItemsSchema = require("./models/logBookItemsSchema");
-const userSchema = require("./models/userSchema");
+const settings = require("./routes/settings");
+const logbook = require("./routes/logbook");
 
 //DB connect
 const DBConnection = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.dgq8q.mongodb.net/?retryWrites=true&w=majority&ssl=true`;
@@ -39,16 +39,17 @@ app.use(
     store: MongoStore.create({ mongoUrl: DBConnection, ttl: 20 * 24 * 60 * 60 }), //20 days
   })
 );
-app.use(passport.session());
-app.use(passport.initialize());
-app.use("/login", login);
-app.use("/profile", profileRoute);
-
-//ensure that user is log in
 const isLoggedIn = (req, res, next) => {
   // req.user ? next() : res.redirect("/login");
   req.user ? next() : res.sendStatus(401);
 };
+app.use(passport.session());
+app.use(passport.initialize());
+app.use(isLoggedIn);
+app.use("/login", login);
+app.use("/logbook", logbook);
+app.use("/settings", settings);
+//ensure that user is log in
 
 //get the objectId from time stamp
 const objectIdFromDate = function (date) {
@@ -60,14 +61,14 @@ const dateFromObjectId = function (objectId) {
   return new Date(parseInt(objectId.substring(0, 8), 16) * 1000);
 };
 
-app.get("/", isLoggedIn, async (req, res) => {
+app.get("/", async (req, res) => {
   const timeElapsed = Date.now();
   //time provided by user or default date (today)
   const today = req.query.date ? new Date(req.query.date) : new Date(timeElapsed);
   const todayMax = new Date(today.setHours(23, 59, 59, 999)) + 1;
   const todayMin = new Date(today.setHours(0, 0, 0, 0)) + 1;
-  // const reqDate = today.toISOString().substring(0, 10);
   // console.log(today);
+  // const reqDate = today.toISOString().substring(0, 10);
   // console.log(todayMax.toString());
   // console.log(todayMin.toString());
 
@@ -86,7 +87,7 @@ app.get("/", isLoggedIn, async (req, res) => {
   });
 });
 
-app.post("/", [isLoggedIn, validate(validation.dialogValidation)], (req, res) => {
+app.post("/", validate(validation.dialogValidation), (req, res) => {
   logBookItemsSchema
     .create({
       userId: req.user._id,
@@ -100,46 +101,6 @@ app.post("/", [isLoggedIn, validate(validation.dialogValidation)], (req, res) =>
     })
     .then((log) => res.json(log))
     .catch((err) => res.json({ err }));
-});
-
-app.get("/logbook", isLoggedIn, async (req, res) => {
-  let lastLogId,
-    hasNext,
-    limit = 3;
-
-  //get logbooks that are less than query cursor
-  const logBooks = await logBookItemsSchema
-    .find({ _id: { $lt: req.query.previousCursor } })
-    .sort({ _id: -1 })
-    .limit(limit);
-
-  if (logBooks.length) {
-    firstLogId = logBooks[0];
-    lastLogId = logBooks[logBooks.length - 1]._id;
-    //checking if the last log is the last in the DB
-    hasNext = !!(await logBookItemsSchema.findOne({ _id: { $lt: lastLogId } }));
-  }
-  res.json({ logBooks, previous_cursor: req.query.previousCursor, next_cursor: lastLogId, hasNext });
-});
-
-app.get("/settings", (req, res) => {
-  res.json({ msg: "settings" });
-});
-
-app.post("/settings", (req, res) => {
-  const data = {
-    bio: req.body.bio,
-    age: req.body.age,
-    gender: req.body.gender,
-    height: req.body.height,
-    weight: req.body.weight,
-    diabetesType: req.body.diabetesType,
-    hb1ac: req.body.hb1ac,
-    newUser: false,
-    updatedAt: new Date(),
-  };
-  const userId = req.user._id;
-  const UpdateSettings = userSchema.insertMany();
 });
 
 app.get("/logout", (req, res) => {
