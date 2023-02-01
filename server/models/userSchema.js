@@ -18,6 +18,7 @@ const userSchema = mongoose.Schema({
   weight: Number,
   diabetesType: String,
   hb1ac: String,
+  unit: { type: String, default: "mg/dL" },
   newUser: { type: Boolean, default: true },
   createdAt: { type: String, default: new Date() },
   updateAt: { type: String, default: new Date() },
