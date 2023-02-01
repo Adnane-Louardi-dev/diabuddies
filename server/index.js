@@ -67,10 +67,6 @@ app.get("/", async (req, res) => {
   const today = req.query.date ? new Date(req.query.date) : new Date(timeElapsed);
   const todayMax = new Date(today.setHours(23, 59, 59, 999)) + 1;
   const todayMin = new Date(today.setHours(0, 0, 0, 0)) + 1;
-  // console.log(today);
-  // const reqDate = today.toISOString().substring(0, 10);
-  // console.log(todayMax.toString());
-  // console.log(todayMin.toString());
 
   //get the logs of specific day
   const logs = await logBookItemsSchema
@@ -81,9 +77,19 @@ app.get("/", async (req, res) => {
     // descending sorting
     .sort({ time: -1 });
 
+  let graphData = logs.map((log) => {
+    return {
+      time: log.time.substring(16),
+      egv: log.glucose,
+      status: log.glucose <= 70 ? "Low" : log.glucose >= 180 ? "High" : "Normal",
+      unit: "ml/dL",
+    };
+  });
+
   res.status(200).json({
     user: req.user,
     logBook: logs,
+    graphData,
   });
 });
 
