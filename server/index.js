@@ -77,7 +77,7 @@ app.get("/", async (req, res) => {
     // descending sorting
     .sort({ time: -1 });
 
-  let graphData = logs.map((log) => {
+  let egvs = logs.map((log) => {
     return {
       time: log.time.substring(16),
       egv: log.glucose,
@@ -86,10 +86,17 @@ app.get("/", async (req, res) => {
     };
   });
 
+  const someGlucoseVal = egvs.reduce((accumulator, curOBJ) => {
+    return accumulator + curOBJ.egv;
+  }, 0);
+
   res.status(200).json({
     user: req.user,
     logBook: logs,
-    graphData,
+    graphData: {
+      avgEgvs: someGlucoseVal / egvs.length,
+      egvs,
+    },
   });
 });
 
