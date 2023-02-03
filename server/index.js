@@ -45,7 +45,7 @@ const isLoggedIn = (req, res, next) => {
 };
 app.use(passport.session());
 app.use(passport.initialize());
-app.use(isLoggedIn);
+// app.use(isLoggedIn);
 app.use("/login", login);
 app.use("/logbook", logbook);
 app.use("/settings", settings);
@@ -61,7 +61,7 @@ const dateFromObjectId = function (objectId) {
   return new Date(parseInt(objectId.substring(0, 8), 16) * 1000);
 };
 
-app.get("/", async (req, res) => {
+app.get("/", isLoggedIn, async (req, res) => {
   const timeElapsed = Date.now();
   //time provided by user or default date (today)
   const today = req.query.date ? new Date(req.query.date) : new Date(timeElapsed);
