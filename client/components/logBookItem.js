@@ -9,8 +9,11 @@ import TableCell from "@mui/material/TableCell";
 import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import { Icon } from "@iconify/react";
+
 const LogBookItem = ({ props }) => {
   const [data, setData] = useState(props);
+  console.log(data);
 
   return (
     <Accordion
@@ -21,42 +24,39 @@ const LogBookItem = ({ props }) => {
         },
       }}
     >
-      <AccordionSummary className="border-none rounded-xl" expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
-        <div className="flex justify-around w-full rounded-xl py-3">
-          <div className="justify-self-start self-center">
-            <p className="font-inter text-sm text-diaGray">{data.implicit.time}</p>
-            <p className="font-inter text-md text-semibold">{data.implicit.meal}</p>
-          </div>
-          {/* <div className="grid place-items-center px-2  rounded-2xl  bg-diaOrange">
-                  <p className="font-poppin p-3 text-white w-full truncate">
-                    <span className="font-bold">90g </span>
-                  </p>
-                </div> */}
-          <div className="rounded-2xl p-3 bg-diaBlue">
-            <p className="font-inter text-white text-xl">{data.implicit.carbs}</p>
-          </div>
-          <div className="rounded-2xl p-3 bg-diaOrange">
-            <p className="font-inter text-white text-xl">{data.implicit.fastActingInsulinUnits}</p>
-          </div>
-          <div className="rounded-2xl p-3 bg-diaGreen">
-            <p className="font-inter text-white text-xl">{data.implicit.glucose}</p>
-          </div>
+      <AccordionSummary className="border-none rounded-xl shadow-md" expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
+        <div className="self-center flex items-center mx-2 bg-diaBlue h-10 w-10 rounded-xl shadow-md">
+          <Icon icon="fluent-mdl2:breakfast" className="mx-auto text-white h-7 w-7" />
+        </div>
+        <div className="mx-2">
+          <p className="font-rubik font-bold truncate overflow-hidden">{data.meal}</p>
+          <p className="font-rubik text-sm text-diaGray">{data.time.substring(16, 21)}</p>
         </div>
       </AccordionSummary>
       <AccordionDetails className="rounded-xl">
         <TableContainer component={Paper} className="shadow-none">
           <Table aria-label="simple table" className="border-separate border-spacing-y-3">
             <TableBody className="">
-              {data.explicit.map((row) => (
-                <TableRow key={row.name} className=" rounded-lg" sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+              {data.glucose ? (
+                <TableRow className=" rounded-lg" sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
                   <TableCell component="th" scope="row" className="border-2 border-diaBlue border-r-0 rounded-xl rounded-r-none font-poppins">
-                    {row.name}
+                    glucose(mg/dL)
                   </TableCell>
                   <TableCell align="right" className="border-2 border-diaBlue border-l-0 rounded-xl rounded-l-none font-inter font-semibold">
-                    {row.value}
+                    {data.glucose}
                   </TableCell>
                 </TableRow>
-              ))}
+              ) : null}
+              {data.carbs ? (
+                <TableRow className=" rounded-lg" sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
+                  <TableCell component="th" scope="row" className="border-2 border-diaBlue border-r-0 rounded-xl rounded-r-none font-poppins">
+                    Carbohydrates(g)
+                  </TableCell>
+                  <TableCell align="right" className="border-2 border-diaBlue border-l-0 rounded-xl rounded-l-none font-inter font-semibold">
+                    {data.carbs}
+                  </TableCell>
+                </TableRow>
+              ) : null}
             </TableBody>
           </Table>
         </TableContainer>

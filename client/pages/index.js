@@ -1,22 +1,20 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useRouter } from "next/router";
-import Image from "next/image";
 import ResponsiveAppBar from "../components/ResponsiveAppBar";
 import Glucose from "../components/glucose";
 import ActiveInsulin from "../components/activeInsulin";
 import LogBookItem from "../components/logBookItem";
 import LoadingCircle from "../components/loadingCircle";
 import NewLogDialog from "../components/newLogDialog";
-
 export default function Home() {
   const router = useRouter();
   const [Data, setData] = useState();
   useEffect(() => {
-    axios.get("/api/", { withCredentials: true }).then((fullData) => {
+    axios.get("/api/?date=2023-02-01", { withCredentials: true }).then((fullData) => {
       const data = fullData.data;
-      console.log(data);
       setData(data);
+      console.log(data);
     });
   }, []);
 
@@ -33,10 +31,13 @@ export default function Home() {
             </section>
             <section className="w-full rounded-xl shadow-sm p-3">
               <div className="flex justify-between">
-                <h3 className="text-lg text-diaGray font-rubik">Log book</h3>
+                <h3 className="text-lg text-diaGray font-rubik">Recent meals</h3>
                 <NewLogDialog />
               </div>
-              {/* <LogBookItem props={Data.logBook} /> */}
+              {Data.logBook.map((log) => {
+                console.log(log);
+                return <LogBookItem props={log} key={log._id} />;
+              })}
             </section>
           </main>
         </>

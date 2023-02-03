@@ -32,13 +32,13 @@ function ResponsiveAppBar({ props }) {
         <Toolbar disableGutters>
           <Box sx={{ flexGrow: 1, ml: -2, display: { xs: "flex", md: "none" } }}>
             <IconButton size="small" aria-label="account of current user" aria-controls="menu-appbar" aria-haspopup="true" className="text-diaGray">
-              <Image src={"/diabuddies_logo_D.png"} height={70} width={75} className="bg-transparent" alt="diabuddies logo" />
+              <Image src={"/diabuddies_logo_D.png"} height={65} width={65} className="bg-transparent" alt="diabuddies logo" />
             </IconButton>
           </Box>
 
           <Box sx={{ flexGrow: 1, ml: -2, display: { xs: "none", md: "flex" } }}>
             <div className="relative">
-              <Image src={"/diabuddies_logo.png"} objectFit="cover" width={120} height={90} className="bg-transparent my-0" alt="diabuddies logo" />
+              <Image src={"/diabuddies_logo.png"} width={130} height={90} className="bg-transparent my-0 mx-5" alt="diabuddies logo" />
             </div>
           </Box>
 

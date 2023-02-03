@@ -1,5 +1,4 @@
 import * as React from "react";
-import AddIcon from "@mui/icons-material/Add";
 import SaveIcon from "@mui/icons-material/Save";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
@@ -8,6 +7,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
+import { Icon } from "@iconify/react";
 
 export default function NewLogDialog() {
   const [open, setOpen] = React.useState(false);
@@ -22,7 +22,10 @@ export default function NewLogDialog() {
 
   return (
     <>
-      <AddIcon className="text-diaGray" onClick={handleClickOpen} />
+      <Button variant="filled" onClick={handleClickOpen} className="text-diaBlue rounded-full">
+        <Icon icon="material-symbols:add" className="h-6 w-6" />
+        Add
+      </Button>
       <Dialog open={open} onClose={handleClose}>
         <DialogTitle>Subscribe</DialogTitle>
         <DialogContent>
