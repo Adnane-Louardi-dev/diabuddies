@@ -30,8 +30,8 @@ export default function Home() {
               <ActiveInsulin />
             </section>
             <section className="w-full rounded-xl shadow-sm p-3">
-              <div className="flex justify-between">
-                <h3 className="text-lg text-diaGray font-rubik">Recent meals</h3>
+              <div className="flex justify-between items-center">
+                <h3 className="text-lg text-diaGray font-rubik">Recently</h3>
                 <NewLogDialog />
               </div>
               {Data.logBook.map((log) => {
