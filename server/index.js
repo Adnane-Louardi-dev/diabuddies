@@ -101,6 +101,7 @@ app.get("/", isLoggedIn, async (req, res) => {
 });
 
 app.post("/", validate(validation.dialogValidation), (req, res) => {
+  console.log(req.body);
   logBookItemsSchema
     .create({
       userId: req.user._id,

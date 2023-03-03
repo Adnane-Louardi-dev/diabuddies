@@ -11,7 +11,7 @@ export default function Home() {
   const router = useRouter();
   const [Data, setData] = useState();
   useEffect(() => {
-    axios.get("/api/?date=2023-02-01", { withCredentials: true }).then((fullData) => {
+    axios.get("/api/", { withCredentials: true }).then((fullData) => {
       const data = fullData.data;
       setData(data);
       console.log(data);
@@ -35,7 +35,6 @@ export default function Home() {
                 <NewLogDialog />
               </div>
               {Data.logBook.map((log) => {
-                console.log(log);
                 return <LogBookItem props={log} key={log._id} />;
               })}
             </section>
