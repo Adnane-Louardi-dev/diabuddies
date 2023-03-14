@@ -12,10 +12,11 @@ module.exports = {
       },
       colors: {
         diaBlue: "#3AB0FF",
+        diaLightBlue: "#61C0FF",
         diaGray: "#666666",
         diaOrange: "#FFB562",
         diaRed: "#F87474",
-        diaGreen: "#93FFD8",
+        diaGreen: "#44D29F",
       },
       blur: {
         xs: "2px",
