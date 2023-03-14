@@ -26,8 +26,8 @@ export default function Home() {
           <main className="p-5">
             <span className="font-inter text-2xl text-semibold">{`Good evening, ${Data?.user?.givenName}`}</span>
             <section className="flex justify-around my-5">
-              <Glucose />
-              <ActiveInsulin />
+              <Glucose props={Data.logBook[0]} />
+              <ActiveInsulin props={Data.logBook[0]} />
             </section>
             <section className="w-full rounded-xl shadow-sm p-3">
               <div className="flex justify-between items-center">
