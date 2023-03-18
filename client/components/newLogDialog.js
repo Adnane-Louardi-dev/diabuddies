@@ -5,36 +5,30 @@ import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import DialogTitle from "@mui/material/DialogTitle";
 import { Icon } from "@iconify/react";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import TextField from "@mui/material/TextField";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { DesktopDateTimePicker } from "@mui/x-date-pickers/DesktopDateTimePicker";
-import OutlinedInput from "@mui/material/OutlinedInput";
-import MenuItem from "@mui/material/MenuItem";
-import FormControl from "@mui/material/FormControl";
+import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker";
 import InputAdornment from "@mui/material/InputAdornment";
-import Box from "@mui/material/Box";
-import InputLabel from "@mui/material/InputLabel";
-import Select from "@mui/material/Select";
-import Chip from "@mui/material/Chip";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
 export default function NewLogDialog() {
   const [dateOpen, setDateOpen] = React.useState(false);
   const [dateValue, setDateValue] = React.useState(moment());
-  const [firstAlignment, setFirstAlignment] = React.useState("");
-  const [secondAlignment, setSecondAlignment] = React.useState("");
+  const [Alignment, setAlignment] = React.useState({
+    firstAlignment: null,
+    secondAlignment: null,
+  });
   const [data, setData] = React.useState({
     time: dateValue._d,
-    meal: `${firstAlignment} ${secondAlignment}`,
+    meal: `${Alignment.firstAlignment} ${Alignment.secondAlignment}`,
   });
 
   React.useEffect(() => {
-    console.log(data);
-  }, [data]);
+    setData({ ...data, meal: `${Alignment.firstAlignment}  ${Alignment.secondAlignment}` });
+  }, [Alignment]);
 
   return (
     <LocalizationProvider dateAdapter={AdapterMoment}>
@@ -49,23 +43,43 @@ export default function NewLogDialog() {
         <Icon icon="material-symbols:add-circle-rounded" className="mx-1 mb-0.5" />
       </Button>
       <Dialog
+        fullScreen
         open={dateOpen}
         onClose={() => {
           setDateOpen(false);
         }}
       >
-        <DialogTitle className="border-b-2 mb-5">Add new log</DialogTitle>
         <DialogContent>
           {/* date pickers */}
-          <DesktopDateTimePicker
+          <MobileDateTimePicker
             className="w-full my-5"
-            renderInput={(props) => <TextField {...props} />}
+            renderInput={(props) => (
+              <TextField
+                {...props}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <Icon icon="ic:round-access-time-filled" className="h-7 w-7" />
+                    </InputAdornment>
+                  ),
+                }}
+                sx={{
+                  borderRadius: 10,
+                  backgroundColor: "#F3FAFF",
+                  "& fieldset": { borderRadius: 10, boxShadow: "0px 0px 20px -10px" },
+                  "& .MuiInputBase-input": {
+                    textAlign: "center",
+                    fontFamily: "poppins",
+                  },
+                }}
+              />
+            )}
             value={dateValue}
             onChange={(newValue) => {
               setDateValue(newValue);
               setData({ ...data, time: newValue._d });
-              console.log(newValue);
             }}
+            openTo="hours"
           />
           <div>
             <ToggleButtonGroup
@@ -74,16 +88,18 @@ export default function NewLogDialog() {
                 "& .MuiButtonBase-root": {
                   backgroundColor: "#F3FAFF",
                 },
+                "& .MuiButtonBase-root-MuiToggleButton-root.Mui-selected:hover": {
+                  color: "#3AB0FF",
+                },
                 "& .MuiButtonBase-root[aria-pressed='true']": {
                   backgroundColor: "#3AB0FF",
                   color: "white",
                 },
               }}
-              color="primary"
-              value={firstAlignment}
+              value={Alignment.firstAlignment}
               exclusive
               onChange={(event, newAlignment) => {
-                setFirstAlignment(newAlignment);
+                setAlignment({ ...Alignment, firstAlignment: newAlignment });
               }}
               aria-label="Platform"
             >
@@ -103,20 +119,24 @@ export default function NewLogDialog() {
                 "& .MuiButtonBase-root": {
                   backgroundColor: "#F3FAFF",
                 },
+                "& .MuiButtonBase-root-MuiToggleButton-root.Mui-selected:hover": {
+                  color: "#3AB0FF",
+                },
                 "& .MuiButtonBase-root[aria-pressed='true']": {
                   backgroundColor: "#3AB0FF",
                   color: "white",
                 },
               }}
-              color="primary"
-              value={secondAlignment}
+              value={Alignment.secondAlignment}
               exclusive
               onChange={(event, newAlignment) => {
-                setSecondAlignment(newAlignment);
-                console.log(data);
+                setAlignment({ ...Alignment, secondAlignment: newAlignment });
               }}
               aria-label="Platform"
             >
+              <ToggleButton value="other" className="rounded-full border-none mr-3 mb-5 shadow-md">
+                Other
+              </ToggleButton>
               <ToggleButton value="breakfast" className="rounded-full border-none mr-3 mb-5 shadow-md">
                 Breakfast
               </ToggleButton>
@@ -129,11 +149,8 @@ export default function NewLogDialog() {
               <ToggleButton value="dinner" className="rounded-full border-none mr-3 mb-5 shadow-md">
                 Dinner
               </ToggleButton>
-              <ToggleButton value="dinner" className="rounded-full border-none mr-3 mb-5 shadow-md">
+              <ToggleButton value="sport" className="rounded-full border-none mr-3 mb-5 shadow-md">
                 Sport
-              </ToggleButton>
-              <ToggleButton value="other" className="rounded-full border-none mr-3 mb-5 shadow-md">
-                Other
               </ToggleButton>
             </ToggleButtonGroup>
             {/* <FormControl sx={{ marginY: 1, width: "full" }}>
@@ -493,7 +510,7 @@ export default function NewLogDialog() {
                 .then((log) => console.log("log posted succefully"));
             }}
             variant="filled"
-            className="flex justify-center px-2 mx-4 font-rubik text-white bg-diaGreen hover:bg-opacity-75 rounded-lg shadow-md"
+            className="flex justify-center px-2 mx-4 font-rubik text-white bg-diaGray hover:bg-opacity-75 rounded-lg shadow-md"
           >
             Save
           </Button>
