@@ -27,7 +27,7 @@ function ResponsiveAppBar({ props }) {
   };
 
   return (
-    <AppBar position="static" className="bg-white shadow-none">
+    <AppBar position="static" className="bg-transparent shadow-none">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Box sx={{ flexGrow: 1, ml: -2, display: { xs: "flex", md: "none" } }}>
