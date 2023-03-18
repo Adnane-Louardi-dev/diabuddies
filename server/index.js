@@ -117,6 +117,21 @@ app.post("/", validate(validation.dialogValidation), (req, res) => {
     .catch((err) => res.json({ err }));
 });
 
+// DELETE a log by ID
+app.delete("/", async (req, res) => {
+  try {
+    const log = await logBookItemsSchema.findByIdAndDelete(req.query.id);
+    console.log(req.query.id);
+    if (!log) {
+      return res.status(404).send({ error: "Log not found" });
+    }
+    res.send(log);
+  } catch (err) {
+    console.error(err.message);
+    res.status(500).send({ error: "Server error" });
+  }
+});
+
 app.get("/logout", (req, res) => {
   req.session.destroy(function () {
     res.clearCookie("connect.sid");
