@@ -27,9 +27,9 @@ const Glucose = ({ props }) => {
         </div>
       ) : (
         <div className="py-2 w-1/2 mx-1">
-          <div className="rounded-3xl shadow-md bg-white p-3">
-            <div className="flex justify-between w-full items-center text-center">
-              <h3 className="font-poppins text-md text-semibold">there's no logs for today</h3>
+          <div className="rounded-3xl shadow-md bg-green-300 p-3">
+            <div className="w-full items-center text-center">
+              <h3 className="font-poppins text-md text-white">there's no logs for today</h3>
             </div>
             {/* <Image src={"/nologs_illustrator.svg"} width={48} height={48} /> */}
             <div className="my-3">

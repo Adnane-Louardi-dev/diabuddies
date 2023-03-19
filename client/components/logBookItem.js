@@ -1,5 +1,6 @@
 import React from "react";
 import { useState } from "react";
+import axios from "axios";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -11,10 +12,12 @@ import TableContainer from "@mui/material/TableContainer";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import { Icon } from "@iconify/react";
+import Button from "@mui/material/Button";
 import { Breakfast, Lunch, Snack, Dinner, Injection, Glucose } from "../components/mealIcons";
 
 const LogBookItem = ({ props }) => {
   const [data, setData] = useState(props);
+  console.log(data);
 
   return (
     <Accordion
@@ -75,6 +78,22 @@ const LogBookItem = ({ props }) => {
             </TableBody>
           </Table>
         </TableContainer>
+        <Button
+          onClick={() => {
+            axios
+              .delete(`/api/?id=${data._id}`, data, {
+                headers: {
+                  "Content-Type": "application/json",
+                  "Access-Control-Allow-Origin": "*",
+                },
+              })
+              .then((log) => console.log("log deleted succefully"));
+          }}
+          variant="filled"
+          className="flex justify-center px-2 mx-4 font-rubik text-white bg-diaGray hover:bg-opacity-75 rounded-lg shadow-md"
+        >
+          delete
+        </Button>
       </AccordionDetails>
     </Accordion>
   );

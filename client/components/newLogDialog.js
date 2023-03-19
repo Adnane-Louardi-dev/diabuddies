@@ -23,7 +23,7 @@ export default function NewLogDialog() {
   });
   const [data, setData] = React.useState({
     time: dateValue._d,
-    meal: `${Alignment.firstAlignment} ${Alignment.secondAlignment}`,
+    meal: Alignment ? `${Alignment.firstAlignment} ${Alignment.secondAlignment}` : "other",
   });
 
   React.useEffect(() => {
@@ -153,38 +153,13 @@ export default function NewLogDialog() {
                 Sport
               </ToggleButton>
             </ToggleButtonGroup>
-            {/* <FormControl sx={{ marginY: 1, width: "full" }}>
-              <InputLabel id="demo-multiple-chip-label">Meal type</InputLabel>
-              <Select
-                value={personName}
-                onChange={(event) => {
-                  const {
-                    target: { value },
-                  } = event;
-                  setPersonName(value);
-                  setData({ ...data, meal: value });
-                }}
-                input={<OutlinedInput id="select-multiple-chip" label="Chip" />}
-                renderValue={(selected) => (
-                  <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
-                    <Chip label={selected} />
-                  </Box>
-                )}
-              >
-                {names.map((name) => (
-                  <MenuItem key={name} value={name}>
-                    {name}
-                  </MenuItem>
-                ))}
-              </Select>
-            </FormControl> */}
           </div>
 
-          <div className="grid grid-cols-2 gap-2">
+          <div className="grid grid-cols-2 gap-2 my-7">
             {/* Glucose lvls */}
-            <div className="p-2.5 bg-diaBlue rounded-xl shadow-md">
+            <div className="p-2.5 bg-blue-400 rounded-xl shadow-md">
               <div className="flex">
-                <Icon icon="system-uicons:cubes" className="bg-white text-diaBlue rounded-full self-center m-1 p-1 h-7 w-7" />
+                <Icon icon="system-uicons:cubes" className="bg-white text-blue-400 rounded-full self-center m-1 p-1 h-7 w-7" />
                 <p className="text-white font-rubik font-sm self-center">Glucose</p>
               </div>
               <TextField
@@ -226,15 +201,15 @@ export default function NewLogDialog() {
                   },
                 }}
                 onChange={(event) => {
-                  setData({ ...data, glucose: event.target.value });
+                  setData({ ...data, glucose: parseFloat(event.target.value) });
                 }}
               />
             </div>
 
             {/* bolus */}
-            <div className="p-2.5 bg-diaOrange rounded-xl shadow-md">
+            <div className="p-2.5 bg-orange-300 rounded-xl shadow-md">
               <div className="flex">
-                <Icon icon="fluent:syringe-20-regular" className="bg-white text-diaOrange rounded-full self-center m-1 p-1 h-7 w-7" />
+                <Icon icon="fluent:syringe-20-regular" className="bg-white text-orange-300 rounded-full self-center m-1 p-1 h-7 w-7" />
                 <p className="text-white font-rubik font-sm self-center">bolus</p>
               </div>
               <TextField
@@ -277,15 +252,15 @@ export default function NewLogDialog() {
                   },
                 }}
                 onChange={(event) => {
-                  setData({ ...data, fastActingInsulinUnits: event.target.value });
+                  setData({ ...data, fastActingInsulinUnits: parseFloat(event.target.value) });
                 }}
               />
             </div>
 
             {/* carbs */}
-            <div className="p-2.5 bg-diaGray rounded-xl shadow-md">
+            <div className="p-2.5 bg-gray-400 rounded-xl shadow-md">
               <div className="flex">
-                <Icon icon="fluent:food-grains-20-regular" className="bg-white text-diaGray rounded-full self-center m-1 p-1 h-7 w-7" />
+                <Icon icon="fluent:food-grains-20-regular" className="bg-white text-gray-400 rounded-full self-center m-1 p-1 h-7 w-7" />
                 <p className="text-white font-rubik font-sm self-center">Carbs</p>
               </div>
               <TextField
@@ -328,15 +303,15 @@ export default function NewLogDialog() {
                   },
                 }}
                 onChange={(event) => {
-                  setData({ ...data, carbs: event.target.value });
+                  setData({ ...data, carbs: parseFloat(event.target.value) });
                 }}
               />
             </div>
 
             {/* protein */}
-            <div className="p-2.5 bg-diaGray rounded-xl shadow-md">
+            <div className="p-2.5 bg-amber-300 rounded-xl shadow-md">
               <div className="flex">
-                <Icon icon="fluent-emoji-high-contrast:cut-of-meat" className="bg-white text-diaGray rounded-full self-center m-1 p-1 h-7 w-7" />
+                <Icon icon="fluent-emoji-high-contrast:cut-of-meat" className="bg-white text-amber-300 rounded-full self-center m-1 p-1 h-7 w-7" />
                 <p className="text-white font-rubik font-sm self-center">Protein</p>
               </div>
               <TextField
@@ -379,15 +354,15 @@ export default function NewLogDialog() {
                   },
                 }}
                 onChange={(event) => {
-                  setData({ ...data, protein: event.target.value });
+                  setData({ ...data, protein: parseFloat(event.target.value) });
                 }}
               />
             </div>
 
             {/* fat */}
-            <div className="p-2.5 bg-diaGray rounded-xl shadow-md">
+            <div className="p-2.5 bg-red-400 rounded-xl shadow-md">
               <div className="flex">
-                <Icon icon="circum:pizza" className="bg-white text-diaGray rounded-full self-center m-1 p-1 h-7 w-7" />
+                <Icon icon="circum:pizza" className="bg-white text-red-400 rounded-full self-center m-1 p-1 h-7 w-7" />
                 <p className="text-white font-rubik font-sm self-center">fat</p>
               </div>
               <TextField
@@ -430,15 +405,15 @@ export default function NewLogDialog() {
                   },
                 }}
                 onChange={(event) => {
-                  setData({ ...data, kcal: event.target.value });
+                  setData({ ...data, kcal: parseFloat(event.target.value) });
                 }}
               />
             </div>
 
             {/* kcal */}
-            <div className="p-2.5 bg-diaGray rounded-xl shadow-md">
+            <div className="p-2.5 bg-violet-400 rounded-xl shadow-md">
               <div className="flex">
-                <Icon icon="fluent-mdl2:calories" className="bg-white text-diaGray rounded-full self-center m-1 p-1 h-7 w-7" />
+                <Icon icon="fluent-mdl2:calories" className="bg-white text-violet-400 rounded-full self-center m-1 p-1 h-7 w-7" />
                 <p className="text-white font-rubik font-sm self-center">kcal</p>
               </div>
               <TextField
@@ -481,7 +456,7 @@ export default function NewLogDialog() {
                   },
                 }}
                 onChange={(event) => {
-                  setData({ ...data, kcal: event.target.value });
+                  setData({ ...data, kcal: parseFloat(event.target.value) });
                 }}
               />
             </div>
@@ -499,7 +474,6 @@ export default function NewLogDialog() {
           <Button
             onClick={() => {
               setDateOpen(false);
-              console.log(data);
               axios
                 .post("/api", data, {
                   headers: {
@@ -507,7 +481,7 @@ export default function NewLogDialog() {
                     "Access-Control-Allow-Origin": "*",
                   },
                 })
-                .then((log) => console.log("log posted succefully"));
+                .then((log) => console.log(log));
             }}
             variant="filled"
             className="flex justify-center px-2 mx-4 font-rubik text-white bg-diaGray hover:bg-opacity-75 rounded-lg shadow-md"

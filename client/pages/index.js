@@ -5,8 +5,10 @@ import ResponsiveAppBar from "../components/ResponsiveAppBar";
 import Glucose from "../components/glucose";
 import ActiveInsulin from "../components/activeInsulin";
 import LogBookItem from "../components/logBookItem";
-import LoadingCircle from "../components/loadingCircle";
 import NewLogDialog from "../components/newLogDialog";
+import GraphSelect from "../components/GraphSelect";
+import LoadingCircle from "../components/loadingCircle";
+import LineChartGraph from "../components/charts/lineChartGraph";
 export default function Home() {
   const router = useRouter();
   const [Data, setData] = useState();
@@ -31,14 +33,24 @@ export default function Home() {
               <ActiveInsulin props={Data.logBook[0]} />
             </section>
 
-            <section className="w-full rounded-xl shadow-sm p-3">
+            <section className="w-full rounded-xl p-3 my-5">
               <div className="flex justify-between items-center">
-                <h3 className="text-lg text-diaGray font-rubik">Recently</h3>
+                <h3 className="text-lg font-semibold text-diaGray font-rubik">Recently</h3>
                 <NewLogDialog />
               </div>
               {Data.logBook.map((log) => {
                 return <LogBookItem props={log} key={log._id} />;
               })}
+            </section>
+
+            <section className="w-full py-3 mb-10">
+              <div className="flex justify-between items-center">
+                <h3 className="text-lg font-semibold text-diaGray font-rubik px-3">Glucose</h3>
+                <GraphSelect />
+              </div>
+              <div className="my-3 bg-white rounded-xl py-3">
+                <LineChartGraph props={Data.graphData.egvs} />
+              </div>
             </section>
           </main>
         </>
