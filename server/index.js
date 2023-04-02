@@ -81,7 +81,7 @@ app.get("/", isLoggedIn, async (req, res) => {
     return {
       time: log.time.substring(16),
       egv: log.glucose,
-      status: log.glucose <= 70 ? "Low" : log.glucose >= 180 ? "High" : "Normal",
+      status: log.glucose <= 70 ? "low" : log.glucose >= 180 ? (log.glucose >= 250 ? "veryHigh" : "high") : "normal",
       unit: "ml/dL",
     };
   });
