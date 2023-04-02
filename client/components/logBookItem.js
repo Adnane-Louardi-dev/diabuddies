@@ -17,7 +17,7 @@ import { Breakfast, Lunch, Snack, Dinner, Injection, Glucose } from "../componen
 
 const LogBookItem = ({ props }) => {
   const [data, setData] = useState(props);
-  console.log(data);
+  // console.log(data);
 
   return (
     <Accordion

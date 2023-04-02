@@ -38,7 +38,7 @@ export default function GraphSelect() {
         className="flex justify-between items-center text-diaBlue bg-diaBlue bg-opacity-25 pt-2 rounded-full shadow-md"
       >
         Today
-        <Icon icon="material-symbols:arrow-drop-down-rounded" className="h-7 w-7 mb-1" />
+        <Icon icon="material-symbols:arrow-drop-down-rounded" className="h-7 w-7 -mx-1 mb-1" />
       </Button>
       <Dialog disableEscapeKeyDown open={open} onClose={handleClose}>
         <DialogTitle>Fill the form</DialogTitle>
