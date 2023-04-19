@@ -11,14 +11,17 @@ import GraphSelect from "../components/GraphSelect";
 import LoadingCircle from "../components/loadingCircle";
 import LineChartGraph from "../components/charts/lineChartGraph";
 import PiGraph from "../components/charts/piGraph";
+import BarGraph from "../components/charts/barGraph";
+import DayPicker from "../components/dayPicker";
 export default function Home() {
+  const [UserSelectedDate, setUserSelectedDate] = useState("04-13-2023");
   const router = useRouter();
   const [Data, setData] = useState();
   useEffect(() => {
-    axios.get("/api/", { withCredentials: true }).then((fullData) => {
+    axios.get(`/api/?date=${UserSelectedDate}`, { withCredentials: true }).then((fullData) => {
       const data = fullData.data;
       setData(data);
-      console.log(data);
+      console.log(fullData);
     });
   }, []);
 
@@ -29,10 +32,14 @@ export default function Home() {
           <ResponsiveAppBar props={Data?.user} />
           <main className="p-5">
             <span className="font-inter text-2xl text-semibold">{`Good evening, ${Data?.user?.givenName}`}</span>
-
+            <DayPicker />
             <section className="flex justify-around my-5">
-              <Glucose props={Data.logBook[0]} />
-              <ActiveInsulin props={Data.logBook} />
+              {Data.logBook[0] ? (
+                <>
+                  <Glucose props={Data.logBook[0]} />
+                  <ActiveInsulin props={Data?.logBook} />
+                </>
+              ) : null}
             </section>
 
             <section className="w-full rounded-xl p-3 my-5 ">
@@ -70,6 +77,15 @@ export default function Home() {
               </div>
               <div className="my-3 bg-white rounded-xl py-3 pr-3">
                 <PiGraph props={Data.graphData.egvs} />
+              </div>
+            </section>
+            <section className="w-full py-3 mb-10">
+              <div className="flex justify-between items-center">
+                <h3 className="text-lg font-semibold text-diaGray font-rubik px-3">Carbs and insulin combination</h3>
+                <GraphSelect />
+              </div>
+              <div className="my-3 bg-white rounded-xl py-3 pr-3">
+                <BarGraph props={[...Data.logBook].reverse()} />
               </div>
             </section>
           </main>

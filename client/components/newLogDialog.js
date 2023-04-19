@@ -6,9 +6,9 @@ import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import { Icon } from "@iconify/react";
-import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import TextField from "@mui/material/TextField";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
+import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker";
 import InputAdornment from "@mui/material/InputAdornment";
 import ToggleButton from "@mui/material/ToggleButton";
@@ -31,7 +31,7 @@ export default function NewLogDialog() {
   }, [Alignment]);
 
   return (
-    <LocalizationProvider dateAdapter={AdapterMoment}>
+    <>
       <Button
         variant="filled"
         onClick={() => {
@@ -490,6 +490,6 @@ export default function NewLogDialog() {
           </Button>
         </DialogActions>
       </Dialog>
-    </LocalizationProvider>
+    </>
   );
 }
