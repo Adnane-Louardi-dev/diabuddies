@@ -13,17 +13,31 @@ import LineChartGraph from "../components/charts/lineChartGraph";
 import PiGraph from "../components/charts/piGraph";
 import BarGraph from "../components/charts/barGraph";
 import DayPicker from "../components/dayPicker";
+import { useSelector, useDispatch } from "react-redux";
+import { updateDate } from "../features/dayPicker/dayPicker";
 export default function Home() {
-  const [UserSelectedDate, setUserSelectedDate] = useState("04-13-2023");
   const router = useRouter();
+  let date = useSelector((state) => state.dayPicker?.value);
   const [Data, setData] = useState();
+  const queryDate = router.query.date;
+
   useEffect(() => {
-    axios.get(`/api/?date=${UserSelectedDate}`, { withCredentials: true }).then((fullData) => {
-      const data = fullData.data;
-      setData(data);
-      console.log(fullData);
-    });
-  }, []);
+    if (router.isReady) {
+      if (!date) {
+        date = queryDate;
+      }
+      //get date from url query or from the date component
+      axios.get(`/api/?date=${date}`, { withCredentials: true }).then((fullData) => {
+        const data = fullData.data;
+        setData(data);
+        console.log(fullData);
+        // if (data.user.newUser) {
+        //   router.push("/setup");
+        // }
+      });
+      router.push({ href: "/", query: { date: date } });
+    }
+  }, [router.isReady, date]);
 
   return (
     <>
@@ -33,14 +47,14 @@ export default function Home() {
           <main className="p-5">
             <span className="font-inter text-2xl text-semibold">{`Good evening, ${Data?.user?.givenName}`}</span>
             <DayPicker />
-            <section className="flex justify-around my-5">
-              {Data.logBook[0] ? (
-                <>
+            {Data.logBook[0] ? (
+              <>
+                <section className="flex justify-around my-5">
                   <Glucose props={Data.logBook[0]} />
                   <ActiveInsulin props={Data?.logBook} />
-                </>
-              ) : null}
-            </section>
+                </section>
+              </>
+            ) : null}
 
             <section className="w-full rounded-xl p-3 my-5 ">
               <div className="flex justify-between items-center">
@@ -55,39 +69,42 @@ export default function Home() {
                 </div>
               ) : (
                 <div className="grid items-center justify-center m-3 py-5 bg-white rounded-xl">
-                  <Image src={"/No-data-cuate.png"} height={300} width={200} />
+                  <Image src={"/No-data-cuate.png"} height={300} width={200} alt="no data in blue folder" />
                 </div>
               )}
             </section>
-
-            <section className="w-full py-3 mb-10">
-              <div className="flex justify-between items-center">
-                <h3 className="text-lg font-semibold text-diaGray font-rubik px-3">Glucose</h3>
-                <GraphSelect />
-              </div>
-              <div className="my-3 bg-white rounded-xl py-3 pr-3">
-                {/* //reverse the graph to show the recent egvs from RTL */}
-                <LineChartGraph props={[...Data.graphData.egvs].reverse()} />
-              </div>
-            </section>
-            <section className="w-full py-3 mb-10">
-              <div className="flex justify-between items-center">
-                <h3 className="text-lg font-semibold text-diaGray font-rubik px-3">Glucose distibution</h3>
-                <GraphSelect />
-              </div>
-              <div className="my-3 bg-white rounded-xl py-3 pr-3">
-                <PiGraph props={Data.graphData.egvs} />
-              </div>
-            </section>
-            <section className="w-full py-3 mb-10">
-              <div className="flex justify-between items-center">
-                <h3 className="text-lg font-semibold text-diaGray font-rubik px-3">Carbs and insulin combination</h3>
-                <GraphSelect />
-              </div>
-              <div className="my-3 bg-white rounded-xl py-3 pr-3">
-                <BarGraph props={[...Data.logBook].reverse()} />
-              </div>
-            </section>
+            {Data ? (
+              <>
+                <section className="w-full py-3 mb-10">
+                  <div className="flex justify-between items-center">
+                    <h3 className="text-lg font-semibold text-diaGray font-rubik px-3">Glucose</h3>
+                    <GraphSelect />
+                  </div>
+                  <div className="my-3 bg-white rounded-xl py-3 pr-3">
+                    {/* //reverse the graph to show the recent egvs from RTL */}
+                    <LineChartGraph props={[...Data.graphData.egvs].reverse()} />
+                  </div>
+                </section>
+                <section className="w-full py-3 mb-10">
+                  <div className="flex justify-between items-center">
+                    <h3 className="text-lg font-semibold text-diaGray font-rubik px-3">Glucose distibution</h3>
+                    <GraphSelect />
+                  </div>
+                  <div className="my-3 bg-white rounded-xl py-3 pr-3">
+                    <PiGraph props={Data.graphData.egvs} />
+                  </div>
+                </section>
+                <section className="w-full py-3 mb-10">
+                  <div className="flex justify-between items-center">
+                    <h3 className="text-lg font-semibold text-diaGray font-rubik px-3">Carbs and insulin combination</h3>
+                    <GraphSelect />
+                  </div>
+                  <div className="my-3 bg-white rounded-xl py-3 pr-3">
+                    <BarGraph props={[...Data.logBook].reverse()} />
+                  </div>
+                </section>
+              </>
+            ) : null}
           </main>
         </>
       ) : (

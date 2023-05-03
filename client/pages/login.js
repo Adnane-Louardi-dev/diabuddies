@@ -12,17 +12,16 @@ export default function Login() {
   const onSubmit = (data) => setFormData(JSON.stringify(data));
   return (
     <div className="h-full h-screen">
+      {/* <Image src={"/signup_promo.jpg"} className="brightness-50 blur-xs " fill objectFit="cover" alt={"black woman checking blood sugar"} /> */}
       <div className="relative lg:hidden h-52 w-screen pt-8 px-6">
-        <p className="text-md text-white leading-relaxed font-poppins">
+        <p className="text-md text-diaGray leading-relaxed font-poppins">
           With <span className="font hover:underline hover:text-diaBlue decoration-diaOrange">DIABUDDIES</span> you can easily control <br />
           and track your diabetes in one single platform.
           <br />
-          <Button endIcon={<EastIcon />} className="font-roboto text-white hover:text-diaOrange text-md underline hover:decoration-diaOrange">
+          <Button endIcon={<EastIcon />} className="font-roboto text-diaGray hover:text-diaOrange text-md underline hover:decoration-diaOrange">
             Discover why and how
           </Button>
         </p>
-
-        <Image src={"/signup_promo.jpg"} className="brightness-50 blur-xs -z-50" fill objectFit="cover" alt={"black woman checking blood sugar"} />
       </div>
       <div className="flex flex-row -mt-12 bg-white justify-center lg:items-center h-full w-full rounded-3xl lg:rounded-none">
         <div className="absolute">

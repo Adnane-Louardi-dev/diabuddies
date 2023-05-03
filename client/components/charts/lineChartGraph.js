@@ -3,9 +3,9 @@ import moment from "moment";
 import { ResponsiveContainer, AreaChart, CartesianGrid, Area, XAxis, YAxis, linearGradient, Tooltip } from "recharts";
 const LineChartGraph = ({ props }) => {
   const [data, setData] = useState(props);
-  // useEffect(() => {
-  //   console.log(data);
-  // }, [props]);
+  useEffect(() => {
+    console.log(data);
+  }, [props]);
   return (
     <ResponsiveContainer width="100%" height={250}>
       <AreaChart data={data} margin={{ left: -10 }}>
