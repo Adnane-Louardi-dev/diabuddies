@@ -1,7 +1,7 @@
 import React from "react";
 
 const Setup = () => {
-  return <div>Setup</div>;
+  return <section></section>;
 };
 
 export default Setup;
