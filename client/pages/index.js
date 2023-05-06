@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
+import {useEffect, useState} from "react";
 import axios from "axios";
 import Image from "next/image";
-import { useRouter } from "next/router";
+import {useRouter} from "next/router";
 import ResponsiveAppBar from "../components/ResponsiveAppBar";
 import Glucose from "../components/glucose";
 import ActiveInsulin from "../components/activeInsulin";
@@ -13,13 +13,15 @@ import LineChartGraph from "../components/charts/lineChartGraph";
 import PiGraph from "../components/charts/piGraph";
 import BarGraph from "../components/charts/barGraph";
 import DayPicker from "../components/dayPicker";
-import { useSelector, useDispatch } from "react-redux";
-import { updateDate } from "../features/dayPicker/dayPicker";
+import {useDispatch, useSelector} from "react-redux";
+import {updateUser} from "../features/user/user";
+
 export default function Home() {
   const router = useRouter();
   let date = useSelector((state) => state.dayPicker?.value);
   const [Data, setData] = useState();
   const queryDate = router.query.date;
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (router.isReady) {
@@ -30,6 +32,7 @@ export default function Home() {
       axios.get(`/api/?date=${date}`, { withCredentials: true }).then((fullData) => {
         const data = fullData.data;
         setData(data);
+        dispatch(updateUser(data.user))
         console.log(fullData);
         // if (data.user.newUser) {
         //   router.push("/setup");
@@ -80,9 +83,9 @@ export default function Home() {
                     <h3 className="text-lg font-semibold text-diaGray font-rubik px-3">Glucose</h3>
                     <GraphSelect />
                   </div>
-                  <div className="my-3 bg-white rounded-xl py-3 pr-3">
+                  <div className="my-3 bg-white rounded-xl py-6 pr-3">
                     {/* //reverse the graph to show the recent egvs from RTL */}
-                    <LineChartGraph props={[...Data.graphData.egvs].reverse()} />
+                    <LineChartGraph props={Data.graphData.egvs} />
                   </div>
                 </section>
                 <section className="w-full py-3 mb-10">
