@@ -6,19 +6,18 @@ router.get("/", (req, res) => {
   res.json({ msg: "settings" });
 });
 
-router.post("/", (req, res) => {
-  const data = {
-    bio: req.body.bio,
-    age: req.body.age,
-    gender: req.body.gender,
-    height: req.body.height,
-    weight: req.body.weight,
-    diabetesType: req.body.diabetesType,
-    hb1ac: req.body.hb1ac,
-    newUser: false,
-    updatedAt: new Date(),
-  };
-  const userId = req.user._id;
-  const UpdateSettings = userSchema.insertMany();
+router.post("/addMedicament", async (req, res) => {
+  console.log("heeeey")
+  try {
+    const userId = req.user._id;
+    const user = await userSchema.findById(userId);
+    user.medications = [...user.medications, req.body]
+    await user.save()
+    return res.status(201).json(user.medications)
+  } catch (e) {
+    console.error(e)
+    return res.status(404).json({msg: e})
+  }
 });
+
 module.exports = router;
