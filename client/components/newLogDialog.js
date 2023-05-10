@@ -475,7 +475,7 @@ export default function NewLogDialog() {
             onClick={() => {
               setDateOpen(false);
               axios
-                .post("/api", data, {
+                .post("/api/logbook", data, {
                   headers: {
                     "Content-Type": "application/json",
                     "Access-Control-Allow-Origin": "*",
