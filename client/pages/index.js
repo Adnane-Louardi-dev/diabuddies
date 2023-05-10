@@ -1,7 +1,7 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
-import {useRouter} from "next/router";
+import { useRouter } from "next/router";
 import ResponsiveAppBar from "../components/ResponsiveAppBar";
 import Glucose from "../components/glucose";
 import ActiveInsulin from "../components/activeInsulin";
@@ -13,8 +13,7 @@ import LineChartGraph from "../components/charts/lineChartGraph";
 import PiGraph from "../components/charts/piGraph";
 import BarGraph from "../components/charts/barGraph";
 import DayPicker from "../components/dayPicker";
-import {useDispatch, useSelector} from "react-redux";
-import {updateUser} from "../features/user/user";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function Home() {
   const router = useRouter();
@@ -32,7 +31,6 @@ export default function Home() {
       axios.get(`/api/?date=${date}`, { withCredentials: true }).then((fullData) => {
         const data = fullData.data;
         setData(data);
-        dispatch(updateUser(data.user))
         console.log(fullData);
         // if (data.user.newUser) {
         //   router.push("/setup");
