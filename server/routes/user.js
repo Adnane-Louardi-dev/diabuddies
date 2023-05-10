@@ -1,56 +1,46 @@
 const express = require("express");
-const logBookItemsSchema = require("../models/logBookItemsSchema");
-const {validate} = require("../middlewares/validationMiddleware");
-const validation = require("../models/validationSchemas");
 const router = express.Router();
 const userSchema = require("../models/userSchema");
 
-
-
-router.get("/me",async (req, res) => {
-    try {
-        const user = await userSchema.findById(req.user._id)
-        return res.status(201).json(user)
-    } catch (e) {
-        return res.status(404).json({msg: e})
-    }
+//get user data
+router.get("/me", async (req, res) => {
+  try {
+    const user = await userSchema.findById(req.user._id);
+    return res.status(201).json(user);
+  } catch (e) {
+    return res.status(404).json({ msg: e });
+  }
 });
 
-router.post("/", validate(validation.dialogValidation), (req, res) => {
-    console.log(req.body);
-    logBookItemsSchema
-        .create({
-            userId: req.user._id,
-            time: new Date(req.body.time),
-            glucose: req.body.glucose,
-            meal: req.body.meal,
-            fastActingInsulinUnits: req.body.fastActingInsulinUnits,
-            carbs: req.body.carbs,
-            protein: req.body.protein,
-            fat: req.body.fat,
-        })
-        .then((log) => res.json(log))
-        .catch((err) => res.json({ err }));
+//update user settings and return the updated data
+router.post("/", async (req, res) => {
+  try {
+    const changedData = req.body;
+    userSchema
+      .updateOne({ _id: req.user._id }, { $set: changedData })
+      .then(async () => {
+        const user = await userSchema.findById(req.user._id);
+        return res.json({ user });
+      })
+      .catch((err) => res.json(err));
+  } catch (e) {
+    console.error(e);
+    return res.json({ msg: e });
+  }
 });
 
-
-
-// DELETE a log by ID
-router.delete("/", async (req, res) => {
-    try {
-        const log = await logBookItemsSchema.findByIdAndDelete(req.query.id);
-        console.log(req.query.id);
-        if (!log) {
-            return res.status(404).send({ error: "Log not found" });
-        }
-        res.send(log);
-    } catch (err) {
-        console.error(err.message);
-        res.status(500).send({ error: "Server error" });
-    }
+//add medicament to user's medicaments array
+router.post("/addMedicament", async (req, res) => {
+  console.log("heeeey");
+  try {
+    const userId = req.user.id;
+    const user = await userSchema.findById(userId);
+    user.medications = [...user.medications, req.body];
+    await user.save();
+    return res.status(201).json(user.medications);
+  } catch (e) {
+    console.error(e);
+    return res.json({ msg: e });
+  }
 });
-
-
-
-
-module.exports = router
+module.exports = router;

@@ -8,9 +8,9 @@ const MongoStore = require("connect-mongo");
 const passport = require("passport");
 const morgan = require("morgan");
 const login = require("./routes/login");
-const settings = require("./routes/settings");
 const logbook = require("./routes/logbook");
 const userRoutes = require("./routes/userRoutes");
+const isLoggedIn = require("./middlewares/isLoggedIn");
 const user = require("./routes/user");
 
 //DB connect
@@ -40,24 +40,10 @@ app.use(
 );
 app.use(passport.session());
 app.use(passport.initialize());
-// app.use(isLoggedIn);
 app.use("/login", login);
 app.use("/logbook", logbook);
-app.use("/settings", settings);
-app.use("/users", user);
+app.use("/user", user);
 app.use("/", userRoutes);
-//ensure that user is log in
-
-//get the objectId from time stamp
-const objectIdFromDate = function (date) {
-  return Math.floor(date.getTime() / 1000).toString(16) + "0000000000000000";
-};
-
-//get time from time stamp of objectid
-const dateFromObjectId = function (objectId) {
-  return new Date(parseInt(objectId.substring(0, 8), 16) * 1000);
-};
-
 
 app.get("/logout", (req, res) => {
   req.session.destroy(function () {
