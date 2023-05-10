@@ -81,7 +81,7 @@ const LogBookItem = ({ props }) => {
         <Button
           onClick={() => {
             axios
-              .delete(`/api/?id=${data._id}`, data, {
+              .delete(`/api/logbook/?id=${data._id}`, data, {
                 headers: {
                   "Content-Type": "application/json",
                   "Access-Control-Allow-Origin": "*",
