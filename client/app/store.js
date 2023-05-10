@@ -1,10 +1,10 @@
-import {configureStore} from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import dayPicker from "../features/dayPicker/dayPicker";
-import {user} from "../features/user/user";
+import stepper from "../features/stepper/stepper";
 
 export default configureStore({
   reducer: {
-    dayPicker: dayPicker,
-    user: user
+    dayPicker,
+    stepper,
   },
 });
