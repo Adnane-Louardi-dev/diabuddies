@@ -1,10 +1,17 @@
-import moment from "moment";
 import { useState } from "react";
+import moment from "moment";
 import { MobileDatePicker } from "@mui/x-date-pickers";
 import { TextField, InputAdornment } from "@mui/material";
+import { addBirthDate } from "../../features/stepper/stepper";
+import { useDispatch } from "react-redux";
 import { Icon } from "@iconify/react";
 const BirthDate = () => {
-  const [birthDateValue, setBirthDateValue] = useState(moment("2022-04-17"));
+  const dispatch = useDispatch();
+  const [birthDateValue, setBirthDateValue] = useState(moment());
+  const handleBirthDateChange = (newBirthDateValue) => {
+    setBirthDateValue(newBirthDateValue._d);
+    dispatch(addBirthDate(moment(newBirthDateValue._d).format("MMM Do YYYY")));
+  };
   return (
     <section>
       <div className="mt-24 grid items-center justify-center text-center">
@@ -41,10 +48,8 @@ const BirthDate = () => {
             />
           )}
           value={birthDateValue}
-          onChange={(newValue) => {
-            setBirthDateValue(newValue);
-          }}
-          openTo="years"
+          onChange={handleBirthDateChange}
+          views={["year", "month", "day"]}
           inputFormat={"dddd, DD MMMM yyyy"}
         />
       </div>

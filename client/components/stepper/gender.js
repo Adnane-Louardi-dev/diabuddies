@@ -1,10 +1,15 @@
-import { Stepper, Box, Step, StepContent, LinearProgress, ToggleButton, ToggleButtonGroup, Button } from "@mui/material";
-import Image from "next/image";
-import { Icon } from "@iconify/react";
 import { useState } from "react";
+import { ToggleButton, ToggleButtonGroup } from "@mui/material";
+import Image from "next/image";
+import { useSelector, useDispatch } from "react-redux";
+import { addGender } from "../../features/stepper/stepper";
 const Gender = () => {
+  const dispatch = useDispatch();
   const [Gender, setGender] = useState("male");
-  const [activeStep, setActiveStep] = useState(0);
+  const handleGenderChange = (event, newGender) => {
+    setGender(newGender);
+    dispatch(addGender(newGender));
+  };
   return (
     <section>
       <div className="mt-24 grid items-center justify-center text-center">
@@ -17,15 +22,7 @@ const Gender = () => {
         </p>
       </div>
       <div className="flex justify-around mt-10">
-        <ToggleButtonGroup
-          value={Gender}
-          exclusive
-          onChange={(event, newGender) => {
-            setGender(newGender);
-          }}
-          aria-label="text alignment"
-          className="grid grid-cols-2 p-5"
-        >
+        <ToggleButtonGroup value={Gender} exclusive onChange={handleGenderChange} aria-label="text alignment" className="grid grid-cols-2 p-5">
           <ToggleButton value="female" className="grid rounded-xl self-center shadow-md mx-5">
             <Image src={"/female_avatar_diaBlue.png"} height={250} width={120} alt={"blue illustration of female character"} />
             <div className="m-5">
