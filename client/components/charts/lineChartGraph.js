@@ -1,19 +1,19 @@
-import {useEffect, useState} from "react";
-import {Area, AreaChart, CartesianGrid, linearGradient, ResponsiveContainer, Tooltip, XAxis, YAxis} from "recharts";
+import { useEffect, useState } from "react";
+import { Area, AreaChart, CartesianGrid, linearGradient, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 const LineChartGraph = ({ props }) => {
   const [data, setData] = useState(props);
   useEffect(() => {
-    setData(props)
-    console.log("line chart",data);
+    setData(props);
+    console.log("line chart", data);
   }, [props]);
   return (
     <ResponsiveContainer width="100%" height={250}>
       <AreaChart data={data} margin={{ left: -10 }}>
         <defs>
           <linearGradient id="colorUv" x1="0" y1="0" x2="0" y2="1">
-            <stop offset="1%" stopColor="#3AB0FF" stopOpacity={1} />
-            <stop offset="80%" stopColor="#3AB0FF" stopOpacity={1} />
+            <stop offset="1%" stopColor="#3AB0FF" stopOpacity={0.8} />
+            <stop offset="80%" stopColor="#3AB0FF" stopOpacity={0.1} />
           </linearGradient>
         </defs>
         <XAxis dataKey="time" hide />
