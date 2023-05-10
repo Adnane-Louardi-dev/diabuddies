@@ -1,24 +1,41 @@
-import { Button, Box } from "@mui/material";
+import { Button, Box, LinearProgress } from "@mui/material";
 import { useState } from "react";
-import * as React from "react";
-import Typography from "@mui/material/Typography";
+import { useForm } from "react-hook-form";
 import { Icon } from "@iconify/react";
 import Gender from "../components/stepper/gender";
 import BirthDate from "../components/stepper/birthDate";
 import Tall from "../components/stepper/tall";
 import Weight from "../components/stepper/weight";
+import InsulinSensitivity from "../components/stepper/insulinSensitivity";
+import Hb1ac from "../components/stepper/hb1ac";
+import { useSelector } from "react-redux";
+import axios from "axios";
 
-const steps = [<Gender />, <BirthDate />, <Tall />, <Weight />];
+const steps = [<Gender />, <BirthDate />, <Tall />, <Weight />, <InsulinSensitivity />, <Hb1ac />];
 
 const Setup = () => {
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+  let setupForm = useSelector((state) => state.stepper.value);
+
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set());
-  const [isSkipAvailable, setisSkipAvailable] = useState(true);
 
-  const isStepOptional = (step) => {
-    return step === 1;
+  const handlePOSTSetupUser = async () => {
+    console.log(setupForm);
+    axios
+      .post("/api/user/", setupForm, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      })
+      .then((res) => console.log(res))
+      .catch((err) => console.log(err));
   };
-
   const isStepSkipped = (step) => {
     return skipped.has(step);
   };
@@ -29,7 +46,6 @@ const Setup = () => {
       newSkipped = new Set(newSkipped.values());
       newSkipped.delete(activeStep);
     }
-
     setActiveStep((prevActiveStep) => prevActiveStep + 1);
     setSkipped(newSkipped);
   };
@@ -38,6 +54,10 @@ const Setup = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
+  // const [isSkipAvailable, setisSkipAvailable] = useState(true);
+  // const isStepOptional = (step) => {
+  //   return step === 1;
+  // };
   // const handleSkip = () => {
   //   if (!isStepOptional(activeStep)) {
   //     // You probably want to guard against something like this,
@@ -57,7 +77,12 @@ const Setup = () => {
     <Box sx={{ width: "100%" }}>
       {activeStep === steps.length ? (
         <>
-          <Typography sx={{ mt: 2, mb: 1 }}>All steps completed - you&apos;re finished</Typography>
+          <div className="grid grid-cols-1">
+            <Button onClick={handlePOSTSetupUser}>Setup my app</Button>
+            <Button>Cancel</Button>
+          </div>
+
+          {/* <Typography sx={{ mt: 2, mb: 1 }}>All steps completed - you&apos;re finished</Typography>
           <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
             <Box sx={{ flex: "1 1 auto" }} />
             <Button
@@ -67,10 +92,11 @@ const Setup = () => {
             >
               Reset
             </Button>
-          </Box>
+          </Box> */}
         </>
       ) : (
         <>
+          <LinearProgress variant="determinate" value={(activeStep / steps.length) * 100} />
           <div className="flex justify-between">
             <Button onClick={handleBack} disabled={activeStep === 0} className="grid items-center m-3 p-5 bg-gray-200 text-gray-800 rounded-2xl">
               <Icon icon="material-symbols:arrow-back-ios-new-rounded" className="h-5 w-5" />
