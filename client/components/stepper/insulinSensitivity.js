@@ -33,7 +33,8 @@ const InsulinSensitivity = () => {
           className="grid grid-cols-2 gap-5 mx-2 py-5"
           sx={{
             "& .MuiButtonBase-root.MuiToggleButton-root.Mui-selected": {
-              backgroundColor: "#666666",
+              backgroundColor: "#FFD7AA",
+              border: "none",
               color: "white",
             },
           }}

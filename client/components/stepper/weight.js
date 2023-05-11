@@ -28,7 +28,8 @@ const Weight = () => {
           className="grid grid-cols-2 gap-5 mx-5 py-5"
           sx={{
             "& .MuiButtonBase-root.MuiToggleButton-root.Mui-selected": {
-              backgroundColor: "#666666",
+              backgroundColor: "#FFD7AA",
+              border: "none",
               color: "white",
             },
           }}

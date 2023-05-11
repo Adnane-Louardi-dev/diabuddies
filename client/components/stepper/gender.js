@@ -29,8 +29,8 @@ const Gender = () => {
               <h5 className="font-poppins font-semibold">Female</h5>
             </div>
           </ToggleButton>
-          <ToggleButton value="male" className="grid rounded-xl self-center shadow-md mx-5" alt={"blue illustration of male character"}>
-            <Image src={"/male_avatar_diaBlue.png"} height={250} width={120} />
+          <ToggleButton value="male" className="grid rounded-xl self-center shadow-md mx-5">
+            <Image src={"/male_avatar_diaBlue.png"} height={250} width={120} alt={"blue illustration of male character"} />
             <div className="m-5">
               <h5 className="font-poppins font-semibold">Male</h5>
             </div>
