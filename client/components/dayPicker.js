@@ -10,7 +10,7 @@ import moment from "moment";
 const DayPicker = () => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const [UserDate, setUserDate] = useState(moment().format("L"));
+  const [UserDate, setUserDate] = useState(router.query.date || moment().format("L"));
   const datePickerInputFormat = "dddd, DD MMMM yyyy";
 
   return (
@@ -21,7 +21,7 @@ const DayPicker = () => {
             renderInput={(props) => (
               <>
                 <div>
-                  <div className="bg-diaLightBlue  rounded-full p-4 mx-3">
+                  <div className="bg-diaBlue rounded-full p-4 mx-3">
                     <Icon icon="material-symbols:calendar-month" className="text-white h-5 w-5" />
                   </div>
                 </div>
@@ -58,9 +58,9 @@ const DayPicker = () => {
                 />
               </>
             )}
-            value={router.query.date || UserDate}
+            value={UserDate}
             inputFormat={datePickerInputFormat}
-            onAccept={(newDateValue) => dispatch(updateDate(newDateValue._d))}
+            onAccept={(newDateValue) => dispatch(updateDate(newDateValue.toISOString(true)))}
             onChange={(newDateValue) => setUserDate(newDateValue)}
             className="w-full"
           />
