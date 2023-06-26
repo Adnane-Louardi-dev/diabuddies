@@ -5,7 +5,7 @@ const LineChartGraph = ({ props }) => {
   const [data, setData] = useState(props);
   useEffect(() => {
     setData(props);
-    console.log("line chart", data);
+    // console.log("line chart", data);
   }, [props]);
   return (
     <ResponsiveContainer width="100%" height={250}>

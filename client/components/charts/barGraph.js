@@ -6,12 +6,10 @@ const BarGraph = ({ props }) => {
   useEffect(() => {
     setData(props);
   }, [props]);
-  console.log(data);
+  // console.log(data);
   return (
     <ResponsiveContainer width="100%" height={300}>
       <BarChart
-        width={500}
-        height={300}
         data={data}
         margin={{
           top: 20,
