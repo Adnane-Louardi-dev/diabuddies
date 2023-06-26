@@ -14,10 +14,11 @@ import Paper from "@mui/material/Paper";
 import { Icon } from "@iconify/react";
 import Button from "@mui/material/Button";
 import { Breakfast, Lunch, Snack, Dinner, Injection, Glucose } from "../components/mealIcons";
-
+import { useDispatch } from "react-redux";
+import { deleteLog } from "../features/dataReducers/data";
 const LogBookItem = ({ props }) => {
+  const dispatch = useDispatch();
   const [data, setData] = useState(props);
-  // console.log(data);
 
   return (
     <Accordion
@@ -87,7 +88,11 @@ const LogBookItem = ({ props }) => {
                   "Access-Control-Allow-Origin": "*",
                 },
               })
-              .then((log) => console.log("log deleted succefully"));
+              .then((log) => {
+                const { data } = log;
+                console.log(data);
+                dispatch(deleteLog(data));
+              });
           }}
           variant="filled"
           className="flex justify-center px-2 mx-4 font-rubik text-white bg-diaGray hover:bg-opacity-75 rounded-lg shadow-md"

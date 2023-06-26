@@ -7,14 +7,15 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import { Icon } from "@iconify/react";
 import TextField from "@mui/material/TextField";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
+import { appendNewLog } from "../features/dataReducers/data";
+import { useDispatch } from "react-redux";
 import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker";
 import InputAdornment from "@mui/material/InputAdornment";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
 export default function NewLogDialog() {
+  const dispatch = useDispatch();
   const [dateOpen, setDateOpen] = React.useState(false);
   const [dateValue, setDateValue] = React.useState(moment());
   const [Alignment, setAlignment] = React.useState({
@@ -23,8 +24,21 @@ export default function NewLogDialog() {
   });
   const [data, setData] = React.useState({
     time: dateValue._d,
-    meal: Alignment ? `${Alignment.firstAlignment} ${Alignment.secondAlignment}` : "other",
+    meal: `${Alignment.firstAlignment && ""} ${Alignment.secondAlignment || ""}`,
   });
+
+  //handle post new log
+  const handlePOSTNewLog = () => {
+    setDateOpen(false);
+    axios
+      .post("/api/logbook", data, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      })
+      .then((log) => dispatch(appendNewLog(log.data)));
+  };
 
   React.useEffect(() => {
     setData({ ...data, meal: `${Alignment.firstAlignment}  ${Alignment.secondAlignment}` });
@@ -472,17 +486,7 @@ export default function NewLogDialog() {
             Cancel
           </Button>
           <Button
-            onClick={() => {
-              setDateOpen(false);
-              axios
-                .post("/api/logbook", data, {
-                  headers: {
-                    "Content-Type": "application/json",
-                    "Access-Control-Allow-Origin": "*",
-                  },
-                })
-                .then((log) => console.log(log));
-            }}
+            onClick={handlePOSTNewLog}
             variant="filled"
             className="flex justify-center px-2 mx-4 font-rubik text-white bg-diaGray hover:bg-opacity-75 rounded-lg shadow-md"
           >
