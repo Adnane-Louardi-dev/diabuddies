@@ -23,12 +23,16 @@ const Setup = () => {
 
   const handlePOSTSetupUser = async () => {
     axios
-      .post("/api/user/", setupForm, {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-      })
+      .post(
+        "/api/user/",
+        { ...setupForm, newUser: false },
+        {
+          headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Origin": "*",
+          },
+        }
+      )
       .then((res) => console.log(res))
       .catch((err) => console.log(err));
     router.push("/");
@@ -55,31 +59,12 @@ const Setup = () => {
     setActiveStep((prevActiveStep) => prevActiveStep - 1);
   };
 
-  // const [isSkipAvailable, setisSkipAvailable] = useState(true);
-  // const isStepOptional = (step) => {
-  //   return step === 1;
-  // };
-  // const handleSkip = () => {
-  //   if (!isStepOptional(activeStep)) {
-  //     // You probably want to guard against something like this,
-  //     // it should never occur unless someone's actively trying to break something.
-  //     setisSkipAvailable(false);
-  //   }
-
-  //   setActiveStep((prevActiveStep) => prevActiveStep + 1);
-  //   setSkipped((prevSkipped) => {
-  //     const newSkipped = new Set(prevSkipped.values());
-  //     newSkipped.add(activeStep);
-  //     return newSkipped;
-  //   });
-  // };
-
   return (
     <Box sx={{ width: "100%" }}>
       <LinearProgress
         sx={{
           "& .MuiLinearProgress-bar": {
-            backgroundColor: "#FFD7AA",
+            backgroundColor: "#3AB0FF",
           },
         }}
         variant="determinate"
@@ -89,12 +74,12 @@ const Setup = () => {
         <Button
           onClick={handleBack}
           disabled={activeStep === 0}
-          className={`grid items-center m-3 p-5 ${activeStep === 0 ? "bg-[#FFECD6] text-gray-300" : "bg-diaLightOrange text-gray-500"}  rounded-2xl`}
+          className={`grid items-center m-3 p-5 bg-diaLightBlue  ${activeStep === 0 ? "text-gray-300" : "text-diaBlue"}  rounded-2xl`}
         >
           <Icon icon="material-symbols:arrow-back-ios-new-rounded" className="h-5 w-5" />
         </Button>
         {activeStep !== steps.length && (
-          <Button onClick={handleNext} className="m-3 p-5 bg-diaLightOrange rounded-2xl font-poppins font-semibold text-gray-500">
+          <Button onClick={handleNext} className="m-3 p-5 bg-diaLightBlue rounded-2xl font-poppins font-semibold text-diaBlue">
             Skip
           </Button>
         )}
@@ -102,36 +87,24 @@ const Setup = () => {
       {activeStep === steps.length ? (
         <>
           <Box sx={{ width: "100%" }}>
-            <div className="flex flex-col justify-center items-center text-center my-10">
+            <div className="flex flex-col justify-center items-center text-center my-20">
               <Image src={"/undraw_Completing.png"} height={600} width={300} alt={"diabuddies logo"} className="rounded-full" />
               <div className="my-5">
                 <h2 className="text-2xl font-poppins font-semibold">All is done</h2>
                 <p className="font-poppins text-diaGray text-sm">It is now very easy to reach the best results of management of your diabetes</p>
               </div>
             </div>
-            <div className="grid grid-cols-1 gap-3 my-5 absolute bottom-10 left-[50%] translate-x-[-50%] w-full">
+            <div className="grid grid-cols-1 gap-3 absolute bottom-10 left-[50%] translate-x-[-50%] w-full">
               <div className="px-5">
-                <Button onClick={handlePOSTSetupUser} className="w-full p-3 rounded-3xl shadow-md bg-diaLightOrange text-white font-poppins font-xl">
+                <Button onClick={handlePOSTSetupUser} className="w-full p-3 rounded-3xl shadow-md bg-gray-800 text-white font-poppins font-xl">
                   Setup my app
                 </Button>
-              </div>{" "}
+              </div>
               <Button onClick={handleSetupAbortion} className="font-poppins text-diaGray">
                 Cancel
               </Button>
             </div>
           </Box>
-
-          {/* <Typography sx={{ mt: 2, mb: 1 }}>All steps completed - you&apos;re finished</Typography>
-          <Box sx={{ display: "flex", flexDirection: "row", pt: 2 }}>
-            <Box sx={{ flex: "1 1 auto" }} />
-            <Button
-              onClick={() => {
-                setActiveStep(0);
-              }}
-            >
-              Reset
-            </Button>
-          </Box> */}
         </>
       ) : (
         <>
@@ -141,7 +114,7 @@ const Setup = () => {
               onClick={() => {
                 setActiveStep(activeStep + 1);
               }}
-              className="grid items-center justify-center h-20 w-20 m-5 p-5 rounded-full bg-diaLightOrange text-gray-400"
+              className="grid items-center justify-center h-20 w-20 m-5 p-5 rounded-full bg-diaLightBlue text-diaBlue"
             >
               <Icon icon="material-symbols:arrow-forward-ios-rounded" className="h-7 w-7" />
             </Button>

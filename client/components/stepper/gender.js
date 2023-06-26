@@ -22,7 +22,19 @@ const Gender = () => {
         </p>
       </div>
       <div className="flex justify-around mt-10">
-        <ToggleButtonGroup value={Gender} exclusive onChange={handleGenderChange} aria-label="text alignment" className="grid grid-cols-2 p-5">
+        <ToggleButtonGroup
+          sx={{
+            "& .MuiButtonBase-root.MuiToggleButton-root.Mui-selected": {
+              backgroundColor: "#98D6FF",
+              border: "none",
+            },
+          }}
+          value={Gender}
+          exclusive
+          onChange={handleGenderChange}
+          aria-label="text alignment"
+          className="grid grid-cols-2 p-5"
+        >
           <ToggleButton value="female" className="grid rounded-xl self-center shadow-md mx-5">
             <Image src={"/female_avatar_diaBlue.png"} height={250} width={120} alt={"blue illustration of female character"} />
             <div className="m-5">

@@ -27,7 +27,7 @@ const Tall = ({ props }) => {
           className="grid grid-cols-2 gap-5 mx-5 py-5"
           sx={{
             "& .MuiButtonBase-root.MuiToggleButton-root.Mui-selected": {
-              backgroundColor: "#FFD7AA",
+              backgroundColor: "#3AB0FF",
               border: "none",
               color: "white",
             },
