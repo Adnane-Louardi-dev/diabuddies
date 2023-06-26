@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Button, Grid, Input } from "@mui/material";
+import { Button, Grid, Input, InputAdornment } from "@mui/material";
+import TextField from "@mui/material/TextField";
 import { SettingsCard } from "../components/SettingsCard";
 import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
@@ -14,23 +15,24 @@ import MenuItem from "@mui/material/MenuItem";
 import { heightUnits, insulinUnits, weightUnits } from "../utils/units";
 import { AddMedicamentModal } from "../components/AddMedicamentModal";
 import Image from "next/image";
+import LoadingCircle from "../components/loadingCircle";
 
 const Settings = () => {
   const { register, control, handleSubmit, reset } = useForm();
   const [user, setUser] = useState(undefined);
   const router = useRouter();
-  const queryDate = router.query.date;
   const [loading, setLoading] = useState(false);
   useEffect(() => {
     setLoading(true);
     if (router.isReady) {
       //get date from url query or from the date component
       axios.get(`/api/user/me`, { withCredentials: true }).then((res) => {
-        setUser(res.data);
+        const { data } = res;
+        setUser(data);
         setLoading(false);
       });
     }
-  }, [router.isReady, queryDate]);
+  }, [router.isReady]);
   const updateUserSettings = (data) => {
     if (data.newPassword) {
       if (data.confirmPassword === data.newPassword) {
@@ -56,8 +58,9 @@ const Settings = () => {
         }
       )
       .then((res) => {
-        console.log("user updated successfuly", res.data);
-        setUser(res.data);
+        const { user } = res.data;
+        console.log("user updated successfuly", user);
+        setUser(user);
       })
       .catch((err) => {
         alert("cannot Update user, some error occured");
@@ -67,53 +70,70 @@ const Settings = () => {
 
   const UserInput = React.useCallback(({ fieldName, label, ...props }) => {
     return (
-      <div className={"flex justify-between align-middle"}>
-        {/*<InputLabel className={"text-black"}>{props.defaultValue}</InputLabel>*/}
-        <Input placeholder={label} {...register(fieldName)} {...props} defaultValue={props.defaultValue} />
+      <div className={"flex justify-between align-middle "}>
+        <TextField
+          variant="outlined"
+          label={label}
+          className="rounded-2xl w-full font-inter"
+          {...register(fieldName)}
+          {...props}
+          defaultValue={props.defaultValue}
+        />
       </div>
     );
   }, []);
 
   if (loading || !user) {
-    return <h1>loading....</h1>;
+    return (
+      <div className="grid h-screen justify-center content-center">
+        <LoadingCircle />
+      </div>
+    );
   }
   return (
     <form onSubmit={handleSubmit(updateUserSettings)}>
       <section className={"p-5 flex justify-between"}>
-        <h3 className={"text-2xl"}>Settings</h3>
+        <h3 className={"text-2xl font-inter text-diaGray"}>Profile</h3>
         <div>
           <Button className={"text-gray-500"}>Cancel</Button>
           <Button type={"submit"} className={"bg-diaBlue text-white"}>
-            Save All
+            Save
           </Button>
         </div>
       </section>
-      <Grid container className={"px-5"} columnSpacing={2}>
-        <Grid item xs={12} md={9}>
+      <Grid container className={"px-5"} rowSpacing={3}>
+        {/* profile */}
+        <Grid item xs={12}>
+          <div className="grid grid-cols-1 items-center justify-items-center">
+            <Image src={user.photo} width={100} height={100} alt={user.userName + " picture"} className="rounded-full" />
+            <Button type={"submit"} className="ring-1 ring-diaGray text-diaGray m-5 bg-transparent font-semibold font-rubik">
+              Change profile picture
+            </Button>
+          </div>
           <SettingsCard sectionTitle={"Profile"}>
             <Grid container columnSpacing={2} rowSpacing={2}>
-              <Grid item xs={6}>
+              <Grid item xs={12}>
                 <UserInput defaultValue={user.givenName} fieldName={"givenName"} label={"First name"} />
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={12}>
                 <UserInput defaultValue={user.familyName} fieldName={"familyName"} label={"Last name"} />
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={12}>
                 <UserInput defaultValue={user.email} fieldName={"email"} label={"Email"} />
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={12}>
                 <UserInput defaultValue={user.userName} fieldName={"userName"} label={"userName"} />
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={6}>
                 <UserInput defaultValue={user.age} fieldName={"age"} label={"Age"} type={"number"} />
               </Grid>
-              <Grid item xs={4}>
+              <Grid item xs={6}>
                 <Controller
                   name={"gender"}
                   control={control}
                   defaultValue={user.gender || "Gender"}
                   render={({ field }) => (
-                    <Select {...field}>
+                    <Select {...field} className="w-full">
                       {["Gender", "Male", "Female"].map((gender) => (
                         <MenuItem key={"gender-" + gender} value={gender}>
                           {gender}
@@ -123,13 +143,21 @@ const Settings = () => {
                   )}
                 />
               </Grid>
-              <Grid item xs={4}>
+            </Grid>
+          </SettingsCard>
+        </Grid>
+        {/* my details */}
+        <Grid item xs={12} md={12}>
+          <SettingsCard sectionTitle={"My details"}>
+            <Grid container columnSpacing={2} rowSpacing={2}>
+              {/* diabetes type */}
+              <Grid item xs={12}>
                 <Controller
                   name={"diabetesType"}
                   control={control}
                   defaultValue={user.diabetesType || "Diabetes Type"}
                   render={({ field }) => (
-                    <Select {...field}>
+                    <Select {...field} className="w-full">
                       {["Diabetes Type", "type 1", "type 2"].map((type) => (
                         <MenuItem key={"diabetes" + type} value={type}>
                           {type}
@@ -139,132 +167,166 @@ const Settings = () => {
                   )}
                 />
               </Grid>
-            </Grid>
-          </SettingsCard>
-        </Grid>
-        <Grid item xs={12} md={3}>
-          {/*<ProfileAvatar />*/}
-          <Image src={user.photo} width={200} height={200} alt={user.userName + " picture"} />
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <SettingsCard sectionTitle={"My details"}>
-            <Grid container columnSpacing={2} rowSpacing={2}>
+              {/* Height */}
               <Grid item xs={6}>
                 <UserInput
                   defaultValue={user.height?.value ? user.height.value : ""}
                   fieldName={"height.value"}
                   label={"Height"}
                   type={"number"}
-                  renderSuffix={() => {
-                    return (
-                      <Controller
-                        name={"height.unit"}
-                        control={control}
-                        defaultValue={user.height?.unit || heightUnits.default}
-                        render={({ field }) => (
-                          <Select {...field} className={"min-w-[100px]"}>
-                            {heightUnits.options.map((unit) => (
-                              <MenuItem key={"height" + unit} value={unit}>
-                                {unit}
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        )}
-                      />
-                    );
+                  sx={{
+                    "& .MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-colorPrimary.MuiInputBase-formControl.MuiInputBase-adornedEnd": {
+                      padding: 0,
+                    },
+                  }}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <Controller
+                          name={"height.unit"}
+                          control={control}
+                          defaultValue={user.height?.unit || heightUnits.default}
+                          render={({ field }) => (
+                            <Select {...field} className={"w-full"}>
+                              {heightUnits.options.map((unit) => (
+                                <MenuItem key={"height" + unit} value={unit}>
+                                  {unit}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          )}
+                        />
+                      </InputAdornment>
+                    ),
                   }}
                 />
               </Grid>
+              {/* weight */}
               <Grid item xs={6}>
                 <UserInput
                   defaultValue={user.weight?.value ? user.weight.value : ""}
                   fieldName={"weight.value"}
                   label={"Weight"}
                   type={"number"}
-                  renderSuffix={() => {
-                    return (
-                      <Controller
-                        name={"weight.unit"}
-                        control={control}
-                        defaultValue={user.weight?.unit || weightUnits.default}
-                        render={({ field }) => (
-                          <Select {...field} className={"min-w-[100px]"}>
-                            {weightUnits.options.map((unit) => (
-                              <MenuItem key={"weight" + unit} value={unit}>
-                                {unit}
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        )}
-                      />
-                    );
+                  sx={{
+                    "& .MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-colorPrimary.MuiInputBase-formControl.MuiInputBase-adornedEnd": {
+                      padding: 0,
+                    },
+                  }}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <Controller
+                          name={"weight.unit"}
+                          control={control}
+                          defaultValue={user.weight?.unit || weightUnits.default}
+                          render={({ field }) => (
+                            <Select {...field} className={"w-full"}>
+                              {weightUnits.options.map((unit) => (
+                                <MenuItem key={"weight" + unit} value={unit}>
+                                  {unit}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          )}
+                        />
+                      </InputAdornment>
+                    ),
                   }}
                 />
               </Grid>
+              {/* carbs ratio */}
               <Grid item xs={6}>
                 <UserInput
                   defaultValue={parseFloat(user.carbsRatio)}
                   fieldName={"carbsRatio"}
                   label={"Carbs Ratio"}
                   type={"number"}
-                  renderSuffix={() => <span>%</span>}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <span>%</span>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
               </Grid>
+              {/* body fat */}
               <Grid item xs={6}>
                 <UserInput
                   defaultValue={parseFloat(user.bodyFatPercentage)}
                   fieldName={"bodyFatPercentage"}
                   label={"Body Fat Percentage"}
                   type={"number"}
-                  renderSuffix={() => <span>%</span>}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <span>%</span>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
               </Grid>
+              {/* insulin Sensitivity */}
               <Grid item xs={6}>
-                <input type={"number"} {...register("someInput")} />
                 <UserInput
                   defaultValue={parseFloat(user.insulinSensitivity?.value)}
                   fieldName={"insulinSensitivity.value"}
                   label={"Insulin Sensitivity"}
                   type={"number"}
-                  renderSuffix={() => {
-                    return (
-                      <Controller
-                        name={"insulinSensitivity.unit"}
-                        control={control}
-                        defaultValue={user.insulinSensitivity?.unit || insulinUnits.default}
-                        render={({ field }) => (
-                          <Select {...field} className={"min-w-[100px]"}>
-                            {insulinUnits.options.map((unit) => (
-                              <MenuItem key={"weight" + unit} value={unit}>
-                                {unit}
-                              </MenuItem>
-                            ))}
-                          </Select>
-                        )}
-                      />
-                    );
+                  sx={{
+                    "& .MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-colorPrimary.MuiInputBase-formControl.MuiInputBase-adornedEnd": {
+                      padding: 0,
+                    },
+                  }}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <Controller
+                          name={"insulinSensitivity.unit"}
+                          control={control}
+                          defaultValue={user.insulinSensitivity?.unit || insulinUnits.default}
+                          render={({ field }) => (
+                            <Select {...field} className={"w-full"}>
+                              {insulinUnits.options.map((unit) => (
+                                <MenuItem key={"weight" + unit} value={unit}>
+                                  {unit}
+                                </MenuItem>
+                              ))}
+                            </Select>
+                          )}
+                        />
+                      </InputAdornment>
+                    ),
                   }}
                 />
               </Grid>
+              {/* hb1ac */}
               <Grid item xs={6}>
                 <UserInput
                   defaultValue={user.hb1ac}
                   fieldName={"hb1ac"}
                   label={"HB1AC"}
                   type={"number"}
-                  renderSuffix={() => <span className={"px-2"}>%</span>}
+                  InputProps={{
+                    endAdornment: (
+                      <InputAdornment position="end">
+                        <span>%</span>
+                      </InputAdornment>
+                    ),
+                  }}
                 />
               </Grid>
             </Grid>
           </SettingsCard>
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={12}>
           <SettingsCard sectionTitle={"Ranges"}>
             <Grid container columnSpacing={2} rowSpacing={2}>
-              <Grid item xs={6}>
+              <Grid item xs={12}>
                 <InputLabel>Hyperglycemia</InputLabel>
               </Grid>
-              <Grid item xs={6} className={"grid grid-cols-2"}>
+              <Grid item xs={12} className={"grid grid-cols-2"}>
                 <div>
                   Min. <Input defaultValue={user.hyperglycemia?.min} type={"number"} placeholder={"181"} {...register("hyperglycemia.min")} />
                 </div>
@@ -272,10 +334,10 @@ const Settings = () => {
                   Max. <Input defaultValue={user.hyperglycemia?.max} type={"number"} placeholder={"600"} {...register("hyperglycemia.max")} />
                 </div>
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={12}>
                 <InputLabel>Normal blood glucose</InputLabel>
               </Grid>
-              <Grid item xs={6} className={"grid grid-cols-2"}>
+              <Grid item xs={12} className={"grid grid-cols-2"}>
                 <div>
                   Min. <Input defaultValue={user.normalBloodGlucose?.min} type={"number"} placeholder={"70"} {...register("normalBloodGlucose.min")} />
                 </div>
@@ -283,10 +345,10 @@ const Settings = () => {
                   Max. <Input defaultValue={user.normalBloodGlucose?.max} type={"number"} placeholder={"180"} {...register("normalBloodGlucose.max")} />
                 </div>
               </Grid>
-              <Grid item xs={6}>
+              <Grid item xs={12}>
                 <InputLabel>Hypoglycemia</InputLabel>
               </Grid>
-              <Grid item xs={6} className={"grid grid-cols-2"}>
+              <Grid item xs={12} className={"grid grid-cols-2"}>
                 <div>
                   Min. <Input defaultValue={user.hypoglycemia?.min} type={"number"} placeholder={"20"} {...register("hypoglycemia.min")} />
                 </div>
@@ -309,10 +371,10 @@ const Settings = () => {
             {user && user.medications?.map((medication) => <SettingMedication medication={medication} control={control} />)}
           </SettingsCard>
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={12}>
           <SettingsCard sectionTitle={"General"}>
             <Grid container>
-              <Grid item xs={6}>
+              <Grid item xs={12}>
                 <h5 className={"text-lg pb-5"}>Security</h5>
                 <div className={"pb-5"}>
                   <InputLabel className={"text-black text-xs"}>{"Current password"}</InputLabel>
@@ -328,7 +390,7 @@ const Settings = () => {
                 </div>
                 <Button className={"bg-diaBlue text-white w-[100%]"}>Change password</Button>
               </Grid>
-              <Grid item xs={6} className={"text-gray-500"}>
+              <Grid item xs={12} className={"text-gray-500"}>
                 <h5>Delete the Account</h5>
                 <p className={"text-sm pt-2 pb-8"}>want to delete your account permanently. Click delete permanently</p>
 
@@ -337,7 +399,7 @@ const Settings = () => {
             </Grid>
           </SettingsCard>
         </Grid>
-        <Grid item xs={12} md={6}>
+        <Grid item xs={12} md={12}>
           <SettingsCard sectionTitle={"Appearance"}>
             <h5>Change the theme of the platform</h5>
             <p>Appearance let you customize your background</p>
@@ -354,7 +416,7 @@ const Settings = () => {
         <div className={"flex py-5"}>
           <Button>Cancel</Button>
           <Button type={"submit"} className={"bg-diaBlue text-white"}>
-            Save all changes
+            Save
           </Button>
         </div>
       </Grid>
