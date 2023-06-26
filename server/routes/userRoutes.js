@@ -25,7 +25,7 @@ router.get("/", isLoggedIn, async (req, res) => {
     return {
       time: log.time.substring(16),
       egv: log.glucose,
-      status: log.glucose <= 70 ? "low" : log.glucose >= 180 ? (log.glucose >= 250 ? "veryHigh" : "high") : "normal",
+      status: log.glucose <= 69 ? "low" : log.glucose >= 181 ? (log.glucose >= 251 ? "veryHigh" : "high") : "normal",
       unit: "ml/dL",
     };
   });
