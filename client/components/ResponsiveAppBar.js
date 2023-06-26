@@ -64,8 +64,8 @@ function ResponsiveAppBar({ props }) {
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
-              {settings.map((setting) => (
-                <Link href={`/${setting.toLowerCase()}`} passHref>
+              {settings.map((setting, i) => (
+                <Link key={i} href={`/${setting.toLowerCase()}`} passHref>
                   <MenuItem key={setting} onClick={handleCloseUserMenu}>
                     <Typography textAlign="center">{setting}</Typography>
                   </MenuItem>
