@@ -8,7 +8,7 @@ export const dayPicker = createSlice({
   },
   reducers: {
     updateDate: (state, action) => {
-      state.value = moment(action.payload).format("L");
+      state.value = moment(action.payload).format("MM/DD/YYYY");
     },
   },
 });

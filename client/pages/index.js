@@ -22,20 +22,22 @@ export default function Home() {
   const dispatch = useDispatch();
   const queryDate = router.query.date;
   const [isReady, setIsReady] = useState(false);
+  //initial value is null
   let date = useSelector((state) => state.dayPicker?.value);
   let Data = useSelector((data) => data.dataSlice?.value);
   useEffect(() => {
     if (router.isReady) {
+      //for the initial rendering get date from url (direct access from url)
       if (!date) {
         date = queryDate;
       }
+      router.push({ href: "/", query: { date: date } });
       //get date from url query or from the date component
       axios
         .get(`/api/?date=${date}`, { withCredentials: true })
         .then((fullData) => {
           const { data } = fullData;
           dispatch(storeData(data));
-          Data = data;
           setIsReady(true);
         })
         .catch((e) => console.log(e));
@@ -43,7 +45,6 @@ export default function Home() {
       // if (Data?.user.newUser) {
       //   router.push("/setup");
       // }
-      router.push({ href: "/", query: { date: date } });
     }
   }, [router.isReady, date]);
 
