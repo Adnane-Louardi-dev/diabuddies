@@ -1,6 +1,9 @@
 const joi = require("joi");
+//logBook dialog validation
 exports.dialogValidation = joi.object().keys({
-  time: joi.string().required(),
+  time: joi.date().required(),
+  status: joi.string(),
+  unit: joi.string(),
   glucose: joi.number().integer().min(0).max(700),
   meal: joi.string().required(),
   fastActingInsulinUnits: joi.number(),

@@ -3,8 +3,10 @@ const router = express.Router();
 const logBookItemsSchema = require("../models/logBookItemsSchema");
 const { validate } = require("../middlewares/validationMiddleware");
 const validation = require("../models/validationSchemas");
+const moment = require("moment");
+const { isLoggedIn } = require("../middlewares/isLoggedIn");
 
-router.get("/", async (req, res) => {
+router.get("/", isLoggedIn, async (req, res) => {
   let lastLogId,
     hasNext,
     limit = 3;
@@ -24,13 +26,15 @@ router.get("/", async (req, res) => {
   res.json({ logBooks, previous_cursor: req.query.previousCursor, next_cursor: lastLogId, hasNext });
 });
 
-router.post("/", validate(validation.dialogValidation), (req, res) => {
-  console.log(req.body);
+router.post("/", [isLoggedIn, validate(validation.dialogValidation)], (req, res) => {
+  console.log(req.user);
   logBookItemsSchema
     .create({
       userId: req.user._id,
-      time: new Date(req.body.time),
+      time: moment(req.body.time),
       glucose: req.body.glucose,
+      unit: req.user.unit,
+      status: req.body.glucose <= 69 ? "low" : req.body.glucose >= 181 ? (req.body.glucose >= 251 ? "veryHigh" : "high") : "normal",
       meal: req.body.meal,
       fastActingInsulinUnits: req.body.fastActingInsulinUnits,
       carbs: req.body.carbs,
@@ -41,7 +45,7 @@ router.post("/", validate(validation.dialogValidation), (req, res) => {
     .catch((err) => res.json({ err }));
 });
 // DELETE a log by ID
-router.delete("/", async (req, res) => {
+router.delete("/", isLoggedIn, async (req, res) => {
   try {
     const log = await logBookItemsSchema.findByIdAndDelete(req.query.id);
     console.log(req.query.id);

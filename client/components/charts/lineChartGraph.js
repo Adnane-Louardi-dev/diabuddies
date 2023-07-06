@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { Area, AreaChart, CartesianGrid, linearGradient, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
-
+import moment from "moment";
 const LineChartGraph = ({ props }) => {
   const [data, setData] = useState(props);
   useEffect(() => {
@@ -18,9 +18,15 @@ const LineChartGraph = ({ props }) => {
         </defs>
         <XAxis dataKey="time" hide />
         <YAxis type="number" tickSize={10} axisLine={false} tickLine={false} ticks={[50, 70, 180, 250, 400]} domain={[0, 400]} />
-        <Tooltip />
+        <Tooltip
+          formatter={(value) => {
+            return [value, "Blood Glucose"];
+          }}
+          labelFormatter={(date) => moment(date).format("DD/MM/YYYY HH:mm:ss")}
+          contentStyle={{ color: "#323D34", borderRadius: 15 }}
+        />
         <CartesianGrid strokeDasharray="5" horizontalFill={["white", "white", "#44D29F", "white"]} fillOpacity={0.5} />
-        <Area type="monotone" dot dataKey="egv" strokeWidth={2} stroke="#3AB0FF" fillOpacity={1} fill="url(#colorUv)" />
+        <Area type="monotone" dot dataKey="glucose" strokeWidth={2} stroke="#3AB0FF" fillOpacity={1} fill="url(#colorUv)" />
       </AreaChart>
     </ResponsiveContainer>
   );

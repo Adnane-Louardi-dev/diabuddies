@@ -17,7 +17,7 @@ const userSchema = mongoose.Schema(
     },
     photo: String,
     bio: String,
-    birthDate: String,
+    birthDate: Date,
     gender: String,
     height: {
       value: {

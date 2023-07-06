@@ -8,7 +8,7 @@ const { isLoggedIn } = require("../middlewares/isLoggedIn");
 router.get("/", isLoggedIn, async (req, res) => {
   const timeElapsed = Date.now();
   //time provided by user or default date (today)
-  const today = req.query.date ? new Date(req.query.date) : new Date(timeElapsed);
+  const today = req.query.date && req.query.date != undefined ? new Date(req.query.date) : new Date(timeElapsed);
   const todayMax = new Date(today.setHours(23, 59, 59, 999)) + 1;
   const todayMin = new Date(today.setHours(0, 0, 0, 0)) + 1;
 
@@ -21,25 +21,16 @@ router.get("/", isLoggedIn, async (req, res) => {
     // descending sorting
     .sort({ time: -1 });
 
-  let egvs = logs.map((log) => {
-    return {
-      time: log.time.substring(16),
-      egv: log.glucose,
-      status: log.glucose <= 69 ? "low" : log.glucose >= 181 ? (log.glucose >= 251 ? "veryHigh" : "high") : "normal",
-      unit: "ml/dL",
-    };
-  });
-
-  const someGlucoseVal = egvs.reduce((accumulator, curOBJ) => {
-    return accumulator + curOBJ.egv;
+  const someGlucoseVal = logs.reduce((accumulator, curOBJ) => {
+    return accumulator + curOBJ.glucose;
   }, 0);
 
   res.status(200).json({
     user: req.user,
     logBook: logs,
     graphData: {
-      avgEgvs: someGlucoseVal / egvs.length,
-      egvs,
+      avgEgvs: someGlucoseVal / logs.length,
+      egvs: logs,
     },
   });
 });

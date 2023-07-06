@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
-
+import moment from "moment";
 const BarGraph = ({ props }) => {
   const [data, setData] = useState(props);
   useEffect(() => {
@@ -22,7 +22,13 @@ const BarGraph = ({ props }) => {
         <XAxis dataKey="meal" />
         <YAxis yAxisId="left" orientation="left" stroke="#8884d8" />
         <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" />
-        <Tooltip />
+        <Tooltip
+          // formatter={(value) => {
+          //   return [value, "Blood Glucose"];
+          // }}
+          // labelFormatter={(date) => moment(date).format("DD/MM/YYYY HH:mm:ss")}
+          contentStyle={{ color: "#323D34", borderRadius: 15 }}
+        />
         <Legend />
         <Bar yAxisId="left" dataKey="carbs" fill="#8884d8" />
         <Bar yAxisId="right" dataKey="fastActingInsulinUnits" fill="#82ca9d" />
