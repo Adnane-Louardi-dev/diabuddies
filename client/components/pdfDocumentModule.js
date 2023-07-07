@@ -1,32 +1,41 @@
-import React from "react";
-import { Page, Text, View, Document } from "react-pdf";
+/* eslint-disable jsx-a11y/alt-text */
+import { Document, Page, View, Text, Image, StyleSheet, Font } from "@react-pdf/renderer";
+import { useState, useEffect } from "react";
+import dynamic from "next/dynamic";
 
-// Create styles
-// const styles = StyleSheet.create({
-//   page: {
-//     flexDirection: "row",
-//     backgroundColor: "#E4E4E4",
-//     height: "100%",
-//   },
-//   section: {
-//     margin: 10,
-//     padding: 10,
-//     flexGrow: 1,
-//   },
-// });
+const PDFViewer = dynamic(
+  import("@react-pdf/renderer").then((module) => module.PDFViewer),
+  {
+    loading: ({ error, isLoading, pastDelay, retry }) => {
+      return <div>{isLoading}</div>;
+    },
+    ssr: false,
+  }
+);
 
-// Create Document Component
-export default function PDFDocumentModule() {
+const PDF = () => {
+  const [client, setClient] = useState(false);
+
+  useEffect(() => {
+    setClient(true);
+  }, []);
   return (
     <Document>
-      <Page size="A4">
+      <Page size={[80, 60]}>
         <View>
-          <Text>Heading #1</Text>
-        </View>
-        <View>
-          <Text>Heading #2</Text>
+          <Text>Please display</Text>
+          <Text>Please display</Text>
         </View>
       </Page>
     </Document>
+  );
+};
+export default function PDFDocumentModule() {
+  return (
+    <div>
+      <PDFViewer width="100%" height="750px">
+        <PDF />
+      </PDFViewer>
+    </div>
   );
 }

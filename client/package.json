@@ -19,13 +19,14 @@
     "axios": "^1.2.1",
     "eslint": "8.28.0",
     "eslint-config-next": "^13.1.6",
+    "events": "^3.3.0",
     "moment": "^2.29.4",
-    "next": "13.0.5",
-    "react": "18.2.0",
+    "next": "^13.4.9",
+    "react": "^18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.40.0",
     "react-pdf": "^7.1.2",
-    "react-redux": "^8.0.5",
+    "react-redux": "^8.1.1",
     "recharts": "^2.5.0"
   },
   "devDependencies": {
