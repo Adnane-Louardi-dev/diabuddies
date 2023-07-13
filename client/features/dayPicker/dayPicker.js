@@ -4,11 +4,11 @@ import moment from "moment";
 export const dayPicker = createSlice({
   name: "pickADay",
   initialState: {
-    value: moment().format("MM/DD/YYYY"),
+    value: undefined,
   },
   reducers: {
     updateDate: (state, action) => {
-      state.value = moment(action.payload).format("MM/DD/YYYY");
+      state.value = moment(action.payload, "MM/DD/YYYY").format("MM/DD/YYYY");
     },
   },
 });

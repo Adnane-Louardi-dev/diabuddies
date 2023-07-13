@@ -10,7 +10,7 @@ import moment from "moment";
 const DayPicker = () => {
   const router = useRouter();
   const dispatch = useDispatch();
-  const [UserDate, setUserDate] = useState(router.query.date || moment().format("L"));
+  const [UserDate, setUserDate] = useState(moment(router.query.date, "MM/DD/YYYY") || moment().format("MM/DD/YYYY"));
   const datePickerInputFormat = "dddd, DD MMMM yyyy";
 
   return (
@@ -60,7 +60,7 @@ const DayPicker = () => {
             )}
             value={UserDate}
             inputFormat={datePickerInputFormat}
-            onAccept={(newDateValue) => dispatch(updateDate(newDateValue.toISOString(true)))}
+            onAccept={(newDateValue) => dispatch(updateDate(moment(newDateValue, "MM/DD/YYYY").format("MM/DD/YYYY")))}
             onChange={(newDateValue) => setUserDate(newDateValue)}
             className="w-full"
           />

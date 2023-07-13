@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
+import Link from "next/link";
+import moment from "moment";
 import { useRouter } from "next/router";
 import ResponsiveAppBar from "../components/ResponsiveAppBar";
 import Glucose from "../components/glucose";
@@ -15,7 +17,7 @@ import DayPicker from "../components/dayPicker";
 import { useDispatch, useSelector } from "react-redux";
 import { storeData } from "../features/dataReducers/data";
 import { Icon } from "@iconify/react";
-import Link from "next/link";
+import Head from "next/head";
 
 export default function Home() {
   const router = useRouter();
@@ -26,10 +28,13 @@ export default function Home() {
   let date = useSelector((state) => state.dayPicker?.value);
   let Data = useSelector((data) => data.dataSlice?.value);
   useEffect(() => {
+    //for the initial rendering get date from url (direct access from url)
     if (router.isReady) {
-      //for the initial rendering get date from url (direct access from url)
       if (!date) {
         date = queryDate;
+        if (!queryDate) {
+          date = moment().format("L");
+        }
       }
       router.push({ href: "/", query: { date: date } });
       //get date from url query or from the date component
@@ -52,6 +57,10 @@ export default function Home() {
     <>
       {isReady ? (
         <>
+          <Head>
+            <meta name="title" content="Diabuddies | All-in-One Solution for Diabetes Management" />
+            <title>Diabuddies | Home</title>
+          </Head>
           <ResponsiveAppBar props={Data?.user} />
           <main className="p-4 relative overflow-y-hidden">
             <span className="font-inter text-2xl text-semibold">{`Good evening, ${Data?.user?.givenName}`}</span>
@@ -78,7 +87,17 @@ export default function Home() {
                 </div>
               ) : (
                 <div className="grid items-center justify-center m-3 py-5 bg-white rounded-xl">
-                  <Image src={"/No-data-cuate.png"} height={300} width={200} alt="no data in blue folder" />
+                  <Image
+                    src={"/No-data-cuate.webp"}
+                    priority
+                    style={{
+                      width: "auto",
+                      height: "auto",
+                    }}
+                    height={300}
+                    width={200}
+                    alt="no data in blue folder"
+                  />
                 </div>
               )}
             </section>
@@ -91,7 +110,7 @@ export default function Home() {
                     </div>
                     <h3 className="text-lg text-diaGray font-semibold font-rubik">Charts</h3>
                   </div>
-                  <Link href={"/charts"} passHref>
+                  <Link href={"/charts"} aria-label="Charts page" target="_blank" passHref>
                     <Icon icon="ep:arrow-right-bold" className="h-6 w-6 text-diaGray" />
                   </Link>
                 </div>
