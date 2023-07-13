@@ -23,7 +23,7 @@ export default function Login() {
       .then((res) => {
         console.log(res.data);
         if (res.data) {
-          router.push("/setup");
+          router.push("/");
         }
       })
       .catch((err) => {
