@@ -101,7 +101,7 @@ export default function Home() {
                 </div>
               )}
             </section>
-            {Data ? (
+            {Data.graphData ? (
               <>
                 <div className="flex justify-between items-center my-5">
                   <div className="flex items-center">
@@ -122,7 +122,7 @@ export default function Home() {
                     </div>
                     <div className="my-3 bg-white rounded-xl pr-3">
                       {/* //reverse the graph to show the recent egvs from RTL */}
-                      <LineChartGraph props={Data.graphData.egvs} />
+                      <LineChartGraph props={[...Data.graphData.egvs].reverse()} />
                     </div>
                   </section>
                   <section className="w-full rounded-xl mb-10 ring-1 ring-gray-300 p-2">

@@ -37,7 +37,8 @@ export default function NewLogDialog() {
           "Access-Control-Allow-Origin": "*",
         },
       })
-      .then((log) => dispatch(appendNewLog(log.data)));
+      .then((log) => dispatch(appendNewLog(log.data)))
+      .catch((err) => console.log(err));
   };
 
   React.useEffect(() => {
@@ -220,57 +221,6 @@ export default function NewLogDialog() {
               />
             </div>
 
-            {/* bolus */}
-            <div className="p-2.5 bg-orange-300 rounded-xl shadow-md">
-              <div className="flex">
-                <Icon icon="fluent:syringe-20-regular" className="bg-white text-orange-300 rounded-full self-center m-1 p-1 h-7 w-7" />
-                <p className="text-white font-rubik font-sm self-center">bolus</p>
-              </div>
-              <TextField
-                id="outlined-number"
-                type="tel"
-                variant="standard"
-                placeholder="0"
-                sx={{
-                  marginTop: 1,
-                  marginX: 1,
-                  textAlign: "center",
-                  border: "none",
-                  width: "full",
-                  "& .MuiInputBase-root::after, .MuiInputBase-root::before": {
-                    display: "none",
-                  },
-                  "& .MuiInputBase-input": {
-                    fontSize: 25,
-                    fontStyle: "bold",
-                    width: "full",
-                  },
-                }}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment
-                      position="end"
-                      sx={{
-                        "& .MuiTypography-root": {
-                          color: "white",
-                          fontSize: 14,
-                          marginRight: 1,
-                        },
-                      }}
-                    >
-                      UI
-                    </InputAdornment>
-                  ),
-                  style: {
-                    color: "white",
-                  },
-                }}
-                onChange={(event) => {
-                  setData({ ...data, fastActingInsulinUnits: parseFloat(event.target.value) });
-                }}
-              />
-            </div>
-
             {/* carbs */}
             <div className="p-2.5 bg-gray-400 rounded-xl shadow-md">
               <div className="flex">
@@ -318,6 +268,108 @@ export default function NewLogDialog() {
                 }}
                 onChange={(event) => {
                   setData({ ...data, carbs: parseFloat(event.target.value) });
+                }}
+              />
+            </div>
+
+            {/* bolus */}
+            <div className="p-2.5 bg-orange-300 rounded-xl shadow-md">
+              <div className="flex">
+                <Icon icon="fluent:syringe-20-regular" className="bg-white text-orange-300 rounded-full self-center m-1 p-1 h-7 w-7" />
+                <p className="text-white font-rubik font-sm self-center">bolus</p>
+              </div>
+              <TextField
+                id="outlined-number"
+                type="tel"
+                variant="standard"
+                placeholder="0"
+                sx={{
+                  marginTop: 1,
+                  marginX: 1,
+                  textAlign: "center",
+                  border: "none",
+                  width: "full",
+                  "& .MuiInputBase-root::after, .MuiInputBase-root::before": {
+                    display: "none",
+                  },
+                  "& .MuiInputBase-input": {
+                    fontSize: 25,
+                    fontStyle: "bold",
+                    width: "full",
+                  },
+                }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment
+                      position="end"
+                      sx={{
+                        "& .MuiTypography-root": {
+                          color: "white",
+                          fontSize: 14,
+                          marginRight: 1,
+                        },
+                      }}
+                    >
+                      UI
+                    </InputAdornment>
+                  ),
+                  style: {
+                    color: "white",
+                  },
+                }}
+                onChange={(event) => {
+                  setData({ ...data, bolus: parseFloat(event.target.value) });
+                }}
+              />
+            </div>
+
+            {/* basal */}
+            <div className="p-2.5 bg-orange-300 rounded-xl shadow-md">
+              <div className="flex">
+                <Icon icon="fluent:syringe-20-regular" className="bg-white text-orange-300 rounded-full self-center m-1 p-1 h-7 w-7" />
+                <p className="text-white font-rubik font-sm self-center">basal</p>
+              </div>
+              <TextField
+                id="outlined-number"
+                type="tel"
+                variant="standard"
+                placeholder="0"
+                sx={{
+                  marginTop: 1,
+                  marginX: 1,
+                  textAlign: "center",
+                  border: "none",
+                  width: "full",
+                  "& .MuiInputBase-root::after, .MuiInputBase-root::before": {
+                    display: "none",
+                  },
+                  "& .MuiInputBase-input": {
+                    fontSize: 25,
+                    fontStyle: "bold",
+                    width: "full",
+                  },
+                }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment
+                      position="end"
+                      sx={{
+                        "& .MuiTypography-root": {
+                          color: "white",
+                          fontSize: 14,
+                          marginRight: 1,
+                        },
+                      }}
+                    >
+                      UI
+                    </InputAdornment>
+                  ),
+                  style: {
+                    color: "white",
+                  },
+                }}
+                onChange={(event) => {
+                  setData({ ...data, basal: parseFloat(event.target.value) });
                 }}
               />
             </div>

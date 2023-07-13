@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import axios from "axios";
+import moment from "moment";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
@@ -49,7 +50,7 @@ const LogBookItem = ({ props }) => {
         </div>
         <div className="mx-2">
           <p className="font-rubik font-bold truncate overflow-hidden">{data.meal}</p>
-          <p className="font-rubik text-sm text-diaGray">{`${data.time.substring(16, 21)}`}</p>
+          <p className="font-rubik text-sm text-diaGray">{`${moment(data.time).format("HH:mm")}`}</p>
         </div>
       </AccordionSummary>
       <AccordionDetails className="rounded-xl">
