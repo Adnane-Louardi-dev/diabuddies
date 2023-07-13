@@ -6,9 +6,10 @@ const router = express.Router();
 const { isLoggedIn } = require("../middlewares/isLoggedIn");
 
 router.get("/", isLoggedIn, async (req, res) => {
-  const timeElapsed = Date.now();
+  console.log(req.user);
   //time provided by user or default date (today)
-  const today = req.query.date && req.query.date != undefined ? new Date(req.query.date) : new Date(timeElapsed);
+  let today = req.query.date == undefined || !req.query.date ? new Date() : new Date(req.query.date);
+  console.log(today);
   const todayMax = new Date(today.setHours(23, 59, 59, 999)) + 1;
   const todayMin = new Date(today.setHours(0, 0, 0, 0)) + 1;
 

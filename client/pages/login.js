@@ -6,10 +6,32 @@ import Image from "next/image";
 import GoogleIcon from "@mui/icons-material/Google";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import EastIcon from "@mui/icons-material/East";
+import axios from "axios";
+import { useRouter } from "next/router";
 export default function Login() {
-  const { register, handleSubmit } = useForm();
-  const [FormData, setFormData] = useState({});
-  const onSubmit = (data) => setFormData(JSON.stringify(data));
+  const router = useRouter();
+  const { register, control, handleSubmit, reset } = useForm();
+
+  const onSubmit = (data) => {
+    axios
+      .post("/api/login/", data, {
+        headers: {
+          "Content-Type": "application/json",
+          "Access-Control-Allow-Origin": "*",
+        },
+      })
+      .then((res) => {
+        console.log(res.data);
+        if (res.data) {
+          router.push("/setup");
+        }
+      })
+      .catch((err) => {
+        console.log(err);
+      });
+  };
+  const onErrors = (err) => console.log(err);
+
   return (
     <div className="h-full h-screen">
       {/* <Image src={"/signup_promo.jpg"} className="brightness-50 blur-xs " fill objectFit="cover" alt={"black woman checking blood sugar"} /> */}
@@ -25,7 +47,7 @@ export default function Login() {
       </div>
       <div className="flex flex-row -mt-12 bg-white justify-center lg:items-center h-full w-full rounded-3xl lg:rounded-none">
         <div className="absolute">
-          <Image src={"/diabuddies_logo.jpg"} height={100} width={250} />
+          <Image src={"/diabuddies_logo.png"} style={{ height: "auto" }} priority height={100} width={250} alt="Diabuddies full logo" />
         </div>
         <div className="flex-none w-full lg:basis-2/5 my-28">
           <div className="my-5 p-10">
@@ -44,7 +66,7 @@ export default function Login() {
               </Link>
             </div>
 
-            <form onSubmit={handleSubmit(onSubmit)}>
+            <form onSubmit={handleSubmit(onSubmit, onErrors)}>
               <TextField
                 required
                 InputLabelProps={{
@@ -60,10 +82,10 @@ export default function Login() {
                     backgroundColor: "transparent",
                   },
                 }}
-                {...register("email", { pattern: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/ })}
+                {...register("username")}
                 fullWidth
                 id="standard-required"
-                label="Email"
+                label="username"
                 variant="standard"
                 margin="normal"
               />
@@ -103,7 +125,7 @@ export default function Login() {
             </form>
           </div>
         </div>
-        <div className="hidden relative lg:flex flex-1 justify-center rounded-lg shadow-2xl w-full h-full lg:basis-1/5">
+        {/* <div className="hidden relative lg:flex flex-1 justify-center rounded-lg shadow-2xl w-full h-full lg:basis-1/5">
           <div className="absolute backdrop-blur-lg rounded-3xl shadow-2xl my-20 p-8 z-50">
             <h2 className="mb-8 font-inter text-4xl font-semibold leading-relaxed tracking-wider text-white">
               Let's put some control <br /> on your diabetes together.
@@ -118,7 +140,7 @@ export default function Login() {
             </Button>
           </div>
           <Image src={"/signup_promo.jpg"} className="brightness-50" fill alt={"black woman checking blood sugar"} />
-        </div>
+        </div> */}
       </div>
     </div>
   );
