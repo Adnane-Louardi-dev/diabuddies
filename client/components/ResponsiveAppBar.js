@@ -13,7 +13,7 @@ import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
 import Image from "next/image";
 
-const settings = ["Profile", "Account", "Logout"];
+const settings = ["Settings", "Logout"];
 
 function ResponsiveAppBar({ props }) {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
@@ -32,7 +32,7 @@ function ResponsiveAppBar({ props }) {
         <Toolbar disableGutters>
           <Box sx={{ flexGrow: 1, ml: -2, display: { xs: "flex", md: "none" } }}>
             <IconButton size="small" aria-label="account of current user" aria-controls="menu-appbar" aria-haspopup="true" className="text-diaGray">
-              <Image src={"/diabuddies_logo_D.png"} height={65} width={65} className="bg-transparent" alt="diabuddies logo" />
+              <Image src={"/diabuddies_logo_D.webp"} priority height={65} width={65} className="bg-transparent" alt="diabuddies logo" />
             </IconButton>
           </Box>
 
