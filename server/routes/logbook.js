@@ -27,7 +27,6 @@ router.get("/", isLoggedIn, async (req, res) => {
 });
 
 router.post("/", [isLoggedIn, validate(validation.dialogValidation)], (req, res) => {
-  console.log(req.user);
   logBookItemsSchema
     .create({
       userId: req.user._id,
@@ -36,13 +35,15 @@ router.post("/", [isLoggedIn, validate(validation.dialogValidation)], (req, res)
       unit: req.user.unit,
       status: req.body.glucose <= 69 ? "low" : req.body.glucose >= 181 ? (req.body.glucose >= 251 ? "veryHigh" : "high") : "normal",
       meal: req.body.meal,
-      fastActingInsulinUnits: req.body.fastActingInsulinUnits,
+      bolus: req.body.bolus,
+      basal: req.body.basal,
       carbs: req.body.carbs,
       protein: req.body.protein,
       fat: req.body.fat,
+      kcal: req.body.kcal,
     })
     .then((log) => res.json(log))
-    .catch((err) => res.json({ err }));
+    .catch((err) => res.json(err));
 });
 // DELETE a log by ID
 router.delete("/", isLoggedIn, async (req, res) => {

@@ -6,7 +6,6 @@ const router = express.Router();
 const { isLoggedIn } = require("../middlewares/isLoggedIn");
 
 router.get("/", isLoggedIn, async (req, res) => {
-  console.log(req.user);
   //time provided by user or default date (today)
   let today = req.query.date == undefined || !req.query.date ? new Date() : new Date(req.query.date);
   console.log(today);

@@ -6,8 +6,10 @@ exports.dialogValidation = joi.object().keys({
   unit: joi.string(),
   glucose: joi.number().integer().min(0).max(700),
   meal: joi.string().required(),
-  fastActingInsulinUnits: joi.number(),
+  bolus: joi.number(),
+  basal: joi.number(),
   carbs: joi.number(),
   protein: joi.number(),
   fat: joi.number(),
+  kcal: joi.number(),
 });

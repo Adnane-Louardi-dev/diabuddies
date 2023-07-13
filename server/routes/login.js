@@ -10,7 +10,6 @@ const router = express.Router();
 passport.use(
   new LocalStrategy(function (username, password, done) {
     userSchema.findOne({ userName: username }, function (err, user) {
-      console.log(user);
       if (err) {
         return done(err);
       }
