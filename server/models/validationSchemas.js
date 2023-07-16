@@ -12,5 +12,4 @@ exports.dialogValidation = joi.object().keys({
   protein: joi.number(),
   fat: joi.number(),
   kcal: joi.number(),
-  age: joi.number()
 });
