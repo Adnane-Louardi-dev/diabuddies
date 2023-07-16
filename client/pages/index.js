@@ -21,9 +21,8 @@ import { useGetCurrentUser } from "../customeHooks/useGetCurrentUser";
 
 export default function Home() {
   const router = useRouter();
-  const queryDate = router.query.date;
-  const [date, setDate] = useState("07/15/2023");
-
+  const [date, setDate] = useState(router.query.date || moment().format("L"));
+  //GET method to get user info
   const { user, isLoading: isUserLoading } = useGetCurrentUser();
 
   const {
@@ -45,25 +44,24 @@ export default function Home() {
       console.error(e);
     },
   });
-  useEffect(() => {
-    //for the initial rendering get date from url (direct access from url)
-    if (router.isReady) {
-      if (!date) {
-        setDate(queryDate);
-        if (!queryDate) {
-          setDate(moment().format("L"));
-        }
-      }
-      //redirect new users to setup page
-      // if (Data?.user.newUser) {
-      //   router.push("/setup");
-      // }
-    }
-  }, [router.isReady]);
 
   useEffect(() => {
     refetch();
-  }, [date]);
+    // if (router.isReady) {
+    //   // redirect new users to setup page
+    //   if (Data?.user.newUser) {
+    //     router.push("/setup");
+    //   }
+    // };
+  }, [router.isReady]);
+
+  // useEffect(() => {
+  //   refetch();
+  //   // redirect new users to setup page
+  //   // if (Data?.user.newUser) {
+  //   //   router.push("/setup");
+  //   // }
+  // }, [router.isReady,date]);
 
   console.log(Data);
   return (

@@ -10,8 +10,8 @@ import Avatar from "@mui/material/Avatar";
 import Link from "next/link";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import {Logo} from "./Logo";
-
+import { Logo } from "./Logo";
+import { useGetCurrentUser } from "../customeHooks/useGetCurrentUser";
 
 const appBarItems = [
   {
@@ -20,15 +20,16 @@ const appBarItems = [
   },
   {
     link: "/pdf",
-    label: "Generate PDF"
+    label: "Generate PDF",
   },
   {
     link: "/logout",
-    label: "Logout"
-  }
-]
+    label: "Logout",
+  },
+];
 
-function ResponsiveAppBar({user}) {
+function ResponsiveAppBar() {
+  const { user, isLoading: isUserLoading } = useGetCurrentUser();
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);
@@ -42,12 +43,12 @@ function ResponsiveAppBar({user}) {
     <AppBar position="static" className="bg-transparent shadow-none">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Logo/>
+          <Logo />
 
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Profile photo" src={user.photo}/>
+                <Avatar alt="Profile photo" src={user?.photo} />
               </IconButton>
             </Tooltip>
             <Menu
@@ -67,11 +68,11 @@ function ResponsiveAppBar({user}) {
               onClose={handleCloseUserMenu}
             >
               {appBarItems.map((appBarItem, i) => (
-                  <Link key={i} href={appBarItem.link} passHref>
-                    <MenuItem key={appBarItems.link} onClick={handleCloseUserMenu}>
-                      <Typography textAlign="center">{appBarItem.label}</Typography>
-                    </MenuItem>
-                  </Link>
+                <Link key={i} href={appBarItem.link} passHref>
+                  <MenuItem key={appBarItems.link} onClick={handleCloseUserMenu}>
+                    <Typography textAlign="center">{appBarItem.label}</Typography>
+                  </MenuItem>
+                </Link>
               ))}
             </Menu>
           </Box>
