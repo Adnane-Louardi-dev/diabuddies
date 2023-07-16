@@ -13,8 +13,7 @@ const userRoutes = require("./routes/userRoutes");
 const user = require("./routes/user");
 const charts = require("./routes/charts");
 //DB connect
-// const DBConnection = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.dgq8q.mongodb.net/?retryWrites=true&w=majority&ssl=true`;
-const DBConnection = `mongodb://127.0.0.1:27017/diabuddies?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+1.10.1`;
+const DBConnection = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.dgq8q.mongodb.net/?retryWrites=true&w=majority&ssl=true`;
 mongoose.connect(DBConnection, () => console.log("DB connected!"));
 
 //middleswares
