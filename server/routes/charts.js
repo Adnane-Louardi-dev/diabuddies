@@ -26,11 +26,9 @@ router.get("/", isLoggedIn, async (req, res) => {
   }, 0);
 
   res.status(200).json({
-    user: req.user,
-    graphData: {
       avgEgvs: sumOfGlucoseVal / logs.length,
       logs,
     },
-  });
+  );
 });
 module.exports = router;

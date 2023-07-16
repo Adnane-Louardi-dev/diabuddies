@@ -9,6 +9,7 @@ const userSchema = mongoose.Schema(
     },
     givenName: { type: String, lowercase: true, trim: true },
     familyName: { type: String, lowercase: true, trim: true },
+    age: Number,
     email: {
       type: String,
       lowercase: true,

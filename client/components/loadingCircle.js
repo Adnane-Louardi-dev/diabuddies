@@ -1,10 +1,10 @@
 import CircularProgress from "@mui/material/CircularProgress";
-import Box from "@mui/material/Box";
 
-export default function LoadingCircle() {
-  return (
-    <Box sx={{ display: "flex" }}>
-      <CircularProgress />
-    </Box>
-  );
+export default function LoadingCircle({hidden = false}) {
+    return (
+        <div className={`${hidden ? "hidden" : "absolute"} top-0 right-0 z-10 w-full h-full bg-black bg-opacity-20`}>
+            <CircularProgress
+                className={`absolute top-[50%] right-[50%] translate-x-[calc(-50%+20px)] translate-y-[-50%]`}/>
+        </div>
+    );
 }

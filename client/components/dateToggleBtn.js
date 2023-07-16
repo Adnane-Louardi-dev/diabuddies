@@ -1,23 +1,20 @@
 import * as React from "react";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-import { useDispatch, useSelector } from "react-redux";
-import { updateDateRange } from "../features/dateRange/dateRange";
-export default function DateToggleBtn() {
-  const dispatch = useDispatch();
-  const [alignment, setAlignment] = React.useState(useSelector((state) => state.dateRange.value.toggleBtnSelectedValue));
+import moment from "moment/moment";
 
-  const handleChange = (event, newAlignment) => {
-    if (newAlignment !== null) {
-      dispatch(updateDateRange(newAlignment));
-      setAlignment(newAlignment);
-    }
-  };
+export default function DateToggleBtn({setDate}) {
+    const [alignment, setAlignment] = React.useState(7);
 
-  return (
-    <ToggleButtonGroup
-      sx={{
-        "& .MuiToggleButtonGroup-root , .MuiButtonBase-root": {
+    const handleChange = (event, newAlignment) => {
+        setAlignment(newAlignment)
+        setDate(moment(new Date()).subtract(newAlignment, "day").format("DD/MM/YYYY"));
+    };
+
+    return (
+        <ToggleButtonGroup
+            sx={{
+                "& .MuiToggleButtonGroup-root , .MuiButtonBase-root": {
           border: "none",
           marginX: 1,
         },

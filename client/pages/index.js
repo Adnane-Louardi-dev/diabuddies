@@ -14,59 +14,70 @@ import LineChartGraph from "../components/charts/lineChartGraph";
 import PiGraph from "../components/charts/piGraph";
 import BarGraph from "../components/charts/barGraph";
 import DayPicker from "../components/dayPicker";
-import { useDispatch, useSelector } from "react-redux";
-import { storeData } from "../features/dataReducers/data";
 import { Icon } from "@iconify/react";
 import Head from "next/head";
-import CompleteYourProfile from "../components/completeYourProfile";
+import { useQuery } from "@tanstack/react-query";
+import { useGetCurrentUser } from "../customeHooks/useGetCurrentUser";
 
 export default function Home() {
   const router = useRouter();
-  const dispatch = useDispatch();
   const queryDate = router.query.date;
-  const [isReady, setIsReady] = useState(false);
-  //initial value is null
-  let date = useSelector((state) => state.dayPicker?.value);
-  let Data = useSelector((data) => data.dataSlice?.value);
+  const [date, setDate] = useState("07/15/2023");
+
+  const { user, isLoading: isUserLoading } = useGetCurrentUser();
+
+  const {
+    isLoading,
+    data: Data,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ["indexChart"],
+    queryFn: async () => {
+      const result = await axios.get(`/api/?date=${date}`, { withCredentials: true });
+      return result.data;
+    },
+    enabled: router.isReady,
+    onSuccess: () => {
+      router.push({ href: "/", query: { date: date } });
+    },
+    onError: (e) => {
+      console.error(e);
+    },
+  });
   useEffect(() => {
     //for the initial rendering get date from url (direct access from url)
     if (router.isReady) {
       if (!date) {
-        date = queryDate;
+        setDate(queryDate);
         if (!queryDate) {
-          date = moment().format("L");
+          setDate(moment().format("L"));
         }
       }
-      router.push({ href: "/", query: { date: date } });
-      //get date from url query or from the date component
-      axios
-        .get(`/api/?date=${date}`, { withCredentials: true })
-        .then((fullData) => {
-          const { data } = fullData;
-          dispatch(storeData(data));
-          setIsReady(true);
-        })
-        .catch((e) => console.log(e));
       //redirect new users to setup page
       // if (Data?.user.newUser) {
       //   router.push("/setup");
       // }
     }
-  }, [router.isReady, date]);
+  }, [router.isReady]);
 
+  useEffect(() => {
+    refetch();
+  }, [date]);
+
+  console.log(Data);
   return (
     <>
-      {isReady ? (
+      {!isLoading && !isUserLoading ? (
         <>
           <Head>
             <meta name="title" content="Diabuddies | All-in-One Solution for Diabetes Management" />
             <title>Diabuddies | Home</title>
           </Head>
-          <ResponsiveAppBar props={Data?.user} />
+          <ResponsiveAppBar user={user} />
           <main className="p-4 relative overflow-y-hidden">
-            {/* <CompleteYourProfile /> */}
-            <span className="font-inter text-2xl text-semibold">{`Good evening, ${Data?.user?.givenName}`}</span>
-            <DayPicker />
+            <span className="font-inter text-2xl text-semibold">{`Good evening, ${user.givenName}`}</span>
+            <DayPicker setDate={setDate} />
             {Data?.logBook[0] ? (
               <>
                 <section className="flex justify-around my-5">
