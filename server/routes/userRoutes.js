@@ -26,7 +26,6 @@ router.get("/", isLoggedIn, async (req, res) => {
   }, 0);
 
   res.status(200).json({
-    user: req.user,
     logBook: logs,
     graphData: {
       avgEgvs: someGlucoseVal / logs.length,

@@ -1,62 +1,91 @@
 import * as React from "react";
+import {useState} from "react";
 import axios from "axios";
 import moment from "moment";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import { Icon } from "@iconify/react";
+import {Icon} from "@iconify/react";
 import TextField from "@mui/material/TextField";
-import { appendNewLog } from "../features/dataReducers/data";
-import { useDispatch } from "react-redux";
-import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker";
+import {MobileDateTimePicker} from "@mui/x-date-pickers/MobileDateTimePicker";
 import InputAdornment from "@mui/material/InputAdornment";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import {useMutation, useQueryClient} from "@tanstack/react-query";
+import {Alert, Snackbar} from "@mui/material";
+import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export default function NewLogDialog() {
-  const dispatch = useDispatch();
-  const [dateOpen, setDateOpen] = React.useState(false);
-  const [dateValue, setDateValue] = React.useState(moment());
-  const [Alignment, setAlignment] = React.useState({
-    firstAlignment: null,
-    secondAlignment: null,
-  });
-  const [data, setData] = React.useState({
-    time: dateValue._d,
-    meal: `${Alignment.firstAlignment && ""} ${Alignment.secondAlignment || ""}`,
-  });
+    const [dateOpen, setDateOpen] = React.useState(false);
+    const [dateValue, setDateValue] = React.useState(moment());
+    const [Alignment, setAlignment] = React.useState({
+        firstAlignment: null,
+        secondAlignment: null,
+    });
+    const [data, setData] = React.useState({
+        time: dateValue._d,
+        meal: `${Alignment.firstAlignment && ""} ${Alignment.secondAlignment || ""}`,
+    });
+    const queryClient = useQueryClient();
+    const [notificationOpen, setNotificationOpen] = useState(false);
 
-  //handle post new log
-  const handlePOSTNewLog = () => {
-    setDateOpen(false);
-    axios
-      .post("/api/logbook", data, {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
+    const {mutate: addNewLogBook, isLoading, isError} = useMutation({
+        mutationKey: "addNewLogBook",
+        mutationFn: (data) => {
+            return axios.post("/api/logbook", data, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                },
+            })
         },
-      })
-      .then((log) => dispatch(appendNewLog(log.data)))
-      .catch((err) => console.log(err));
-  };
+        onSuccess: () => {
+            queryClient.invalidateQueries(["indexChart"])
+        },
+        onError: (e) => {
+            console.error(e)
+        },
+        onSettled: () => {
+            setNotificationOpen(true)
+        }
+    })
 
-  React.useEffect(() => {
-    setData({ ...data, meal: `${Alignment.firstAlignment}  ${Alignment.secondAlignment}` });
-  }, [Alignment]);
 
-  return (
-    <>
-      <Button
-        variant="filled"
-        onClick={() => {
-          setDateOpen(true);
-        }}
-        className="flex justify-between items-center text-diaBlue bg-diaBlue bg-opacity-25 pt-2 rounded-full shadow-md"
-      >
-        Add
-        <Icon icon="material-symbols:add-circle-rounded" className="mx-1 mb-0.5" />
-      </Button>
+    //handle post new log
+    const handlePOSTNewLog = async () => {
+        setDateOpen(false);
+        await addNewLogBook(data)
+    };
+
+    React.useEffect(() => {
+        setData({...data, meal: `${Alignment.firstAlignment}  ${Alignment.secondAlignment}`});
+    }, [Alignment]);
+
+    const handleClose = () => {
+        setNotificationOpen(false)
+    }
+    return (
+        <>
+            <Box sx={{display: 'flex'}}>
+                <CircularProgress hidden={!isLoading}/>
+            </Box>
+            <Snackbar open={notificationOpen} autoHideDuration={6000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity={isError ? "danger" : "success"} sx={{width: '100%'}}>
+                    {isError ? "There was an error while saving log book" : "Log book was added successfully"}
+                </Alert>
+            </Snackbar>
+            <Button
+                variant="filled"
+                onClick={() => {
+                    setDateOpen(true);
+                }}
+                className="flex justify-between items-center text-diaBlue bg-diaBlue bg-opacity-25 pt-2 rounded-full shadow-md"
+            >
+                Add
+                <Icon icon="material-symbols:add-circle-rounded" className="mx-1 mb-0.5"/>
+            </Button>
       <Dialog
         fullScreen
         open={dateOpen}
@@ -538,9 +567,10 @@ export default function NewLogDialog() {
             Cancel
           </Button>
           <Button
-            onClick={handlePOSTNewLog}
-            variant="filled"
-            className="flex justify-center px-2 mx-4 font-rubik text-white bg-diaGray hover:bg-opacity-75 rounded-lg shadow-md"
+              disabled={isLoading}
+              onClick={handlePOSTNewLog}
+              variant="filled"
+              className="flex justify-center px-2 mx-4 font-rubik text-white bg-diaGray hover:bg-opacity-75 rounded-lg shadow-md"
           >
             Save
           </Button>

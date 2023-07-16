@@ -1,11 +1,12 @@
-import React, { useState } from "react";
-import { Autocomplete, Button, Modal, TextField } from "@mui/material";
+import React, {useState} from "react";
+import {Autocomplete, Button, Modal, TextField} from "@mui/material";
 import Box from "@mui/material/Box";
 import MenuItem from "@mui/material/MenuItem";
 import Select from "@mui/material/Select";
-import { Controller, useForm } from "react-hook-form";
-import { actingTimes, colors, fakeDataProducts } from "../utils/utils";
+import {Controller, useForm} from "react-hook-form";
+import {actingTimes, colors, fakeDataProducts} from "../utils/utils";
 import axios from "axios";
+import {useMutation} from "@tanstack/react-query";
 
 const style = {
   position: "absolute",
@@ -22,22 +23,29 @@ const style = {
 };
 
 export const AddMedicamentModal = () => {
-  const [open, setOpen] = useState(false);
-  const { control, handleSubmit } = useForm();
+    const [open, setOpen] = useState(false);
+    const {control, handleSubmit} = useForm();
 
-  const addNewMedical = (data) => {
-    axios.post("/api/user/addMedicament", { ...data, brand: data.id }).then((res) => {
-      console.log("new medical was added successfily");
-    });
-    console.log(data);
-  };
+    const addNewMedicalMutation = useMutation({
+        mutationFn: (medicament) => (axios.post("/api/user/addMedicament", medicament)),
+        onSuccess: () => {
+            console.log("new medical was added successfily")
+            //sucess toast //TODO
+        },
+        onError: () => {
+            //TODO error toast
+        }
+    })
+    const addNewMedical = (data) => {
+        console.log(data)
+    };
 
-  return (
-    <>
-      <Button
-        className={"bg-diaBlue text-white"}
-        onClick={() => {
-          setOpen(true);
+    return (
+        <>
+            <Button
+                className={"bg-diaBlue text-white"}
+                onClick={() => {
+                    setOpen(true);
         }}
       >
         New add
