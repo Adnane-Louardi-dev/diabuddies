@@ -32,7 +32,7 @@ export default function NewLogDialog() {
     const [notificationOpen, setNotificationOpen] = useState(false);
 
     const {mutate: addNewLogBook, isLoading, isError} = useMutation({
-        mutationKey: "addNewLogBook",
+        mutationKey: ["addNewLogBook"],
         mutationFn: (data) => {
             return axios.post("/api/logbook", data, {
                 headers: {

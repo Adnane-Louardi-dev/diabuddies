@@ -28,7 +28,7 @@ const Settings = () => {
   const [notificationOpen, setNotificationOpen] = useState(false);
 
   const {mutate: updateUser, isError, isLoading: updateUserLoading} = useMutation({
-    mutationKey: "updateUser",
+    mutationKey: ["updateUser"],
     mutationFn: (data) => {
       return axios
           .post(
