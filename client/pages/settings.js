@@ -33,7 +33,11 @@ const Settings = () => {
       return axios
           .post(
               "/api/user/",
-              {...user, ...data},
+              {...user,
+                ...data,
+                gender: data.gender === "Gender" ? "" : data.gender,
+                diabetesType: data.diabetesType === "Diabetes Type" ? "" : data.diabetesType
+              },
               {
                 headers: {
                   "Content-Type": "application/json",
@@ -129,6 +133,9 @@ const Settings = () => {
                   </Grid>
                   <Grid item xs={12}>
                     <UserInput defaultValue={user.email} fieldName={"email"} label={"Email"}/>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <UserInput defaultValue={user.homeAddress} fieldName={"homeAddress"} label={"Home Address"}/>
                   </Grid>
                   <Grid item xs={12}>
                     <UserInput defaultValue={user.userName} fieldName={"userName"} label={"userName"}/>
