@@ -35,8 +35,8 @@ const Settings = () => {
               "/api/user/",
               {...user,
                 ...data,
-                gender: data.gender === "Gender" ? "" : data.gender,
-                diabetesType: data.diabetesType === "Diabetes Type" ? "" : data.diabetesType
+                gender: data.gender === "Gender" ? "none" : data.gender,
+                diabetesType: data.diabetesType === "Diabetes Type" ? "other" : data.diabetesType
               },
               {
                 headers: {
