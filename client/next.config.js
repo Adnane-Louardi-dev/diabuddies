@@ -1,4 +1,11 @@
 /** @type {import('next').NextConfig} */
+const withPWA = require("next-pwa")({
+  dest: "public",
+  disable: process.env.NODE_ENV === "development",
+  register: true,
+  scope: "/app",
+  sw: "service-worker.js",
+});
 const nextConfig = {
   reactStrictMode: true,
   images: {
@@ -7,18 +14,19 @@ const nextConfig = {
         protocol: "https",
         hostname: "lh3.googleusercontent.com",
         port: "",
-        pathname: "/**"
-      }
-    ]
+        pathname: "/**",
+      },
+    ],
   },
   async rewrites() {
     return [
       {
         source: "/api/:path*",
-        destination: "http://localhost:3000/:path*",
+        destination: `http://localhost:3000/:path*`,
       },
     ];
   },
+  swcMinify: false,
 };
 
-module.exports = nextConfig;
+module.exports = withPWA(nextConfig);

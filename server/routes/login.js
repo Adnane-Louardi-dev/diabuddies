@@ -2,8 +2,31 @@ const express = require("express");
 const passport = require("passport");
 const userSchema = require("../models/userSchema");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
+const LocalStrategy = require("passport-local").Strategy;
+var crypto = require("crypto");
 
 const router = express.Router();
+//local strategy
+passport.use(
+  new LocalStrategy(function (username, password, done) {
+    userSchema.findOne({ userName: username }, function (err, user) {
+      if (err) {
+        return done(err);
+      }
+      if (!user) {
+        return done(null, false);
+      }
+      if (user.password != password) {
+        return done(null, false);
+      }
+      return done(null, user);
+    });
+  })
+);
+router.post("/", passport.authenticate("local", { failureRedirect: `/login` }), function (req, res) {
+  res.json(req.user);
+});
+//google strategy
 passport.use(
   new GoogleStrategy(
     {
@@ -12,7 +35,6 @@ passport.use(
       callbackURL: "http://localhost:3000/login/auth/google/callback",
     },
     async (accessToken, refreshToken, profile, cb) => {
-      console.log(profile);
       userSchema.findOne({ googleId: profile.id }, function (err, user) {
         //create a new user if the user doesn't exist in the DB
         if (!user) {
@@ -32,6 +54,17 @@ passport.use(
     }
   )
 );
+router.get(
+  "/auth/google",
+  passport.authenticate("google", {
+    scope: ["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email"],
+  })
+);
+router.get(
+  "/auth/google/callback",
+  passport.authenticate("google", { successRedirect: process.env.FRONTEND_URL, failureRedirect: `${process.env.FRONTEND_URL}/login` })
+);
+
 passport.serializeUser((user, done) => {
   done(null, user);
 });
@@ -39,12 +72,4 @@ passport.deserializeUser((user, done) => {
   done(null, user);
 });
 
-router.get(
-  "/auth/google",
-  passport.authenticate("google", {
-    scope: ["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email"],
-  })
-);
-
-router.get("/auth/google/callback", passport.authenticate("google", { successRedirect: "http://localhost:3001/", failureRedirect: "/login" }));
 module.exports = router;

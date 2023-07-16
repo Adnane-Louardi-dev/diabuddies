@@ -15,6 +15,7 @@ module.exports = {
         diaLightBlue: "#98D6FF",
         diaGray: "#666666",
         diaOrange: "#FFB562",
+        diaLightOrange: "#FFD7AA",
         diaRed: "#F87474",
         diaGreen: "#44D29F",
         diaLightGreen: "#B0EAD5",

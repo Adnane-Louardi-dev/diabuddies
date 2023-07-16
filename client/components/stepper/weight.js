@@ -1,40 +1,35 @@
 import React from "react";
-import { useState } from "react";
-import { TextField, ToggleButtonGroup, ToggleButton } from "@mui/material";
-import { useDispatch } from "react-redux";
-import { addWeightUnit, addWeightValue } from "../../features/stepper/stepper";
+import {TextField, ToggleButton, ToggleButtonGroup} from "@mui/material";
 
-const Weight = () => {
-  const dispatch = useDispatch();
-  const [weightUnit, setWeightValue] = useState("kg");
+const Weight = ({data, setData}) => {
 
-  const handleWeightUnitChange = (event, newWeightUnit) => {
-    setWeightValue(newWeightUnit);
-    dispatch(addWeightUnit(newWeightUnit));
-  };
-  const handleWeightValueChange = (event) => {
-    dispatch(addWeightValue(event.target.value));
-  };
+    const handleWeightUnitChange = (_, newWeightUnit) => {
+        setData(oldData => ({...oldData, weight: {...oldData.weight, unit: newWeightUnit}}))
+    };
+    const handleWeightValueChange = (event) => {
+        setData(oldData => ({...oldData, weight: {...oldData.weight, value: event.target.value}}))
+    };
 
-  return (
-    <section>
-      <div className="mt-24 grid items-center justify-center text-center">
-        <h1 className="font-semibold font-poppins text-xl">
-          What about your <span className="decoration-none font-bold text-diaBlue">Weight</span> ?
+    return (
+        <section>
+            <div className="mt-24 grid items-center justify-center text-center">
+                <h1 className="font-semibold font-poppins text-xl">
+                    What about your <span className="decoration-none font-bold text-diaBlue">Weight</span> ?
         </h1>
       </div>
       <div className="grid items-center justify-center text-center mx-16 my-16 py-8">
         <ToggleButtonGroup
-          className="grid grid-cols-2 gap-5 mx-5 py-5"
-          sx={{
-            "& .MuiButtonBase-root.MuiToggleButton-root.Mui-selected": {
-              backgroundColor: "#666666",
-              color: "white",
-            },
-          }}
-          value={weightUnit}
-          exclusive
-          onChange={handleWeightUnitChange}
+            className="grid grid-cols-2 gap-5 mx-5 py-5"
+            sx={{
+                "& .MuiButtonBase-root.MuiToggleButton-root.Mui-selected": {
+                    backgroundColor: "#3AB0FF",
+                    border: "none",
+                    color: "white",
+                },
+            }}
+            value={data.weight.unit}
+            exclusive
+            onChange={handleWeightUnitChange}
         >
           <ToggleButton value="lbs" className="rounded-full font-semibold">
             lbs
@@ -45,11 +40,12 @@ const Weight = () => {
         </ToggleButtonGroup>
         <div className="grid grid-cols-1 items-center justify-center p-2 bg-diaBlue rounded-3xl shadow-md">
           <TextField
-            onChange={handleWeightValueChange}
-            id="outlined-number"
-            variant="standard"
-            placeholder="0"
-            sx={{
+              onChange={handleWeightValueChange}
+              id="outlined-number"
+              value={data.weight.value}
+              variant="standard"
+              placeholder="0"
+              sx={{
               marginTop: 1,
               marginX: 1,
               border: "none",

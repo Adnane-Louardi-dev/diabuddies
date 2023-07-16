@@ -9,15 +9,17 @@ const userSchema = mongoose.Schema(
     },
     givenName: { type: String, lowercase: true, trim: true },
     familyName: { type: String, lowercase: true, trim: true },
+    age: Number,
     email: {
       type: String,
       lowercase: true,
       trim: true,
       match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, "Please fill a valid email address"],
     },
+    homeAddress: String,
     photo: String,
     bio: String,
-    birthDate: String,
+    birthDate: Date,
     gender: String,
     height: {
       value: {

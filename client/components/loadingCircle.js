@@ -1,10 +1,9 @@
 import CircularProgress from "@mui/material/CircularProgress";
-import Box from "@mui/material/Box";
 
-export default function LoadingCircle() {
+export default function LoadingCircle({ hidden = false }) {
   return (
-    <Box sx={{ display: "flex" }}>
+    <div className={`${hidden ? "hidden" : "grid"} items-center justify-center  z-10 w-full h-full`}>
       <CircularProgress />
-    </Box>
+    </div>
   );
 }

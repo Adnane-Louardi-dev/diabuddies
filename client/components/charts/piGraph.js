@@ -24,10 +24,10 @@ const PiGraph = ({ props }) => {
   useEffect(() => {
     // setData(result);
     setFakeData([
-      { name: "low", value: props.filter((item) => item.status === "low").length },
-      { name: "normal", value: props.filter((item) => item.status === "normal").length },
-      { name: "high", value: props.filter((item) => item.status === "high").length },
-      { name: "veryHigh", value: props.filter((item) => item.status === "veryHigh").length },
+      { name: "low", value: props?.filter((item) => item.status === "low").length },
+      { name: "normal", value: props?.filter((item) => item.status === "normal").length },
+      { name: "high", value: props?.filter((item) => item.status === "high").length },
+      { name: "veryHigh", value: props?.filter((item) => item.status === "veryHigh").length },
     ]);
     // console.log("piChart", fakeData);
   }, [props]);

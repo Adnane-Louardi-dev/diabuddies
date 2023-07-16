@@ -10,9 +10,8 @@ const morgan = require("morgan");
 const login = require("./routes/login");
 const logbook = require("./routes/logbook");
 const userRoutes = require("./routes/userRoutes");
-const isLoggedIn = require("./middlewares/isLoggedIn");
 const user = require("./routes/user");
-
+const charts = require("./routes/charts");
 //DB connect
 const DBConnection = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.dgq8q.mongodb.net/?retryWrites=true&w=majority&ssl=true`;
 mongoose.connect(DBConnection, () => console.log("DB connected!"));
@@ -40,10 +39,11 @@ app.use(
 );
 app.use(passport.session());
 app.use(passport.initialize());
+app.use("/", userRoutes);
 app.use("/login", login);
 app.use("/logbook", logbook);
 app.use("/user", user);
-app.use("/", userRoutes);
+app.use("/charts", charts);
 
 app.get("/logout", (req, res) => {
   req.session.destroy(function () {

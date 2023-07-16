@@ -1,47 +1,91 @@
 import * as React from "react";
+import {useState} from "react";
 import axios from "axios";
 import moment from "moment";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import { Icon } from "@iconify/react";
+import {Icon} from "@iconify/react";
 import TextField from "@mui/material/TextField";
-import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
-import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
-import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker";
+import {MobileDateTimePicker} from "@mui/x-date-pickers/MobileDateTimePicker";
 import InputAdornment from "@mui/material/InputAdornment";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import {useMutation, useQueryClient} from "@tanstack/react-query";
+import {Alert, Snackbar} from "@mui/material";
+import Box from "@mui/material/Box";
+import CircularProgress from "@mui/material/CircularProgress";
 
 export default function NewLogDialog() {
-  const [dateOpen, setDateOpen] = React.useState(false);
-  const [dateValue, setDateValue] = React.useState(moment());
-  const [Alignment, setAlignment] = React.useState({
-    firstAlignment: null,
-    secondAlignment: null,
-  });
-  const [data, setData] = React.useState({
-    time: dateValue._d,
-    meal: Alignment ? `${Alignment.firstAlignment} ${Alignment.secondAlignment}` : "other",
-  });
+    const [dateOpen, setDateOpen] = React.useState(false);
+    const [dateValue, setDateValue] = React.useState(moment());
+    const [Alignment, setAlignment] = React.useState({
+        firstAlignment: null,
+        secondAlignment: null,
+    });
+    const [data, setData] = React.useState({
+        time: dateValue._d,
+        meal: `${Alignment.firstAlignment && ""} ${Alignment.secondAlignment || ""}`,
+    });
+    const queryClient = useQueryClient();
+    const [notificationOpen, setNotificationOpen] = useState(false);
 
-  React.useEffect(() => {
-    setData({ ...data, meal: `${Alignment.firstAlignment}  ${Alignment.secondAlignment}` });
-  }, [Alignment]);
+    const {mutate: addNewLogBook, isLoading, isError} = useMutation({
+        mutationKey: ["addNewLogBook"],
+        mutationFn: (data) => {
+            return axios.post("/api/logbook", data, {
+                headers: {
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": "*",
+                },
+            })
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries(["indexChart"])
+        },
+        onError: (e) => {
+            console.error(e)
+        },
+        onSettled: () => {
+            setNotificationOpen(true)
+        }
+    })
 
-  return (
-    <>
-      <Button
-        variant="filled"
-        onClick={() => {
-          setDateOpen(true);
-        }}
-        className="flex justify-between items-center text-diaBlue bg-diaBlue bg-opacity-25 pt-2 rounded-full shadow-md"
-      >
-        Add
-        <Icon icon="material-symbols:add-circle-rounded" className="mx-1 mb-0.5" />
-      </Button>
+
+    //handle post new log
+    const handlePOSTNewLog = async () => {
+        setDateOpen(false);
+        await addNewLogBook(data)
+    };
+
+    React.useEffect(() => {
+        setData({...data, meal: `${Alignment.firstAlignment}  ${Alignment.secondAlignment}`});
+    }, [Alignment]);
+
+    const handleClose = () => {
+        setNotificationOpen(false)
+    }
+    return (
+        <>
+            <Box sx={{display: 'flex'}}>
+                <CircularProgress hidden={!isLoading}/>
+            </Box>
+            <Snackbar open={notificationOpen} autoHideDuration={6000} onClose={handleClose}>
+                <Alert onClose={handleClose} severity={isError ? "danger" : "success"} sx={{width: '100%'}}>
+                    {isError ? "There was an error while saving log book" : "Log book was added successfully"}
+                </Alert>
+            </Snackbar>
+            <Button
+                variant="filled"
+                onClick={() => {
+                    setDateOpen(true);
+                }}
+                className="flex justify-between items-center text-diaBlue bg-diaBlue bg-opacity-25 pt-2 rounded-full shadow-md"
+            >
+                Add
+                <Icon icon="material-symbols:add-circle-rounded" className="mx-1 mb-0.5"/>
+            </Button>
       <Dialog
         fullScreen
         open={dateOpen}
@@ -206,57 +250,6 @@ export default function NewLogDialog() {
               />
             </div>
 
-            {/* bolus */}
-            <div className="p-2.5 bg-orange-300 rounded-xl shadow-md">
-              <div className="flex">
-                <Icon icon="fluent:syringe-20-regular" className="bg-white text-orange-300 rounded-full self-center m-1 p-1 h-7 w-7" />
-                <p className="text-white font-rubik font-sm self-center">bolus</p>
-              </div>
-              <TextField
-                id="outlined-number"
-                type="tel"
-                variant="standard"
-                placeholder="0"
-                sx={{
-                  marginTop: 1,
-                  marginX: 1,
-                  textAlign: "center",
-                  border: "none",
-                  width: "full",
-                  "& .MuiInputBase-root::after, .MuiInputBase-root::before": {
-                    display: "none",
-                  },
-                  "& .MuiInputBase-input": {
-                    fontSize: 25,
-                    fontStyle: "bold",
-                    width: "full",
-                  },
-                }}
-                InputProps={{
-                  endAdornment: (
-                    <InputAdornment
-                      position="end"
-                      sx={{
-                        "& .MuiTypography-root": {
-                          color: "white",
-                          fontSize: 14,
-                          marginRight: 1,
-                        },
-                      }}
-                    >
-                      UI
-                    </InputAdornment>
-                  ),
-                  style: {
-                    color: "white",
-                  },
-                }}
-                onChange={(event) => {
-                  setData({ ...data, fastActingInsulinUnits: parseFloat(event.target.value) });
-                }}
-              />
-            </div>
-
             {/* carbs */}
             <div className="p-2.5 bg-gray-400 rounded-xl shadow-md">
               <div className="flex">
@@ -304,6 +297,108 @@ export default function NewLogDialog() {
                 }}
                 onChange={(event) => {
                   setData({ ...data, carbs: parseFloat(event.target.value) });
+                }}
+              />
+            </div>
+
+            {/* bolus */}
+            <div className="p-2.5 bg-orange-300 rounded-xl shadow-md">
+              <div className="flex">
+                <Icon icon="fluent:syringe-20-regular" className="bg-white text-orange-300 rounded-full self-center m-1 p-1 h-7 w-7" />
+                <p className="text-white font-rubik font-sm self-center">bolus</p>
+              </div>
+              <TextField
+                id="outlined-number"
+                type="tel"
+                variant="standard"
+                placeholder="0"
+                sx={{
+                  marginTop: 1,
+                  marginX: 1,
+                  textAlign: "center",
+                  border: "none",
+                  width: "full",
+                  "& .MuiInputBase-root::after, .MuiInputBase-root::before": {
+                    display: "none",
+                  },
+                  "& .MuiInputBase-input": {
+                    fontSize: 25,
+                    fontStyle: "bold",
+                    width: "full",
+                  },
+                }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment
+                      position="end"
+                      sx={{
+                        "& .MuiTypography-root": {
+                          color: "white",
+                          fontSize: 14,
+                          marginRight: 1,
+                        },
+                      }}
+                    >
+                      UI
+                    </InputAdornment>
+                  ),
+                  style: {
+                    color: "white",
+                  },
+                }}
+                onChange={(event) => {
+                  setData({ ...data, bolus: parseFloat(event.target.value) });
+                }}
+              />
+            </div>
+
+            {/* basal */}
+            <div className="p-2.5 bg-orange-300 rounded-xl shadow-md">
+              <div className="flex">
+                <Icon icon="fluent:syringe-20-regular" className="bg-white text-orange-300 rounded-full self-center m-1 p-1 h-7 w-7" />
+                <p className="text-white font-rubik font-sm self-center">basal</p>
+              </div>
+              <TextField
+                id="outlined-number"
+                type="tel"
+                variant="standard"
+                placeholder="0"
+                sx={{
+                  marginTop: 1,
+                  marginX: 1,
+                  textAlign: "center",
+                  border: "none",
+                  width: "full",
+                  "& .MuiInputBase-root::after, .MuiInputBase-root::before": {
+                    display: "none",
+                  },
+                  "& .MuiInputBase-input": {
+                    fontSize: 25,
+                    fontStyle: "bold",
+                    width: "full",
+                  },
+                }}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment
+                      position="end"
+                      sx={{
+                        "& .MuiTypography-root": {
+                          color: "white",
+                          fontSize: 14,
+                          marginRight: 1,
+                        },
+                      }}
+                    >
+                      UI
+                    </InputAdornment>
+                  ),
+                  style: {
+                    color: "white",
+                  },
+                }}
+                onChange={(event) => {
+                  setData({ ...data, basal: parseFloat(event.target.value) });
                 }}
               />
             </div>
@@ -472,19 +567,10 @@ export default function NewLogDialog() {
             Cancel
           </Button>
           <Button
-            onClick={() => {
-              setDateOpen(false);
-              axios
-                .post("/api/logbook", data, {
-                  headers: {
-                    "Content-Type": "application/json",
-                    "Access-Control-Allow-Origin": "*",
-                  },
-                })
-                .then((log) => console.log(log));
-            }}
-            variant="filled"
-            className="flex justify-center px-2 mx-4 font-rubik text-white bg-diaGray hover:bg-opacity-75 rounded-lg shadow-md"
+              disabled={isLoading}
+              onClick={handlePOSTNewLog}
+              variant="filled"
+              className="flex justify-center px-2 mx-4 font-rubik text-white bg-diaGray hover:bg-opacity-75 rounded-lg shadow-md"
           >
             Save
           </Button>
