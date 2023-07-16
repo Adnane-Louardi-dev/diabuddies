@@ -1,23 +1,18 @@
-import { useState } from "react";
-import moment from "moment";
-import { MobileDatePicker } from "@mui/x-date-pickers";
-import { TextField, InputAdornment } from "@mui/material";
-import { addBirthDate } from "../../features/stepper/stepper";
-import { useDispatch } from "react-redux";
-import { Icon } from "@iconify/react";
-const BirthDate = () => {
-  const dispatch = useDispatch();
-  const [birthDateValue, setBirthDateValue] = useState(moment());
-  const handleBirthDateChange = (newBirthDateValue) => {
-    setBirthDateValue(newBirthDateValue._d);
-    dispatch(addBirthDate(moment(newBirthDateValue._d).format("MMM Do YYYY")));
-  };
-  return (
-    <section>
-      <div className="mt-24 grid items-center justify-center text-center">
-        <h1 className="font-semibold font-poppins text-xl">
-          Your <span className="decoration-none font-bold text-diaBlue">date of birth</span>
-        </h1>
+import {MobileDatePicker} from "@mui/x-date-pickers";
+import {InputAdornment, TextField} from "@mui/material";
+import {Icon} from "@iconify/react";
+
+const BirthDate = ({data, setData}) => {
+    const handleBirthDateChange = (newBirthDateValue) => {
+        console.log("date", newBirthDateValue._d)
+        setData(oldData => ({...oldData, birthDate: newBirthDateValue._d}))
+    };
+    return (
+        <section>
+            <div className="mt-24 grid items-center justify-center text-center">
+                <h1 className="font-semibold font-poppins text-xl">
+                    Your <span className="decoration-none font-bold text-diaBlue">date of birth</span>
+                </h1>
         <p className="my-3 font-rubik text-gray-400">
           we will use this data for a better <br />
           management for you
@@ -37,17 +32,17 @@ const BirthDate = () => {
                 ),
               }}
               sx={{
-                backgroundColor: "white",
-                borderRadius: 7,
-                "& fieldset": { borderRadius: 7, boxShadow: "0px 0px 20px -10px" },
-                "& .MuiInputBase-input": {
-                  textAlign: "center",
-                  fontFamily: "poppins",
-                },
+                  backgroundColor: "white",
+                  borderRadius: 7,
+                  "& fieldset": {borderRadius: 7, boxShadow: "0px 0px 20px -10px"},
+                  "& .MuiInputBase-input": {
+                      textAlign: "center",
+                      fontFamily: "poppins",
+                  },
               }}
             />
           )}
-          value={birthDateValue}
+          value={data.birthDate}
           onChange={handleBirthDateChange}
           views={["year", "month", "day"]}
           inputFormat={"dddd, DD MMMM yyyy"}
