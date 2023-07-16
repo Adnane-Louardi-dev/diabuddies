@@ -18,6 +18,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { storeData } from "../features/dataReducers/data";
 import { Icon } from "@iconify/react";
 import Head from "next/head";
+import CompleteYourProfile from "../components/completeYourProfile";
 
 export default function Home() {
   const router = useRouter();
@@ -63,6 +64,7 @@ export default function Home() {
           </Head>
           <ResponsiveAppBar props={Data?.user} />
           <main className="p-4 relative overflow-y-hidden">
+            {/* <CompleteYourProfile /> */}
             <span className="font-inter text-2xl text-semibold">{`Good evening, ${Data?.user?.givenName}`}</span>
             <DayPicker />
             {Data?.logBook[0] ? (
