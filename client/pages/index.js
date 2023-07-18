@@ -74,7 +74,15 @@ export default function Home() {
           </Head>
           <ResponsiveAppBar user={user} />
           <main className="p-4 relative overflow-y-hidden">
-            <span className="font-inter text-2xl text-semibold">{`Good evening, ${user.givenName}`}</span>
+            <span className="font-inter text-2xl text-semibold">{`Good ${
+              moment().format("LT") > (moment("12:00 AM", "LT") && moment().format("LT") < moment("12:00 PM"))
+                ? "morning"
+                : moment().format("LT") > (moment("12:00 PM", "LT") && moment().format("LT") < moment("05:00 PM"))
+                ? "afternoon"
+                : moment().format("LT") > (moment("05:00 PM", "LT") && moment().format("LT") < moment("09:00 PM"))
+                ? "evening"
+                : "night"
+            }, ${user.givenName}`}</span>
             <DayPicker setDate={setDate} />
             {Data?.logBook[0] ? (
               <>
@@ -121,7 +129,7 @@ export default function Home() {
                     </div>
                     <h3 className="text-lg text-diaGray font-semibold font-rubik">Charts</h3>
                   </div>
-                  <Link href={"/charts"} aria-label="Charts page" target="_blank" passHref>
+                  <Link href={"/charts"} aria-label="Charts page" passHref>
                     <Icon icon="ep:arrow-right-bold" className="h-6 w-6 text-diaGray" />
                   </Link>
                 </div>

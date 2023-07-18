@@ -3,18 +3,20 @@ import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import moment from "moment/moment";
 
-export default function DateToggleBtn({setDate}) {
-    const [alignment, setAlignment] = React.useState(7);
+export default function DateToggleBtn({ setDate }) {
+  const [alignment, setAlignment] = React.useState(7);
 
-    const handleChange = (event, newAlignment) => {
-        setAlignment(newAlignment)
-        setDate(moment(new Date()).subtract(newAlignment, "day").format("DD/MM/YYYY"));
-    };
+  const handleChange = (event, newAlignment) => {
+    if (newAlignment != null) {
+      setAlignment(newAlignment);
+      setDate(moment(new Date()).subtract(newAlignment, "day").format("DD/MM/YYYY"));
+    }
+  };
 
-    return (
-        <ToggleButtonGroup
-            sx={{
-                "& .MuiToggleButtonGroup-root , .MuiButtonBase-root": {
+  return (
+    <ToggleButtonGroup
+      sx={{
+        "& .MuiToggleButtonGroup-root , .MuiButtonBase-root": {
           border: "none",
           marginX: 1,
         },
