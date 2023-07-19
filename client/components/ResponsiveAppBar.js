@@ -10,8 +10,8 @@ import Avatar from "@mui/material/Avatar";
 import Link from "next/link";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import { Logo } from "./Logo";
-import { useGetCurrentUser } from "../customeHooks/useGetCurrentUser";
+import {Logo} from "./Logo";
+import {useGetCurrentUser} from "../customeHooks/useGetCurrentUser";
 
 const appBarItems = [
   {
@@ -23,13 +23,20 @@ const appBarItems = [
     label: "Generate PDF",
   },
   {
+    link: "/store",
+    label: "E-Diabuddies"
+  },  {
+    link: "/store/wish_list",
+    label: "My WishList"
+  },
+  {
     link: "/logout",
     label: "Logout",
   },
 ];
 
 function ResponsiveAppBar() {
-  const { user, isLoading: isUserLoading } = useGetCurrentUser();
+  const { user } = useGetCurrentUser();
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const handleOpenUserMenu = (event) => {
     setAnchorElUser(event.currentTarget);

@@ -53,17 +53,8 @@ export default function Home() {
     //     router.push("/setup");
     //   }
     // };
-  }, [router.isReady]);
+  }, [router.isReady, date]);
 
-  // useEffect(() => {
-  //   refetch();
-  //   // redirect new users to setup page
-  //   // if (Data?.user.newUser) {
-  //   //   router.push("/setup");
-  //   // }
-  // }, [router.isReady,date]);
-
-  console.log(Data);
   return (
     <>
       {!isLoading && !isUserLoading ? (

@@ -12,8 +12,10 @@ const logbook = require("./routes/logbook");
 const userRoutes = require("./routes/userRoutes");
 const user = require("./routes/user");
 const charts = require("./routes/charts");
+const wishList = require("./routes/wishList");
 //DB connect
-const DBConnection = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.dgq8q.mongodb.net/?retryWrites=true&w=majority&ssl=true`;
+// const DBConnection = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.dgq8q.mongodb.net/?retryWrites=true&w=majority&ssl=true`;
+const DBConnection = `mongodb://127.0.0.1:27017/diabuddies?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+1.10.1`;
 mongoose.connect(DBConnection, () => console.log("DB connected!"));
 
 //middleswares
@@ -44,6 +46,7 @@ app.use("/login", login);
 app.use("/logbook", logbook);
 app.use("/user", user);
 app.use("/charts", charts);
+app.use("/wishList", wishList);
 
 app.get("/logout", (req, res) => {
   req.session.destroy(function () {
