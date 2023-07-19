@@ -18,6 +18,7 @@ import { Icon } from "@iconify/react";
 import Head from "next/head";
 import { useQuery } from "@tanstack/react-query";
 import { useGetCurrentUser } from "../customeHooks/useGetCurrentUser";
+import CompleteYourProfile from "../components/completeYourProfile";
 
 export default function Home() {
   const router = useRouter();
@@ -47,21 +48,7 @@ export default function Home() {
 
   useEffect(() => {
     refetch();
-    // if (router.isReady) {
-    //   // redirect new users to setup page
-    //   if (Data?.user.newUser) {
-    //     router.push("/setup");
-    //   }
-    // };
   }, [router.isReady]);
-
-  // useEffect(() => {
-  //   refetch();
-  //   // redirect new users to setup page
-  //   // if (Data?.user.newUser) {
-  //   //   router.push("/setup");
-  //   // }
-  // }, [router.isReady,date]);
 
   console.log(Data);
   return (
@@ -83,6 +70,8 @@ export default function Home() {
                 ? "evening"
                 : "night"
             }, ${user.givenName}`}</span>
+            {user.newUser ? <CompleteYourProfile /> : null}
+
             <DayPicker setDate={setDate} />
             {Data?.logBook[0] ? (
               <>
