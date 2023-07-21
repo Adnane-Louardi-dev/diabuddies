@@ -1,12 +1,15 @@
-import React, {useState} from "react";
-import commerce from "../../lib/commerce";
+import React, {useEffect, useState} from "react";
 import Link from "next/link";
+import {useAddToCart} from "../../customeHooks/useCart";
 
 
-export const AddProductToCart = ({children}) => {
+export const AddProductToCart = ({children, id,product}) => {
     const [added, setAdded] = useState(false);
-    const addToCart = () => {
-        commerce.cart.add(id, 1).then(() => {
+
+    const {mutate:addToCart, isLoading,isSuccess} = useAddToCart()
+
+    useEffect(()=>{
+        if(!isLoading && isSuccess){
             let beggin = setInterval(() => {
                 setAdded(true);
                 setTimeout(() => {
@@ -14,8 +17,8 @@ export const AddProductToCart = ({children}) => {
                     clearInterval(beggin);
                 }, 5000);
             }, 0);
-        });
-    };
+        }
+    },[isLoading])
 
     return <>
         {added && (
@@ -30,7 +33,9 @@ export const AddProductToCart = ({children}) => {
                 </p>
             </div>
         )}
-        <div className={"flex justify-end w-full relative"} onClick={addToCart}>
+        <div className={"flex justify-end w-full relative"} onClick={()=>{
+            addToCart(product)
+        }}>
             {children}
         </div>
     </>

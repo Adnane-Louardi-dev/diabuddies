@@ -1,15 +1,10 @@
-import Image from "next/image";
 import Link from "next/link";
-import React, {useMemo} from "react";
+import React from "react";
 import {AddProductToCart} from "./addProductToCart";
 import {WishedIcon} from "./wishedIcon";
+import {ProductImage} from "./ProductImage";
 
-export default function Product({ name, price, image, description, inventory, id }) {
-
-   const imageSrc = useMemo(()=>{
-      console.log(image ? image.url : assets[0].url)
-      return image ? image.url : assets[0].url
-   },[id])
+export default function Product({ name, price, image, description, inventory, id,...product }) {
 
    return (
       <>
@@ -30,9 +25,10 @@ export default function Product({ name, price, image, description, inventory, id
             </div>
             {/*---- ----*/}
             {/*---- product section ----*/}
-            <div className=" m-5  md:flex justify-between">
+            <div className=" m-5 md:flex justify-between">
                <div className="relative rounded-lg shadow-lg overflow-hidden bg-blue-300 w-full md:w-1/2 lg:w-2/5 h-80 my-10">
-                  <Image src={imageSrc} width={500} height={300}  alt={name} />
+                  {/*<Image src={imageSrc} width={500} height={300}  alt={name} />*/}
+                  <ProductImage className={"w-full h-full bg-center bg-cover"} src={image ? image.url : assets[0].url} />
                </div>
                <div className="px-2 md:w-1/2 lg:w-3/5 lg:ml-14">
                   <div className="flex justify-between my-10 md:mt-14 ">
@@ -50,8 +46,8 @@ export default function Product({ name, price, image, description, inventory, id
                      </div>
                   </div>
 
-                  <div className="text-gray-500 font-openSans ">
-                     <p className="leading-7">{description.replace(/(<([^>]+)>)/gi, "")}</p>
+                  <div className="text-gray-500 font-openSans">
+                     <p className="leading-7" style={{paddingBottom: "7.5rem"}}>{description.replace(/(<([^>]+)>)/gi, "")}</p>
                   </div>
                </div>
             </div>
@@ -69,7 +65,7 @@ export default function Product({ name, price, image, description, inventory, id
                      <div className="px-3 py-1 text-blue-700">
                         <h1 className="text-xl mt-0.5 whitespace-nowrap">{price.formatted_with_code}</h1>
                      </div>
-                     <AddProductToCart>
+                     <AddProductToCart id={id} product={product}>
                         <button type="submit" className="inline-flex text-white h-10 w-32 bg-yellow-500 hover:bg-yellow-400 hover:text-gray-100 px-3 py-2 rounded-md">
                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 my-0.5 mr-0.5" viewBox="0 0 20 20" fill="currentColor">
                               <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />

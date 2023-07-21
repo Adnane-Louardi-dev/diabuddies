@@ -17,6 +17,10 @@ const userSchema = mongoose.Schema(
       match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, "Please fill a valid email address"],
     },
     homeAddress: String,
+    phoneNumber: {
+        type: String,
+        match: [/(\+212|0)([ \-_/]*)(\d[ \-_/]*){9}/,"Please fill a valid phone number"]
+    },
     photo: String,
     bio: String,
     birthDate: Date,

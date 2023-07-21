@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {useGetWishListItems, useToggleWishItem} from "../../customeHooks/wishListHooks";
+import {debounce} from "@mui/material";
 
 
 export const WishedIcon = ({productId}) => {
@@ -14,12 +15,12 @@ export const WishedIcon = ({productId}) => {
     },[isLoading])
 
     return !isLoading ?
-        <button onClick={()=>{
+        <button onClick={debounce(()=>{
             if(!toggleProductLoading){
                 toggleWishItem(productId)
                 setIsWished((wished) => !wished)
             }
-        }}>
+        },300)}>
             <svg xmlns="http://www.w3.org/2000/svg"
                  key={productId}
                      className={`h-8 w-8 stroke-current text-red-500 

@@ -22,9 +22,9 @@ export const WishedProducts = ({wishedProducts}) => {
         return <LoadingCircle />
     }
     return <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {result.map(({isErrore, isLoading, data:product}) => {
-            if(isLoading) return null
-            return !isErrore ? <Card {...product} key={product.id} /> : null
+        {result.map(({isSuccess, isLoading, data:product}) => {
+            if(isLoading) return <LoadingCircle />
+            return isSuccess ? <Card product={product} key={product.id} /> : null
         })}
     </div>
 }

@@ -1,8 +1,6 @@
-import Head from "next/head";
 import Products from "../../../components/store/products";
 import commerce from "../../../lib/commerce";
-import Container from "@mui/material/Container";
-import ResponsiveAppBar from "../../../components/ResponsiveAppBar";
+import {StoreLayout} from "../../../components/store/storeLayout";
 
 //fetch the product that have the clicked permalink
 export async function getStaticProps({ params }) {
@@ -35,14 +33,8 @@ export async function getStaticPaths() {
 //create component that handle a data passed from getStaticProps
 export default function ProductPage({ product }) {
    return (
-      <>
-         <Head>
-            <title>{`Edona | ${product.name}`}</title>
-         </Head>
-         <Container maxWidth={"xl"}>
-            <ResponsiveAppBar />
-            <Products {...product} />
-         </Container>
-      </>
+      <StoreLayout>
+         <Products {...product} />
+      </StoreLayout>
    );
 }

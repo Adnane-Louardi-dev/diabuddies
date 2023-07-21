@@ -1,14 +1,12 @@
 import Link from "next/link";
-import React, {useMemo} from "react";
+import React from "react";
 import {AddProductToCart} from "./addProductToCart";
 import {WishedIcon} from "./wishedIcon";
+import {ProductImage} from "./ProductImage";
 
-const Card = ({ name, price, image, id, assets }) => {
+const Card = ({ product }) => {
+   const {name, price, image, id, assets} = product
 
-   const imageSrc = useMemo(()=>{
-      console.log(image ? image.url : assets[0].url)
-      return image ? image.url : assets[0].url
-   },[id])
    return (
       <>
          <div className="mx-auto my-5 xs:flex rounded-xl shadow-md bg-blue-50 p-3 xs:px-3">
@@ -17,7 +15,7 @@ const Card = ({ name, price, image, id, assets }) => {
 
                {/* <Carousel emulateTouch={true} showArrows={false} showThumbs={false} transitionTime={750} centerMode={true} centerSlidePercentage={100}> */}
                {/*<img src={`${image?.url}`} style={{objectFit: "cover"}} layout="fill" objectFit="cover" alt={name} />*/}
-                  <div className={"w-full h-full bg-center bg-cover"} style={{backgroundImage: `url(${imageSrc.replace(" ","%20")})`}} />
+                  <ProductImage className={"w-full h-full bg-center bg-cover"} src={image ? image.url : assets[0].url} />
                {/* </Carousel> */}
                </Link>
 
@@ -26,7 +24,7 @@ const Card = ({ name, price, image, id, assets }) => {
                <div className="flex justify-between h-10 w-full">
                   <Link href={`/store/products/${id}`} className="cursor-pointer">
                      <div className="flex-col">
-                        <h1 className="mt-0.5 w-48 text-2xl">{name}</h1>
+                        <h1 className="mt-0.5 w-48 text-xl">{name}</h1>
                         <div className="text-blue-700">
                            <h1 className="my-1.5 text-xl">{price.formatted_with_code}</h1>
                         </div>
@@ -39,7 +37,7 @@ const Card = ({ name, price, image, id, assets }) => {
                   </div>
                </div>
                <div className="flex justify-end w-full relative">
-                  <AddProductToCart>
+                  <AddProductToCart id={id} product={product}>
                      <button className="absolute -mt-10 mx-0.5 bg-yellow-400 hover:bg-yellow-500 focus:bg-yellow-500 focus:ring-2 focus:ring-red-500 w-10 h-10 rounded-md">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mx-auto my-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />

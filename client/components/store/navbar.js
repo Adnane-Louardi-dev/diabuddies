@@ -1,7 +1,24 @@
+import React from "react";
 import Link from "next/link";
 import {Logo} from "../Logo";
+import IconButton from "@mui/material/IconButton";
+import Menu from "@mui/material/Menu";
+import {Button} from "@mui/material";
+import {useGetCart} from "../../customeHooks/useCart";
+import {ProductImage} from "./ProductImage";
 
 const Navbar = () => {
+
+    const {data:cart, isLoading} = useGetCart()
+
+    const [anchorElCart, setAnchorElCart] = React.useState(null);
+    const handleOpenCartMenu = (event) => {
+        setAnchorElCart(event.currentTarget);
+    };
+
+    const handleCloseCartMenu = () => {
+        setAnchorElCart(null);
+    };
 
    return (
       <>
@@ -15,17 +32,72 @@ const Navbar = () => {
                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
                         </svg>
                      </Link>
-                     <Link href="/store/cart" passHref={true} className="p-1 ml-3 rounded-full text-gray-400 hover:text-black focus:outline-none focus:ring-2 focus:ring-offset-2">
-                           <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <IconButton onClick={handleOpenCartMenu} className="p-1 ml-3 rounded-full text-gray-400 hover:text-black focus:outline-none focus:ring-2 focus:ring-offset-2">
+                          <svg className="h-6 w-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path
-                                 strokeLinecap="round"
-                                 strokeLinejoin="round"
-                                 strokeWidth={1.5}
-                                 d="M10 19.5c0 .829-.672 1.5-1.5 1.5s-1.5-.671-1.5-1.5c0-.828.672-1.5 1.5-1.5s1.5.672 1.5 1.5zm3.5-1.5c-.828 0-1.5.671-1.5 1.5s.672 1.5 1.5 1.5 1.5-.671 1.5-1.5c0-.828-.672-1.5-1.5-1.5zm6.305-15l-3.432 12h-10.428l-3.777-9h-2.168l4.615 11h13.239l3.474-12h1.929l.743-2h-4.195z"
+                                  strokeLinecap="round"
+                                  strokeLinejoin="round"
+                                  strokeWidth={1.5}
+                                  d="M10 19.5c0 .829-.672 1.5-1.5 1.5s-1.5-.671-1.5-1.5c0-.828.672-1.5 1.5-1.5s1.5.672 1.5 1.5zm3.5-1.5c-.828 0-1.5.671-1.5 1.5s.672 1.5 1.5 1.5 1.5-.671 1.5-1.5c0-.828-.672-1.5-1.5-1.5zm6.305-15l-3.432 12h-10.428l-3.777-9h-2.168l4.615 11h13.239l3.474-12h1.929l.743-2h-4.195z"
                               />
-                           </svg>
-                           <span className={`absolute top-5 right-4 inline-block w-3 h-3 transform translate-x-1/2 -translate-y-1/2 bg-yellow-600 rounded-full`}></span>
-                     </Link>
+                          </svg>
+                          <span className={`absolute top-2 right-4 text-[0.7rem] text-white inline-block w-4 h-4 transform translate-x-1/2 -translate-y-1/2 bg-yellow-600 rounded-full`}>
+                              {!isLoading ? cart.total_items : ""}
+                          </span>
+                      </IconButton>
+                      {!isLoading && <Menu
+                          sx={{mt: "45px"}}
+                          id="menu-appbar"
+                          anchorEl={anchorElCart}
+                          anchorOrigin={{
+                              vertical: "top",
+                              horizontal: "right",
+                          }}
+                          keepMounted
+                          transformOrigin={{
+                              vertical: "top",
+                              horizontal: "right",
+                          }}
+                          className={"h-[500px] scroll-auto"}
+                          open={Boolean(anchorElCart)}
+                          onClose={handleCloseCartMenu}
+                      >
+                          {cart.line_items.map(({id,name,price,assets,quantity,line_total,image}) => (
+                              <div className={"mx-3"} key={id} >
+                                  <div className="mx-auto mb-5 flex rounded-xl shadow-md bg-blue-50 px-1 py-2">
+                                      <div className="self-center relative h-16 w-16  flex-shrink-0 rounded-xl overflow-hidden bg-gray-400">
+                                          <ProductImage className={"w-full h-full bg-center bg-cover"} src={image ? image.url : assets[0].url} />
+                                      </div>
+                                      <div className="self-center flex flex-col mx-auto mt-2 xs:mt-0 xs:ml-3 px-3 xs:px-0 justify-between rounded-xl font-rubik">
+                                          <div className="flex-col">
+                                              <h1 className="mt-1 w-48 text-sm">{name}</h1>
+                                              <h1 className="my-1 text-sm flex justify-between">
+                                                  <p>
+                                                      {quantity} * <span className={"text-blue-700"}>{price.formatted_with_code}</span>
+                                                  </p>
+                                                  <p>
+                                                      {line_total.formatted_with_code}
+                                                  </p>
+                                              </h1>
+                                          </div>
+                                      </div>
+                                  </div>
+                              </div>
+                          ))}
+                          <div className={"mx-3"}>
+                              {cart.line_items.length !== 0 &&
+                                  <Link href="/store/cart" passHref={true}>
+                                      <Button className={"bg-amber-500 text-white my-5 w-full"}>
+                                          Goto cart
+                                      </Button>
+                                  </Link>}
+                              <Link href="/store/orders" passHref={true}>
+                                  <Button className={"bg-amber-500 text-white w-full"}>
+                                      My Orders
+                                  </Button>
+                              </Link>
+                          </div>
+                      </Menu>}
                   </div>
                </div>
             </div>
