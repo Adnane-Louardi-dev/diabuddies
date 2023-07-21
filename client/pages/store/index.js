@@ -7,17 +7,6 @@ import {StoreLayout} from "../../components/store/storeLayout";
 const Home = ({ products , categories}) => {
     const router = useRouter()
 
-    // const {data,isLoading} = useQuery({
-    //     queryKey: ["authUser"],
-    //     queryFn: async () => {
-    //         commerce.customer.login("ahmed.tanalt666@gmail.com","https://localhost:3001/").then(token => {
-    //             console.log("token", token)
-    //         })
-    //         commerce.customer.getToken('1ae420a5-2f43-426f-8a61-516eabb56d33').then((jwt) => console.log(jwt));
-    //         return commerce.customer.login("ahmed.tanalt666@gmail.com","https://localhost:3001/")
-    //     }
-    // })
-    // console.log(data)
    return (
       <StoreLayout>
          <Categories categories={categories}/>

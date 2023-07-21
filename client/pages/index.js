@@ -47,12 +47,12 @@ export default function Home() {
 
   useEffect(() => {
     refetch();
-    // if (router.isReady) {
-    //   // redirect new users to setup page
-    //   if (Data?.user.newUser) {
-    //     router.push("/setup");
-    //   }
-    // };
+    if (router.isReady) {
+      // redirect new users to setup page
+      if (user.newUser) {
+        router.push("/setup");
+      }
+    };
   }, [router.isReady, date]);
 
   return (

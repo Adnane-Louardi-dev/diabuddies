@@ -32,13 +32,6 @@ export default function Checkout() {
         return <LoadingCircle />
     }
 
-    // return <>
-    //     <h1>{checkout.id}</h1>
-    //     <pre>
-    //             {JSON.stringify(checkout,null,2)}
-    //         </pre>
-    // </>
-
     return <StoreLayout>
         <form onSubmit={handleSubmit(submitOrder)} className={"flex"}>
             <div className={"w-[75%]"}>
