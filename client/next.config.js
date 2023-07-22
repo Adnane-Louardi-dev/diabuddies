@@ -9,10 +9,17 @@ const withPWA = require("next-pwa")({
 const nextConfig = {
   reactStrictMode: true,
   images: {
+    domains: ["cdn.chec.io"],
     remotePatterns: [
       {
         protocol: "https",
         hostname: "lh3.googleusercontent.com",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "cdn.chec.io",
         port: "",
         pathname: "/**",
       },
@@ -22,7 +29,7 @@ const nextConfig = {
     return [
       {
         source: "/api/:path*",
-        destination: `http://localhost:3000/:path*`,
+        destination: `${process.env.BACKEND_URL}/:path*`,
       },
     ];
   },
