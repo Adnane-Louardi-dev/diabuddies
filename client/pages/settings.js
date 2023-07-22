@@ -112,7 +112,6 @@ const Settings = () => {
           </Alert>
         </Snackbar>
         <LoadingCircle hidden={!updateUserLoading} />
-
         <Grid container rowSpacing={3}>
           {/* profile */}
           <Grid item xs={12}>

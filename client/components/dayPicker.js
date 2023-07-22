@@ -1,13 +1,9 @@
-import { useState } from "react";
-import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-import { InputAdornment, TextField } from "@mui/material";
-import { useRouter } from "next/router";
-import { Icon } from "@iconify/react";
+import {DatePicker} from "@mui/x-date-pickers/DatePicker";
+import {InputAdornment, TextField} from "@mui/material";
+import {Icon} from "@iconify/react";
 import moment from "moment";
 
-const DayPicker = ({ setDate }) => {
-  const router = useRouter();
-  const [UserDate, setUserDate] = useState(moment(router.query.date, "MM/DD/YYYY"));
+const DayPicker = ({date, setDate }) => {
   const datePickerInputFormat = "dddd, DD MMMM yyyy";
 
   return (
@@ -55,10 +51,10 @@ const DayPicker = ({ setDate }) => {
                 />
               </>
             )}
-            value={UserDate}
+            value={date}
             inputFormat={datePickerInputFormat}
             onAccept={(newDateValue) => setDate(moment(newDateValue, "MM/DD/YYYY"))}
-            onChange={(newDateValue) => setUserDate(newDateValue)}
+            onChange={(newDateValue) => setDate(newDateValue)}
             className="w-full"
           />
         </div>

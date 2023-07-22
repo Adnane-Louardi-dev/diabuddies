@@ -12,6 +12,8 @@ const logbook = require("./routes/logbook");
 const userRoutes = require("./routes/userRoutes");
 const user = require("./routes/user");
 const charts = require("./routes/charts");
+const wishList = require("./routes/wishList");
+const order = require("./routes/order");
 //DB connect
 const DBConnection = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.dgq8q.mongodb.net/?retryWrites=true&w=majority&ssl=true`;
 mongoose.connect(DBConnection, () => console.log("DB connected!"));
@@ -44,6 +46,8 @@ app.use("/login", login);
 app.use("/logbook", logbook);
 app.use("/user", user);
 app.use("/charts", charts);
+app.use("/wishList", wishList);
+app.use("/orders", order);
 
 app.get("/logout", (req, res) => {
   req.session.destroy(function () {
