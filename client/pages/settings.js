@@ -138,6 +138,17 @@ const Settings = () => {
                     <UserInput defaultValue={user.homeAddress} fieldName={"homeAddress"} label={"Home Address"}/>
                   </Grid>
                   <Grid item xs={12}>
+                      <div className={"flex justify-between align-middle"}>
+                          <TextField
+                              variant="outlined"
+                              label={"Phone Number"}
+                              className="rounded-2xl w-full font-inter"
+                              {...register('phoneNumber',{pattern: /(\+212|0)([ \-_/]*)(\d[ \-_/]*){9}/ })}
+                              defaultValue={user.phoneNumber}
+                          />
+                      </div>
+                  </Grid>
+                  <Grid item xs={12}>
                     <UserInput defaultValue={user.userName} fieldName={"userName"} label={"userName"}/>
                   </Grid>
                   <Grid item xs={6}>

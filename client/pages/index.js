@@ -37,7 +37,7 @@ export default function Home() {
       return result.data;
     },
     enabled: router.isReady,
-    onSuccess: () => {
+    onSuccess: (data) => {
       router.push({ href: "/", query: { date: date } });
     },
     onError: (e) => {
@@ -45,25 +45,16 @@ export default function Home() {
     },
   });
 
+  useEffect(()=>{
+    if(router.isReady && !isUserLoading && user.newUser){
+      router.push("/setup");
+    }
+  },[isUserLoading, router.isReady])
+
   useEffect(() => {
     refetch();
-    // if (router.isReady) {
-    //   // redirect new users to setup page
-    //   if (Data?.user.newUser) {
-    //     router.push("/setup");
-    //   }
-    // };
-  }, [router.isReady]);
+  }, [ date]);
 
-  // useEffect(() => {
-  //   refetch();
-  //   // redirect new users to setup page
-  //   // if (Data?.user.newUser) {
-  //   //   router.push("/setup");
-  //   // }
-  // }, [router.isReady,date]);
-
-  console.log(Data);
   return (
     <>
       {!isLoading && !isUserLoading ? (

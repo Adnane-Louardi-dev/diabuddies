@@ -1,0 +1,54 @@
+import Link from "next/link";
+import React from "react";
+import {AddProductToCart} from "./addProductToCart";
+import {WishedIcon} from "./wishedIcon";
+import {ProductImage} from "./ProductImage";
+
+const Card = ({ product }) => {
+   const {name, price, image, id, assets} = product
+
+   return (
+      <>
+         <div className="mx-auto my-5 xs:flex rounded-xl shadow-md bg-blue-50 p-3 xs:px-3">
+            <div className="self-center relative h-36 md:h-40 w-full xs:w-48 flex-shrink-0 rounded-xl overflow-hidden bg-gray-400">
+               <Link href={`/store/products/${id}`} className="cursor-pointer">
+
+               {/* <Carousel emulateTouch={true} showArrows={false} showThumbs={false} transitionTime={750} centerMode={true} centerSlidePercentage={100}> */}
+               {/*<img src={`${image?.url}`} style={{objectFit: "cover"}} layout="fill" objectFit="cover" alt={name} />*/}
+                  <ProductImage className={"w-full h-full bg-center bg-cover"} src={image ? image.url : assets[0].url} />
+               {/* </Carousel> */}
+               </Link>
+
+            </div>
+            <div className="self-center flex flex-col mx-auto mt-2 xs:mt-0 xs:ml-3 px-3 xs:px-0 justify-between w-full h-36 md:h-40 rounded-xl font-rubik">
+               <div className="flex justify-between h-10 w-full">
+                  <Link href={`/store/products/${id}`} className="cursor-pointer">
+                     <div className="flex-col">
+                        <h1 className="mt-0.5 w-48 text-xl">{name}</h1>
+                        <div className="text-blue-700">
+                           <h1 className="my-1.5 text-xl">{price.formatted_with_code}</h1>
+                        </div>
+                        {/* <div className="text-sm text-gray-400 h-10 mt-1 w-full overflow-hidden">{description}</div> */}
+                     </div>
+                  </Link>
+
+                  <div className="mx-1.5">
+                    <WishedIcon productId={id} />
+                  </div>
+               </div>
+               <div className="flex justify-end w-full relative">
+                  <AddProductToCart id={id} product={product}>
+                     <button className="absolute -mt-10 mx-0.5 bg-yellow-400 hover:bg-yellow-500 focus:bg-yellow-500 focus:ring-2 focus:ring-red-500 w-10 h-10 rounded-md">
+                        <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 mx-auto my-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+                        </svg>
+                     </button>
+                  </AddProductToCart>
+               </div>
+            </div>
+         </div>
+      </>
+   );
+};
+
+export default Card;
