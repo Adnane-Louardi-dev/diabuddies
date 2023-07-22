@@ -6,6 +6,8 @@ import Typography from "@mui/material/Typography";
 import {ProductImage} from "../../../components/store/ProductImage";
 import {Button} from "@mui/material";
 import React from "react";
+import {getStatusColor} from "../../../utils/getColors";
+import {orderStatusEnum} from "../../../utils/enums";
 
 
 export default function Orders() {
@@ -82,8 +84,9 @@ export default function Orders() {
                                         <div className="text-sm text-gray-900">{cart.subtotal.raw} DH</div>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
-                                        <span
-                                            className="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Active</span>
+                                        <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-${getStatusColor(order.status)}-100 text-${getStatusColor(order.status)}-800`}>
+                                            {orderStatusEnum[order.status]}
+                                        </span>
                                     </td>
                                     <td
                                         onClick={() => {

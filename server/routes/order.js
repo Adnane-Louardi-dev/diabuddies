@@ -1,7 +1,7 @@
 const express = require("express")
 const router = express.Router();
 const orderSchema = require("../models/orderSchema")
-const {isLoggedIn} = require("../middlewares/isLoggedIn");
+const {isLoggedIn, isAdminLoggedIn} = require("../middlewares/isLoggedIn");
 router.get("/", isLoggedIn,async (req,res) => {
     try {
         const orders = await orderSchema.find({userId: req.user._id})
@@ -11,7 +11,26 @@ router.get("/", isLoggedIn,async (req,res) => {
         return res.status(404).json(e)
     }
 })
+router.get("/all", isAdminLoggedIn,async (req,res) => {
+    try {
+        const orders = await orderSchema.find({}).populate("userId")
+        return res.status(200).json(orders)
+    } catch (e) {
+        console.error(e)
+        return res.status(404).json(e)
+    }
+})
 
+router.put("/", isAdminLoggedIn, async (req,res)=>{
+    try {
+        const order = await orderSchema.findByIdAndUpdate(req.body.orderId,{status:req.body.status})
+        console.log(req.body.orderId + " was modefied to status " + req.body.status)
+        return res.status(201).json(order)
+    } catch (e) {
+        console.error(e)
+        return res.status(404).json(e)
+    }
+})
 router.post("/", isLoggedIn, async (req,res) => {
     try {
         const ordered = await orderSchema.findOne({cartId: req.body.cartId})
@@ -37,7 +56,7 @@ router.post("/", isLoggedIn, async (req,res) => {
 
 router.delete("/", isLoggedIn, async (req,res) => {
     try {
-        const order = await orderSchema.findOneAndDelete({cartId: req.body.cartId})
+        const order = await orderSchema.findOneAndUpdate({cartId: req.body.cartId}, {status: "CANCELLED"})
         if(!order){
             return res.json(404).json({message: "This order doesn't exist!"})
         }

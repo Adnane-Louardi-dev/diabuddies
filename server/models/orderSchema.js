@@ -1,8 +1,9 @@
-const {Schema, model} = require("mongoose");
+const {Schema, model, Mongoose} = require("mongoose");
 
 const orderSchema = Schema({
     userId: {
         type: Schema.Types.ObjectId,
+        ref: "userSchema",
         required: true
     },
     cartId: {
@@ -34,6 +35,12 @@ const orderSchema = Schema({
     },
     cart: {
         type: String,
+        required: true
+    },
+    status: {
+        type: String,
+        enum: ["NEW","PENDING", "IN_TRANSIT","RETURNED","COMPLETED","CANCELLED"],
+        default: "NEW",
         required: true
     }
 })
