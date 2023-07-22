@@ -16,8 +16,9 @@ import BarGraph from "../components/charts/barGraph";
 import DayPicker from "../components/dayPicker";
 import {Icon} from "@iconify/react";
 import Head from "next/head";
-import {useQuery} from "@tanstack/react-query";
-import {useGetCurrentUser} from "../customeHooks/useGetCurrentUser";
+import { useQuery } from "@tanstack/react-query";
+import { useGetCurrentUser } from "../customeHooks/useGetCurrentUser";
+import CompleteYourProfile from "../components/completeYourProfile";
 
 export default function Home() {
   const router = useRouter();
@@ -55,6 +56,7 @@ export default function Home() {
     refetch();
   }, [ date]);
 
+
   return (
     <>
       {!isLoading && !isUserLoading ? (
@@ -67,6 +69,19 @@ export default function Home() {
           <main className="p-4 relative overflow-y-hidden">
             <span className="font-inter text-2xl text-semibold">{`Good evening, ${user.givenName}`}</span>
             <DayPicker date={date} setDate={setDate} />
+
+            <span className="font-inter text-2xl text-semibold">{`Good ${
+              moment().format("LT") > (moment("12:00 AM", "LT") && moment().format("LT") < moment("12:00 PM"))
+                ? "morning"
+                : moment().format("LT") > (moment("12:00 PM", "LT") && moment().format("LT") < moment("05:00 PM"))
+                ? "afternoon"
+                : moment().format("LT") > (moment("05:00 PM", "LT") && moment().format("LT") < moment("09:00 PM"))
+                ? "evening"
+                : "night"
+            }, ${user.givenName}`}</span>
+            {user.newUser ? <CompleteYourProfile /> : null}
+
+            <DayPicker setDate={setDate} />
             {Data?.logBook[0] ? (
               <>
                 <section className="flex justify-around my-5">
@@ -112,7 +127,7 @@ export default function Home() {
                     </div>
                     <h3 className="text-lg text-diaGray font-semibold font-rubik">Charts</h3>
                   </div>
-                  <Link href={"/charts"} aria-label="Charts page" target="_blank" passHref>
+                  <Link href={"/charts"} aria-label="Charts page" passHref>
                     <Icon icon="ep:arrow-right-bold" className="h-6 w-6 text-diaGray" />
                   </Link>
                 </div>
