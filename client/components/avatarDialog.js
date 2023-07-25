@@ -52,7 +52,7 @@ export default function FormDialog({ user }) {
 
   return (
     <>
-      <Button variant="outlined" className="absolute rounded-full top-48 ml-16" sx={{ minWidth: 16 }} onClick={handleClickOpen}>
+      <Button variant="outlined" className="absolute rounded-full top-48 ml-16 bg-diaLightBlue" sx={{ minWidth: 15 }} onClick={handleClickOpen}>
         <Icon icon="material-symbols:edit" />
       </Button>
       <Dialog open={open} onClose={handleClose}>

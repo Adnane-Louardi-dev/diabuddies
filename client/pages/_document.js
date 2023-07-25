@@ -33,7 +33,7 @@ export default function Document() {
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico" />
         <link rel="manifest" href="/manifest.json" />
-        <link rel="mask-icon" href="/icons/icon-192x192.png" color="#5bbad5" />
+        <link rel="mask-icon" href="/icons/icon-512x512.png" color="azure" />
         <link rel="shortcut icon" href="/favicon.ico" />
 
         {/* <meta name="twitter:card" content="summary" />

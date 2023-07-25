@@ -4,23 +4,24 @@ const { validate } = require("../middlewares/validationMiddleware");
 const validation = require("../models/validationSchemas");
 const router = express.Router();
 const { isLoggedIn } = require("../middlewares/isLoggedIn");
+const moment = require("moment");
 
 router.get("/", isLoggedIn, async (req, res) => {
   try {
     //time provided by user or default date (today)
-    let today = req.query.date == undefined || !req.query.date ? new Date() : new Date(req.query.date);
-    console.log(today);
-    const todayMax = new Date(today.setHours(23, 59, 59, 999)) + 1;
-    const todayMin = new Date(today.setHours(0, 0, 0, 0)) + 1;
+    let today = req.query.date == undefined || !req.query.date ? moment().format("L") : moment(req.query.date, "MM/DD/YYYY").format("L");
+    // console.log(today);
+    const todayMax = moment(today, "MM/DD/YYYY").endOf("day");
+    const todayMin = moment(today, "MM/DD/YYYY").startOf("day");
 
     //get the logs of specific day
     const logs = await logBookItemsSchema
-        .find({
-          userId: req.user._id,
-          time: {$gte: todayMin.toString(), $lt: todayMax.toString()},
-        })
-        // descending sorting
-        .sort({time: -1});
+      .find({
+        userId: req.user._id,
+        time: { $gte: todayMin.toString(), $lt: todayMax.toString() },
+      })
+      // descending sorting
+      .sort({ time: -1 });
 
     const someGlucoseVal = logs.reduce((accumulator, curOBJ) => {
       return accumulator + curOBJ.glucose;
@@ -33,7 +34,7 @@ router.get("/", isLoggedIn, async (req, res) => {
         egvs: logs,
       },
     });
-  } catch (e){
+  } catch (e) {
     console.error(e);
   }
 });
