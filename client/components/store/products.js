@@ -20,7 +20,7 @@ export default function Product({ name, price, image, description, inventory, id
                </Link>
 
                <div className="ml-1 mr-1.5">
-               <WishedIcon productId={id}/>
+               <WishedIcon itemId={id} type={"product"}/>
                </div>
             </div>
             {/*---- ----*/}

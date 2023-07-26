@@ -57,7 +57,6 @@ const Settings = () => {
     setNotificationOpen(false)
   }
   const updateUserSettings = async (data) => {
-    console.log("create user", data)
     if (data.newPassword) {
       if (data.confirmPassword === data.newPassword) {
         axios.post("/api/user/changePassword", {

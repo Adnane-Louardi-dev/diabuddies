@@ -33,7 +33,7 @@ const Card = ({ product }) => {
                   </Link>
 
                   <div className="mx-1.5">
-                    <WishedIcon productId={id} />
+                    <WishedIcon itemId={id} type={"product"} />
                   </div>
                </div>
                <div className="flex justify-end w-full relative">

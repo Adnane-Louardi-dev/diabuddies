@@ -5,10 +5,20 @@ const wishListSchema = Schema({
         type: Schema.Types.ObjectId,
         required: true
     },
-    productId: {
+    itemId: {
         type: String,
         required: true
-    }
+    },
+    isProduct: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
+    isBlog: {
+        type: Boolean,
+        required: true,
+        default: false
+    },
 })
 
 

@@ -23,9 +23,14 @@ const appBarItems = [
     label: "Generate PDF",
   },
   {
+    link: "/blog/articles",
+    label: "Dia-Blog"
+  },
+  {
     link: "/store",
     label: "E-Diabuddies"
-  },  {
+  },
+  {
     link: "/store/wish_list",
     label: "My WishList"
   },
