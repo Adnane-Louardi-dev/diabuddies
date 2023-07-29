@@ -9,6 +9,7 @@ module.exports = {
         poppins: ["Poppins", "sans-serif"],
         roboto: ["Roboto", "sans-serif"],
         rubik: ["Rubik", "sans-serif"],
+        sourceCode: ["Source Code Pro", "monospace"],
       },
       colors: {
         diaBlue: "#3AB0FF",

@@ -87,7 +87,12 @@ export default function Home() {
             ) : null}
             <section className="w-full rounded-xl p-3 my-5 ">
               <div className="flex justify-between items-center">
-                <h3 className="text-lg font-semibold text-diaGray font-rubik">Recently</h3>
+                <div className="flex items-center">
+                  <div className="ring-1 ring-gray-300 p-1 rounded-md mr-3">
+                    <Icon icon="bi:book" className="h-5 w-5" />
+                  </div>
+                  <h3 className="text-lg text-diaGray font-semibold font-rubik">Recently</h3>
+                </div>
                 <NewLogDialog />
               </div>
               {Data.logBook[0] ? (
@@ -147,10 +152,10 @@ export default function Home() {
                   </section>
                   <section className="w-full rounded-xl mb-10 ring-1 ring-gray-300 p-2">
                     <div className="flex justify-between text-diaGray items-center">
-                      <h3 className="text-lg font-semibold font-rubik truncate">Carbs and insulin combination</h3>
+                      <h3 className="text-lg font-semibold font-rubik truncate">Carbs/Insulin averages by meal</h3>
                       <Icon icon="ph:info" className="mx-3" />
                     </div>
-                    <div className="flex items-center justify-center bg-white rounded-xl">
+                    <div className="flex items-center justify-center bg-white rounded-xl w-full">
                       <BarGraph props={[...Data.logBook].reverse()} />
                     </div>
                   </section>

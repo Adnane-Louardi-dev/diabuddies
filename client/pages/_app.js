@@ -9,13 +9,7 @@ const queryClient = new QueryClient();
 function MyApp({ Component, pageProps }) {
   useEffect(() => {
     if ("serviceWorker" in navigator) {
-      //push API
-      navigator.serviceWorker.register("/service-worker.js").then((registration) =>
-        registration.pushManager.subscribe({
-          userVisibleOnly: true,
-          applicationServerKey: process.env.APPLICATION_SERVER_KEY,
-        })
-      );
+      navigator.serviceWorker.register("/service-worker.js").then((registration) => console.log("scope is: ", registration.scope));
     }
   }, []);
   return (
