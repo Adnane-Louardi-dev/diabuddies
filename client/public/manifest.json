@@ -3,6 +3,7 @@
     "background_color": "#F0FFFF",
     "start_url": "/",
     "orientation": "portrait",
+    "display": "fullscreen",
     "name": "Diabuddies",
     "short_name": "Diabuddies",
     "description": "Track your health, connect with a supportive community, shop essential supplies, and enhance your knowledge with our diabetes management platform.",

@@ -42,12 +42,12 @@ a {
 
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #3AB0FF;
+  background: #3ab0ff;
   border-radius: 5px;
   transition: background 1000ms ease-in-out;
 }
 
 /* Handle on hover */
 ::-webkit-scrollbar-thumb:hover {
-  background: #2C3575;
+  background: #2c3575;
 }

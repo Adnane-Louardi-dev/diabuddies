@@ -33,7 +33,7 @@ export default function Document() {
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico" />
         <link rel="manifest" href="/manifest.json" />
-        <link rel="mask-icon" href="/icons/icon-192x192.png" color="#5bbad5" />
+        <link rel="mask-icon" href="/icons/icon-512x512.png" color="azure" />
         <link rel="shortcut icon" href="/favicon.ico" />
 
         {/* <meta name="twitter:card" content="summary" />
@@ -63,7 +63,7 @@ export default function Document() {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
         <link
-          href="https://fonts.googleapis.com/css2?family=Inter&family=Poppins&family=Roboto:wght@300;400;500;700&family=Rubik&display=swap"
+          href="https://fonts.googleapis.com/css2?family=Inter&family=Poppins&family=Roboto:wght@300;400;500;700&family=Rubik&family=Source+Code+Pro&display=swap"
           rel="stylesheet"
         />
       </Head>

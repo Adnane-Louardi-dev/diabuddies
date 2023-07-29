@@ -21,22 +21,20 @@ if (!self.define) {
 
   const singleRequire = (uri, parentUri) => {
     uri = new URL(uri + ".js", parentUri).href;
-    return registry[uri] || (
-      
-        new Promise(resolve => {
-          if ("document" in self) {
-            const script = document.createElement("script");
-            script.src = uri;
-            script.onload = resolve;
-            document.head.appendChild(script);
-          } else {
-            nextDefineUri = uri;
-            importScripts(uri);
-            resolve();
-          }
-        })
-      
-      .then(() => {
+    return (
+      registry[uri] ||
+      new Promise((resolve) => {
+        if ("document" in self) {
+          const script = document.createElement("script");
+          script.src = uri;
+          script.onload = resolve;
+          document.head.appendChild(script);
+        } else {
+          nextDefineUri = uri;
+          importScripts(uri);
+          resolve();
+        }
+      }).then(() => {
         let promise = registry[uri];
         if (!promise) {
           throw new Error(`Module ${uri} didn’t register its module`);
@@ -53,49 +51,107 @@ if (!self.define) {
       return;
     }
     let exports = {};
-    const require = depUri => singleRequire(depUri, uri);
+    const require = (depUri) => singleRequire(depUri, uri);
     const specialDeps = {
       module: { uri },
       exports,
-      require
+      require,
     };
-    registry[uri] = Promise.all(depsNames.map(
-      depName => specialDeps[depName] || require(depName)
-    )).then(deps => {
+    registry[uri] = Promise.all(depsNames.map((depName) => specialDeps[depName] || require(depName))).then((deps) => {
       factory(...deps);
       return exports;
     });
   };
 }
-define(['./workbox-8f0e986c'], (function (workbox) { 'use strict';
+define(["./workbox-8f0e986c"], function (workbox) {
+  "use strict";
 
   importScripts();
   self.skipWaiting();
   workbox.clientsClaim();
-  workbox.registerRoute("/", new workbox.NetworkFirst({
-    "cacheName": "start-url",
-    plugins: [{
-      cacheWillUpdate: async ({
-        request,
-        response,
-        event,
-        state
-      }) => {
-        if (response && response.type === 'opaqueredirect') {
-          return new Response(response.body, {
-            status: 200,
-            statusText: 'OK',
-            headers: response.headers
-          });
-        }
-        return response;
-      }
-    }]
-  }), 'GET');
-  workbox.registerRoute(/.*/i, new workbox.NetworkOnly({
-    "cacheName": "dev",
-    plugins: []
-  }), 'GET');
-
-}));
+  workbox.registerRoute(
+    "/",
+    new workbox.NetworkFirst({
+      cacheName: "start-url",
+      plugins: [
+        {
+          cacheWillUpdate: async ({ request, response, event, state }) => {
+            if (response && response.type === "opaqueredirect") {
+              return new Response(response.body, {
+                status: 200,
+                statusText: "OK",
+                headers: response.headers,
+              });
+            }
+            return response;
+          },
+        },
+      ],
+    }),
+    "GET"
+  );
+  workbox.registerRoute(
+    /.*/i,
+    new workbox.NetworkOnly({
+      cacheName: "dev",
+      plugins: [],
+    }),
+    "GET"
+  );
+});
 //# sourceMappingURL=service-worker.js.map
+const installEvent = () => {
+  self.addEventListener("install", () => {
+    console.log("service worker installed");
+  });
+};
+installEvent();
+
+const activateEvent = () => {
+  self.addEventListener("activate", () => {
+    console.log("service worker activated");
+  });
+};
+activateEvent();
+
+//caching
+const cacheName = "v1";
+
+const cacheClone = async (e) => {
+  const res = await fetch(e.request);
+  const resClone = res.clone();
+
+  const cache = await caches.open(cacheName);
+  await cache.put(e.request, resClone);
+  return res;
+};
+
+const fetchEvent = () => {
+  self.addEventListener("fetch", (e) => {
+    e.respondWith(
+      cacheClone(e)
+        .catch(() => caches.match(e.request))
+        .then((res) => res)
+    );
+  });
+};
+
+fetchEvent();
+
+// self.addEventListener("push", (event) => {
+//   const data = event.data.json();
+//   const title = data.title;
+//   const body = data.message;
+//   const icon = "some-icon.png";
+//   const notificationOptions = {
+//     body: body,
+//     tag: "simple-push-notification-example",
+//     icon: icon,
+//   };
+
+//   return self.Notification.requestPermission().then((permission) => {
+//     if (permission === "granted") {
+//       return new self.Notification(title, notificationOptions);
+//     }
+//   });
+// });

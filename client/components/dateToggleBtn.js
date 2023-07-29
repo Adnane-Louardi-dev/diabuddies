@@ -4,7 +4,7 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import moment from "moment/moment";
 
 export default function DateToggleBtn({ setDate }) {
-  const [alignment, setAlignment] = React.useState(7);
+  const [alignment, setAlignment] = React.useState(0);
 
   const handleChange = (event, newAlignment) => {
     if (newAlignment != null) {

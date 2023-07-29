@@ -106,8 +106,8 @@ const Settings = () => {
             Save
           </Button>
         </section>
-        <Snackbar open={notificationOpen} autoHideDuration={6000} onClose={handleClose}>
-          <Alert onClose={handleClose} severity={isError ? "danger" : "success"} sx={{ width: "100%" }}>
+        <Snackbar open={notificationOpen} autoHideDuration={3000} onClose={handleClose}>
+          <Alert onClose={handleClose} severity={isError ? "warning" : "success"} sx={{ width: "100%" }}>
             {isError ? "There was an error while modifying your profile" : "Profile was modified successfully"}
           </Alert>
         </Snackbar>
@@ -324,6 +324,22 @@ const Settings = () => {
                       endAdornment: (
                         <InputAdornment position="end">
                           <span>%</span>
+                        </InputAdornment>
+                      ),
+                    }}
+                  />
+                </Grid>
+                {/* dailyCaloriesNeeds */}
+                <Grid item xs={6}>
+                  <UserInput
+                    defaultValue={user?.dailyCaloriesNeeds}
+                    fieldName={"dailyCaloriesNeeds"}
+                    label={"Daily calories needs"}
+                    type={"number"}
+                    InputProps={{
+                      endAdornment: (
+                        <InputAdornment position="end">
+                          <span>Kcal</span>
                         </InputAdornment>
                       ),
                     }}
