@@ -1,9 +1,9 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import moment from "moment";
-import {useRouter} from "next/router";
+import { useRouter } from "next/router";
 import ResponsiveAppBar from "../components/ResponsiveAppBar";
 import Glucose from "../components/glucose";
 import ActiveInsulin from "../components/activeInsulin";
@@ -14,10 +14,11 @@ import LineChartGraph from "../components/charts/lineChartGraph";
 import PiGraph from "../components/charts/piGraph";
 import BarGraph from "../components/charts/barGraph";
 import DayPicker from "../components/dayPicker";
-import {Icon} from "@iconify/react";
+import { Icon } from "@iconify/react";
 import Head from "next/head";
-import {useQuery} from "@tanstack/react-query";
-import {useGetCurrentUser} from "../customeHooks/useGetCurrentUser";
+import { useQuery } from "@tanstack/react-query";
+import { useGetCurrentUser } from "../customeHooks/useGetCurrentUser";
+import CompleteYourProfile from "../components/completeYourProfile";
 
 export default function Home() {
   const router = useRouter();
@@ -45,28 +46,37 @@ export default function Home() {
     },
   });
 
-  useEffect(()=>{
-    if(router.isReady && !isUserLoading && user.newUser){
-      router.push("/setup");
-    }
-  },[isUserLoading, router.isReady])
-
   useEffect(() => {
     refetch();
-  }, [ date]);
+    if (!isUserLoading && !user) {
+      router.push("/login");
+      if (router.isReady && user?.newUser) {
+        router.push("/setup");
+      }
+    }
+  }, [isUserLoading, router.isReady, date]);
 
   return (
     <>
-      {!isLoading && !isUserLoading ? (
+      {!isLoading && !isUserLoading && user ? (
         <>
           <Head>
             <meta name="title" content="Diabuddies | All-in-One Solution for Diabetes Management" />
-            <title>Diabuddies | Home</title>
+            <title>Home | Diabuddies</title>
           </Head>
           <ResponsiveAppBar user={user} />
           <main className="p-4 relative overflow-y-hidden">
-            <span className="font-inter text-2xl text-semibold">{`Good evening, ${user.givenName}`}</span>
-            <DayPicker date={date} setDate={setDate} />
+            <span className="font-inter text-2xl text-semibold">{`Good ${
+              moment().format("LT") > (moment("12:00 AM", "LT") && moment().format("LT") < moment("12:00 PM"))
+                ? "morning"
+                : moment().format("LT") > (moment("12:00 PM", "LT") && moment().format("LT") < moment("05:00 PM"))
+                ? "afternoon"
+                : moment().format("LT") > (moment("05:00 PM", "LT") && moment().format("LT") < moment("09:00 PM"))
+                ? "evening"
+                : "night"
+            }, ${user.givenName}`}</span>
+            {user.newUser ? <CompleteYourProfile /> : null}
+            <DayPicker setDate={setDate} date={date} />
             {Data?.logBook[0] ? (
               <>
                 <section className="flex justify-around my-5">
@@ -75,10 +85,14 @@ export default function Home() {
                 </section>
               </>
             ) : null}
-
             <section className="w-full rounded-xl p-3 my-5 ">
               <div className="flex justify-between items-center">
-                <h3 className="text-lg font-semibold text-diaGray font-rubik">Recently</h3>
+                <div className="flex items-center">
+                  <div className="ring-1 ring-gray-300 p-1 rounded-md mr-3">
+                    <Icon icon="bi:book" className="h-5 w-5" />
+                  </div>
+                  <h3 className="text-lg text-diaGray font-semibold font-rubik">Recently</h3>
+                </div>
                 <NewLogDialog />
               </div>
               {Data.logBook[0] ? (
@@ -112,7 +126,7 @@ export default function Home() {
                     </div>
                     <h3 className="text-lg text-diaGray font-semibold font-rubik">Charts</h3>
                   </div>
-                  <Link href={"/charts"} aria-label="Charts page" target="_blank" passHref>
+                  <Link href={"/charts"} aria-label="Charts page" passHref>
                     <Icon icon="ep:arrow-right-bold" className="h-6 w-6 text-diaGray" />
                   </Link>
                 </div>
@@ -138,10 +152,10 @@ export default function Home() {
                   </section>
                   <section className="w-full rounded-xl mb-10 ring-1 ring-gray-300 p-2">
                     <div className="flex justify-between text-diaGray items-center">
-                      <h3 className="text-lg font-semibold font-rubik truncate">Carbs and insulin combination</h3>
+                      <h3 className="text-lg font-semibold font-rubik truncate">Carbs/Insulin averages by meal</h3>
                       <Icon icon="ph:info" className="mx-3" />
                     </div>
-                    <div className="flex items-center justify-center bg-white rounded-xl">
+                    <div className="flex items-center justify-center bg-white rounded-xl w-full">
                       <BarGraph props={[...Data.logBook].reverse()} />
                     </div>
                   </section>

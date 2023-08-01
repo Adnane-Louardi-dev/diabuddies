@@ -1,11 +1,12 @@
-import {DatePicker} from "@mui/x-date-pickers/DatePicker";
-import {InputAdornment, TextField} from "@mui/material";
-import {Icon} from "@iconify/react";
+import { useState } from "react";
+import { DatePicker } from "@mui/x-date-pickers/DatePicker";
+import { InputAdornment, TextField } from "@mui/material";
+import { Icon } from "@iconify/react";
 import moment from "moment";
 
-const DayPicker = ({date, setDate }) => {
+const DayPicker = ({ date, setDate }) => {
   const datePickerInputFormat = "dddd, DD MMMM yyyy";
-
+  const [localDate, setlocalDate] = useState(moment(date, "MM/DD/YYYY").format("L"));
   return (
     <>
       <div>
@@ -51,10 +52,10 @@ const DayPicker = ({date, setDate }) => {
                 />
               </>
             )}
-            value={date}
+            value={localDate}
             inputFormat={datePickerInputFormat}
-            onAccept={(newDateValue) => setDate(moment(newDateValue, "MM/DD/YYYY"))}
-            onChange={(newDateValue) => setDate(newDateValue)}
+            onAccept={(newDateValue) => setDate(moment(localDate, "MM/DD/YYYY").format("L"))}
+            onChange={(newDateValue) => setlocalDate(moment(newDateValue, "MM/DD/YYYY").format("L"))}
             className="w-full"
           />
         </div>

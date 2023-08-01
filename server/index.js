@@ -53,9 +53,9 @@ app.use("/orders", order);
 app.use("/articles", articles);
 app.use("/comments", comments);
 
-app.get("/logout", (req, res) => {
-  req.session.destroy(function () {
-    res.clearCookie("connect.sid");
+app.get("/logout", function (req, res) {
+  req.session.destroy(function (err) {
+    res.redirect("/"); //Inside a callback… bulletproof!
   });
 });
 

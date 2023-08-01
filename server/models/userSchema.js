@@ -18,8 +18,8 @@ const userSchema = mongoose.Schema(
     },
     homeAddress: String,
     phoneNumber: {
-        type: String,
-        match: [/(\+212|0)([ \-_/]*)(\d[ \-_/]*){9}/,"Please fill a valid phone number"]
+      type: String,
+      match: [/(\+212|0)([ \-_/]*)(\d[ \-_/]*){9}/, "Please fill a valid phone number"],
     },
     photo: String,
     bio: String,
@@ -134,8 +134,9 @@ const userSchema = mongoose.Schema(
     },
     isAdmin: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
+    dailyCaloriesNeeds: Number,
   },
   { timestamps: true }
 );
