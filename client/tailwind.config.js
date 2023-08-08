@@ -24,6 +24,9 @@ module.exports = {
       blur: {
         xs: "2px",
       },
+      fontSize: {
+        "2xs": ["0.6rem", "0.5rem"],
+      },
     },
   },
 };

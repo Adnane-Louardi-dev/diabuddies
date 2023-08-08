@@ -15,8 +15,8 @@ const DayPicker = ({ date, setDate }) => {
             renderInput={(props) => (
               <>
                 <div>
-                  <div className="bg-diaBlue rounded-full p-4 mx-3">
-                    <Icon icon="material-symbols:calendar-month" className="text-white h-5 w-5" />
+                  <div className="bg-diaBlue rounded-full p-3 ml-4">
+                    <Icon icon="material-symbols:calendar-month" className="text-white h-7 w-7" />
                   </div>
                 </div>
                 <TextField

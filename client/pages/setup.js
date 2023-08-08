@@ -109,7 +109,7 @@ const Setup = () => {
             </div>
             <div className="grid grid-cols-1 gap-3 absolute bottom-10 left-[50%] translate-x-[-50%] w-full">
               <div className="px-5">
-                <Button onClick={handlePOSTSetupUser} className="w-full p-3 rounded-3xl shadow-md bg-gray-800 text-white font-poppins font-xl">
+                <Button onClick={handlePOSTSetupUser} className="w-full p-3 rounded-full shadow-md bg-gray-800 text-white font-poppins font-xl">
                   Setup my app
                 </Button>
               </div>

@@ -4,7 +4,7 @@ const withPWA = require("next-pwa")({
   disable: false,
   register: true,
   scope: "/",
-  sw: "/sw.js",
+  sw: "/service-worker.js",
 });
 const nextConfig = {
   reactStrictMode: true,

@@ -3,7 +3,7 @@ import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import moment from "moment";
-import {useRouter} from "next/router";
+import { useRouter } from "next/router";
 import ResponsiveAppBar from "../components/ResponsiveAppBar";
 import Glucose from "../components/glucose";
 import ActiveInsulin from "../components/activeInsulin";
@@ -14,19 +14,24 @@ import LineChartGraph from "../components/charts/lineChartGraph";
 import PiGraph from "../components/charts/piGraph";
 import BarGraph from "../components/charts/barGraph";
 import DayPicker from "../components/dayPicker";
-import {Icon} from "@iconify/react";
+import { Icon } from "@iconify/react";
 import Head from "next/head";
-import {useQuery} from "@tanstack/react-query";
-import {useGetCurrentUser} from "../customeHooks/useGetCurrentUser";
+import { useQuery } from "@tanstack/react-query";
+import { useGetCurrentUser } from "../customeHooks/useGetCurrentUser";
 import CompleteYourProfile from "../components/completeYourProfile";
 import {blogAxios} from "../lib/blogAuthConfig";
 import {SmallArticle} from "../components/blog/smallArticle";
 import Card from "../components/store/card";
 import commerce from "../lib/commerce";
+import CalculateInsulinDose from "../components/calculateInsulinDose";
 
 export default function Home() {
   const router = useRouter();
   const [date, setDate] = useState(router.query.date || moment().format("L"));
+  const [activeInsulin, setActiveInsulin] = useState(undefined);
+  const [glucose, setglucose] = useState(120);
+  const [lastInjectionTime, setlastInjectionTime] = useState(undefined);
+
   //GET method to get user info
   const { user, isLoading: isUserLoading } = useGetCurrentUser();
   const {data:articles, isLoading:isArticlesLoading} = useQuery({
@@ -76,6 +81,7 @@ export default function Home() {
       }
     }
   }, [isUserLoading, router.isReady, date]);
+
   return (
     <>
       {!isLoading && !isUserLoading && user ? (
@@ -100,21 +106,28 @@ export default function Home() {
             {Data?.logBook[0] ? (
               <>
                 <section className="flex justify-around my-5">
-                  <Glucose props={Data.logBook[0]} />
-                  <ActiveInsulin props={Data?.logBook} />
+                  <Glucose props={Data.logBook} setglucose={setglucose} />
+                  <ActiveInsulin
+                    props={Data?.logBook}
+                    activeInsulin={activeInsulin}
+                    setActiveInsulin={setActiveInsulin}
+                    lastInjectionTime={lastInjectionTime}
+                    setlastInjectionTime={setlastInjectionTime}
+                  />
                 </section>
               </>
             ) : null}
-            <section className="w-full rounded-xl p-3 my-5 ">
-              <div className="flex justify-between items-center">
-                <div className="flex items-center">
-                  <div className="ring-1 ring-gray-300 p-1 rounded-md mr-3">
-                    <Icon icon="bi:book" className="h-5 w-5" />
-                  </div>
-                  <h3 className="text-lg text-diaGray font-semibold font-rubik">Recently</h3>
+            <CalculateInsulinDose activeInsulin={activeInsulin} glucose={glucose} lastInjectionTime={lastInjectionTime} />
+            <div className="flex justify-between items-center my-5">
+              <div className="flex items-center">
+                <div className="ring-1 ring-gray-300 p-1 rounded-md mr-3">
+                  <Icon icon="bi:book" className="h-5 w-5 text-diaGray" />
                 </div>
-                <NewLogDialog />
+                <h3 className="text-lg text-diaGray font-semibold font-rubik">Recently</h3>
               </div>
+              <NewLogDialog />
+            </div>
+            <section className="w-full mb-8 shadow-md p-4 bg-white rounded-2xl">
               {Data.logBook[0] ? (
                 <div className="my-5 h-full overflow-scroll">
                   {Data.logBook.map((log) => {
@@ -142,7 +155,7 @@ export default function Home() {
                 <div className="flex justify-between items-center my-5">
                   <div className="flex items-center">
                     <div className="ring-1 ring-gray-300 p-1 rounded-md mr-3">
-                      <Icon icon="flat-color-icons:line-chart" className="h-5 w-5" />
+                      <Icon icon="ic:round-bar-chart" className="h-5 w-5 text-diaGray" />
                     </div>
                     <h3 className="text-lg text-diaGray font-semibold font-rubik">Charts</h3>
                   </div>
@@ -150,7 +163,7 @@ export default function Home() {
                     <Icon icon="ep:arrow-right-bold" className="h-6 w-6 text-diaGray" />
                   </Link>
                 </div>
-                <section className="shadow-2xl p-4 bg-white rounded-2xl">
+                <section className="shadow-2xl p-4 bg-white rounded-2xl mb-8">
                   <section className="w-full rounded-xl mb-10 ring-1 ring-gray-300 p-2">
                     <div className="flex justify-between text-diaGray items-center">
                       <h3 className="text-lg font-semibold font-rubik">Glucose</h3>

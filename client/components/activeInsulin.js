@@ -2,23 +2,27 @@ import moment from "moment";
 import { Icon } from "@iconify/react";
 import { useState, useEffect } from "react";
 
-const ActiveInsulin = ({ props }) => {
+const ActiveInsulin = ({ props, setActiveInsulin, activeInsulin, lastInjectionTime, setlastInjectionTime }) => {
   const [Data, setData] = useState(props);
-  const [activeInsulin, setActiveInsulin] = useState(null);
   const userInsulinDurationInSystem = 3 * 60 * 60 * 1000;
+  const [LocalActiveInsulin, setLocalActiveInsulin] = useState(activeInsulin);
   useEffect(() => {
+    [...props].reverse().forEach((element) => {
+      if (element.bolus) {
+        setlastInjectionTime(moment(element.time));
+      }
+    });
     let calculateActiveInsulin = Data.reduce((accumulateur, currentElement) => {
       const timeBetweenNowAndInsulinShot = moment().diff(moment(currentElement.time));
       //if there's injected insulin && the insulin injected still in blood stream && the injection has been injected
-      if (currentElement.fastActingInsulinUnits && timeBetweenNowAndInsulinShot < userInsulinDurationInSystem && timeBetweenNowAndInsulinShot > 0) {
-        accumulateur +=
-          currentElement.fastActingInsulinUnits -
-          (currentElement.fastActingInsulinUnits / userInsulinDurationInSystem) * moment().diff(moment(currentElement.time));
+      if (currentElement.bolus && timeBetweenNowAndInsulinShot < userInsulinDurationInSystem && timeBetweenNowAndInsulinShot > 0) {
+        accumulateur += currentElement.bolus - (currentElement.bolus / userInsulinDurationInSystem) * moment().diff(moment(currentElement.time));
       }
       return accumulateur;
     }, 0);
     setActiveInsulin(calculateActiveInsulin);
-  }, [Data]);
+    setLocalActiveInsulin(calculateActiveInsulin);
+  }, [props]);
   return (
     <>
       {props ? (
@@ -31,12 +35,12 @@ const ActiveInsulin = ({ props }) => {
             <div className="my-3">
               <div className="mx-2">
                 <p className="font-inter text-bold text-4xl truncate">
-                  {parseFloat(activeInsulin).toFixed(2)} <span className="text-sm text-semibold">UI</span>
+                  {parseFloat(LocalActiveInsulin).toFixed(2)} <span className="text-sm text-semibold">UI</span>
                 </p>
               </div>
             </div>
             <div className="mt-7 py-1 bg-white truncate rounded-full font-poppins text-semibold text-sm text-center text-diaOrange">
-              <span>{moment(props[0].time).fromNow()}</span>
+              <span>{moment(lastInjectionTime).fromNow() || "No active insulin"}</span>
             </div>
           </div>
         </div>

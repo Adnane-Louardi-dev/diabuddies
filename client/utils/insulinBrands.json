@@ -1,0 +1,182 @@
+[
+    {
+        "id": 1,
+        "brand": "Humalog",
+        "name": "lispro",
+        "type": "Rapid-acting",
+        "actingTimeDuration": {
+            "onset": 0.16,
+            "peak": 1,
+            "duration": 3
+        }
+    },
+    {
+        "id": 2,
+        "brand": "Novolog",
+        "name": "aspart",
+        "type": "Rapid-acting",
+        "actingTimeDuration": {
+            "onset": 0.16,
+            "peak": 1,
+            "duration": 3
+        }
+    },
+    {
+        "id": 3,
+        "brand": "Apidra",
+        "name": "glulisine",
+        "type": "Rapid-acting",
+        "actingTimeDuration": {
+            "onset": 0.16,
+            "peak": 1,
+            "duration": 3
+        }
+    },
+    {
+        "id": 4,
+        "brand": "Fiasp",
+        "name": "aspart",
+        "type": "Ultra-rapid-acting",
+        "actingTimeDuration": {
+            "onset": 0.12,
+            "peak": 1.5,
+            "duration": 3
+        }
+    },
+    {
+        "id": 5,
+        "brand": "Regular",
+        "name": "insulin",
+        "type": "Short-acting",
+        "actingTimeDuration": {
+            "onset": 0.5,
+            "peak": 3,
+            "duration": 6
+        }
+    },
+    {
+        "id": 6,
+        "brand": "Novolin",
+        "name": "R",
+        "type": "Short-acting",
+        "actingTimeDuration": {
+            "onset": 0.5,
+            "peak": 3,
+            "duration": 6
+        }
+    },
+    {
+        "id": 7,
+        "brand": "Humulin",
+        "name": "R",
+        "type": "Short-acting",
+        "actingTimeDuration": {
+            "onset": 30,
+            "peak": 3,
+            "duration": 6
+        }
+    },
+    {
+        "id": 8,
+        "brand": "Lantus",
+        "name": "glargine",
+        "type": "Long-acting",
+        "actingTimeDuration": {
+            "peak": 0,
+            "duration": 24
+        }
+    },
+    {
+        "id": 9,
+        "brand": "Levemir",
+        "name": "detemir",
+        "type": "Long-acting",
+        "actingTimeDuration": {
+            "peak": 0,
+            "duration": 24
+        }
+    },
+    {
+        "id": 10,
+        "brand": "Toujeo",
+        "name": "glargine",
+        "type": "Long-acting",
+        "actingTimeDuration": {
+            "peak": 0,
+            "duration": 24
+        }
+    },
+    {
+        "id": 11,
+        "brand": "Tresiba",
+        "name": "degludec",
+        "type": "Ultra-long-acting",
+        "actingTimeDuration": {
+            "peak": 0,
+            "duration": 42
+        }
+    },
+    {
+        "id": 12,
+        "brand": "Basaglar",
+        "name": "glargine",
+        "type": "Long-acting",
+        "actingTimeDuration": {
+            "peak": 0,
+            "duration": 24
+        }
+    },
+    {
+        "id": 13,
+        "brand": "Afrezza",
+        "name": "inhaled",
+        "type": "Rapid-acting",
+        "actingTimeDuration": {
+            "onset": 0.25,
+            "peak": 1,
+            "duration": 2
+        }
+    },
+    {
+        "id": 14,
+        "brand": "NovoLog",
+        "name": "Mix",
+        "type": "Intermediate-acting",
+        "actingTimeDuration": {
+            "onset": 0.2,
+            "peak": 2,
+            "duration": 16
+        }
+    },
+    {
+        "id": 15,
+        "brand": "Humalog",
+        "name": "Mix",
+        "type": "Intermediate-acting",
+        "actingTimeDuration": {
+            "onset": 0.25,
+            "peak": 2,
+            "duration": 16
+        }
+    },
+    {
+        "id": 16,
+        "brand": "Ryzodeg",
+        "name": "Mix",
+        "type": "Mixed",
+        "actingTimeDuration": {
+            "peak": 0,
+            "duration": 24
+        }
+    },
+    {
+        "id": 17,
+        "brand": "Xultophy",
+        "name": "degludec/liraglutide",
+        "type": "Combination",
+        "actingTimeDuration": {
+            "peak": 0,
+            "duration": 42
+        }
+    }
+]
