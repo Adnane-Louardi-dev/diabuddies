@@ -163,7 +163,7 @@ export default function NewLogDialog() {
             <ToggleButtonGroup
               className="w-full overflow-scroll no-scrollbar"
               sx={{
-                "& .MuiButtonBase-root": {
+                "& .MuiButtonBase-root-MuiToggleButton-root": {
                   backgroundColor: "#F3FAFF",
                 },
                 "& .MuiButtonBase-root-MuiToggleButton-root.Mui-selected:hover": {

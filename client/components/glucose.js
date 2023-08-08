@@ -2,11 +2,22 @@ import moment from "moment";
 import Image from "next/image";
 import NewLogDialog from "./newLogDialog";
 import { Icon } from "@iconify/react";
+import { useEffect, useState } from "react";
 
-const Glucose = ({ props }) => {
+const Glucose = ({ props, glucose, setglucose }) => {
+  const [localGlucose, setlocalGlucose] = useState(undefined);
+  useEffect(() => {
+    props.forEach((element) => {
+      if (element.glucose) {
+        setlocalGlucose(element);
+        setglucose(element.glucose);
+      }
+    });
+  }, [props]);
+
   return (
     <>
-      {props ? (
+      {localGlucose ? (
         <div className="py-2 w-1/2 mx-1">
           <div className="rounded-3xl shadow-md bg-diaGreen text-white p-3">
             <div className="flex justify-between w-full items-center mb-3">
@@ -16,12 +27,12 @@ const Glucose = ({ props }) => {
             <div className="my-3">
               <div className="mx-2">
                 <p className="font-inter text-bold text-4xl truncate">
-                  {props.glucose} <span className="text-sm text-semibold"> mg/dl</span>
+                  {localGlucose.glucose} <span className="text-sm text-semibold"> mg/dl</span>
                 </p>
               </div>
             </div>
             <div className="mt-7 py-1 bg-white truncate rounded-full font-poppins text-semibold text-sm text-center text-diaGreen">
-              <span>{moment(props.time).calendar()}</span>
+              <span>{moment(localGlucose.time).calendar()}</span>
             </div>
           </div>
         </div>

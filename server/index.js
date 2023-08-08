@@ -17,7 +17,9 @@ const order = require("./routes/order");
 const articles = require("./routes/articles");
 const comments = require("./routes/comments");
 //DB connect
-const DBConnection = process.env.DB_CONNECTION || `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.dgq8q.mongodb.net/?retryWrites=true&w=majority&ssl=true`;
+const DBConnection =
+  process.env.DB_CONNECTION ||
+  `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.dgq8q.mongodb.net/?retryWrites=true&w=majority&ssl=true`;
 mongoose.connect(DBConnection, () => console.log("DB connected!"));
 
 //middleswares

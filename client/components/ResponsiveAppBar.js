@@ -10,33 +10,50 @@ import Avatar from "@mui/material/Avatar";
 import Link from "next/link";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import {Logo} from "./Logo";
-import {useGetCurrentUser} from "../customeHooks/useGetCurrentUser";
+import { Icon } from "@iconify/react";
+import { Logo } from "./Logo";
+import { useGetCurrentUser } from "../customeHooks/useGetCurrentUser";
 
 const appBarItems = [
   {
-    link: "/settings",
-    label: "Settings",
+    link: "/store",
+    label: "E-Diabuddies",
+    icon: "iconamoon:store-light",
+  },
+  {
+    link: "/blog/articles",
+    label: "Diablog",
+    icon: "majesticons:article-line",
+  },
+  {
+    link: "/store/wish_list",
+    label: "My WishList",
+    icon: "mdi:heart-outline",
   },
   {
     link: "/pdf",
     label: "Generate PDF",
+    icon: "teenyicons:pdf-outline",
   },
   {
-    link: "/blog/articles",
-    label: "Dia-Blog"
+    link: "/guide",
+    label: "Guide",
+    icon: "majesticons:document-line",
   },
   {
-    link: "/store",
-    label: "E-Diabuddies"
+    link: "/help",
+    label: "Help Center",
+    icon: "material-symbols:help-outline",
   },
   {
-    link: "/store/wish_list",
-    label: "My WishList"
+    link: "/settings",
+    label: "Settings",
+    icon: "solar:settings-linear",
   },
   {
     link: "/logout",
     label: "Logout",
+    icon: "solar:logout-2-linear",
   },
 ];
 
@@ -60,11 +77,11 @@ function ResponsiveAppBar() {
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Profile photo" src={user?.photo} />
+                <Avatar alt="Profile photo" src={user?.photo} className="h-12 w-12" />
               </IconButton>
             </Tooltip>
             <Menu
-              sx={{ mt: "45px" }}
+              sx={{ mt: "45px", "& .MuiPaper-root.MuiMenu-paper": { borderRadius: "15px" } }}
               id="menu-appbar"
               anchorEl={anchorElUser}
               anchorOrigin={{
@@ -81,7 +98,8 @@ function ResponsiveAppBar() {
             >
               {appBarItems.map((appBarItem, i) => (
                 <Link key={i} href={appBarItem.link} passHref>
-                  <MenuItem key={appBarItems.link} onClick={handleCloseUserMenu}>
+                  <MenuItem key={appBarItems.link} onClick={handleCloseUserMenu} className="flex">
+                    <Icon icon={appBarItem.icon} className="h-6 w-6 mr-2 text-diaGray" />
                     <Typography textAlign="center">{appBarItem.label}</Typography>
                   </MenuItem>
                 </Link>
