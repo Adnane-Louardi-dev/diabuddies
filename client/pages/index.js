@@ -24,6 +24,7 @@ import {SmallArticle} from "../components/blog/smallArticle";
 import Card from "../components/store/card";
 import commerce from "../lib/commerce";
 import CalculateInsulinDose from "../components/calculateInsulinDose";
+import {Button} from "@mui/material";
 
 export default function Home() {
   const router = useRouter();
@@ -206,8 +207,10 @@ export default function Home() {
                       <Icon icon="ep:arrow-right-bold" className="h-6 w-6"/>
                     </Link>
                   </div>
-                  <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
-                    {articles?.data?.map(({id, attributes}) => <SmallArticle {...attributes} id={id} key={id} />)}
+                  <div className={"shadow-2xl p-4 bg-white rounded-2xl mb-8 pb-8"}>
+                    <div className="gap-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                      {articles?.data?.map(({id, attributes}) => <SmallArticle {...attributes} id={id} key={id} />)}
+                    </div>
                   </div>
                 </section>}
                 {!isProductsLoading && <section>
@@ -223,13 +226,21 @@ export default function Home() {
                       <Icon icon="ep:arrow-right-bold" className="h-6 w-6"/>
                     </Link>
                   </div>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                    {products.map((product) => (
-                            <Card product={product} key={product.id}/>
-                        )
-                    )}
+                  <div className={"shadow-2xl p-4 bg-white rounded-2xl mb-8 pb-8"}>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                      {products.map((product) => (
+                              <Card product={product} key={product.id}/>
+                          )
+                      )}
+                    </div>
                   </div>
                 </section>}
+
+                <Button onClick={()=>{
+                  axios.get("/api/aiAssistant/connect").then((res)=>res)
+                }}>
+                  Connec to api
+                </Button>
               </>
             ) : null}
           </main>

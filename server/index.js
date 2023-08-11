@@ -16,6 +16,7 @@ const wishList = require("./routes/wishList");
 const order = require("./routes/order");
 const articles = require("./routes/articles");
 const comments = require("./routes/comments");
+const aiAssistant = require("./routes/aiAssistant");
 //DB connect
 const DBConnection =
   process.env.DB_CONNECTION ||
@@ -54,6 +55,7 @@ app.use("/wishList", wishList);
 app.use("/orders", order);
 app.use("/articles", articles);
 app.use("/comments", comments);
+app.use("/aiAssistant", aiAssistant);
 
 app.get("/logout", function (req, res) {
   req.session.destroy(function (err) {

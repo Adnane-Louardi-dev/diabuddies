@@ -6,7 +6,7 @@ import {WishedIcon} from "../store/wishedIcon";
 
 export const SmallArticle = ({id,title,introduction, image}) => {
     const thumbnail = image ? image.data.attributes.formats.thumbnail : ""
-    return <article className="max-w-xs h-[400px]">
+    return <article className="max-w-xs mx-auto h-[400px]">
             <Link href={`/blog/articles/${id}`}>
                 <img src={`http://localhost:1337${thumbnail.url}`} className="mb-5 rounded-lg h-[200px]" alt={thumbnail.name} width={"100%"} height={"auto"} />
             </Link>
