@@ -1,13 +1,13 @@
-import { useState } from "react";
-import { useForm } from "react-hook-form";
-import { TextField, Button } from "@mui/material";
+import {useForm} from "react-hook-form";
+import {Button, TextField} from "@mui/material";
 import Link from "next/link";
 import Image from "next/image";
 import GoogleIcon from "@mui/icons-material/Google";
 import FacebookIcon from "@mui/icons-material/Facebook";
 import EastIcon from "@mui/icons-material/East";
 import axios from "axios";
-import { useRouter } from "next/router";
+import {useRouter} from "next/router";
+
 export default function Login() {
   const router = useRouter();
   const { register, control, handleSubmit, reset } = useForm();
@@ -58,7 +58,7 @@ export default function Login() {
                   Sign up with Google
                 </Button>
               </Link>
-              <Link href="/api/login/auth/facebook" to="http://localhost:3000/login/auth/facebook" as="/login" passHref>
+              <Link href="/api/login/auth/facebook" to={`${process.env.BACKEND_URL}:3000/login/auth/facebook`} as="/login" passHref>
                 <Button fullWidth variant="outlined" className="mb-7 p-2 text-diaGray text-md rounded-full border-2 border-diaGray">
                   <FacebookIcon className="text-md mx-5" />
                   Sign up with Facebook
