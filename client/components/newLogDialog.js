@@ -206,7 +206,8 @@ export default function NewLogDialog() {
           <div className="grid grid-cols-2 gap-2 my-7">
              <NutrationLogInput
                  label={"Glucose"}
-                 color={"blue-400"}
+                 textColor={"text-blue-400"}
+                 bgColor={"bg-blue-400"}
                  icon={"system-uicons:cubes"}
                  inputAdornmentLabel={"mg/dL"}
                  onChange={(event) => {
@@ -215,7 +216,8 @@ export default function NewLogDialog() {
              />
              <NutrationLogInput
                  label={"Carbs"}
-                 color={"gray-400"}
+                 textColor={"text-gray-400"}
+                 bgColor={"bg-gray-400"}
                  icon={"fluent:food-grains-20-regular"}
                  inputAdornmentLabel={"g"}
                  onChange={(event) => {
@@ -224,7 +226,8 @@ export default function NewLogDialog() {
              />
              <NutrationLogInput
                  label={"Bolus"}
-                 color={"orange-300"}
+                 textColor={"text-orange-300"}
+                 bgColor={"bg-orange-300"}
                  icon={"fluent:syringe-20-regular"}
                  inputAdornmentLabel={"UI"}
                  onChange={(event) => {
@@ -233,7 +236,8 @@ export default function NewLogDialog() {
              />
              <NutrationLogInput
                  label={"Basal"}
-                 color={"orange-300"}
+                 textColor={"text-orange-300"}
+                 bgColor={"bg-orange-300"}
                  icon={"fluent:syringe-20-regular"}
                  inputAdornmentLabel={"UI"}
                  onChange={(event) => {
@@ -242,7 +246,8 @@ export default function NewLogDialog() {
              />
              <NutrationLogInput
                  label={"Protein"}
-                 color={"amber-300"}
+                 textColor={"text-amber-300"}
+                 bgColor={"bg-amber-300"}
                  icon={"fluent-emoji-high-contrast:cut-of-meat"}
                  inputAdornmentLabel={"g"}
                  onChange={(event) => {
@@ -251,7 +256,8 @@ export default function NewLogDialog() {
              />
              <NutrationLogInput
                  label={"Fat"}
-                 color={"red-400"}
+                 textColor={"text-red-400"}
+                 bgColor={"bg-red-400"}
                  icon={"circum:pizza"}
                  inputAdornmentLabel={"g"}
                  onChange={(event) => {
@@ -260,7 +266,8 @@ export default function NewLogDialog() {
              />
              <NutrationLogInput
                  label={"Kcal"}
-                 color={"violet-400"}
+                 textColor={"text-violet-400"}
+                 bgColor={"bg-violet-400"}
                  icon={"fluent-mdl2:calories"}
                  inputAdornmentLabel={"kcal"}
                  onChange={(event) => {
