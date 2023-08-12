@@ -1,0 +1,489 @@
+[
+    {
+        "id": 1,
+        "slug": "monitor-blood-glucose",
+        "type": "advice",
+        "tags": [
+            "blood glucose",
+            "monitoring"
+        ],
+        "advice": "Monitor your blood glucose levels regularly."
+    },
+    {
+        "id": 2,
+        "slug": "balanced-diet",
+        "type": "advice",
+        "tags": [
+            "diet",
+            "nutrition"
+        ],
+        "advice": "Follow a balanced and healthy diet, focusing on whole foods and portion control."
+    },
+    {
+        "id": 3,
+        "slug": "stay-hydrated",
+        "type": "advice",
+        "tags": [
+            "hydration"
+        ],
+        "advice": "Stay hydrated by drinking plenty of water."
+    },
+    {
+        "id": 4,
+        "slug": "avoid-sugary-beverages",
+        "type": "advice",
+        "tags": [
+            "diet",
+            "hydration"
+        ],
+        "advice": "Avoid sugary beverages and opt for water or unsweetened drinks."
+    },
+    {
+        "id": 5,
+        "slug": "regular-exercise",
+        "type": "advice",
+        "tags": [
+            "exercise"
+        ],
+        "advice": "Incorporate regular exercise into your daily routine."
+    },
+    {
+        "id": 6,
+        "slug": "portion-control",
+        "type": "advice",
+        "tags": [
+            "diet",
+            "nutrition"
+        ],
+        "advice": "Practice portion control to manage your carbohydrate intake."
+    },
+    {
+        "id": 7,
+        "slug": "read-food-labels",
+        "type": "advice",
+        "tags": [
+            "diet",
+            "nutrition"
+        ],
+        "advice": "Learn to read food labels to make healthier choices."
+    },
+    {
+        "id": 8,
+        "slug": "medication-compliance",
+        "type": "advice",
+        "tags": [
+            "medication"
+        ],
+        "advice": "Take your medications as prescribed by your healthcare provider."
+    },
+    {
+        "id": 9,
+        "slug": "regular-meals",
+        "type": "advice",
+        "tags": [
+            "diet"
+        ],
+        "advice": "Don't skip meals or go long periods without eating."
+    },
+    {
+        "id": 10,
+        "slug": "limit-processed-foods",
+        "type": "advice",
+        "tags": [
+            "diet",
+            "nutrition"
+        ],
+        "advice": "Limit the consumption of processed foods and fast food."
+    },
+    {
+        "id": 11,
+        "slug": "get-enough-sleep",
+        "type": "advice",
+        "tags": [
+            "sleep"
+        ],
+        "advice": "Get enough sleep each night to support overall health."
+    },
+    {
+        "id": 12,
+        "slug": "stress-management",
+        "type": "advice",
+        "tags": [
+            "stress"
+        ],
+        "advice": "Control stress through relaxation techniques like meditation or deep breathing."
+    },
+    {
+        "id": 13,
+        "slug": "meal-planning",
+        "type": "advice",
+        "tags": [
+            "diet",
+            "nutrition"
+        ],
+        "advice": "Create a meal plan with the help of a registered dietitian."
+    },
+    {
+        "id": 14,
+        "slug": "cholesterol-blood-pressure",
+        "type": "advice",
+        "tags": [
+            "cholesterol",
+            "blood pressure"
+        ],
+        "advice": "Monitor your cholesterol and blood pressure levels."
+    },
+    {
+        "id": 15,
+        "slug": "avoid-smoking-alcohol",
+        "type": "advice",
+        "tags": [
+            "smoking",
+            "alcohol"
+        ],
+        "advice": "Avoid smoking and limit alcohol intake."
+    },
+    {
+        "id": 16,
+        "slug": "carry-identification",
+        "type": "advice",
+        "tags": [
+            "emergency",
+            "safety"
+        ],
+        "advice": "Always carry diabetes identification and emergency contact information."
+    },
+    {
+        "id": 17,
+        "slug": "inform-others",
+        "type": "advice",
+        "tags": [
+            "support",
+            "communication"
+        ],
+        "advice": "Inform family, friends, and coworkers about your condition."
+    },
+    {
+        "id": 18,
+        "slug": "regular-checkups",
+        "type": "advice",
+        "tags": [
+            "healthcare"
+        ],
+        "advice": "Have regular check-ups with your healthcare team."
+    },
+    {
+        "id": 19,
+        "slug": "foot-care",
+        "type": "advice",
+        "tags": [
+            "foot health"
+        ],
+        "advice": "Be cautious about foot care and inspect your feet daily."
+    },
+    {
+        "id": 20,
+        "slug": "quick-sugar-access",
+        "type": "advice",
+        "tags": [
+            "low blood sugar",
+            "emergency"
+        ],
+        "advice": "Keep glucose tablets or quick-acting sugar on hand for low blood sugar episodes."
+    },
+    {
+        "id": 21,
+        "slug": "medical-alert",
+        "type": "advice",
+        "tags": [
+            "safety",
+            "emergency"
+        ],
+        "advice": "Wear a medical alert bracelet or necklace."
+    },
+    {
+        "id": 22,
+        "slug": "self-insulin-injections",
+        "type": "advice",
+        "tags": [
+            "insulin",
+            "treatment"
+        ],
+        "advice": "Learn how to give yourself insulin injections properly if needed."
+    },
+    {
+        "id": 23,
+        "slug": "continuous-glucose-monitoring",
+        "type": "advice",
+        "tags": [
+            "CGM",
+            "monitoring"
+        ],
+        "advice": "Consider using a continuous glucose monitoring (CGM) system."
+    },
+    {
+        "id": 24,
+        "slug": "glucagon-kit",
+        "type": "advice",
+        "tags": [
+            "emergency",
+            "low blood sugar"
+        ],
+        "advice": "Have a glucagon kit available in case of severe low blood sugar."
+    },
+    {
+        "id": 25,
+        "slug": "understand-food-effects",
+        "type": "advice",
+        "tags": [
+            "nutrition",
+            "blood sugar"
+        ],
+        "advice": "Understand how different foods affect your blood sugar levels."
+    },
+    {
+        "id": 26,
+        "slug": "educate-hypo-hyper",
+        "type": "advice",
+        "tags": [
+            "hypoglycemia",
+            "hyperglycemia"
+        ],
+        "advice": "Educate yourself about the signs of hypoglycemia and hyperglycemia."
+    },
+    {
+        "id": 27,
+        "slug": "join-support-group",
+        "type": "advice",
+        "tags": [
+            "support",
+            "community"
+        ],
+        "advice": "Join a support group or community for diabetes management tips and encouragement."
+    },
+    {
+        "id": 28,
+        "slug": "prepared-travel",
+        "type": "advice",
+        "tags": [
+            "travel",
+            "preparedness"
+        ],
+        "advice": "Be prepared for travel by packing extra supplies and snacks."
+    },
+    {
+        "id": 29,
+        "slug": "oral-hygiene",
+        "type": "advice",
+        "tags": [
+            "oral health"
+        ],
+        "advice": "Practice good oral hygiene to prevent gum disease."
+    },
+    {
+        "id": 30,
+        "slug": "identification-carried",
+        "type": "advice",
+        "tags": [
+            "emergency",
+            "safety"
+        ],
+        "advice": "Always carry a source of identification indicating your diabetes status."
+    },
+    {
+        "id": 31,
+        "slug": "sick-day-management",
+        "type": "advice",
+        "tags": [
+            "sick days",
+            "health"
+        ],
+        "advice": "Educate yourself about sick day management for when you're unwell."
+    },
+    {
+        "id": 32,
+        "slug": "blood-sugar-targets",
+        "type": "advice",
+        "tags": [
+            "blood sugar",
+            "healthcare"
+        ],
+        "advice": "Work with your healthcare team to set realistic blood sugar targets."
+    },
+    {
+        "id": 33,
+        "slug": "adjust-management-plan",
+        "type": "advice",
+        "tags": [
+            "healthcare",
+            "self-care"
+        ],
+        "advice": "Regularly review and adjust your diabetes management plan as needed."
+    },
+    {
+        "id": 34,
+        "slug": "exercise-benefits",
+        "type": "advice",
+        "tags": [
+            "exercise"
+        ],
+        "advice": "Educate yourself about the benefits of regular physical activity for diabetes management."
+    },
+    {
+        "id": 35,
+        "slug": "healthy-snacks",
+        "type": "advice",
+        "tags": [
+            "diet",
+            "nutrition"
+        ],
+        "advice": "Plan for healthy snacks in between meals to avoid extreme fluctuations in blood sugar levels."
+    },
+    {
+        "id": 36,
+        "slug": "avoid-fad-diets",
+        "type": "advice",
+        "tags": [
+            "diet",
+            "nutrition"
+        ],
+        "advice": "Avoid fad diets and consult a healthcare professional for personalized advice."
+    },
+    {
+        "id": 37,
+        "slug": "emergency-contact-list",
+        "type": "advice",
+        "tags": [
+            "emergency",
+            "healthcare"
+        ],
+        "advice": "Keep an emergency contact list with names and phone numbers of your healthcare providers."
+    },
+    {
+        "id": 38,
+        "slug": "first-aid-kit",
+        "type": "advice",
+        "tags": [
+            "emergency"
+        ],
+        "advice": "Carry a small first-aid kit with basic supplies like band-aids and antiseptic wipes."
+    },
+    {
+        "id": 39,
+        "slug": "avoid-sitting-long",
+        "type": "advice",
+        "tags": [
+            "exercise"
+        ],
+        "advice": "Avoid long periods of sitting; incorporate movement breaks throughout the day."
+    },
+    {
+        "id": 40,
+        "slug": "limit-sugary-desserts",
+        "type": "advice",
+        "tags": [
+            "diet",
+            "nutrition"
+        ],
+        "advice": "Limit the consumption of sugary desserts and opt for healthier alternatives."
+    },
+    {
+        "id": 41,
+        "slug": "use-diabetes-apps",
+        "type": "advice",
+        "tags": [
+            "technology",
+            "management"
+        ],
+        "advice": "Consider using apps or tools to track your blood sugar, meals, and exercise."
+    },
+    {
+        "id": 42,
+        "slug": "seek-support",
+        "type": "advice",
+        "tags": [
+            "support"
+        ],
+        "advice": "Don't hesitate to ask for help or support from loved ones when needed."
+    },
+    {
+        "id": 43,
+        "slug": "establish-routine",
+        "type": "advice",
+        "tags": [
+            "routine",
+            "management"
+        ],
+        "advice": "Develop a routine for diabetes management to create consistency."
+    },
+    {
+        "id": 44,
+        "slug": "stay-informed",
+        "type": "advice",
+        "tags": [
+            "research",
+            "education"
+        ],
+        "advice": "Stay up-to-date with the latest diabetes research and treatment options."
+    },
+    {
+        "id": 45,
+        "slug": "emergency-snacks",
+        "type": "advice",
+        "tags": [
+            "emergency",
+            "snacking"
+        ],
+        "advice": "Keep emergency snacks like granola bars or fruit with you when you're on the go."
+    },
+    {
+        "id": 46,
+        "slug": "prepare-weather-changes",
+        "type": "advice",
+        "tags": [
+            "weather",
+            "management"
+        ],
+        "advice": "Prepare for weather changes that may impact blood sugar levels."
+    },
+    {
+        "id": 47,
+        "slug": "monitor-blood-pressure",
+        "type": "advice",
+        "tags": [
+            "blood pressure",
+            "healthcare"
+        ],
+        "advice": "Check your blood pressure regularly and maintain a healthy range."
+    },
+    {
+        "id": 48,
+        "slug": "proactive-management",
+        "type": "advice",
+        "tags": [
+            "management",
+            "prevention"
+        ],
+        "advice": "Stay proactive in managing your diabetes to prevent complications."
+    },
+    {
+        "id": 49,
+        "slug": "celebrate-achievements",
+        "type": "advice",
+        "tags": [
+            "positive mindset",
+            "achievement"
+        ],
+        "advice": "Be patient with yourself and acknowledge progress, no matter how small."
+    },
+    {
+        "id": 50,
+        "slug": "acknowledge-milestones",
+        "type": "advice",
+        "tags": [
+            "positive mindset",
+            "milestone"
+        ],
+        "advice": "Celebrate achievements and milestones in your diabetes management journey."
+    }
+]
