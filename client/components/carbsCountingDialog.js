@@ -7,21 +7,23 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import { Icon } from "@iconify/react";
-import ActivityLevel from "./activityLevel";
+import ReduceFactors from "./reduceFactors";
+import { useGetCurrentUser } from "../customeHooks/useGetCurrentUser";
+import moment from "moment";
+import Link from "next/link";
 import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
-import { useGetCurrentUser } from "../customeHooks/useGetCurrentUser";
-import moment from "moment";
 
-function CalculatingBolus(carbs, ratio, InsulinSensitivity, IOBcarb, glucose = 120) {
+function CalculatingBolus(carbs, ratio, InsulinSensitivity, IOBcarb, glucose) {
   let IOBcorr = 0,
     IOB = IOBcarb + IOBcorr,
     target = 120,
-    Glucose = glucose || 120,
+    Glucose = glucose,
+    localCarbs = carbs || 0,
     correction = (Glucose - target) / InsulinSensitivity,
-    bolus = carbs / ratio + correction;
+    bolus = localCarbs / ratio + correction;
   if (Glucose > target && correction <= IOBcarb) {
     correction = -IOBcorr;
   }
@@ -36,17 +38,20 @@ function CalculatingBolus(carbs, ratio, InsulinSensitivity, IOBcarb, glucose = 1
 
 const CarbsCountingDialog = ({ activeInsulinProp, glucose, lastInjectionTime }) => {
   const { user } = useGetCurrentUser();
-  const [Glucose, setGlucose] = useState(glucose);
+  const [localGlucose, setGlucose] = useState(glucose && user.normalBloodGlucose.min);
   const [activeInsulin, setActiveInsulin] = useState(0);
+  const [localLastInjectionTime, setlocalLastInjectionTime] = useState(lastInjectionTime);
   const [carbsRatio, setcarbsRatio] = useState(user.carbsRatio);
   const [insulinSensitivity, setinsulinSensitivity] = useState(user.insulinSensitivity.value);
+  const [reduceLevel, setreduceLevel] = useState(0);
   let actingTime = 3;
-  let actingTimeDateFormat = moment(lastInjectionTime, "LLL").add(actingTime, "hours").format();
-  let diffBetweenNowAndLastInjection = moment().diff(lastInjectionTime, "minutes");
+  let actingTimeDateFormat = moment(localLastInjectionTime)
+    .add(actingTime * 60, "minutes")
+    .format();
+  let diffBetweenNowAndLastInjection = moment().diff(localLastInjectionTime, "minutes");
+  console.log(actingTimeDateFormat);
   const [NextMealTimer, setNextMealTimer] = useState(
-    moment().diff(lastInjectionTime, "minutes") > actingTime * 60
-      ? 0
-      : moment(actingTimeDateFormat).subtract(diffBetweenNowAndLastInjection, "minutes").fromNow()
+    diffBetweenNowAndLastInjection > actingTime * 60 ? "Now" : moment(actingTimeDateFormat).startOf("minute").fromNow()
   );
   const [Macros, setMacros] = useState({
     carbs: 0,
@@ -65,10 +70,9 @@ const CarbsCountingDialog = ({ activeInsulinProp, glucose, lastInjectionTime }) 
 
   useEffect(() => {
     setActiveInsulin(activeInsulinProp);
-    let bolus = CalculatingBolus(Macros.carbs, carbsRatio, insulinSensitivity, activeInsulin, Glucose);
-    setbolusDose(bolus?.toFixed(2));
-    console.log(Macros.carbs);
-  }, [activeInsulinProp, carbsRatio, insulinSensitivity, Glucose, Macros.carbs]);
+    let bolus = CalculatingBolus(Macros.carbs, carbsRatio, insulinSensitivity, activeInsulin, localGlucose);
+    setbolusDose(bolus);
+  }, [activeInsulinProp, carbsRatio, insulinSensitivity, localGlucose, Macros.carbs, reduceLevel]);
 
   return (
     <div>
@@ -86,18 +90,11 @@ const CarbsCountingDialog = ({ activeInsulinProp, glucose, lastInjectionTime }) 
           <DialogContent>
             <DialogContentText className="font-sourceCode text-sm text-diaGray">Calculate your macros and get the ideal bolus.</DialogContentText>
 
-            {bolusDose ? (
+            {(localGlucose || Macros.carbs > 0) && bolusDose > 0 ? (
               <section className="py-4">
                 <div className="grid gap-4 rounded-xl shadow-md p-4 bg-diaLightGreen">
                   <h3 className="font-sourceCode text-xl text-diaGray">Total bolus</h3>
-                  {bolusDose < 0 ? (
-                    <div className="flex items-center px-2 rounded-lg bg-diaRed shadow-md">
-                      <Icon icon="ph:warning" className="h-10 w-10 text-white m-1" />
-                      <span className="mx-2 w-full text-xs font-poppins text-white">Correct your Blood Sugar immediatly</span>
-                    </div>
-                  ) : (
-                    <p className="font-sourceCode font-2xl text-gray-800 mx-4">{bolusDose} UI</p>
-                  )}
+                  <p className="font-sourceCode font-2xl text-gray-800 mx-4">{bolusDose.toFixed(2)} UI</p>
                 </div>
               </section>
             ) : null}
@@ -106,14 +103,14 @@ const CarbsCountingDialog = ({ activeInsulinProp, glucose, lastInjectionTime }) 
                 <Icon icon="fluent:syringe-20-regular" className="bg-white text-diaBlue rounded-full self-center mr-2 p-1 h-10 w-10" />
                 <div className="grid">
                   <span className="self-center font-rubik text-2xs text-diaGray">Active Insulin</span>
-                  <span className="self-center font-rubik text-md">{activeInsulin?.toFixed(2)} UI</span>
+                  <span className="self-center font-rubik text-md">{activeInsulin.toFixed(2)} UI</span>
                 </div>
               </div>
               <div className="flex w-full mx-3 p-4 bg-gray-200 rounded-md shadow-sm">
                 <Icon icon="mingcute:time-fill" className="bg-white text-diaRed rounded-full self-center mr-2 p-1 h-10 w-10" />
                 {NextMealTimer != 0 ? (
                   <div className="grid">
-                    <span className="self-center font-rubik text-2xs text-diaGray">next meal in</span>
+                    <span className="self-center font-rubik text-2xs text-diaGray">next meal's</span>
                     <span className="self-center font-rubik text-sm">{NextMealTimer}</span>
                   </div>
                 ) : (
@@ -190,10 +187,17 @@ const CarbsCountingDialog = ({ activeInsulinProp, glucose, lastInjectionTime }) 
                           textAlign: "center",
                         },
                       }}
-                    />{" "}
+                    />
                     <span className="text-sm">{user.insulinSensitivity.unit}</span>
                   </div>
                 </div>
+              </div>
+              <div className="flex items-center p-2 rounded-lg bg-blue-200 shadow-md">
+                <Icon icon="tabler:bulb" className="h-8 w-8 text-white" />
+                <span className="mx-2 w-full text-xs font-poppins text-diaGray">Learn how to calculate them by your self.</span>
+                <Link href={"/blog/how-to-calculate-insulin-sensitivity-and-carbs-ratio"} aria-label="blog page" passHref>
+                  <Icon icon="ep:arrow-right-bold" className="h-5 w-5 text-white" />
+                </Link>
               </div>
             </section>
 
@@ -241,7 +245,7 @@ const CarbsCountingDialog = ({ activeInsulinProp, glucose, lastInjectionTime }) 
                   }}
                 />
               </div>
-              <div className="flex justify-between rounded-xl shadow-md items-center bg-gray-200 p-2">
+              {/* <div className="flex justify-between rounded-xl shadow-md items-center bg-gray-200 p-2">
                 <span className="mx-7">Protein(g)</span>
                 <TextField
                   id="standard-number"
@@ -282,7 +286,7 @@ const CarbsCountingDialog = ({ activeInsulinProp, glucose, lastInjectionTime }) 
                     },
                   }}
                 />
-              </div>
+              </div> */}
               {/* <Accordion className="my-5">
               <AccordionSummary aria-controls="panel1a-content" id="panel1a-header" className="grid items-center">
                 <Icon icon="ic:round-expand-more" className="h-7 w-7 text-diaGray" />
@@ -315,11 +319,11 @@ const CarbsCountingDialog = ({ activeInsulinProp, glucose, lastInjectionTime }) 
             </section>
             <section className="grid gap-3 rounded-xl my-5 py-2">
               <h3 className="font-sourceCode text-diaGray">Activity Level</h3>
-              <ActivityLevel />
+              <ReduceFactors setreduceLevel={setreduceLevel} reduceLevel={reduceLevel} />
             </section>
             <section className="grid gap-3 rounded-xl my-5 py-2">
               <h3 className="font-sourceCode text-diaGray">Sickness Factor</h3>
-              <ActivityLevel />
+              <ReduceFactors setreduceLevel={setreduceLevel} reduceLevel={reduceLevel} />
             </section>
           </DialogContent>
         ) : null}

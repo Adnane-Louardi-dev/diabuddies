@@ -1,9 +1,9 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import moment from "moment";
-import {useRouter} from "next/router";
+import { useRouter } from "next/router";
 import ResponsiveAppBar from "../components/ResponsiveAppBar";
 import Glucose from "../components/glucose";
 import ActiveInsulin from "../components/activeInsulin";
@@ -14,45 +14,46 @@ import LineChartGraph from "../components/charts/lineChartGraph";
 import PiGraph from "../components/charts/piGraph";
 import BarGraph from "../components/charts/barGraph";
 import DayPicker from "../components/dayPicker";
-import {Icon} from "@iconify/react";
+import { Icon } from "@iconify/react";
 import Head from "next/head";
-import {useQuery} from "@tanstack/react-query";
-import {useGetCurrentUser} from "../customeHooks/useGetCurrentUser";
+import { useQuery } from "@tanstack/react-query";
+import { useGetCurrentUser } from "../customeHooks/useGetCurrentUser";
 import CompleteYourProfile from "../components/completeYourProfile";
-import {blogAxios} from "../lib/blogAuthConfig";
-import {SmallArticle} from "../components/blog/smallArticle";
+import { blogAxios } from "../lib/blogAuthConfig";
+import { SmallArticle } from "../components/blog/smallArticle";
 import Card from "../components/store/card";
 import commerce from "../lib/commerce";
 import CalculateInsulinDose from "../components/calculateInsulinDose";
-import {Button} from "@mui/material";
+import { Button } from "@mui/material";
+import Advice from "../components/advice";
 
 export default function Home() {
   const router = useRouter();
   const [date, setDate] = useState(router.query.date || moment().format("L"));
-  const [activeInsulin, setActiveInsulin] = useState(undefined);
+  const [activeInsulin, setActiveInsulin] = useState(0);
   const [glucose, setglucose] = useState(120);
   const [lastInjectionTime, setlastInjectionTime] = useState(undefined);
 
   //GET method to get user info
   const { user, isLoading: isUserLoading } = useGetCurrentUser();
-  const {data:articles, isLoading:isArticlesLoading} = useQuery({
-    queryKey: ["articles",3],
-    queryFn:async () => {
-      const {data} = await blogAxios.get("/api/articles?pagination[start]=0&pagination[limit]=3&populate=image")
-      return data
-    }
-  })
-  const {data:products, isLoading:isProductsLoading} = useQuery({
-    queryKey: ["products",3],
+  const { data: articles, isLoading: isArticlesLoading } = useQuery({
+    queryKey: ["articles", 3],
+    queryFn: async () => {
+      const { data } = await blogAxios.get("/api/articles?pagination[start]=0&pagination[limit]=3&populate=image");
+      return data;
+    },
+  });
+  const { data: products, isLoading: isProductsLoading } = useQuery({
+    queryKey: ["products", 3],
     queryFn: () => {
       return commerce.products
-          .list({
-            limit: 3
-          })
-          .then(res => res.data)
-          .catch(() => [])
-    }
-  })
+        .list({
+          limit: 3,
+        })
+        .then((res) => res.data)
+        .catch(() => []);
+    },
+  });
   const {
     isLoading,
     data: Data,
@@ -118,6 +119,7 @@ export default function Home() {
                 </section>
               </>
             ) : null}
+            <Advice />
             <CalculateInsulinDose activeInsulin={activeInsulin} glucose={glucose} lastInjectionTime={lastInjectionTime} />
             <div className="flex justify-between items-center my-5">
               <div className="flex items-center">
@@ -194,51 +196,58 @@ export default function Home() {
                     </div>
                   </section>
                 </section>
-                {!isArticlesLoading && <section>
-                  <div className={"flex justify-between items-center my-5"}>
-                    <div className="flex items-center">
-                      <div className="ring-1 ring-gray-300 p-1 rounded-md mr-3">
-                        <Icon icon="mdi:blog-outline" className="h-7 w-7"/>
+                {!isArticlesLoading && (
+                  <section>
+                    <div className={"flex justify-between items-center my-5"}>
+                      <div className="flex items-center">
+                        <div className="ring-1 ring-gray-300 p-1 rounded-md mr-3">
+                          <Icon icon="mdi:blog-outline" className="h-7 w-7" />
+                        </div>
+                        <h3 className="text-lg text-diaGray font-semibold font-rubik">Dia-Blogs</h3>
                       </div>
-                      <h3 className="text-lg text-diaGray font-semibold font-rubik">Dia-Blogs</h3>
+                      <Link href={"/blog/articles"} className={"flex text-diaGray"} aria-label="Charts page" passHref>
+                        <h4>Read More Articles</h4>
+                        <Icon icon="ep:arrow-right-bold" className="h-6 w-6" />
+                      </Link>
                     </div>
-                    <Link href={"/blog/articles"} className={"flex text-diaGray"} aria-label="Charts page" passHref>
-                      <h4>Read More Articles</h4>
-                      <Icon icon="ep:arrow-right-bold" className="h-6 w-6"/>
-                    </Link>
-                  </div>
-                  <div className={"shadow-2xl p-4 bg-white rounded-2xl mb-8 pb-8"}>
-                    <div className="gap-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                      {articles?.data?.map(({id, attributes}) => <SmallArticle {...attributes} id={id} key={id} />)}
-                    </div>
-                  </div>
-                </section>}
-                {!isProductsLoading && <section>
-                  <div className={"flex justify-between items-center my-5"}>
-                    <div className="flex items-center">
-                      <div className="ring-1 ring-gray-300 p-1 rounded-md mr-3">
-                        <Icon icon="material-symbols:store-outline" className="h-7 w-7"/>
+                    <div className={"shadow-2xl p-4 bg-white rounded-2xl mb-8 pb-8"}>
+                      <div className="gap-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                        {articles?.data?.map(({ id, attributes }) => (
+                          <SmallArticle {...attributes} id={id} key={id} />
+                        ))}
                       </div>
-                      <h3 className="text-lg text-diaGray font-semibold font-rubik ">E-Diabuddies</h3>
                     </div>
-                    <Link href={"/blog/articles"} className={"flex text-diaGray"} aria-label="Charts page" passHref>
-                      <h4>Explore Products</h4>
-                      <Icon icon="ep:arrow-right-bold" className="h-6 w-6"/>
-                    </Link>
-                  </div>
-                  <div className={"shadow-2xl p-4 bg-white rounded-2xl mb-8 pb-8"}>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                      {products.map((product) => (
-                              <Card product={product} key={product.id}/>
-                          )
-                      )}
+                  </section>
+                )}
+                {!isProductsLoading && (
+                  <section>
+                    <div className={"flex justify-between items-center my-5"}>
+                      <div className="flex items-center">
+                        <div className="ring-1 ring-gray-300 p-1 rounded-md mr-3">
+                          <Icon icon="material-symbols:store-outline" className="h-7 w-7" />
+                        </div>
+                        <h3 className="text-lg text-diaGray font-semibold font-rubik ">E-Diabuddies</h3>
+                      </div>
+                      <Link href={"/blog/articles"} className={"flex text-diaGray"} aria-label="Charts page" passHref>
+                        <h4>Explore Products</h4>
+                        <Icon icon="ep:arrow-right-bold" className="h-6 w-6" />
+                      </Link>
                     </div>
-                  </div>
-                </section>}
+                    <div className={"shadow-2xl p-4 bg-white rounded-2xl mb-8 pb-8"}>
+                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                        {products.map((product) => (
+                          <Card product={product} key={product.id} />
+                        ))}
+                      </div>
+                    </div>
+                  </section>
+                )}
 
-                <Button onClick={()=>{
-                  axios.get("/api/aiAssistant/connect").then((res)=>res)
-                }}>
+                <Button
+                  onClick={() => {
+                    axios.get("/api/aiAssistant/connect").then((res) => res);
+                  }}
+                >
                   Connec to api
                 </Button>
               </>
