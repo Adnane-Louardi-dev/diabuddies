@@ -385,16 +385,16 @@ export default function NewLogDialog() {
             />
           </div>
         </DialogContent>
-        <DialogActions>
+        <DialogActions sx={{ display: "grid", gap: 1, gridTemplateColumns: "repeat(2, minmax(0, 1fr))", width: "full" }}>
           <Button
             onClick={() => {
               setDateOpen(false);
             }}
-            className="font-rubik text-diaGray"
+            className="w-full p-3 rounded-full shadow-md text-gray-800 font-codeSource font-xl"
           >
             Cancel
           </Button>
-          <Button disabled={isLoading} onClick={handlePOSTNewLog} variant="filled" className="flex justify-center px-2 mx-4 font-rubik text-white bg-diaGray hover:bg-opacity-75 rounded-lg shadow-md">
+          <Button disabled={isLoading} onClick={handlePOSTNewLog} variant="filled" className="w-full p-3 rounded-full shadow-md bg-gray-800 text-white  font-codeSource font-xl">
             Save
           </Button>
         </DialogActions>
