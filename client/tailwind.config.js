@@ -12,6 +12,7 @@ module.exports = {
         sourceCode: ["Source Code Pro", "monospace"],
       },
       colors: {
+        diaDarkBlue: "#1e293b",
         diaBlue: "#3AB0FF",
         diaLightBlue: "#98D6FF",
         diaGray: "#666666",

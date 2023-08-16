@@ -71,23 +71,7 @@ const LogBookItem = ({ props }) => {
             {isError ? "There was an error while deleting log book" : "Log book was deleted successfully"}
           </Alert>
         </Snackbar>
-        <div className="self-center flex items-center mx-2 bg-diaBlue h-10 w-10 rounded-xl shadow-md">
-          {data.meal ? (
-            data.meal === "Breakfast" ? (
-              <Breakfast />
-            ) : data.meal === "Lunch" ? (
-              <Lunch />
-            ) : data.meal === "Dinner" ? (
-              <Dinner />
-            ) : data.meal === "Snack" ? (
-              <Snack />
-            ) : (
-              <Glucose />
-            )
-          ) : (
-            <Other />
-          )}
-        </div>
+        <div className="self-center flex items-center mx-2 bg-diaBlue h-10 w-10 rounded-xl shadow-md">{data.meal ? data.meal === "breakfast" ? <Breakfast /> : data.meal === "lunch" ? <Lunch /> : data.meal === "dinner" ? <Dinner /> : data.meal === "snack" ? <Snack /> : <Glucose /> : <Other />}</div>
         <div className="mx-2">
           <p className="font-rubik font-bold truncate overflow-hidden">{data.meal}</p>
           <p className="font-rubik text-sm text-diaGray">{`${moment(data.time).format("HH:mm")}`}</p>

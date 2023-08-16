@@ -94,31 +94,17 @@ export default function Home() {
           </Head>
           <ResponsiveAppBar user={user} />
           <main className="p-4 relative overflow-y-hidden">
-            <span className="font-inter text-2xl text-semibold">{`Good ${
-              moment().format("LT") > (moment("12:00 AM", "LT") && moment().format("LT") < moment("12:00 PM"))
-                ? "morning"
-                : moment().format("LT") > (moment("12:00 PM", "LT") && moment().format("LT") < moment("05:00 PM"))
-                ? "afternoon"
-                : moment().format("LT") > (moment("05:00 PM", "LT") && moment().format("LT") < moment("09:00 PM"))
-                ? "evening"
-                : "night"
-            }, ${user.givenName}`}</span>
+            <span className="font-inter text-2xl text-semibold">{`Good ${moment().format("LT") > (moment("12:00 AM", "LT") && moment().format("LT") < moment("12:00 PM")) ? "morning" : moment().format("LT") > (moment("12:00 PM", "LT") && moment().format("LT") < moment("05:00 PM")) ? "afternoon" : moment().format("LT") > (moment("05:00 PM", "LT") && moment().format("LT") < moment("09:00 PM")) ? "evening" : "night"}, ${user.givenName}`}</span>
             {user.newUser ? <CompleteYourProfile /> : null}
             <DayPicker setDate={setDate} date={date} />
-            {Data?.logBook[0] ? (
-              <>
-                <section className="flex justify-around my-5">
-                  <Glucose props={Data.logBook} setglucose={setglucose} />
-                  <ActiveInsulin
-                    props={Data?.logBook}
-                    activeInsulin={activeInsulin}
-                    setActiveInsulin={setActiveInsulin}
-                    lastInjectionTime={lastInjectionTime}
-                    setlastInjectionTime={setlastInjectionTime}
-                  />
-                </section>
-              </>
-            ) : null}
+
+            <>
+              <section className="flex justify-around my-5">
+                <Glucose props={Data.logBook} setglucose={setglucose} />
+                <ActiveInsulin props={Data?.logBook} activeInsulin={activeInsulin} setActiveInsulin={setActiveInsulin} lastInjectionTime={lastInjectionTime} setlastInjectionTime={setlastInjectionTime} />
+              </section>
+            </>
+
             <Advice />
             <CalculateInsulinDose activeInsulin={activeInsulin} glucose={glucose} lastInjectionTime={lastInjectionTime} />
             <div className="flex justify-between items-center my-5">
@@ -201,9 +187,9 @@ export default function Home() {
                     <div className={"flex justify-between items-center my-5"}>
                       <div className="flex items-center">
                         <div className="ring-1 ring-gray-300 p-1 rounded-md mr-3">
-                          <Icon icon="mdi:blog-outline" className="h-7 w-7" />
+                          <Icon icon="majesticons:article-line" className="h-7 w-7 text-diaGray" />
                         </div>
-                        <h3 className="text-lg text-diaGray font-semibold font-rubik">Dia-Blogs</h3>
+                        <h3 className="text-lg text-diaGray font-semibold font-rubik">Dia-Blog</h3>
                       </div>
                       <Link href={"/blog/articles"} className={"flex text-diaGray"} aria-label="Charts page" passHref>
                         <h4>Read More Articles</h4>
@@ -224,7 +210,7 @@ export default function Home() {
                     <div className={"flex justify-between items-center my-5"}>
                       <div className="flex items-center">
                         <div className="ring-1 ring-gray-300 p-1 rounded-md mr-3">
-                          <Icon icon="material-symbols:store-outline" className="h-7 w-7" />
+                          <Icon icon="iconamoon:store-light" className="h-7 w-7 text-diaGray" />
                         </div>
                         <h3 className="text-lg text-diaGray font-semibold font-rubik ">E-Diabuddies</h3>
                       </div>

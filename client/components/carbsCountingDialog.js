@@ -49,7 +49,6 @@ const CarbsCountingDialog = ({ activeInsulinProp, glucose, lastInjectionTime }) 
     .add(actingTime * 60, "minutes")
     .format();
   let diffBetweenNowAndLastInjection = moment().diff(localLastInjectionTime, "minutes");
-  console.log(actingTimeDateFormat);
   const [NextMealTimer, setNextMealTimer] = useState(
     diffBetweenNowAndLastInjection > actingTime * 60 ? "Now" : moment(actingTimeDateFormat).startOf("minute").fromNow()
   );

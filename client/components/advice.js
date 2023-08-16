@@ -14,7 +14,7 @@ const Advice = () => {
       <div className="grid gap-4 rounded-lg shadow-md p-4 bg-white">
         <div className="flex justify-between">
           <div>
-            <h2 className="font-rubik font-semibold text-xl text-gray-800 mb-2">{choosenAdvice.slug.replace(/-/g, " ")}</h2>
+            <h2 className="font-rubik font-semibold text-xl text-gray-800 mb-2">{choosenAdvice?.slug.replace(/-/g, " ")}</h2>
             {choosenAdvice.tags?.map((tag) => (
               <Chip avatar={<Icon icon="ic:round-tag" />} label={tag} className="mx-1" />
             ))}
