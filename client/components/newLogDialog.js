@@ -173,7 +173,7 @@ export default function NewLogDialog() {
                   color: "#3AB0FF",
                 },
                 "& .MuiButtonBase-root[aria-pressed='true']": {
-                  backgroundColor: "#3AB0FF",
+                  backgroundColor: "#1e293b",
                   color: "white",
                 },
               }}
