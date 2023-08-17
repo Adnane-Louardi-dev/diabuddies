@@ -8,6 +8,7 @@ import {QueryClient, QueryClientProvider} from "@tanstack/react-query"
 const queryClient = new QueryClient()
 
 function MyApp({Component, pageProps}) {
+
     return (
         <QueryClientProvider client={queryClient}>
             <Head>
@@ -17,7 +18,7 @@ function MyApp({Component, pageProps}) {
                 <Component {...pageProps} />
             </LocalizationProvider>
         </QueryClientProvider>
-  );
+        )
 }
 
 export default MyApp;

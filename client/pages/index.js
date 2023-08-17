@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import moment from "moment";
-import { useRouter } from "next/router";
+import {useRouter} from "next/router";
 import ResponsiveAppBar from "../components/ResponsiveAppBar";
 import Glucose from "../components/glucose";
 import ActiveInsulin from "../components/activeInsulin";
@@ -14,10 +14,10 @@ import LineChartGraph from "../components/charts/lineChartGraph";
 import PiGraph from "../components/charts/piGraph";
 import BarGraph from "../components/charts/barGraph";
 import DayPicker from "../components/dayPicker";
-import { Icon } from "@iconify/react";
+import {Icon} from "@iconify/react";
 import Head from "next/head";
-import { useQuery } from "@tanstack/react-query";
-import { useGetCurrentUser } from "../customeHooks/useGetCurrentUser";
+import {useQuery} from "@tanstack/react-query";
+import {useGetCurrentUser} from "../customeHooks/useGetCurrentUser";
 
 export default function Home() {
   const router = useRouter();
@@ -37,7 +37,7 @@ export default function Home() {
       return result.data;
     },
     enabled: router.isReady,
-    onSuccess: () => {
+    onSuccess: (data) => {
       router.push({ href: "/", query: { date: date } });
     },
     onError: (e) => {
@@ -45,25 +45,16 @@ export default function Home() {
     },
   });
 
+  useEffect(()=>{
+    if(router.isReady && !isUserLoading && user.newUser){
+      router.push("/setup");
+    }
+  },[isUserLoading, router.isReady])
+
   useEffect(() => {
     refetch();
-    // if (router.isReady) {
-    //   // redirect new users to setup page
-    //   if (Data?.user.newUser) {
-    //     router.push("/setup");
-    //   }
-    // };
-  }, [router.isReady]);
+  }, [ date]);
 
-  // useEffect(() => {
-  //   refetch();
-  //   // redirect new users to setup page
-  //   // if (Data?.user.newUser) {
-  //   //   router.push("/setup");
-  //   // }
-  // }, [router.isReady,date]);
-
-  console.log(Data);
   return (
     <>
       {!isLoading && !isUserLoading ? (
@@ -74,6 +65,7 @@ export default function Home() {
           </Head>
           <ResponsiveAppBar user={user} />
           <main className="p-4 relative overflow-y-hidden">
+<<<<<<< HEAD
             <span className="font-inter text-2xl text-semibold">{`Good ${
               moment().format("LT") > (moment("12:00 AM", "LT") && moment().format("LT") < moment("12:00 PM"))
                 ? "morning"
@@ -84,6 +76,10 @@ export default function Home() {
                 : "night"
             }, ${user.givenName}`}</span>
             <DayPicker setDate={setDate} />
+=======
+            <span className="font-inter text-2xl text-semibold">{`Good evening, ${user.givenName}`}</span>
+            <DayPicker date={date} setDate={setDate} />
+>>>>>>> c9d767aa57219531c99d867c1ab06438fb0370aa
             {Data?.logBook[0] ? (
               <>
                 <section className="flex justify-around my-5">
