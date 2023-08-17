@@ -1,9 +1,9 @@
 const axios = require("axios")
 
-const blogInstance = axios.create({
+const strapiInstance = axios.create({
     baseURL: "http://localhost:1337",
     headers: {
-        "Authorization": `Bearer 59464ecf26a26220dce43e3d8685013cdb01aa511e3a97c57a3849bdf86c7a2ed5beaf3a3873c0cfd8eaf10bdbb3aa911c34078e89ace97c0b86d625f0b9177a589364f6168f41973a741e97398ec1d5ca5ebce86664e4d6f81015f800965f63e47408a8c5c43c7f70a2e373c3d1886bf40bfc81bf4738051447c451e77fe9e7`
+        "Authorization": `Bearer 73126f30ff0d1e088f2c272f673dfc7b84f00126e363137f1c88ab9b83ee37b6f2e187a516f60b7800739e0e3325fda467a2ad1d42de599a1dc8b7bd227e2267da070c8dc1d1fa10149c8d027d9397badca1132c8a2304e28ffc0b51d3cbe11207c025106d9bfaca92b2cd780ee645841f54fabafd35e7692563cadbd9cfd593`
     }
 })
 
@@ -14,4 +14,4 @@ const storeInstance = axios.create({
     }
 })
 
-module.exports = {blogInstance,storeInstance}
+module.exports = {strapiInstance,storeInstance}

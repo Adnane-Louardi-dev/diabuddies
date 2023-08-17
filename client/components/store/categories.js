@@ -11,12 +11,12 @@ const Categories = ({categories}) => {
                   <h4>All</h4>
                </button>
             </Link>
-            {categories.map(category => <Link href={`/store/categories/${category.slug}`} key={category.name}>
-               <button type="submit"
-                       className="rounded-lg flex-none h-12 sm:h-12 px-6 w-fit shadow-md bg-yellow-400 m-3 hover:bg-transparent hover:ring-2 hover:ring-yellow-400 focus:bg-blue-50 focus:ring-2 focus:ring-yellow-400">
-                  <h4>{category.name}</h4>
-               </button>
-            </Link>)}
+            {/*{categories.map(category => <Link href={`/store/categories/${category.slug}`} key={category.name}>*/}
+            {/*   <button type="submit"*/}
+            {/*           className="rounded-lg flex-none h-12 sm:h-12 px-6 w-fit shadow-md bg-yellow-400 m-3 hover:bg-transparent hover:ring-2 hover:ring-yellow-400 focus:bg-blue-50 focus:ring-2 focus:ring-yellow-400">*/}
+            {/*      <h4>{category.name}</h4>*/}
+            {/*   </button>*/}
+            {/*</Link>)}*/}
          </div>
       </div>
    );

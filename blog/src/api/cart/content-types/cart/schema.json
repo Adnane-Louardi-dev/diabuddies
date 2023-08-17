@@ -1,0 +1,46 @@
+{
+  "kind": "collectionType",
+  "collectionName": "carts",
+  "info": {
+    "singularName": "cart",
+    "pluralName": "carts",
+    "displayName": "cart",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "total": {
+      "type": "decimal",
+      "required": true
+    },
+    "subtotal": {
+      "type": "decimal",
+      "required": true
+    },
+    "discount": {
+      "type": "decimal",
+      "required": true
+    },
+    "venteEntries": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::vente-entry.vente-entry"
+    },
+    "customer": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::customer.customer",
+      "inversedBy": "cart"
+    },
+    "prospectId": {
+      "type": "uid"
+    },
+    "totalItems": {
+      "type": "integer",
+      "required": true
+    }
+  }
+}

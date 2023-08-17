@@ -10,7 +10,7 @@ import ProductSmall from "../../../components/store/productSmall";
 import TextField from "@mui/material/TextField";
 import React from "react";
 import {useForm} from "react-hook-form";
-import {useGetCart} from "../../../customeHooks/useCart";
+import useLocalStorage from "../../../customeHooks/useLocalStorage";
 
 
 export default function Checkout() {
@@ -26,14 +26,20 @@ export default function Checkout() {
             return await commerce.checkout.getLive(id)
         }
     })
-    const {data:cart, isLoading:isCartLoading} = useGetCart()
+    const [cart,setCart] = useLocalStorage("my-cart",{
+        total: 0,
+        subtotal: 0,
+        discount: 0,
+        totalItems: 0,
+        venteEntries: []
+    })
 
     if(isLoading||isUserLoading){
         return <LoadingCircle />
     }
 
     return <StoreLayout>
-        <form onSubmit={handleSubmit(submitOrder)} className={"flex"}>
+        <form className={"flex"}>
             <div className={"w-[75%]"}>
                 <Typography typography={"h4"}>Contact Information</Typography>
                 <TextField variant="outlined" className={"block"} {...register("email")} label={"Email"} defaultValue={user.email} required type={"email"} />
@@ -64,7 +70,6 @@ export default function Checkout() {
                     <p>{checkout.total.formatted_with_code}</p>
                 </div>
                 <Button className={"bg-amber-500 text-white mt-5 w-full"}
-                        disabled={isCartLoading}
                         type={"submit"}
                     >
                     Checkout

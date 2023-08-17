@@ -1,6 +1,11 @@
 import React from "react";
 
 
-export const ProductImage = (props) => {
-    return <div {...props} style={{backgroundImage: `url(${encodeURI(props.src)})`}} />
+export const ProductImage = ({src, ...props}) => {
+    if(src) {
+        return <div {...props} style={{
+            backgroundImage: `url(${encodeURI("http://localhost:1337"+src.attributes?.url)})`
+        }}/>
+    }
+    return null
 }

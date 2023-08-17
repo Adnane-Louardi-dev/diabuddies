@@ -1,116 +1,128 @@
-import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
-import commerce from "../lib/commerce";
+import {useQuery, useQueryClient} from "@tanstack/react-query";
+import {useState} from "react";
 
-
+const nullCart = {
+    total: 0,
+    subtotal: 0,
+    discount: 0,
+    totalItems: 0,
+    venteEntries: []
+}
 const roundNum = (num) =>  Math.round(num*100)/100
-export const useGetCart = () => {
-    return useQuery({
-        queryKey: ['cart'],
-        queryFn: async () => {
-            return await commerce.cart.retrieve()
-        }
+
+const cartCalculationService = (entries)=>{
+    return entries.reduce((entry1,entry2)=>({
+        total: entry1.total + entry2.total,
+        subtotal: entry1.subtotal + entry2.subtotal,
+        discount: entry1.discount + entry2.discount,
+        totalItems: entry1.totalItems + entry2.quantity,
+    }),{
+        total: 0,
+        subtotal: 0,
+        discount: 0,
+        totalItems: 0,
     })
 }
-
-const cartCalculationService = (cart)=>{
-    let cartSubTotal = cart.line_items
-        .map(line_item => line_item.line_total.raw)
-        .reduce((a,b)=> a+b, 0)
-    cartSubTotal = roundNum(cartSubTotal)
-    const subTotal = {
-        formatted: `${cartSubTotal}`,
-        formatted_with_code: `${cartSubTotal} MAD`,
-        formatted_with_symbol: `DH${cartSubTotal}`,
-        raw: cartSubTotal
+export const useGetCart = () => useQuery(["cart"],()=>{
+    return JSON.parse(localStorage.getItem("my-cart")) ?? {
+        total: 0,
+        subtotal: 0,
+        discount: 0,
+        totalItems: 0,
+        venteEntries: []
     }
-    const totalItems = cart.line_items.map(line_item => line_item.quantity).reduce((a,b)=>  a+b, 0)
-    return [subTotal,totalItems]
-}
-
+})
 export const useUpdateCart = () => {
-    const queryClient = useQueryClient()
-
-    return useMutation({
-        mutationKey: ['cartUpdate'],
-        mutationFn: ({productId, quantity}) => {
-            commerce.cart.update(productId, {quantity})
-        },
-        onMutate: async ({productId, quantity, price}) => {
-            await queryClient.cancelQueries(["cart"])
-            const cart = queryClient.getQueryData(["cart"])
-            const productIdx = cart.line_items.findIndex(product => product.id === productId);
-            cart.line_items[productIdx].quantity = quantity
-            const lineTotal = roundNum(price * quantity)
-            cart.line_items[productIdx].line_total = {
-                formatted: `${lineTotal}`,
-                formatted_with_code: `${lineTotal} MAD`,
-                formatted_with_symbol: `DH${lineTotal}`,
-                raw: lineTotal
+    const [cart, setState] = useState(() => {
+        // Initialize the state
+        try {
+            const value = window.localStorage.getItem("my-cart")
+            // Check if the local storage already has any values,
+            // otherwise initialize it with the passed initialValue
+            return value ? JSON.parse(value) : {
+                total: 0,
+                subtotal: 0,
+                discount: 0,
+                totalItems: 0,
+                venteEntries: []
             }
-            const [subTotal, cartTotalItems] = cartCalculationService(cart)
-            cart.subtotal = subTotal
-            cart.total_items = cartTotalItems
-            cart.manuallyUpdated = true
-            queryClient.setQueryData(["cart"], cart)
-        },
-        onError: (err, {productId, quantity}, context) => {
-            console.log("ctx", context)
-            queryClient.setQueryData(["cart"], context.cart)
-        },
-        onSettled: () => {
-            queryClient.invalidateQueries(["cart"])
-        }
-    });
-}
-export const useAddToCart = () => {
-    const queryClient = useQueryClient()
-
-    return useMutation({
-        mutationKey: ["addToCart"],
-        mutationFn: (product) => {
-            return commerce.cart.add(product.id,1);
-        },
-        onMutate: async (product) => {
-            await queryClient.cancelQueries(["cart"])
-            const cart = queryClient.getQueryData(["cart"])
-            product.quantity = 1
-            product.line_total = product.price
-            cart.line_items.push(product)
-            console.log("line itmes", cart.line_items)
-            const [subTotal, cartTotalItems] = cartCalculationService(cart)
-            cart.subtotal = subTotal
-            cart.total_items = cartTotalItems
-            cart.manuallyUpdated = true
-            queryClient.setQueryData(["cart"], cart)
-        },
-        onError: (err, product, context) => {
-            console.log("ctx", context)
-            queryClient.setQueryData(["cart"], context.cart)
-        },
-        onSettled: () => {
-            queryClient.invalidateQueries(["cart"])
-        }
-    });
-}
-export const useDeleteCartItem = () => {
-    const queryClient = useQueryClient()
-
-    return useMutation({
-        mutationKey: ["deleteItemFromCart"],
-        mutationFn: (productId) => {
-            commerce.cart.remove(productId)
-        },
-        onMutate: async (productId) => {
-            await queryClient.cancelQueries(["cart"])
-            let cart = queryClient.getQueryData(["cart"])
-            cart = {...cart, line_items: cart.line_items.filter(line_item => line_item.id !== productId)}
-            const [subTotal, totalItems] = cartCalculationService(cart)
-            cart.subtotal = subTotal
-            cart.total_items = totalItems
-            queryClient.setQueryData(["cart"], cart)
-        },
-        onSettled: () => {
-            queryClient.invalidateQueries(["cart"])
+        } catch (error) {
+            console.log(error)
         }
     })
+
+    const queryClient = useQueryClient()
+
+    const updateCart = (product,quantity) => {
+        try {
+            let currentCart = JSON.parse(window.localStorage.getItem("my-cart"))
+            let newCart;
+            if(!currentCart){
+                newCart = {
+                    venteEntries: [{
+                        product: product,
+                        total: product.attributes.selling_price * 1,
+                        subtotal: product.attributes.original_price * 1,
+                        discount: product.attributes.original_price - product.attributes.selling_price,
+                        quantity: 1
+                    }]
+                }
+                const valueToStore = {
+                    ...cartCalculationService(newCart.venteEntries),
+                    ...newCart
+                }
+
+                window.localStorage.setItem("my-cart", JSON.stringify(valueToStore))
+                setState(valueToStore)
+                queryClient.invalidateQueries(["cart"])
+                return;
+            }
+            let existedEntry = currentCart.venteEntries.find(entry => entry.product.id === product.id);
+            let existedEntryIndex = currentCart.venteEntries.findIndex(entry => entry.product.id === product.id);
+            if(!!existedEntry){
+                newCart = {
+                    venteEntries: currentCart.venteEntries
+                        .filter(entry => entry.product.id !== product.id)
+                }
+                console.log("between cart bro", newCart)
+                const newQty = existedEntry.quantity + quantity,
+                    total = roundNum(newQty*existedEntry.product.attributes.selling_price),
+                    subtotal = roundNum(newQty*existedEntry.product.attributes.original_price)
+                if(newQty > 0){
+                    newCart = {
+                        venteEntries: [...newCart.venteEntries.slice(0,existedEntryIndex), {
+                            total,
+                            subtotal,
+                            quantity: newQty,
+                            product: existedEntry.product,
+                            discount: subtotal - total
+                        } , ...newCart.venteEntries.slice(existedEntryIndex)]
+                    }
+                }
+            } else {
+                newCart = {
+                    venteEntries: [...currentCart.venteEntries, {
+                        product: product,
+                        total: product.attributes.selling_price * 1,
+                        subtotal: product.attributes.original_price * 1,
+                        discount: product.attributes.original_price - product.attributes.selling_price,
+                        quantity: 1
+                    }]
+                }
+            }
+            const valueToStore = {
+                ...cartCalculationService(newCart.venteEntries),
+                ...newCart
+            }
+            window.localStorage.setItem("my-cart", JSON.stringify(valueToStore))
+            setState(valueToStore)
+            queryClient.invalidateQueries(["cart"])
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    return {cart: {...cart}, updateCart}
+
 }
+
