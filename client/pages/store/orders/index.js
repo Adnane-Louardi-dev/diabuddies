@@ -15,10 +15,10 @@ export default function Orders() {
     const {data:orders, isLoading} = useQuery({
         queryKey: ["orders"],
         queryFn: async () => {
-            return axios.get("/api/orders")
+            const {data:orders} = await axios.get("/api/store/orders")
+            return orders
         }
     })
-    console.log(orders)
     if(isLoading){
         return <LoadingCircle />
     }
@@ -52,36 +52,37 @@ export default function Orders() {
                         </tr>
                         </thead>
                         {orders.data.map((order) => {
-                            const cart = JSON.parse(order.cart)
                             return (
                                 <tbody className="bg-white divide-y divide-gray-200" key={order.id}>
                                 <tr>
                                     <td className="px-6 py-4 whitespace-nowrap">
-                                        <div className="text-sm text-gray-900">{cart.id.replace("cart","order")}</div>
+                                        <div className="text-sm text-gray-900">Cart Number:{order.id}</div>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
-                                        {cart.line_items.map((product,index) => (
-                                            <>
+                                        {order.attributes.vente_entries?.data.map((vente_entry,index) => {
+                                            const product = vente_entry.attributes.product.data.attributes
+                                            return (
+                                                <>
                                                 <div className="flex items-center my-3">
-                                                    <div className="relative flex-shrink-0 h-10 w-10 shadow-sm">
-                                                        <ProductImage className={"w-full h-full bg-center bg-cover"}
-                                                            src={product.image ? product.image.url : product.assets[0]?.url}/>
+                                                    <div className="relative flex-shrink-0 h-[75px] w-[75px] shadow-sm">
+                                                        {product.thumbnail &&
+                                                            <ProductImage className={"w-full h-full bg-center bg-cover"}
+                                                                       src={product.thumbnail.data}/>}
                                                     </div>
                                                     <div className="ml-4 w-full text-gray-900 text-sm font-medium ">
                                                         <p>{product.name}</p>
-                                                        <p className={"pt-1"}>Total Produit: <span className={"text-blue-700"}>{product.line_total.raw} DH</span></p>
+                                                        <p className={"pt-1"}>Total Produit: <span className={"text-blue-700"}>{vente_entry.attributes.total} DH</span></p>
                                                     </div>
                                                 </div>
-                                                {index !== cart.line_items.length - 1 && <hr/>}
+                                                {index !== order.attributes.vente_entries.length - 1 && <hr/>}
                                             </>
-                                            )
-                                        )}
+                                        )})}
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
-                                        <div className="text-sm text-gray-900">{cart.total_items}</div>
+                                        <div className="text-sm text-gray-900">{order.attributes.totalItems}</div>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
-                                        <div className="text-sm text-gray-900">{cart.subtotal.raw} DH</div>
+                                        <div className="text-sm text-gray-900">{order.attributes.total} DH</div>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-${getStatusColor(order.status)}-100 text-${getStatusColor(order.status)}-800`}>

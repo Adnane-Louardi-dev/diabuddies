@@ -1,9 +1,9 @@
-import { useEffect, useState } from "react";
+import {useEffect, useState} from "react";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import moment from "moment";
-import { useRouter } from "next/router";
+import {useRouter} from "next/router";
 import ResponsiveAppBar from "../components/ResponsiveAppBar";
 import Glucose from "../components/glucose";
 import ActiveInsulin from "../components/activeInsulin";
@@ -14,17 +14,16 @@ import LineChartGraph from "../components/charts/lineChartGraph";
 import PiGraph from "../components/charts/piGraph";
 import BarGraph from "../components/charts/barGraph";
 import DayPicker from "../components/dayPicker";
-import { Icon } from "@iconify/react";
+import {Icon} from "@iconify/react";
 import Head from "next/head";
-import { useQuery } from "@tanstack/react-query";
-import { useGetCurrentUser } from "../customeHooks/useGetCurrentUser";
+import {useQuery} from "@tanstack/react-query";
+import {useGetCurrentUser} from "../customeHooks/useGetCurrentUser";
 import CompleteYourProfile from "../components/completeYourProfile";
-import { blogAxios } from "../lib/blogAuthConfig";
-import { SmallArticle } from "../components/blog/smallArticle";
+import {blogAxios} from "../lib/blogAuthConfig";
+import {SmallArticle} from "../components/blog/smallArticle";
 import Card from "../components/store/card";
-import commerce from "../lib/commerce";
 import CalculateInsulinDose from "../components/calculateInsulinDose";
-import { Button } from "@mui/material";
+import {Button} from "@mui/material";
 import Advice from "../components/advice";
 
 export default function Home() {
@@ -45,15 +44,10 @@ export default function Home() {
   });
   const { data: products, isLoading: isProductsLoading } = useQuery({
     queryKey: ["products", 3],
-    queryFn: () => {
-      return commerce.products
-        .list({
-          limit: 3,
-        })
-        .then((res) => res.data)
-        .catch(() => []);
-    },
-  });
+    queryFn: async () => {
+      const {data} = await axios.get("/api/store/products/3")
+      return data.data
+    }})
   const {
     isLoading,
     data: Data,

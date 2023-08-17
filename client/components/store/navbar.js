@@ -4,14 +4,12 @@ import {Logo} from "../Logo";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import {Button} from "@mui/material";
-import {useGetCart} from "../../customeHooks/useCart";
 import {ProductImage} from "./ProductImage";
+import {useGetCart} from "../../customeHooks/useCart";
 
 const Navbar = () => {
-
-    const {data:cart, isLoading} = useGetCart()
-
     const [anchorElCart, setAnchorElCart] = React.useState(null);
+    const {data: cart} = useGetCart()
     const handleOpenCartMenu = (event) => {
         setAnchorElCart(event.currentTarget);
     };
@@ -42,10 +40,10 @@ const Navbar = () => {
                               />
                           </svg>
                           <span className={`absolute top-2 right-4 text-[0.7rem] text-white inline-block w-4 h-4 transform translate-x-1/2 -translate-y-1/2 bg-yellow-600 rounded-full`}>
-                              {!isLoading ? cart.total_items : ""}
+                              {cart && cart.totalItems}
                           </span>
                       </IconButton>
-                      {!isLoading && <Menu
+                      <Menu
                           sx={{mt: "45px"}}
                           id="menu-appbar"
                           anchorEl={anchorElCart}
@@ -62,30 +60,37 @@ const Navbar = () => {
                           open={Boolean(anchorElCart)}
                           onClose={handleCloseCartMenu}
                       >
-                          {cart.line_items.map(({id,name,price,assets,quantity,line_total,image}) => (
-                              <div className={"mx-3"} key={id} >
+                          {cart && cart.venteEntries.map(({product,quantity,total}) => {
+                              const {name,thumbnail,selling_price} = product.attributes
+                              return <div className={"mx-3"} key={product.id}>
                                   <div className="mx-auto mb-5 flex rounded-xl shadow-md bg-blue-50 px-1 py-2">
-                                      <div className="self-center relative h-16 w-16  flex-shrink-0 rounded-xl overflow-hidden bg-gray-400">
-                                          <ProductImage className={"w-full h-full bg-center bg-cover"} src={image ? image.url : assets[0].url} />
+                                      <div
+                                          className="self-center relative h-16 w-16  flex-shrink-0 rounded-xl overflow-hidden bg-gray-400">
+                                          {thumbnail && <ProductImage className={"w-full h-full bg-center bg-cover"}
+                                                         src={thumbnail.data}/>}
                                       </div>
-                                      <div className="self-center flex flex-col mx-auto mt-2 xs:mt-0 xs:ml-3 px-3 xs:px-0 justify-between rounded-xl font-rubik">
+                                      <div
+                                          className="self-center flex flex-col mx-auto mt-2 xs:mt-0 xs:ml-3 px-3 xs:px-0 justify-between rounded-xl font-rubik">
                                           <div className="flex-col">
                                               <h1 className="mt-1 w-48 text-sm">{name}</h1>
                                               <h1 className="my-1 text-sm flex justify-between">
                                                   <p>
-                                                      {quantity} * <span className={"text-blue-700"}>{price.formatted_with_code}</span>
+                                                      {quantity} * <span
+                                                      className={"text-blue-700"}>
+                                                      {selling_price}
+                                                  </span>
                                                   </p>
                                                   <p>
-                                                      {line_total.formatted_with_code}
+                                                      {total}
                                                   </p>
                                               </h1>
                                           </div>
                                       </div>
                                   </div>
                               </div>
-                          ))}
+                          })}
                           <div className={"mx-3"}>
-                              {cart.line_items.length !== 0 &&
+                              {cart?.totalItems !== 0 &&
                                   <Link href="/store/cart" passHref={true}>
                                       <Button className={"bg-amber-500 text-white my-5 w-full"}>
                                           Goto cart
@@ -97,7 +102,7 @@ const Navbar = () => {
                                   </Button>
                               </Link>
                           </div>
-                      </Menu>}
+                      </Menu>
                   </div>
                </div>
             </div>

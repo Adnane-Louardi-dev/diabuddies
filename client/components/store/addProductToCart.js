@@ -1,24 +1,11 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import Link from "next/link";
-import {useAddToCart} from "../../customeHooks/useCart";
+import {useUpdateCart} from "../../customeHooks/useCart";
 
 
 export const AddProductToCart = ({children, id,product}) => {
     const [added, setAdded] = useState(false);
-
-    const {mutate:addToCart, isLoading,isSuccess} = useAddToCart()
-
-    useEffect(()=>{
-        if(!isLoading && isSuccess){
-            let beggin = setInterval(() => {
-                setAdded(true);
-                setTimeout(() => {
-                    setAdded(false);
-                    clearInterval(beggin);
-                }, 5000);
-            }, 0);
-        }
-    },[isLoading])
+    const {cart,updateCart} = useUpdateCart();
 
     return <>
         {added && (
@@ -34,7 +21,15 @@ export const AddProductToCart = ({children, id,product}) => {
             </div>
         )}
         <div className={"flex justify-end w-full relative"} onClick={()=>{
-            addToCart(product)
+            console.log("add to cart", product)
+            updateCart(product,1)
+            let beggin = setInterval(() => {
+                setAdded(true);
+                setTimeout(() => {
+                    setAdded(false);
+                    clearInterval(beggin);
+                }, 2000);
+            }, 0);
         }}>
             {children}
         </div>

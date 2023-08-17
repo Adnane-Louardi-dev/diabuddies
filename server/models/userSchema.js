@@ -10,6 +10,7 @@ const userSchema = mongoose.Schema(
     givenName: { type: String, lowercase: true, trim: true },
     familyName: { type: String, lowercase: true, trim: true },
     age: Number,
+    birthdate: Date,
     email: {
       type: String,
       lowercase: true,
@@ -17,6 +18,7 @@ const userSchema = mongoose.Schema(
       match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, "Please fill a valid email address"],
     },
     homeAddress: String,
+    cityId: String,
     phoneNumber: {
       type: String,
       match: [/(\+212|0)([ \-_/]*)(\d[ \-_/]*){9}/, "Please fill a valid phone number"],
@@ -137,6 +139,7 @@ const userSchema = mongoose.Schema(
       default: false,
     },
     dailyCaloriesNeeds: Number,
+    customerId: String
   },
   { timestamps: true }
 );

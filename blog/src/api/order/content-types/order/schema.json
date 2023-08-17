@@ -1,0 +1,73 @@
+{
+  "kind": "collectionType",
+  "collectionName": "orders",
+  "info": {
+    "singularName": "order",
+    "pluralName": "orders",
+    "displayName": "order",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "customer": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::customer.customer",
+      "inversedBy": "orders"
+    },
+    "status": {
+      "type": "enumeration",
+      "enum": [
+        "NEW",
+        "PENDING",
+        "IN_TRANSIT",
+        "RETURNED",
+        "COMPLETED",
+        "CANCELLED"
+      ],
+      "default": "NEW",
+      "required": true
+    },
+    "phoneNumber": {
+      "type": "string",
+      "required": true
+    },
+    "address": {
+      "type": "string",
+      "required": true
+    },
+    "email": {
+      "type": "email"
+    },
+    "customerName": {
+      "type": "string",
+      "required": true
+    },
+    "total": {
+      "type": "decimal"
+    },
+    "subtotal": {
+      "type": "biginteger"
+    },
+    "discount": {
+      "type": "biginteger"
+    },
+    "totalItems": {
+      "type": "integer"
+    },
+    "vente_entries": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::vente-entry.vente-entry",
+      "mappedBy": "order"
+    },
+    "city": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::city.city"
+    }
+  }
+}

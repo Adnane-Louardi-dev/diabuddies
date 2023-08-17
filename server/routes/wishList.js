@@ -2,7 +2,8 @@ const express = require("express")
 const router = express.Router();
 const wishListSchema = require("../models/wishListSchema")
 const {isLoggedIn} = require("../middlewares/isLoggedIn");
-const {blogInstance, storeInstance} = require("../middlewares/blogAxios");
+const {strapiInstance, storeInstance} = require("../middlewares/blogAxios");
+const {productQuery} = require("../util/baseQueries");
 
 
 router.get("/:slug", isLoggedIn,async (req, res) => {
@@ -14,20 +15,21 @@ router.get("/:slug", isLoggedIn,async (req, res) => {
             isProduct: slug === "product",
             isBlog: slug === "blog"
         })
-        let wishedProducts;
+        let wishedItems;
         if(slug === "blog") {
-            wishedProducts = await Promise.all(wishList ?
-                wishList.map((wishItem) => blogInstance.get(`/api/articles/${wishItem.itemId}?populate=image`).then(res => res.data?.data)) :
+            wishedItems = await Promise.all(wishList ?
+                wishList.map((wishItem) => strapiInstance.get(`/api/articles/${wishItem.itemId}?populate=image`).then(res => res.data?.data)) :
                 [])
         } else {
-            wishedProducts = await Promise.all(
-                wishList ? wishList.map(item => storeInstance
-                    .get(`/products/${item.itemId}`)
-                    .then((res)=> res.data
+            wishedItems = await Promise.all(
+                wishList ? wishList.map(item => strapiInstance
+                    .get(`/api/products/${item.itemId}?${productQuery}`)
+                    .then((res)=> res.data?.data
                     )) : []
             )
         }
-        return res.status(200).json(wishedProducts)
+        console.log(wishedItems)
+        return res.status(200).json(wishedItems)
     } catch (e) {
         console.error(e)
         return res.status(404).json(e)
