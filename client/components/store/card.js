@@ -5,8 +5,8 @@ import {WishedIcon} from "./wishedIcon";
 import {ProductImage} from "./ProductImage";
 
 const Card = ({ product }) => {
-   const {name, price, image, id, assets} = product
-
+   const {name, selling_price,original_price, pictures, thumbnail} = product.attributes
+   const id = product.id
    return (
       <>
          <div className="mx-auto my-5 xs:flex rounded-xl shadow-md bg-blue-50 p-3 xs:px-3">
@@ -15,8 +15,10 @@ const Card = ({ product }) => {
 
                {/* <Carousel emulateTouch={true} showArrows={false} showThumbs={false} transitionTime={750} centerMode={true} centerSlidePercentage={100}> */}
                {/*<img src={`${image?.url}`} style={{objectFit: "cover"}} layout="fill" objectFit="cover" alt={name} />*/}
-                  <ProductImage className={"w-full h-full bg-center bg-cover"} src={image ? image.url : assets[0].url} />
                {/* </Carousel> */}
+                  {thumbnail && <ProductImage className={"w-full h-full bg-center bg-cover"}
+                                 src={thumbnail.data}
+                  />}
                </Link>
 
             </div>
@@ -26,7 +28,7 @@ const Card = ({ product }) => {
                      <div className="flex-col">
                         <h1 className="mt-0.5 w-48 text-xl">{name}</h1>
                         <div className="text-blue-700">
-                           <h1 className="my-1.5 text-xl">{price.formatted_with_code}</h1>
+                           <h1 className="my-1.5 text-xl">{selling_price} DH</h1>
                         </div>
                         {/* <div className="text-sm text-gray-400 h-10 mt-1 w-full overflow-hidden">{description}</div> */}
                      </div>

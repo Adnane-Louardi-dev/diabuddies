@@ -1,0 +1,39 @@
+{
+  "kind": "collectionType",
+  "collectionName": "vente_entries",
+  "info": {
+    "singularName": "vente-entry",
+    "pluralName": "vente-entries",
+    "displayName": "vente_entry",
+    "description": ""
+  },
+  "options": {
+    "draftAndPublish": true
+  },
+  "pluginOptions": {},
+  "attributes": {
+    "subtotal": {
+      "type": "decimal"
+    },
+    "discount": {
+      "type": "decimal"
+    },
+    "total": {
+      "type": "decimal"
+    },
+    "quantity": {
+      "type": "integer"
+    },
+    "product": {
+      "type": "relation",
+      "relation": "oneToOne",
+      "target": "api::product.product"
+    },
+    "order": {
+      "type": "relation",
+      "relation": "manyToOne",
+      "target": "api::order.order",
+      "inversedBy": "vente_entries"
+    }
+  }
+}

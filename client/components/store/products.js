@@ -4,8 +4,8 @@ import {AddProductToCart} from "./addProductToCart";
 import {WishedIcon} from "./wishedIcon";
 import {ProductImage} from "./ProductImage";
 
-export default function Product({ name, price, image, description, inventory, id,...product }) {
-
+export default function Product({id,...product}) {
+   const {name, selling_price,original_price, pictures,inventory,description, thumbnail} = product.attributes
    return (
       <>
          <div className="h-screen relative">
@@ -28,7 +28,7 @@ export default function Product({ name, price, image, description, inventory, id
             <div className=" m-5 md:flex justify-between">
                <div className="relative rounded-lg shadow-lg overflow-hidden bg-blue-300 w-full md:w-1/2 lg:w-2/5 h-80 my-10">
                   {/*<Image src={imageSrc} width={500} height={300}  alt={name} />*/}
-                  <ProductImage className={"w-full h-full bg-center bg-cover"} src={image ? image.url : assets[0].url} />
+                  {!!thumbnail.data && <ProductImage className={"w-full h-full bg-center bg-cover"} src={thumbnail.data}/>}
                </div>
                <div className="px-2 md:w-1/2 lg:w-3/5 lg:ml-14">
                   <div className="flex justify-between my-10 md:mt-14 ">
@@ -36,7 +36,9 @@ export default function Product({ name, price, image, description, inventory, id
                         <h1 className="text-3xl ">{name}</h1>
                      </div>
                      <div className="hidden sm:flex rounded-md shadow-md bg-blue-200 px-2 h-10">
-                        <div className="mt-1 text-lg mr-1 whitespace-nowrap">{`${inventory.available} available`}</div>
+                        {inventory.data && <div className="mt-1 text-lg mr-1 whitespace-nowrap">
+                           {`${inventory.data.attributes.available} available`}
+                        </div>}
                         <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" xmlnssvgjs="http://svgjs.com/svgjs" version="1.1" width="16" height="16" className="mt-2.5" x="0" y="0" viewBox="0 0 512 512" style={{ enableBackground: "new 0 0 512 512" }} xmlSpace="preserve">
                            <g>
                               <path xmlns="http://www.w3.org/2000/svg" d="m512 256c0 141.386719-114.613281 256-256 256s-256-114.613281-256-256 114.613281-256 256-256 256 114.613281 256 256zm0 0" fill="#a7f3d0" />
@@ -63,7 +65,7 @@ export default function Product({ name, price, image, description, inventory, id
                   </button>
                   <div className="inline-flex justify-center">
                      <div className="px-3 py-1 text-blue-700">
-                        <h1 className="text-xl mt-0.5 whitespace-nowrap">{price.formatted_with_code}</h1>
+                        <h1 className="text-xl mt-0.5 whitespace-nowrap">{selling_price} DH</h1>
                      </div>
                      <AddProductToCart id={id} product={product}>
                         <button type="submit" className="inline-flex text-white h-10 w-32 bg-yellow-500 hover:bg-yellow-400 hover:text-gray-100 px-3 py-2 rounded-md">

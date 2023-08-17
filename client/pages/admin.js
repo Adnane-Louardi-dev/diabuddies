@@ -6,15 +6,13 @@ import {useMutation, useQuery, useQueryClient} from "@tanstack/react-query";
 import axios from "axios";
 import LoadingCircle from "../components/loadingCircle";
 import {ProductImage} from "../components/store/ProductImage";
-import {Button} from "@mui/material";
-import React, {useState} from "react";
+import React from "react";
 import {orderStatusEnum} from "../utils/enums";
 import {getStatusColor} from "../utils/getColors";
 import FormControl from "@mui/material/FormControl";
 import InputLabel from "@mui/material/InputLabel";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import CircularProgress from "@mui/material/CircularProgress";
 
 function Admin() {
 
@@ -80,28 +78,30 @@ function Admin() {
                                         <div className="text-sm text-gray-900">PhoneNumber: {order.phoneNumber}</div>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
-                                        {cart.line_items.map((product,index) => (
+                                        {cart.venteEntries.map(({product, quantity, total},index) => (
                                                 <React.Fragment key={product.id}>
                                                     <div className="flex items-center my-3">
                                                         <div className="relative flex-shrink-0 h-10 w-10 shadow-sm">
                                                             <ProductImage className={"w-full h-full bg-center bg-cover"}
-                                                                          src={product.image ? product.image.url : product.assets[0]?.url}/>
+                                                                          src={product.thumbnail.src}/>
                                                         </div>
                                                         <div className="ml-4 w-full text-gray-900 text-sm font-medium ">
                                                             <p>{product.name}</p>
-                                                            <p className={"pt-1"}>Total Produit: {product.quantity} * {product.price.raw} = <span className={"text-blue-700"}>{product.line_total.raw} DH</span></p>
+                                                            <p className={"pt-1"}>
+                                                                <span>Total Produit: {quantity} * {product.selling_price} = </span>
+                                                                <span className={"text-blue-700"}>{total} DH</span></p>
                                                         </div>
                                                     </div>
-                                                    {index !== cart.line_items.length - 1 && <hr/>}
+                                                    {index !== cart.venteEntries.length - 1 && <hr/>}
                                                 </React.Fragment>
                                             )
                                         )}
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
-                                        <div className="text-sm text-gray-900">{cart.total_items}</div>
+                                        <div className="text-sm text-gray-900">{cart.totalItems}</div>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
-                                        <div className="text-sm text-gray-900">{cart.subtotal.raw} DH</div>
+                                        <div className="text-sm text-gray-900">{cart.total} DH</div>
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap">
                                         <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-${getStatusColor(order.status)[0]} text-${getStatusColor(order.status)[1]}`}>

@@ -16,7 +16,9 @@ const wishList = require("./routes/wishList");
 const order = require("./routes/order");
 const articles = require("./routes/articles");
 const comments = require("./routes/comments");
+const store = require("./routes/store");
 const aiAssistant = require("./routes/aiAssistant");
+const {strapiInstance} = require("./middlewares/blogAxios");
 //DB connect
 const DBConnection =
   process.env.DB_CONNECTION ||
@@ -56,6 +58,7 @@ app.use("/orders", order);
 app.use("/articles", articles);
 app.use("/comments", comments);
 app.use("/aiAssistant", aiAssistant);
+app.use("/store", store);
 
 app.get("/logout", function (req, res) {
   req.session.destroy(function (err) {

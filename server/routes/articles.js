@@ -1,5 +1,5 @@
 const express = require("express");
-const {blogInstance} = require("../middlewares/blogAxios");
+const {strapiInstance} = require("../middlewares/blogAxios");
 const router = express.Router();
 const commentSchema = require("../models/commentSchema")
 const qs = require("qs")
@@ -18,7 +18,7 @@ router.get('/:id',async (req,res)=>{
                 }
             }
         )
-        const {data} = await blogInstance.get(`/api/articles/${id}?${query}`)
+        const {data} = await strapiInstance.get(`/api/articles/${id}?${query}`)
         const article = {id: data.data.id, ...data.data.attributes}
         article.image = article.image.data ? article.image.data.attributes : null
         article.author = article.author.data ? article.author.data.attributes : null
@@ -39,7 +39,7 @@ router.get('/:id',async (req,res)=>{
                     id: article.author?.id
                 }
             }
-        const relatedArticles = await blogInstance.get(`/api/articles?${
+        const relatedArticles = await strapiInstance.get(`/api/articles?${
             qs.stringify({
                 filters: relatedTopicsFilter,
                 populate: ["image"],
