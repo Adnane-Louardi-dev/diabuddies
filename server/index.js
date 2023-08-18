@@ -14,13 +14,14 @@ const user = require("./routes/user");
 const charts = require("./routes/charts");
 const wishList = require("./routes/wishList");
 const order = require("./routes/order");
-const articles = require("./routes/articles");
 const comments = require("./routes/comments");
 const store = require("./routes/store");
+const blog = require("./routes/blog");
 const aiAssistant = require("./routes/aiAssistant");
-const { strapiInstance } = require("./middlewares/blogAxios");
 //DB connect
-const DBConnection = process.env.DB_CONNECTION || `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.dgq8q.mongodb.net/?retryWrites=true&w=majority&ssl=true`;
+const DBConnection =
+  process.env.DB_CONNECTION ||
+  `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.dgq8q.mongodb.net/?retryWrites=true&w=majority&ssl=true`;
 mongoose.connect(DBConnection, () => console.log("DB connected!"));
 
 //middleswares
@@ -53,7 +54,7 @@ app.use("/user", user);
 app.use("/charts", charts);
 app.use("/wishList", wishList);
 app.use("/orders", order);
-app.use("/articles", articles);
+app.use("/blog", blog);
 app.use("/comments", comments);
 app.use("/aiAssistant", aiAssistant);
 app.use("/store", store);

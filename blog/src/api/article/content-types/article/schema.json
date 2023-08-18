@@ -33,11 +33,6 @@
         "images"
       ]
     },
-    "views": {
-      "type": "biginteger",
-      "default": "0",
-      "min": "0"
-    },
     "author": {
       "type": "relation",
       "relation": "oneToOne",
@@ -45,14 +40,8 @@
     },
     "categories": {
       "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::categorie.categorie",
-      "inversedBy": "articles"
-    },
-    "articles": {
-      "type": "relation",
       "relation": "oneToMany",
-      "target": "api::article.article"
+      "target": "api::categorie.categorie"
     }
   }
 }

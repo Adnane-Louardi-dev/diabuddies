@@ -15,12 +15,6 @@
     "name": {
       "type": "string",
       "required": true
-    },
-    "articles": {
-      "type": "relation",
-      "relation": "manyToMany",
-      "target": "api::article.article",
-      "mappedBy": "categories"
     }
   }
 }

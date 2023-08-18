@@ -10,13 +10,13 @@ import Avatar from "@mui/material/Avatar";
 import Link from "next/link";
 import Tooltip from "@mui/material/Tooltip";
 import MenuItem from "@mui/material/MenuItem";
-import { Icon } from "@iconify/react";
-import { Logo } from "./Logo";
-import { useGetCurrentUser } from "../customeHooks/useGetCurrentUser";
-import { Button, Input } from "@mui/material";
-import { CloseIcon } from "next/dist/client/components/react-dev-overlay/internal/icons/CloseIcon";
+import {Icon} from "@iconify/react";
+import {Logo} from "./Logo";
+import {useGetCurrentUser} from "../customeHooks/useGetCurrentUser";
+import {Button, Input} from "@mui/material";
+import {CloseIcon} from "next/dist/client/components/react-dev-overlay/internal/icons/CloseIcon";
 import axios from "axios";
-import { useMutation } from "@tanstack/react-query";
+import {useMutation} from "@tanstack/react-query";
 
 const appBarItems = [
   {
@@ -75,16 +75,10 @@ function ResponsiveAppBar() {
 
   const { mutate: askAI, isLoading } = useMutation({
     mutationFn: (userQuestion) => {
-      return axios.post(
-        "/api/aiAssistant/assistant",
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          },
-        },
-        { userInputs: [...discussion, userQuestion] }
-      );
+      return axios.post("/api/aiAssistant/assistant",
+      {
+              userInputs: [...discussion, userQuestion]
+            });
     },
     onMutate: (userQuestion) => {
       setUserQuestion("");

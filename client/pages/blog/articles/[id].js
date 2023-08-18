@@ -4,7 +4,7 @@ import LoadingCircle from "../../../components/loadingCircle";
 import Container from "@mui/material/Container";
 import ResponsiveAppBar from "../../../components/ResponsiveAppBar";
 import {Article} from "../../../components/blog/article";
-import {blogAxios} from "../../../lib/blogAuthConfig";
+import axios from "axios";
 
 
 export default function Post() {
@@ -13,7 +13,7 @@ export default function Post() {
     const {data:article, isLoading} = useQuery({
         queryKey: ["article",id],
         queryFn:async () => {
-            const {data} = await blogAxios.get(`/api/articles/${id}`)
+            const {data} = await axios.get(`/api/blog/article/${id}`)
             return data
         },
         enabled: router.isReady
@@ -22,11 +22,11 @@ export default function Post() {
     if(isLoading) {
         return <LoadingCircle />
     }
-
+    console.log("article", article)
     return <Container maxWidth={"xl"}>
         <ResponsiveAppBar />
 
-        <Article id={article.id} {...article} />
+        <Article id={article.data.id} relatedArticles={article.relatedArticles} {...article.data.attributes} />
 
     </Container>
 }

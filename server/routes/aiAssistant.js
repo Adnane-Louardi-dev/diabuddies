@@ -31,6 +31,7 @@ router.post("/assistant",isLoggedIn,async (req,res)=>{
         });
         res.status(201).json({assistantOutput: chatCompletion.data.choices[0].message})
     } catch (e) {
+        console.log(e)
         res.status(404).json({assistantOutput: "There was an errore with the api", ...e})
     }
 })

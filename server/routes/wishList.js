@@ -28,7 +28,6 @@ router.get("/:slug", isLoggedIn,async (req, res) => {
                     )) : []
             )
         }
-        console.log(wishedItems)
         return res.status(200).json(wishedItems)
     } catch (e) {
         console.error(e)
