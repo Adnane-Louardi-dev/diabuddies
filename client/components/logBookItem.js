@@ -17,6 +17,7 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
 import { Alert, Snackbar } from "@mui/material";
+import { Icon } from "@iconify/react";
 
 const LogBookItem = ({ props }) => {
   const [data, setData] = useState(props);
@@ -54,67 +55,56 @@ const LogBookItem = ({ props }) => {
   };
 
   return (
-    <Accordion
-      className="my-3 px-none border-none rounded-xl"
-      sx={{
-        "&:before": {
-          display: "none",
-        },
-      }}
-    >
-      <AccordionSummary className="border-none rounded-xl shadow-md" expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content" id="panel1a-header">
-        <Box sx={{ display: "flex" }}>
-          <CircularProgress hidden={!isLoading} />
-        </Box>
-        <Snackbar open={notificationOpen} autoHideDuration={6000} onClose={handleClose}>
-          <Alert onClose={handleClose} severity={isError ? "danger" : "warning"} sx={{ width: "100%" }}>
-            {isError ? "There was an error while deleting log book" : "Log book was deleted successfully"}
-          </Alert>
-        </Snackbar>
-        <div className="self-center flex items-center mx-2 bg-diaBlue h-10 w-10 rounded-xl shadow-md">{data.meal ? data.meal === "breakfast" ? <Breakfast /> : data.meal === "lunch" ? <Lunch /> : data.meal === "dinner" ? <Dinner /> : data.meal === "snack" ? <Snack /> : <Glucose /> : <Other />}</div>
-        <div className="mx-2">
-          <p className="font-rubik font-bold truncate overflow-hidden">{data.meal}</p>
-          <p className="font-rubik text-sm text-diaGray">{`${moment(data.time).format("HH:mm")}`}</p>
+    <>
+      <Box sx={{ display: "flex" }}>
+        <CircularProgress hidden={!isLoading} />
+      </Box>
+      <Snackbar open={notificationOpen} autoHideDuration={6000} onClose={handleClose}>
+        <Alert onClose={handleClose} severity={isError ? "danger" : "warning"} sx={{ width: "100%" }}>
+          {isError ? "There was an error while deleting log book" : "Log book was deleted successfully"}
+        </Alert>
+      </Snackbar>
+
+      <div className="grid grid-cols-6 gap-5 p-3 rounded-lg shadow-lg border-r-4 border-diaOrange bg-white">
+        <div className="self-start col-span-1 flex items-center p-1 bg-diaOrange h-12 w-12 rounded-full shadow-md">{data.meal ? data.meal === "breakfast" ? <Breakfast /> : data.meal === "lunch" ? <Lunch /> : data.meal === "dinner" ? <Dinner /> : data.meal === "snack" ? <Snack /> : <Glucose /> : <Other />}</div>
+        <div className="grid gap-2 col-span-5">
+          <div className="flex justify-between items-center">
+            <h4 className="font-sourceCode font-bold text-diaDarkBlue text-lg">{data.meal}</h4>
+            <div className="flex items-center justify-center">
+              <span className="mr-1 p-0.5 h-6 w-6 rounded-lg">
+                <Icon icon="tabler:clock" className="h-5 w-5 text-diaDarkBlue" />
+              </span>
+              <span className="font-rubik text-sm">{`${moment(data.time).format("HH:mm")}`}</span>
+            </div>
+          </div>
+          {data.glucose && (
+            <div className="flex items-center justify-between">
+              <div className={`flex items-center justify-center mr-3 p-1 text-white rounded-lg bg-${data.glucose >= 180 ? "diaRed" : data.glucose <= 70 ? "diaBlue" : "diaGreen"}`}>
+                <Icon icon="ph:drop" className="mx-1" />
+                <span className="font-sourceCode">{`${data.glucose} mg/dL`}</span>
+              </div>
+              <span className="text-diaGray font-rubik font-semibold text-xs">Range: 70-180 mg/dL</span>
+            </div>
+          )}
+          <div className="flex items-center justify-between">
+            {data.carbs && (
+              <div className="flex items-center justify-center p-1 text-white rounded-lg bg-diaDarkBlue">
+                <Icon icon="fluent:food-grains-20-regular" className="mx-1" />
+                <span className="font-sourceCode text-xs">Carbs</span>
+                <span className="font-sourceCode font-bold mx-2">{`${data.carbs} g`}</span>
+              </div>
+            )}
+            {data.basal && (
+              <div className="flex items-center justify-center p-1 text-white rounded-lg bg-diaOrange">
+                <Icon icon="fluent:food-grains-20-regular" className="mx-1" />
+                <span className="font-sourceCode text-xs">Basal</span>
+                <span className="font-sourceCode font-bold mx-2">{`${data.basal} UI`}</span>
+              </div>
+            )}
+          </div>
         </div>
-      </AccordionSummary>
-      <AccordionDetails className="rounded-xl">
-        <TableContainer component={Paper} className="shadow-none">
-          <Table aria-label="simple table" className="border-separate border-spacing-y-3">
-            <TableBody className="">
-              {data.glucose ? (
-                <TableRow className=" rounded-lg" sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-                  <TableCell component="th" scope="row" className="border-2 border-diaBlue border-r-0 rounded-xl rounded-r-none font-poppins">
-                    glucose(mg/dL)
-                  </TableCell>
-                  <TableCell align="right" className="border-2 border-diaBlue border-l-0 rounded-xl rounded-l-none font-inter font-semibold">
-                    {data.glucose}
-                  </TableCell>
-                </TableRow>
-              ) : null}
-              {data.carbs ? (
-                <TableRow className=" rounded-lg" sx={{ "&:last-child td, &:last-child th": { border: 0 } }}>
-                  <TableCell component="th" scope="row" className="border-2 border-diaBlue border-r-0 rounded-xl rounded-r-none font-poppins">
-                    Carbohydrates(g)
-                  </TableCell>
-                  <TableCell align="right" className="border-2 border-diaBlue border-l-0 rounded-xl rounded-l-none font-inter font-semibold">
-                    {data.carbs}
-                  </TableCell>
-                </TableRow>
-              ) : null}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <Button
-          onClick={async () => {
-            await deleteLog(data);
-          }}
-          variant="filled"
-          className="flex justify-center px-2 mx-4 font-rubik text-white bg-diaGray hover:bg-opacity-75 rounded-lg shadow-md"
-        >
-          delete
-        </Button>
-      </AccordionDetails>
-    </Accordion>
+      </div>
+    </>
   );
 };
 

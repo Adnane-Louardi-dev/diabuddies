@@ -3,11 +3,10 @@ import { Button, Chip } from "@mui/material";
 import advice from "../utils/advice.json" assert { type: "json" };
 import { useState, useEffect } from "react";
 const Advice = () => {
-  const [RandomIndex, setRandomIndex] = useState(Math.floor(Math.random() * advice.length + 1));
+  const [RandomIndex, setRandomIndex] = useState(Math.floor(Math.random() * advice.length));
   const [choosenAdvice, setchoosenAdvice] = useState(advice[RandomIndex]);
   useEffect(() => {
     setchoosenAdvice(advice[RandomIndex]);
-    console.log(RandomIndex);
   }, [RandomIndex]);
   return (
     <section className="p-2">

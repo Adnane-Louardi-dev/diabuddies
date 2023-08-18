@@ -1,9 +1,9 @@
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import moment from "moment";
-import {useRouter} from "next/router";
+import { useRouter } from "next/router";
 import ResponsiveAppBar from "../components/ResponsiveAppBar";
 import Glucose from "../components/glucose";
 import ActiveInsulin from "../components/activeInsulin";
@@ -14,16 +14,16 @@ import LineChartGraph from "../components/charts/lineChartGraph";
 import PiGraph from "../components/charts/piGraph";
 import BarGraph from "../components/charts/barGraph";
 import DayPicker from "../components/dayPicker";
-import {Icon} from "@iconify/react";
+import { Icon } from "@iconify/react";
 import Head from "next/head";
-import {useQuery} from "@tanstack/react-query";
-import {useGetCurrentUser} from "../customeHooks/useGetCurrentUser";
+import { useQuery } from "@tanstack/react-query";
+import { useGetCurrentUser } from "../customeHooks/useGetCurrentUser";
 import CompleteYourProfile from "../components/completeYourProfile";
-import {blogAxios} from "../lib/blogAuthConfig";
-import {SmallArticle} from "../components/blog/smallArticle";
+import { blogAxios } from "../lib/blogAuthConfig";
+import { SmallArticle } from "../components/blog/smallArticle";
 import Card from "../components/store/card";
 import CalculateInsulinDose from "../components/calculateInsulinDose";
-import {Button} from "@mui/material";
+import { Button } from "@mui/material";
 import Advice from "../components/advice";
 
 export default function Home() {
@@ -45,9 +45,10 @@ export default function Home() {
   const { data: products, isLoading: isProductsLoading } = useQuery({
     queryKey: ["products", 3],
     queryFn: async () => {
-      const {data} = await axios.get("/api/store/products/3")
-      return data.data
-    }})
+      const { data } = await axios.get("/api/store/products/");
+      return data.data;
+    },
+  });
   const {
     isLoading,
     data: Data,
@@ -94,7 +95,7 @@ export default function Home() {
 
             <>
               <section className="flex justify-around my-5">
-                <Glucose props={Data.logBook} setglucose={setglucose} />
+                <Glucose props={Data?.logBook} setglucose={setglucose} />
                 <ActiveInsulin props={Data?.logBook} activeInsulin={activeInsulin} setActiveInsulin={setActiveInsulin} lastInjectionTime={lastInjectionTime} setlastInjectionTime={setlastInjectionTime} />
               </section>
             </>
@@ -110,9 +111,9 @@ export default function Home() {
               </div>
               <NewLogDialog />
             </div>
-            <section className="w-full mb-8 shadow-md p-4 bg-white rounded-2xl">
+            <section className="w-full mb-8 shadow-md bg-white rounded-2xl">
               {Data.logBook[0] ? (
-                <div className="my-5 h-full overflow-scroll">
+                <div className="grid gap-3 overflow-scroll">
                   {Data.logBook.map((log) => {
                     return <LogBookItem props={log} key={log._id} />;
                   })}
@@ -215,7 +216,7 @@ export default function Home() {
                     </div>
                     <div className={"shadow-2xl p-4 bg-white rounded-2xl mb-8 pb-8"}>
                       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                        {products.map((product) => (
+                        {products?.map((product) => (
                           <Card product={product} key={product.id} />
                         ))}
                       </div>
