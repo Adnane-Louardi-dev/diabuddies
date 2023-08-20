@@ -1,5 +1,5 @@
 import { Icon } from "@iconify/react";
-import { Button, Chip } from "@mui/material";
+import { Chip } from "@mui/material";
 import advice from "../utils/advice.json" assert { type: "json" };
 import { useState, useEffect } from "react";
 const Advice = () => {

@@ -1,10 +1,9 @@
 import moment from "moment";
-import Image from "next/image";
 import NewLogDialog from "./newLogDialog";
 import { Icon } from "@iconify/react";
 import { useEffect, useState } from "react";
 
-const Glucose = ({ props, glucose, setGlucose }) => {
+const Glucose = ({ props, setGlucose }) => {
   const [localGlucose, setLocalGlucoseLog] = useState(undefined);
   const calculateLocalGlucose=()=>{
     props.forEach((element) => {

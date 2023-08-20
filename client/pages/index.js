@@ -51,7 +51,6 @@ export default function Home() {
   const {
     isLoading,
     data: Data,
-    error,
     refetch,
   } = useQuery({
     queryKey: ["indexChart"],

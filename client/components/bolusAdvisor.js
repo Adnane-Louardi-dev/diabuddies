@@ -1,5 +1,4 @@
 import React from "react";
-import { Button } from "@mui/material";
 import carbs_counting from "../public/carbs-counting.png";
 import CarbsCountingDialog from "./carbsCountingDialog";
 const BolusAdvisor = ({ activeInsulin, glucose, lastInjectionTime }) => {

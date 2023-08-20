@@ -3,7 +3,7 @@ import { Icon } from "@iconify/react";
 import { useState, useEffect } from "react";
 
 const ActiveInsulin = ({ props, setActiveInsulin, activeInsulin, lastInjectionTime, setlastInjectionTime }) => {
-  const [Data, setData] = useState(props);
+  const [Data] = useState(props);
   const userInsulinDurationInSystem = 3 * 60 * 60 * 1000;
   const [LocalActiveInsulin, setLocalActiveInsulin] = useState(activeInsulin);
   useEffect(() => {

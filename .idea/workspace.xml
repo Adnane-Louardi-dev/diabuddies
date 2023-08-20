@@ -4,20 +4,17 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="47d41590-a06d-4130-8666-cd245f35a61d" name="Changes" comment="">
+    <list default="true" id="47d41590-a06d-4130-8666-cd245f35a61d" name="Changes" comment="improve UI">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/components/ResponsiveAppBar.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/components/ResponsiveAppBar.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/components/activeInsulin.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/components/activeInsulin.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/components/advice.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/components/advice.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/components/calculateInsulinDose.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/components/bolusAdvisor.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/components/bolusAdvisor.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/components/bolusAdvisor.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/components/carbsCountingDialog.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/components/carbsCountingDialog.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/components/glucose.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/components/glucose.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/components/logBookItem.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/components/logBookItem.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/components/newLogDialog.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/components/newLogDialog.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/pages/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/pages/index.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/pages/logout.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/pages/logout.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/public/service-worker.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/client/public/service-worker.js.map" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/middlewares/blogAxios.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/middlewares/blogAxios.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -108,8 +105,16 @@
       <workItem from="1689409188931" duration="1005000" />
       <workItem from="1689413198214" duration="5795000" />
       <workItem from="1692380989930" duration="4339000" />
-      <workItem from="1692555339625" duration="5414000" />
+      <workItem from="1692555339625" duration="6194000" />
     </task>
+    <task id="LOCAL-00001" summary="improve UI">
+      <created>1692561288369</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1692561288369</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -125,5 +130,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="improve UI" />
+    <option name="LAST_COMMIT_MESSAGE" value="improve UI" />
   </component>
 </project>

@@ -1,4 +1,5 @@
-import { useState, useEffect } from "react";
+import * as React from "react";
+import {useEffect, useState} from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -6,16 +7,11 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { Icon } from "@iconify/react";
+import {Icon} from "@iconify/react";
 import ReduceFactors from "./reduceFactors";
-import { useGetCurrentUser } from "../customeHooks/useGetCurrentUser";
+import {useGetCurrentUser} from "../customeHooks/useGetCurrentUser";
 import moment from "moment";
 import Link from "next/link";
-import Accordion from "@mui/material/Accordion";
-import AccordionSummary from "@mui/material/AccordionSummary";
-import AccordionDetails from "@mui/material/AccordionDetails";
-import Typography from "@mui/material/Typography";
-import * as React from "react";
 import InputAdornment from "@mui/material/InputAdornment";
 
 function CalculatingBolus(carbs, ratio, InsulinSensitivity, IOBcarb, glucose) {
@@ -24,8 +20,7 @@ function CalculatingBolus(carbs, ratio, InsulinSensitivity, IOBcarb, glucose) {
     target = 120,
     Glucose = glucose,
     localCarbs = carbs || 0,
-    correction = (Glucose - target) / InsulinSensitivity,
-    bolus = localCarbs / ratio + correction;
+    correction = (Glucose - target) / InsulinSensitivity;
   if (Glucose > target && correction <= IOBcarb) {
     correction = -IOBcorr;
   }
@@ -35,14 +30,14 @@ function CalculatingBolus(carbs, ratio, InsulinSensitivity, IOBcarb, glucose) {
   if (Glucose <= target) {
     correction -= IOBcorr;
   }
-  return bolus;
+  return localCarbs / ratio + correction;
 }
 
 const CarbsCountingDialog = ({ activeInsulinProp, glucose, lastInjectionTime }) => {
   const { user } = useGetCurrentUser();
   const [localGlucose, setGlucose] = useState(glucose && user.normalBloodGlucose.min);
   const [activeInsulin, setActiveInsulin] = useState(0);
-  const [localLastInjectionTime, setlocalLastInjectionTime] = useState(lastInjectionTime);
+  const [localLastInjectionTime] = useState(lastInjectionTime);
   const [carbsRatio, setcarbsRatio] = useState(user.carbsRatio);
   const [insulinSensitivity, setinsulinSensitivity] = useState(user.insulinSensitivity.value);
   const [reduceLevel, setreduceLevel] = useState(0);
@@ -51,7 +46,7 @@ const CarbsCountingDialog = ({ activeInsulinProp, glucose, lastInjectionTime }) 
     .add(actingTime * 60, "minutes")
     .format();
   let diffBetweenNowAndLastInjection = moment().diff(localLastInjectionTime, "minutes");
-  const [NextMealTimer, setNextMealTimer] = useState(
+  const [NextMealTimer] = useState(
     diffBetweenNowAndLastInjection >= actingTime * 60 ? "Now" : moment(actingTimeDateFormat).startOf("minute").fromNow()
   );
   const [Macros, setMacros] = useState({
@@ -109,7 +104,7 @@ const CarbsCountingDialog = ({ activeInsulinProp, glucose, lastInjectionTime }) 
               </div>
               <div className="flex w-full mx-3 p-4 rounded-md shadow-lg">
                 <Icon icon="mingcute:time-fill" className="text-diaRed rounded-full self-center mr-2 p-1 h-10 w-10" />
-                {NextMealTimer != 0 ? (
+                {NextMealTimer !== 0 ? (
                   <div className="grid">
                     <span className="self-center font-rubik text-2xs text-diaGray">next meal's</span>
                     <span className="self-center font-rubik text-sm">{NextMealTimer}</span>
@@ -122,7 +117,7 @@ const CarbsCountingDialog = ({ activeInsulinProp, glucose, lastInjectionTime }) 
               </div>
             </section>
             <section className="px-2 mb-5">
-              {activeInsulin != 0 ? (
+              {activeInsulin !== 0 ? (
                 <div className="flex items-center px-2 rounded-lg bg-diaRed shadow-md">
                   <Icon icon="ph:warning" className="h-10 w-10 text-white m-1" />
                   <span className="mx-2 w-full text-xs font-poppins text-white">It's recommended to wait until your blood stream is out of bolus insulin.</span>

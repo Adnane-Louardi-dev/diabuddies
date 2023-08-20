@@ -88,7 +88,7 @@ function ResponsiveAppBar() {
       console.log("result", result);
       setDiscussion([...discussion, result.data.assistantOutput]);
     },
-    onError: (error, variables) => {
+    onError: (error) => {
       console.error(error);
       setDiscussion([
         ...discussion,
