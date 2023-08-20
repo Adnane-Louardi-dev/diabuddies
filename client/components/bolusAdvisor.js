@@ -2,7 +2,7 @@ import React from "react";
 import { Button } from "@mui/material";
 import carbs_counting from "../public/carbs-counting.png";
 import CarbsCountingDialog from "./carbsCountingDialog";
-const CalculateInsulinDose = ({ activeInsulin, glucose, lastInjectionTime }) => {
+const BolusAdvisor = ({ activeInsulin, glucose, lastInjectionTime }) => {
   return (
     <div className="my-5">
       <div
@@ -23,4 +23,4 @@ const CalculateInsulinDose = ({ activeInsulin, glucose, lastInjectionTime }) => 
   );
 };
 
-export default CalculateInsulinDose;
+export default BolusAdvisor;

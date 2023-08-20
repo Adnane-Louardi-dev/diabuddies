@@ -15,6 +15,8 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import Typography from "@mui/material/Typography";
+import * as React from "react";
+import InputAdornment from "@mui/material/InputAdornment";
 
 function CalculatingBolus(carbs, ratio, InsulinSensitivity, IOBcarb, glucose) {
   let IOBcorr = 0,
@@ -50,7 +52,7 @@ const CarbsCountingDialog = ({ activeInsulinProp, glucose, lastInjectionTime }) 
     .format();
   let diffBetweenNowAndLastInjection = moment().diff(localLastInjectionTime, "minutes");
   const [NextMealTimer, setNextMealTimer] = useState(
-    diffBetweenNowAndLastInjection > actingTime * 60 ? "Now" : moment(actingTimeDateFormat).startOf("minute").fromNow()
+    diffBetweenNowAndLastInjection >= actingTime * 60 ? "Now" : moment(actingTimeDateFormat).startOf("minute").fromNow()
   );
   const [Macros, setMacros] = useState({
     carbs: 0,
@@ -98,15 +100,15 @@ const CarbsCountingDialog = ({ activeInsulinProp, glucose, lastInjectionTime }) 
               </section>
             ) : null}
             <section className="flex justify-around my-5">
-              <div className="flex w-full mx-2 p-4 bg-gray-200 rounded-md shadow-sm">
-                <Icon icon="fluent:syringe-20-regular" className="bg-white text-diaBlue rounded-full self-center mr-2 p-1 h-10 w-10" />
+              <div className="flex w-full mx-2 p-4 rounded-md shadow-lg">
+                <Icon icon="fluent:syringe-20-regular" className="text-diaBlue rounded-full self-center mr-2 p-1 h-10 w-10" />
                 <div className="grid">
                   <span className="self-center font-rubik text-2xs text-diaGray">Active Insulin</span>
                   <span className="self-center font-rubik text-md">{activeInsulin.toFixed(2)} UI</span>
                 </div>
               </div>
-              <div className="flex w-full mx-3 p-4 bg-gray-200 rounded-md shadow-sm">
-                <Icon icon="mingcute:time-fill" className="bg-white text-diaRed rounded-full self-center mr-2 p-1 h-10 w-10" />
+              <div className="flex w-full mx-3 p-4 rounded-md shadow-lg">
+                <Icon icon="mingcute:time-fill" className="text-diaRed rounded-full self-center mr-2 p-1 h-10 w-10" />
                 {NextMealTimer != 0 ? (
                   <div className="grid">
                     <span className="self-center font-rubik text-2xs text-diaGray">next meal's</span>
@@ -201,120 +203,104 @@ const CarbsCountingDialog = ({ activeInsulinProp, glucose, lastInjectionTime }) 
             </section>
 
             <section className="grid gap-3 my-5">
-              <div className="flex justify-between rounded-xl shadow-md items-center bg-gray-200 p-2">
-                <span className="mx-7">Glucose({user.unit})</span>
+              <div>
+                <h3 className="font-sourceCode text-diaGray my-2">Glucose</h3>
                 <TextField
-                  id="standard-number"
-                  type="number"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  variant="standard"
-                  className="w-16 mx-7"
-                  placeholder={"00"}
-                  onChange={(newGlucoseValue) => setGlucose(parseFloat(newGlucoseValue.target.value))}
-                  sx={{
-                    "& .MuiInputBase-input": {
-                      fontSize: 16,
-                      fontStyle: "bold",
+                    id="outlined-number"
+                    type="tel"
+                    variant="standard"
+                    placeholder="0"
+                    sx={{
+                      paddingX: "10px",
                       textAlign: "center",
-                    },
-                  }}
+                      borderRadius: "15px",
+                      backgroundColor: "#334155",
+                      width: "full",
+                      "& .MuiInputBase-root::after, .MuiInputBase-root::before": {
+                        display: "none",
+                      },
+                      "& .MuiInputBase-input": {
+                        fontSize: 25,
+                        fontStyle: "bold",
+                        width: "full",
+                      },
+                    }}
+                    InputProps={{
+                      startAdornment: (
+                          <InputAdornment
+                              position="start"
+                              sx={{
+                                "& .MuiTypography-root": {
+                                  display: "flex",
+                                },
+                                marginRight: 3,
+                                fontSize: 12,
+                                color: "white",
+                              }}
+                          >
+                            <Icon icon="ph:drop-light" className="text-white mx-1 h-5 w-5" />
+                            Glucose({user.unit})
+                          </InputAdornment>
+                      ),
+                      style: {
+                        color: "white",
+                      },
+                    }}
+                    onChange={(newGlucoseValue) => setGlucose(parseFloat(newGlucoseValue.target.value))}
+
                 />
               </div>
-              <h3 className="font-sourceCode text-diaGray">Macros</h3>
-              <div className="flex justify-between rounded-xl shadow-md items-center bg-gray-200 p-2">
-                <span className="mx-7">Carbs(g)</span>
-                <TextField
-                  id="standard-number"
-                  type="number"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
+
+<div>
+
+
+              <h3 className="font-sourceCode text-diaGray my-2">Macros</h3>
+              <TextField
+                  id="outlined-number"
+                  type="tel"
                   variant="standard"
-                  className="w-16 mx-7"
-                  placeholder={"00"}
+                  placeholder="0"
+                  sx={{
+                    paddingX: "10px",
+                    textAlign: "center",
+                    borderRadius: "15px",
+                    backgroundColor: "#334155",
+                    width: "full",
+                    "& .MuiInputBase-root::after, .MuiInputBase-root::before": {
+                      display: "none",
+                    },
+                    "& .MuiInputBase-input": {
+
+                      fontSize: 25,
+                      fontStyle: "bold",
+                      width: "full",
+                      marginX:5
+                    },
+                  }}
+                  InputProps={{
+                    startAdornment: (
+                        <InputAdornment
+                            position="start"
+                            sx={{
+                              "& .MuiTypography-root": {
+                                display: "flex",
+                              },
+                              marginRight: 3,
+                              fontSize: 12,
+                              color: "white",
+                            }}
+                        >
+                          <Icon icon="ph:drop-light" className="text-white mx-1 h-5 w-5" />
+                          Carbs(g)
+                        </InputAdornment>
+                    ),
+                    style: {
+                      color: "white",
+                    },
+                  }}
                   onChange={(newCarbsValue) => setMacros({ ...Macros, carbs: parseFloat(newCarbsValue.target.value) })}
-                  sx={{
-                    "& .MuiInputBase-input": {
-                      fontSize: 16,
-                      fontStyle: "bold",
-                      textAlign: "center",
-                    },
-                  }}
-                />
-              </div>
-              {/* <div className="flex justify-between rounded-xl shadow-md items-center bg-gray-200 p-2">
-                <span className="mx-7">Protein(g)</span>
-                <TextField
-                  id="standard-number"
-                  type="number"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  variant="standard"
-                  className="w-16 mx-7"
-                  placeholder={"00"}
-                  onChange={(newProteinValue) => setMacros({ ...Macros, protein: parseFloat(newProteinValue.target.value) })}
-                  sx={{
-                    "& .MuiInputBase-input": {
-                      fontSize: 16,
-                      fontStyle: "bold",
-                      textAlign: "center",
-                    },
-                  }}
-                />
-              </div>
-              <div className="flex justify-between rounded-xl shadow-md items-center bg-gray-200 p-2">
-                <span className="mx-7">Fat(g)</span>
-                <TextField
-                  id="standard-number"
-                  type="number"
-                  InputLabelProps={{
-                    shrink: true,
-                  }}
-                  variant="standard"
-                  className="w-16 mx-7"
-                  placeholder={"00"}
-                  onChange={(newFatValue) => setMacros({ ...Macros, fat: parseFloat(newFatValue.target.value) })}
-                  sx={{
-                    "& .MuiInputBase-input": {
-                      fontSize: 16,
-                      fontStyle: "bold",
-                      textAlign: "center",
-                    },
-                  }}
-                />
-              </div> */}
-              {/* <Accordion className="my-5">
-              <AccordionSummary aria-controls="panel1a-content" id="panel1a-header" className="grid items-center">
-                <Icon icon="ic:round-expand-more" className="h-7 w-7 text-diaGray" />
-              </AccordionSummary>
-              <AccordionDetails className="grid gap-2">
-                <div className="flex justify-around rounded-xl shadow-md items-center bg-gray-200 p-2">
-                  <span>Protein(g)</span>
-                  <TextField
-                    id="standard-number"
-                    type="number"
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                    variant="standard"
-                  />
-                </div>
-                <div className="flex justify-around rounded-xl shadow-md items-center bg-gray-200 p-2">
-                  <span>Fat(g)</span>
-                  <TextField
-                    id="standard-number"
-                    type="number"
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
-                    variant="standard"
-                  />
-                </div>
-              </AccordionDetails>
-            </Accordion> */}
+              />
+</div>
             </section>
             <section className="grid gap-3 rounded-xl my-5 py-2">
               <h3 className="font-sourceCode text-diaGray">Activity Level</h3>

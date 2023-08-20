@@ -50,7 +50,7 @@ const Android12Switch = styled(Switch)(({ theme }) => ({
 }));
 
 export default function NewLogDialog() {
-  const [InsulinType, setInsulinType] = React.useState("short");
+  const [InsulinType, setInsulinType] = React.useState("bolus");
 
   const [dateOpen, setDateOpen] = React.useState(false);
   const [dateValue, setDateValue] = React.useState(moment());
@@ -350,8 +350,8 @@ export default function NewLogDialog() {
                     },
                   }}
                 >
-                  <ToggleButton value="short">Short</ToggleButton>
-                  <ToggleButton value="long">Long</ToggleButton>
+                  <ToggleButton value="bolus">Short</ToggleButton>
+                  <ToggleButton value="basal">Long</ToggleButton>
                 </ToggleButtonGroup>
               </div>
             </div>

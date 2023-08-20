@@ -9,21 +9,19 @@ const Advice = () => {
     setchoosenAdvice(advice[RandomIndex]);
   }, [RandomIndex]);
   return (
-    <section className="p-2">
-      <div className="grid gap-4 rounded-lg shadow-md p-4 bg-white">
+      <section className="grid gap-4 rounded-xl shadow-md p-4 bg-white border-r-4 border-diaLightOrange">
         <div className="flex justify-between">
           <div>
             <h2 className="font-rubik font-semibold text-xl text-gray-800 mb-2">{choosenAdvice?.slug.replace(/-/g, " ")}</h2>
-            {choosenAdvice.tags?.map((tag) => (
-              <Chip avatar={<Icon icon="ic:round-tag" />} label={tag} className="mx-1" />
+            {choosenAdvice?.tags.map((tag) => (
+              <Chip avatar={<Icon icon="ic:round-tag" />} label={tag} className="mx-1 bg-diaLightOrange" />
             ))}
           </div>
           <div onClick={() => setRandomIndex(Math.floor(Math.random() * advice.length + 1))} className="ring-1 ring-gray-500 rounded-md p-2 self-start">
             <Icon icon="ps:random" className="text-diaGray" />
           </div>
         </div>
-        <p className="font-rubik text-diaGray text-md">{choosenAdvice.advice}</p>
-      </div>
+        <p className="font-poppins text-diaGray text-lg">{choosenAdvice.advice}</p>
     </section>
   );
 };

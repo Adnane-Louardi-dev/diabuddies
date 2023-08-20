@@ -12,13 +12,13 @@ const ActiveInsulin = ({ props, setActiveInsulin, activeInsulin, lastInjectionTi
         setlastInjectionTime(moment(element.time));
       }
     });
-    let calculateActiveInsulin = Data.reduce((accumulateur, currentElement) => {
+    let calculateActiveInsulin = Data.reduce((accumulator, currentElement) => {
       const timeBetweenNowAndInsulinShot = moment().diff(moment(currentElement.time));
       //if there's injected insulin && the insulin injected still in blood stream && the injection has been injected
       if (currentElement.bolus && timeBetweenNowAndInsulinShot < userInsulinDurationInSystem && timeBetweenNowAndInsulinShot > 0) {
-        accumulateur += currentElement.bolus - (currentElement.bolus / userInsulinDurationInSystem) * moment().diff(moment(currentElement.time));
+        accumulator += currentElement.bolus - (currentElement.bolus / userInsulinDurationInSystem) * moment().diff(moment(currentElement.time));
       }
-      return accumulateur;
+      return accumulator;
     }, 0);
     setActiveInsulin(calculateActiveInsulin);
     setLocalActiveInsulin(calculateActiveInsulin);

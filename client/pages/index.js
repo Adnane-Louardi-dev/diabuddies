@@ -21,7 +21,7 @@ import {useGetCurrentUser} from "../customeHooks/useGetCurrentUser";
 import CompleteYourProfile from "../components/completeYourProfile";
 import {SmallArticle} from "../components/blog/smallArticle";
 import Card from "../components/store/card";
-import CalculateInsulinDose from "../components/calculateInsulinDose";
+import BolusAdvisor from "../components/bolusAdvisor";
 import {Button} from "@mui/material";
 import Advice from "../components/advice";
 
@@ -29,8 +29,8 @@ export default function Home() {
   const router = useRouter();
   const [date, setDate] = useState(router.query.date || moment().format("L"));
   const [activeInsulin, setActiveInsulin] = useState(0);
-  const [glucose, setglucose] = useState(120);
-  const [lastInjectionTime, setlastInjectionTime] = useState(undefined);
+  const [glucose, setGlucose] = useState(120);
+  const [lastInjectionTime, setLastInjectionTime] = useState(moment());
 
   //GET method to get user info
   const { user, isLoading: isUserLoading } = useGetCurrentUser();
@@ -92,15 +92,14 @@ export default function Home() {
             {user.newUser ? <CompleteYourProfile /> : null}
             <DayPicker setDate={setDate} date={date} />
 
-            <>
+            {Data?.logBook[0] && <>
               <section className="flex justify-around my-5">
-                <Glucose props={Data?.logBook} setglucose={setglucose} />
-                <ActiveInsulin props={Data?.logBook} activeInsulin={activeInsulin} setActiveInsulin={setActiveInsulin} lastInjectionTime={lastInjectionTime} setlastInjectionTime={setlastInjectionTime} />
+                <Glucose props={[...Data?.logBook].reverse()} setGlucose={setGlucose}/>
+                <ActiveInsulin props={Data?.logBook} activeInsulin={activeInsulin} setActiveInsulin={setActiveInsulin}
+                               lastInjectionTime={lastInjectionTime} setlastInjectionTime={setLastInjectionTime}/>
               </section>
-            </>
-
-            <Advice />
-            <CalculateInsulinDose activeInsulin={activeInsulin} glucose={glucose} lastInjectionTime={lastInjectionTime} />
+            </>}
+            <BolusAdvisor activeInsulin={activeInsulin} glucose={glucose} lastInjectionTime={lastInjectionTime} />
             <div className="flex justify-between items-center my-5">
               <div className="flex items-center">
                 <div className="ring-1 ring-gray-300 p-1 rounded-md mr-3">
@@ -110,7 +109,7 @@ export default function Home() {
               </div>
               <NewLogDialog />
             </div>
-            <section className="w-full mb-8 shadow-md bg-white rounded-2xl">
+            <section className="w-full h-96 overflow-scroll no-scrollbar mb-8 shadow-md bg-white rounded-2xl">
               {Data.logBook[0] ? (
                 <div className="grid gap-3 overflow-scroll">
                   {Data.logBook.map((log) => {
@@ -118,7 +117,7 @@ export default function Home() {
                   })}
                 </div>
               ) : (
-                <div className="grid items-center justify-center m-3 py-5 bg-white rounded-xl">
+                <div className="grid items-center text-center justify-center m-3 py-5 bg-white rounded-xl">
                   <Image
                     src={"/No-data-cuate.webp"}
                     priority
@@ -130,9 +129,14 @@ export default function Home() {
                     width={200}
                     alt="no data in blue folder"
                   />
+                  <h2 className={"text-xl font-poppins text-gray-900 font-semibold"}>
+                    Oops!
+                  </h2>
+                  <p className={"font-poppins text-sm text-gray-900"}>No log found for today</p>
                 </div>
               )}
             </section>
+            <Advice />
             {Data.graphData ? (
               <>
                 <div className="flex justify-between items-center my-5">

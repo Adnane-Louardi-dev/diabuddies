@@ -148,7 +148,7 @@ function ResponsiveAppBar() {
         <Box>
           <Tooltip title="Chat with your AI assistant">
             <IconButton
-              className={"fixed bottom-10 right-10 bg-violet-500 text-white p-2"}
+              className={"fixed bottom-10 right-10 bg-diaDarkBlue text-white p-2"}
               onClick={(event) => setAnchorElChatBot(event.currentTarget)}
               sx={{ p: 0, zIndex: 1000 }}
             >

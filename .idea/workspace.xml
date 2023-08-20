@@ -5,39 +5,19 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="47d41590-a06d-4130-8666-cd245f35a61d" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/client/components/Logo.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/components/pdf/BasicTable.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/components/pdf/pdf-utils.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/client/customeHooks/useGetCurrentUser.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/components/AddMedicamentModal.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/components/AddMedicamentModal.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/components/ResponsiveAppBar.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/components/ResponsiveAppBar.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/components/dateToggleBtn.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/components/dateToggleBtn.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/components/dayPicker.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/components/dayPicker.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/components/loadingCircle.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/components/loadingCircle.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/components/activeInsulin.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/components/activeInsulin.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/components/advice.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/components/advice.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/components/calculateInsulinDose.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/components/bolusAdvisor.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/components/carbsCountingDialog.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/components/carbsCountingDialog.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/components/glucose.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/components/glucose.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/components/logBookItem.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/components/logBookItem.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/components/newLogDialog.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/components/newLogDialog.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/components/pdfDocumentModule.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/components/pdfDocumentModule.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/components/stepper/birthDate.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/components/stepper/birthDate.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/components/stepper/gender.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/components/stepper/gender.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/components/stepper/hb1ac.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/components/stepper/hb1ac.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/components/stepper/insulinSensitivity.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/components/stepper/insulinSensitivity.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/components/stepper/tall.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/components/stepper/tall.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/components/stepper/weight.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/components/stepper/weight.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/features/dateRange/dateRange.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/features/dateRange/dateRange.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/next.config.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/next.config.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/client/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/client/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/pages/_app.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/pages/_app.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/pages/charts.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/pages/charts.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/client/pages/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/pages/index.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/pages/pdf.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/pages/pdf.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/pages/settings.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/pages/settings.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/client/pages/setup.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/pages/setup.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/models/userSchema.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/models/userSchema.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/models/validationSchemas.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/models/validationSchemas.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/routes/charts.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/routes/charts.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server/routes/userRoutes.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/routes/userRoutes.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/pages/logout.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/pages/logout.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/public/service-worker.js.map" beforeDir="false" afterPath="$PROJECT_DIR$/client/public/service-worker.js.map" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server/middlewares/blogAxios.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/middlewares/blogAxios.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,22 +47,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "dev",
-    "ignore.virus.scanning.warn.message": "true",
-    "last_opened_file_path": "/home/ahmed/IdeaProjects/diabuddies/client",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/ahmed/IdeaProjects/diabuddies/client&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="npm.devStart">
     <configuration name="dev" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/client/package.json" />
@@ -101,7 +81,7 @@
         <script value="devStart" />
       </scripts>
       <node-interpreter value="$USER_HOME$/node-v18.15.0-linux-x64/bin/node" />
-      <package-manager value="$USER_HOME$/node-v18.15.0-linux-x64/bin/npm" />
+      <package-manager value="C:\Users\dell\node-v18.15.0-linux-x64\bin\npm" />
       <envs />
       <method v="2" />
     </configuration>
@@ -127,6 +107,8 @@
       <workItem from="1689269768808" duration="1516000" />
       <workItem from="1689409188931" duration="1005000" />
       <workItem from="1689413198214" duration="5795000" />
+      <workItem from="1692380989930" duration="4339000" />
+      <workItem from="1692555339625" duration="5414000" />
     </task>
     <servers />
   </component>

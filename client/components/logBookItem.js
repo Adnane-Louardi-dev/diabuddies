@@ -65,8 +65,8 @@ const LogBookItem = ({ props }) => {
         </Alert>
       </Snackbar>
 
-      <div className="grid grid-cols-6 gap-5 p-3 rounded-lg shadow-lg border-r-4 border-diaOrange bg-white">
-        <div className="self-start col-span-1 flex items-center p-1 bg-diaOrange h-12 w-12 rounded-full shadow-md">{data.meal ? data.meal === "breakfast" ? <Breakfast /> : data.meal === "lunch" ? <Lunch /> : data.meal === "dinner" ? <Dinner /> : data.meal === "snack" ? <Snack /> : <Glucose /> : <Other />}</div>
+      <div className="grid grid-cols-6 gap-5 p-3 rounded-lg shadow-lg border-r-4 border-diaDarkBlue bg-white">
+        <div className="self-start col-span-1 flex items-center p-1 bg-diaDarkBlue h-12 w-12 rounded-full shadow-md">{data.meal ? data.meal === "breakfast" ? <Breakfast /> : data.meal === "lunch" ? <Lunch /> : data.meal === "dinner" ? <Dinner /> : data.meal === "snack" ? <Snack /> : <Glucose /> : <Other />}</div>
         <div className="grid gap-2 col-span-5">
           <div className="flex justify-between items-center">
             <h4 className="font-sourceCode font-bold text-diaDarkBlue text-lg">{data.meal}</h4>
@@ -87,18 +87,18 @@ const LogBookItem = ({ props }) => {
             </div>
           )}
           <div className="flex items-center justify-between">
-            {data.carbs && (
+            {data.carbs!==0 && (
               <div className="flex items-center justify-center p-1 text-white rounded-lg bg-diaDarkBlue">
                 <Icon icon="fluent:food-grains-20-regular" className="mx-1" />
                 <span className="font-sourceCode text-xs">Carbs</span>
                 <span className="font-sourceCode font-bold mx-2">{`${data.carbs} g`}</span>
               </div>
             )}
-            {data.basal && (
+            {data.bolus && (
               <div className="flex items-center justify-center p-1 text-white rounded-lg bg-diaOrange">
                 <Icon icon="fluent:food-grains-20-regular" className="mx-1" />
                 <span className="font-sourceCode text-xs">Basal</span>
-                <span className="font-sourceCode font-bold mx-2">{`${data.basal} UI`}</span>
+                <span className="font-sourceCode font-bold mx-2">{`${data.bolus} UI`}</span>
               </div>
             )}
           </div>

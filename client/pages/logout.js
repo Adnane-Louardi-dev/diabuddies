@@ -1,22 +1,20 @@
 import { Button } from "@mui/material";
 import { useRouter } from "next/router";
-import React from "react";
+import {useEffect} from "react";
 import axios from "axios";
 const Logout = () => {
   const router = useRouter();
-  return (
-    <Button
-      onClick={async () => {
-        try {
+  const logoutFun=async () => {
+      try {
           axios.get("/api/logout", { withCredentials: true }).then(() => router.push("/login"));
-        } catch (e) {
+      } catch (e) {
           console.log(e);
-        }
-      }}
-    >
-      Logout
-    </Button>
-  );
+      }
+  }
+  useEffect(()=>{logoutFun()},[])
+
+  return null
+
 };
 
 export default Logout;
