@@ -1,24 +1,27 @@
 import * as React from "react";
-import { useState } from "react";
+import {useEffect} from "react";
 import axios from "axios";
 import moment from "moment";
 import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import { Icon } from "@iconify/react";
+import {Icon} from "@iconify/react";
 import TextField from "@mui/material/TextField";
-import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker";
+import {MobileDateTimePicker} from "@mui/x-date-pickers/MobileDateTimePicker";
 import InputAdornment from "@mui/material/InputAdornment";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Alert, Snackbar } from "@mui/material";
+import {useMutation, useQueryClient} from "@tanstack/react-query";
+import {Alert, Snackbar} from "@mui/material";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
-import { NutrationLogInput } from "./NutrationLogInput";
-import { styled } from "@mui/material/styles";
+import {NutrationLogInput} from "./NutrationLogInput";
+import {styled} from "@mui/material/styles";
 import Switch from "@mui/material/Switch";
+import {AddMealNameModal} from "./addMealNameModal";
+import {GetSavedMealsModal} from "./getSavedMealsModal";
+import {nullLogBook} from "../utils/nulls";
 
 const Android12Switch = styled(Switch)(({ theme }) => ({
   padding: 8,
@@ -53,18 +56,11 @@ export default function NewLogDialog() {
   const [InsulinType, setInsulinType] = React.useState("bolus");
 
   const [dateOpen, setDateOpen] = React.useState(false);
-  const [dateValue, setDateValue] = React.useState(moment());
-  const [Alignment, setAlignment] = React.useState("other");
-  const [data, setData] = React.useState({
-    time: dateValue._d,
-    meal: Alignment,
-    kcal: 0,
-    carbs: 0,
-    protein: 0,
-    fat: 0,
-  });
+  const [mealModalOpen, setMealModalOpen] = React.useState(false)
+  const [savedMealsModalOpen, setSavedMealsModalOpen] = React.useState(false)
+  const [data, setData] = React.useState({...nullLogBook, time: moment()._d});
   const queryClient = useQueryClient();
-  const [notificationOpen, setNotificationOpen] = useState(false);
+  const [notificationOpen, setNotificationOpen] = React.useState(false);
 
   const {
     mutate: addNewLogBook,
@@ -90,21 +86,31 @@ export default function NewLogDialog() {
       setNotificationOpen(true);
     },
   });
-  //handle post new log
+
+  useEffect(() => {
+    setInsulinType(data.basal !== 0 ? "basal" : "bolus")
+  }, [data.bolus, data.basal]);
   const handlePOSTNewLog = async () => {
     setDateOpen(false);
     await addNewLogBook(data);
+    setData({...nullLogBook, time: moment()._d})
   };
-
-  React.useEffect(() => {
-    setData({ ...data, meal: Alignment });
-  }, [Alignment]);
 
   const handleClose = () => {
     setNotificationOpen(false);
   };
   return (
     <>
+      <AddMealNameModal mealModalOpen={mealModalOpen}
+                        setMealModalOpen={setMealModalOpen}
+                        data={data}
+                        onSave={handlePOSTNewLog}
+      />
+      <GetSavedMealsModal savedMealsModalOpen={savedMealsModalOpen}
+                        setSavedMealsModalOpen={setSavedMealsModalOpen}
+                        setData={setData}
+      />
+
       <Box sx={{ display: "flex" }}>
         <CircularProgress hidden={!isLoading} />
       </Box>
@@ -155,9 +161,8 @@ export default function NewLogDialog() {
                 }}
               />
             )}
-            value={dateValue}
+            value={data.time}
             onChange={(newValue) => {
-              setDateValue(newValue);
               setData({ ...data, time: newValue._d });
             }}
             openTo="hours"
@@ -177,10 +182,10 @@ export default function NewLogDialog() {
                   color: "white",
                 },
               }}
-              value={Alignment}
+              value={data.meal}
               exclusive
               onChange={(event, newAlignment) => {
-                setAlignment(newAlignment);
+                setData({...data, meal:newAlignment});
               }}
               aria-label="Platform"
             >
@@ -204,12 +209,15 @@ export default function NewLogDialog() {
               </ToggleButton>
             </ToggleButtonGroup>
           </section>
-          <section className="flex items-center justify-around my-3">
+          <section className="flex items-center justify-between my-3">
             <button variant="outlined" className="grid w-36 justify-items-center mx-2 py-2 px-3 rounded-lg ring-2 ring-diaDarkBlue bg-slate-300">
               <h2 className="font-rubik text-sm text-diaDarkBlue my-2">Scan a barcode</h2>
               <Icon icon="material-symbols:barcode" className="h-10 w-10 text-diaDarkBlue" />
             </button>
-            <button variant="outlined" className="grid w-36  justify-items-center mx-2 py-2 px-3 rounded-lg ring-2 ring-diaDarkBlue bg-slate-300">
+            <button
+                onClick={()=>{
+                  setSavedMealsModalOpen(true)
+                }} variant="outlined" className="grid w-36  justify-items-center mx-2 py-2 px-3 rounded-lg ring-2 ring-diaDarkBlue bg-slate-300">
               <h2 className="font-rubik text-sm text-diaDarkBlue my-2">Search for a meal</h2>
               <Icon icon="tabler:search" className="h-10 w-10 text-diaDarkBlue" />
             </button>
@@ -225,8 +233,10 @@ export default function NewLogDialog() {
               bgColor={"bg-blue-400"}
               icon={"system-uicons:cubes"}
               inputAdornmentLabel={"mg/dL"}
+              value={data.glucose}
               onChange={(event) => {
-                setData({ ...data, glucose: parseFloat(event.target.value) });
+                const value = event.target.value;
+                setData({ ...data, glucose: value ? parseFloat(value) : 0 });
               }}
             />
             <NutrationLogInput
@@ -235,6 +245,7 @@ export default function NewLogDialog() {
               bgColor={"bg-gray-400"}
               icon={"fluent:food-grains-20-regular"}
               inputAdornmentLabel={"g"}
+              value={data.carbs}
               onChange={(event) => {
                 if (event.target.value) {
                   setData({ ...data, carbs: parseFloat(event.target.value), kcal: data.protein * 4 + data.fat * 9 + parseFloat(event.target.value) * 4 });
@@ -310,11 +321,13 @@ export default function NewLogDialog() {
                     color: "white",
                   },
                 }}
+                value={data.bolus !== 0 ? data.bolus : data.basal}
                 onChange={(event) => {
+                  const value = event.target.value
                   if (InsulinType === "bolus") {
-                    setData({ ...data, bolus: parseFloat(event.target.value) });
+                    setData({ ...data, basal:0, bolus: value ? parseFloat(value) : 0});
                   } else {
-                    setData({ ...data, basal: parseFloat(event.target.value) });
+                    setData({ ...data, bolus:0, basal: value ? parseFloat(value) : 0 });
                   }
                 }}
               />
@@ -361,6 +374,7 @@ export default function NewLogDialog() {
               bgColor={"text-amber-300"}
               icon={"fluent-emoji-high-contrast:cut-of-meat"}
               inputAdornmentLabel={"g"}
+              value={data.protein}
               onChange={(event) => {
                 if (event.target.value) {
                   setData({ ...data, protein: parseFloat(event.target.value), kcal: data.carbs * 4 + data.fat * 9 + parseFloat(event.target.value) * 4 });
@@ -375,6 +389,7 @@ export default function NewLogDialog() {
               bgColor={"bg-red-400"}
               icon={"circum:pizza"}
               inputAdornmentLabel={"g"}
+              value={data.fat}
               onChange={(event) => {
                 if (event.target.value) {
                   setData({ ...data, fat: parseFloat(event.target.value), kcal: data.carbs * 4 + data.protein * 4 + parseFloat(event.target.value) * 9 });
@@ -385,7 +400,7 @@ export default function NewLogDialog() {
             />
           </div>
         </DialogContent>
-        <DialogActions sx={{ display: "grid", gap: 1, gridTemplateColumns: "repeat(2, minmax(0, 1fr))", width: "full" }}>
+        <DialogActions sx={{ display: "grid", gap: 1, gridTemplateColumns: "repeat(3, minmax(0, 1fr))", width: "full" }}>
           <Button
             onClick={() => {
               setDateOpen(false);
@@ -396,6 +411,9 @@ export default function NewLogDialog() {
           </Button>
           <Button disabled={isLoading} onClick={handlePOSTNewLog} variant="filled" className="w-full p-3 rounded-full shadow-md bg-gray-800 text-white  font-codeSource font-xl">
             Save
+          </Button>
+          <Button disabled={isLoading} onClick={()=> setMealModalOpen(true)} variant="filled" className="w-full p-3 rounded-full shadow-md bg-gray-800 text-white  font-codeSource font-xl">
+            Save as a meal
           </Button>
         </DialogActions>
       </Dialog>

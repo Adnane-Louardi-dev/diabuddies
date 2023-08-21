@@ -6,3 +6,13 @@ export const nullCart = {
     totalItems: 0,
     venteEntries: []
 }
+
+export const nullLogBook = {
+    meal: "other",
+    kcal: 0,
+    carbs: 0,
+    protein: 0,
+    fat: 0,
+    glucose: 0,
+    basal: 0
+}

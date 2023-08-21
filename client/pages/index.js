@@ -1,3 +1,4 @@
+import * as React from "react";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import Image from "next/image";
@@ -76,6 +77,7 @@ export default function Home() {
       }
     }
   }, [isUserLoading, router.isReady, date]);
+
 
   return (
     <>

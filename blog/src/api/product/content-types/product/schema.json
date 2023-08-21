@@ -52,17 +52,16 @@
     "motivition_text": {
       "type": "text"
     },
-    "store_category": {
-      "type": "relation",
-      "relation": "manyToOne",
-      "target": "api::store-category.store-category",
-      "inversedBy": "products"
-    },
     "inventory": {
       "type": "relation",
       "relation": "oneToOne",
       "target": "api::inventory.inventory",
       "mappedBy": "product"
+    },
+    "store_categories": {
+      "type": "relation",
+      "relation": "oneToMany",
+      "target": "api::store-category.store-category"
     }
   }
 }
