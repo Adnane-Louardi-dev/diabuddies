@@ -1,10 +1,9 @@
-import { Icon } from "@iconify/react";
+import {Icon} from "@iconify/react";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
-import IconButton from "@mui/material/IconButton";
 import * as React from "react";
 
-export const NutrationLogInput = ({ onChange, label, bgColor, textColor, icon, inputAdornmentLabel }) => {
+export const NutrationLogInput = ({ onChange, label, bgColor,value, textColor, icon, inputAdornmentLabel }) => {
   return (
     <div className={`p-2.5 bg-diaDarkBlue rounded-xl shadow-md`}>
       <div className="flex justify-between items-center">
@@ -23,6 +22,7 @@ export const NutrationLogInput = ({ onChange, label, bgColor, textColor, icon, i
         type="tel"
         variant="standard"
         placeholder="0"
+        value={value}
         sx={{
           marginTop: 1,
           marginX: 1,

@@ -4,7 +4,8 @@
   "info": {
     "singularName": "store-category",
     "pluralName": "store-categories",
-    "displayName": "store_category"
+    "displayName": "store_category",
+    "description": ""
   },
   "options": {
     "draftAndPublish": true
@@ -16,11 +17,8 @@
       "required": true,
       "unique": true
     },
-    "products": {
-      "type": "relation",
-      "relation": "oneToMany",
-      "target": "api::product.product",
-      "mappedBy": "store_category"
+    "slug": {
+      "type": "string"
     }
   }
 }

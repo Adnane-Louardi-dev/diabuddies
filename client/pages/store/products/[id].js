@@ -9,7 +9,7 @@ import axios from "axios";
 export default function ProductPage() {
    const router = useRouter()
    const {data:product, isLoading,error} = useQuery(["product",router.query.id],()=>{
-      return axios.get(`/api/store/products/${router.query.id}`)
+      return axios.get(`/api/store/product/${router.query.id}`)
           .then(res =>{
              return res.data
           })

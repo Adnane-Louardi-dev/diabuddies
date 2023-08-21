@@ -10,7 +10,7 @@ const Home = () => {
     const {data:products, isLoading:isLoadingProducts} = useAxios(
         "get",
         "/api/store/products"
-)
+    )
     const {data:categories, isLoading:isLoadingCategories, error} = useAxios(
         "get",
         "/api/store/categories"
@@ -18,10 +18,10 @@ const Home = () => {
     if(isLoadingProducts || isLoadingCategories){
         return <LoadingCircle />
     }
-    console.log("products",products)
+    console.log("products",products, categories)
    return (
       <StoreLayout>
-         <Categories categories={categories?.data}/>
+          {categories && <Categories categories={categories?.data}/>}
          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             {products?.data.map((product) => (
                     <Card product={product} key={product.id}/>
