@@ -1,12 +1,12 @@
-import React, { useState } from "react";
+import React, {useState} from "react";
 import axios from "axios";
 import moment from "moment";
-import { Breakfast, Dinner, Glucose, Lunch, Snack } from "./mealIcons";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import {Breakfast, Dinner, Glucose, Lunch, Snack} from "./mealIcons";
+import {useMutation, useQueryClient} from "@tanstack/react-query";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
-import { Alert, Snackbar } from "@mui/material";
-import { Icon } from "@iconify/react";
+import {Alert, Snackbar} from "@mui/material";
+import {Icon} from "@iconify/react";
 
 const LogBookItem = ({ props }) => {
   const [data, setData] = useState(props);
@@ -43,6 +43,24 @@ const LogBookItem = ({ props }) => {
     setNotificationOpen(false);
   };
 
+  const getMealIcon = React.useCallback((mealTime) =>{
+    if(mealTime) {
+      switch (mealTime) {
+        case "breakfast":
+          return <Breakfast/>
+        case "lunch":
+          return <Lunch/>
+        case "dinner":
+          return <Dinner/>
+        case "snack":
+          return <Snack/>
+        default:
+          return <Glucose/>
+      }
+    }
+    return <Glucose />
+  },[])
+
   return (
     <>
       <Box sx={{ display: "flex" }}>
@@ -55,7 +73,9 @@ const LogBookItem = ({ props }) => {
       </Snackbar>
 
       <div className="grid grid-cols-6 gap-5 p-3 rounded-lg shadow-lg border-r-4 border-diaDarkBlue bg-white">
-        <div className="self-start col-span-1 flex items-center p-1 bg-diaDarkBlue h-12 w-12 rounded-full shadow-md">{data.meal ? data.meal === "breakfast" ? <Breakfast /> : data.meal === "lunch" ? <Lunch /> : data.meal === "dinner" ? <Dinner /> : data.meal === "snack" ? <Snack /> : <Glucose /> : <Other />}</div>
+        <div className="self-start col-span-1 flex items-center p-1 bg-diaDarkBlue h-12 w-12 rounded-full shadow-md">
+          {getMealIcon(data.meal)}
+        </div>
         <div className="grid gap-2 col-span-5">
           <div className="flex justify-between items-center">
             <h4 className="font-sourceCode font-bold text-diaDarkBlue text-lg">{data.meal}</h4>

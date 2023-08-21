@@ -45,7 +45,6 @@ const Cart = () => {
       }
    })
    const submitOrder = async ({email, city, shippingAddress,phoneNumber, customerName}) => {
-      console.log("city   dsds", city)
       createOrder({
          email,
          shippingAddress,
