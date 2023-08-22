@@ -1,5 +1,5 @@
 import { Html, Head, Main, NextScript } from "next/document";
-
+import Script from "next/script";
 export default function Document() {
   return (
     <Html lang="en">
@@ -12,6 +12,7 @@ export default function Document() {
         <meta name="msapplication-TileColor" content="#2B5797" />
         <meta name="msapplication-tap-highlight" content="no" />
         <meta name="theme-color" content="#000000" />
+
         <meta
           name="description"
           content="Track your health, connect with a supportive community, shop essential supplies, and enhance your knowledge with our diabetes management platform."

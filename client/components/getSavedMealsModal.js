@@ -58,7 +58,7 @@ export const GetSavedMealsModal = ({savedMealsModalOpen,setSavedMealsModalOpen,s
     >
         <Box sx={style}>
             <div className={"h-[450px]"}>
-                {savedMeals.slice(5*(currentPage-1),5*currentPage).map(({whenEated,mealName,kcal,carbs,protein,fat,basal,bolus}) => (
+                {savedMeals.slice(5*(currentPage-1),5*currentPage).map(({whenEated,mealName,kcal,carbs,protein,fat,basal,bolus},i) => (
                     <div onClick={()=>{
                         setData({
                             time: moment()._d,
@@ -71,6 +71,7 @@ export const GetSavedMealsModal = ({savedMealsModalOpen,setSavedMealsModalOpen,s
                             bolus})
                         setSavedMealsModalOpen(false)
                     }}
+                         key={i}
                         className="grid grid-cols-6 gap-5 p-3 mb-2 rounded-lg shadow-lg border-r-4 border-diaDarkBlue bg-white cursor-pointer">
                         <div className="self-start col-span-1 flex items-center p-1 bg-diaDarkBlue h-12 w-12 rounded-full shadow-md">
                             {getMealIcon(whenEated)}

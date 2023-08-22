@@ -4,15 +4,26 @@ import {LocalizationProvider} from "@mui/x-date-pickers/LocalizationProvider";
 import {AdapterMoment} from "@mui/x-date-pickers/AdapterMoment";
 import {QueryClient, QueryClientProvider} from "@tanstack/react-query";
 import {useEffect} from "react";
-import Script from "next/script";
-
+import Script from "next/script"
 const queryClient = new QueryClient();
 function MyApp({ Component, pageProps }) {
-  useEffect(() => {
+  useEffect( () => {
       if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("/service-worker.js").then((registration) => console.log("scope is: ", registration.scope));
-    }
-  }, []);
+      }
+      if (typeof window !== undefined) {
+          window.OneSignal = window.OneSignal || [];
+          OneSignal.push(function () {
+              OneSignal.init({
+                  appId: "6631d4a2-a1df-4cf0-92e1-da016bdd083c",
+                  notifyButton: {
+                      enable: true,
+                  },
+              });
+          });
+      }
+
+      }, []);
   return (
     <QueryClientProvider client={queryClient}>
         <Script
@@ -45,8 +56,9 @@ function MyApp({ Component, pageProps }) {
                 });
             `}
         </Script>
-      <Head>
-        <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
+        <Script src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer/>
+        <Head>
+            <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
       </Head>
       <LocalizationProvider dateAdapter={AdapterMoment}>
         <Component {...pageProps} />
