@@ -5,7 +5,6 @@ const {isLoggedIn} = require("../middlewares/isLoggedIn");
 const {strapiInstance, storeInstance} = require("../middlewares/blogAxios");
 const {productQuery} = require("../util/baseQueries");
 
-
 router.get("/:slug", isLoggedIn,async (req, res) => {
     try {
         const slug= req.params.slug.trim().toLowerCase()

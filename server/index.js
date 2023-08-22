@@ -18,6 +18,7 @@ const comments = require("./routes/comments");
 const store = require("./routes/store");
 const blog = require("./routes/blog");
 const aiAssistant = require("./routes/aiAssistant");
+const {gamifyRouter} = require("./routes/gamify");
 //DB connect
 const DBConnection =
   process.env.DB_CONNECTION ||
@@ -58,6 +59,7 @@ app.use("/blog", blog);
 app.use("/comments", comments);
 app.use("/aiAssistant", aiAssistant);
 app.use("/store", store);
+app.use("/gamify", gamifyRouter);
 
 app.get("/logout", function (req, res) {
   req.session.destroy(function (err) {

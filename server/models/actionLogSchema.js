@@ -1,0 +1,58 @@
+const mongoose = require("mongoose");
+const {gamificationSchema} = require("./gamificationSchema");
+
+const actionLogSchema =  mongoose.Schema({
+    userId: mongoose.Schema.Types.ObjectId, // Reference to the user who performed the action
+    actionType: {
+        type: String,
+        enum: ["dailyLogIn",
+            "addedNewLogBook",
+            "likedAPost",
+            "readABlog",
+            "BoughtAProduct",
+            "postAComment",
+            "share"]
+    }, // E.g., "completedTask", "postedComment"
+    pointsEarned: {
+        type: Number,
+        default: 0
+    },
+    gamification: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "gamificationSchema"
+    }
+}, {timestamps: true})
+
+actionLogSchema.post("validate",async function (_,next) {
+    const actionLog = this
+    const actionLogs = {
+        "dailyLogIn": 5,
+        "addedNewLogBook": 1,
+        "likedAPost": 2,
+        "readABlog": 1,
+        "BoughtAProduct": 15,
+        "postAComment": 2,
+        "share": 7
+    }
+    actionLog.pointsEarned = actionLogs[actionLog.actionType] ?? 0
+    const newGamify = await gamificationSchema.findOneAndUpdate(
+        {
+                userId: actionLog.userId
+            },{
+            $inc: {
+                points: actionLogs[actionLog.actionType] ?? 0
+            }
+        },{new: true})
+        .populate("level")
+    console.log("points: ",newGamify.points, " level ",newGamify.level.maxPoints, "next level", newGamify.level.nextLevel)
+    if(newGamify.points >= newGamify.level.maxPoints){
+        await gamificationSchema.findByIdAndUpdate(
+            newGamify._id,{
+                level: newGamify.level.nextLevel
+            })
+    }
+    next()
+})
+module.exports = {
+    actionLogSchema: mongoose.model("actionLogSchema", actionLogSchema)
+}

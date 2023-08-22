@@ -13,10 +13,10 @@ import MenuItem from "@mui/material/MenuItem";
 import {Icon} from "@iconify/react";
 import {Logo} from "./Logo";
 import {useGetCurrentUser} from "../customeHooks/useGetCurrentUser";
-import {Button, Input} from "@mui/material";
+import {Button, Input, LinearProgress} from "@mui/material";
 import {CloseIcon} from "next/dist/client/components/react-dev-overlay/internal/icons/CloseIcon";
 import axios from "axios";
-import {useMutation} from "@tanstack/react-query";
+import {useMutation, useQuery} from "@tanstack/react-query";
 
 const appBarItems = [
   {
@@ -66,6 +66,10 @@ function ResponsiveAppBar() {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const [anchorElChatBot, setAnchorElChatBot] = React.useState(null);
   const [userQuestion, setUserQuestion] = React.useState("");
+  const {data:gamify, isLoading:isLoadingGamification} = useQuery(["gamify"],async ()=>{
+    const {data} = await axios.get("/api/gamify/")
+    return data
+  })
   const [discussion, setDiscussion] = React.useState([
     {
       role: "assistant",
@@ -112,7 +116,33 @@ function ResponsiveAppBar() {
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Logo />
-          <Box sx={{ flexGrow: 0 }}>
+          <Box sx={{ flexGrow: 0, display: "flex", color: "#000" }}>
+
+            {!isLoadingGamification && gamify && <div>
+              <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                <Box sx={{ width: '200px', mr: 1, mt:2 }}>
+                  <LinearProgress
+                      sx={{
+                        height: "20px",
+                        borderRadius: "2px",
+                        "&.MuiLinearProgress-bar1Determinate": {
+                          backgroundColor: "#1e293b"
+                        }
+                      }}
+                      variant="determinate"
+                      value={(gamify.points/gamify.level.maxPoints*100)} />
+                  <Typography variant="body2" color="text.secondary">
+                    {gamify.level.levelName}
+                  </Typography>
+                </Box>
+                <Box sx={{ minWidth: 60,mr: 1 }}>
+                  <Typography variant="body2" color="text.secondary">
+                    {gamify.points} / {gamify.level.maxPoints}
+                    <Icon icon="carbon:chemistry" className={"inline-block text-lg mb-1 text-diaDarkBlue"} />
+                  </Typography>
+                </Box>
+              </Box>
+            </div>}
             <Tooltip title="Open settings">
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 <Avatar alt="Profile photo" src={user?.photo} className="h-12 w-12" />
@@ -142,6 +172,11 @@ function ResponsiveAppBar() {
                   </MenuItem>
                 </Link>
               ))}
+              <MenuItem onClick={()=>{
+                axios.post("/api/gamify")
+              }}>
+                <Typography textAlign="center">Create Your Gamification</Typography>
+              </MenuItem>
             </Menu>
           </Box>
         </Toolbar>

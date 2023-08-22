@@ -77,7 +77,7 @@ export default function NewLogDialog() {
       });
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(["indexChart"]);
+      queryClient.invalidateQueries(["indexChart","gamify"]);
     },
     onError: (e) => {
       console.error(e);
