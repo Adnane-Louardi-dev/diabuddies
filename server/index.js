@@ -18,6 +18,11 @@ const comments = require("./routes/comments");
 const store = require("./routes/store");
 const blog = require("./routes/blog");
 const aiAssistant = require("./routes/aiAssistant");
+const {gamifyRouter} = require("./routes/gamify");
+const {schedule} = require("node-cron");
+const {gamificationSchema} = require("./models/gamificationSchema");
+const {isLoggedIn} = require("./middlewares/isLoggedIn");
+const {newActionLog} = require("./controllers/gamifyControllers");
 //DB connect
 const DBConnection =
   process.env.DB_CONNECTION ||
@@ -58,6 +63,7 @@ app.use("/blog", blog);
 app.use("/comments", comments);
 app.use("/aiAssistant", aiAssistant);
 app.use("/store", store);
+app.use("/gamify", gamifyRouter);
 
 app.get("/logout", function (req, res) {
   req.session.destroy(function (err) {
@@ -67,4 +73,22 @@ app.get("/logout", function (req, res) {
 
 app.listen(process.env.PORT, () => {
   console.log(`Server listening on ${process.env.PORT}`);
+});
+
+app.post("/daily_log_in",isLoggedIn,async (req,res)=>{
+    const gamify = await gamificationSchema.findOne({
+            userId: req.user._id
+        })
+    if(gamify.dailyLogInClaimed){
+        return res.status(200).json({message: "already claimed"})
+    }
+    gamify.dailyLogInClaimed = true
+    await gamify.save()
+    await newActionLog("dailyLogIn",req.user._id)
+    return res.status(201).json({message: "claimed"})
+})
+schedule('0 0 0 * * *', ()=>{
+    gamificationSchema.updateMany({},{
+        dailyLogInClaimed: false
+    })
 });

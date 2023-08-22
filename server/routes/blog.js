@@ -1,10 +1,19 @@
 const express = require("express")
 const {isLoggedIn} = require("../middlewares/isLoggedIn");
 const qs = require("qs");
-const {getArticles, getArticle, getBlogCategories, getCategoryArticles} = require("../controllers/blogControllers");
+const {getArticles,
+    getCategoryArticles,
+    getBlogCategories,
+    getArticle,
+    toggleLikeAnArticle,
+    isArticleLiked,
+    readArticle} = require("../controllers/blogControllers");
 const router = express.Router();
 
 router.get("/article/:articleId",isLoggedIn,getArticle)
+router.get("/article/like/:articleId",isLoggedIn,isArticleLiked)
+router.post("/article/like/:articleId",isLoggedIn,toggleLikeAnArticle)
+router.post("/article/read/:articleId",isLoggedIn,readArticle)
 router.get("/articles/:limit",isLoggedIn, (req,res) =>{
     const query = qs.stringify({
         pagination: {

@@ -26,7 +26,11 @@ export default function Post() {
     return <Container maxWidth={"xl"}>
         <ResponsiveAppBar />
 
-        <Article id={article.data.id} relatedArticles={article.relatedArticles} {...article.data.attributes} />
+        <Article id={article.data.id}
+                 isLiked={article.isLiked}
+                 likeCount={article.likeCount}
+                 relatedArticles={article.relatedArticles}
+                 {...article.data.attributes} />
 
     </Container>
 }
