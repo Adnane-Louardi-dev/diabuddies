@@ -7,16 +7,17 @@ const actionLogSchema =  mongoose.Schema({
         type: String,
         enum: ["dailyLogIn",
             "addedNewLogBook",
-            "likedAPost",
             "readABlog",
             "BoughtAProduct",
             "postAComment",
+            "setupProfile",
             "share"]
     }, // E.g., "completedTask", "postedComment"
     pointsEarned: {
         type: Number,
         default: 0
     },
+    itemId: String,
     gamification: {
         type: mongoose.Schema.Types.ObjectId,
         ref: "gamificationSchema"
@@ -28,11 +29,11 @@ actionLogSchema.post("validate",async function (_,next) {
     const actionLogs = {
         "dailyLogIn": 5,
         "addedNewLogBook": 1,
-        "likedAPost": 2,
         "readABlog": 1,
         "BoughtAProduct": 15,
         "postAComment": 2,
-        "share": 7
+        "share": 7,
+        "setupProfile": 10
     }
     actionLog.pointsEarned = actionLogs[actionLog.actionType] ?? 0
     const newGamify = await gamificationSchema.findOneAndUpdate(

@@ -16,5 +16,6 @@ module.exports = {
             required: true,
             default: 0
         },
+        dailyLogInClaimed: Boolean
     }))
 }
