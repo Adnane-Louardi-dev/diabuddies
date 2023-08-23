@@ -1,10 +1,10 @@
 import * as React from "react";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import moment from "moment";
-import {useRouter} from "next/router";
+import { useRouter } from "next/router";
 import ResponsiveAppBar from "../components/ResponsiveAppBar";
 import Glucose from "../components/glucose";
 import ActiveInsulin from "../components/activeInsulin";
@@ -15,16 +15,17 @@ import LineChartGraph from "../components/charts/lineChartGraph";
 import PiGraph from "../components/charts/piGraph";
 import BarGraph from "../components/charts/barGraph";
 import DayPicker from "../components/dayPicker";
-import {Icon} from "@iconify/react";
+import { Icon } from "@iconify/react";
 import Head from "next/head";
-import {useQuery} from "@tanstack/react-query";
-import {useGetCurrentUser} from "../customeHooks/useGetCurrentUser";
+import { useQuery } from "@tanstack/react-query";
+import { useGetCurrentUser } from "../customeHooks/useGetCurrentUser";
 import CompleteYourProfile from "../components/completeYourProfile";
-import {SmallArticle} from "../components/blog/smallArticle";
+import { SmallArticle } from "../components/blog/smallArticle";
 import Card from "../components/store/card";
 import BolusAdvisor from "../components/bolusAdvisor";
-import {Button} from "@mui/material";
+import { Button } from "@mui/material";
 import Advice from "../components/advice";
+import { GamifyProgressBar } from "../components/appBar/GamifyProgressBar";
 
 export default function Home() {
   const router = useRouter();
@@ -78,7 +79,6 @@ export default function Home() {
     }
   }, [isUserLoading, router.isReady, date]);
 
-
   return (
     <>
       {!isLoading && !isUserLoading && user ? (
@@ -92,14 +92,15 @@ export default function Home() {
             <span className="font-inter text-2xl text-semibold">{`Good ${moment().format("LT") > (moment("12:00 AM", "LT") && moment().format("LT") < moment("12:00 PM")) ? "morning" : moment().format("LT") > (moment("12:00 PM", "LT") && moment().format("LT") < moment("05:00 PM")) ? "afternoon" : moment().format("LT") > (moment("05:00 PM", "LT") && moment().format("LT") < moment("09:00 PM")) ? "evening" : "night"}, ${user.givenName}`}</span>
             {user.newUser ? <CompleteYourProfile /> : null}
             <DayPicker setDate={setDate} date={date} />
-
-            {Data?.logBook[0] && <>
-              <section className="flex justify-around my-5">
-                <Glucose props={[...Data?.logBook].reverse()} setGlucose={setGlucose}/>
-                <ActiveInsulin props={Data?.logBook} activeInsulin={activeInsulin} setActiveInsulin={setActiveInsulin}
-                               lastInjectionTime={lastInjectionTime} setlastInjectionTime={setLastInjectionTime}/>
-              </section>
-            </>}
+            <GamifyProgressBar />
+            {Data?.logBook[0] && (
+              <>
+                <section className="flex justify-around my-5">
+                  <Glucose props={[...Data?.logBook].reverse()} setGlucose={setGlucose} />
+                  <ActiveInsulin props={Data?.logBook} activeInsulin={activeInsulin} setActiveInsulin={setActiveInsulin} lastInjectionTime={lastInjectionTime} setlastInjectionTime={setLastInjectionTime} />
+                </section>
+              </>
+            )}
             <BolusAdvisor activeInsulin={activeInsulin} glucose={glucose} lastInjectionTime={lastInjectionTime} />
             <div className="flex justify-between items-center my-5">
               <div className="flex items-center">
@@ -130,9 +131,7 @@ export default function Home() {
                     width={200}
                     alt="no data in blue folder"
                   />
-                  <h2 className={"text-xl font-poppins text-gray-900 font-semibold"}>
-                    Oops!
-                  </h2>
+                  <h2 className={"text-xl font-poppins text-gray-900 font-semibold"}>Oops!</h2>
                   <p className={"font-poppins text-sm text-gray-900"}>No log found for today</p>
                 </div>
               )}

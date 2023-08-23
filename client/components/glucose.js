@@ -5,18 +5,18 @@ import { useEffect, useState } from "react";
 
 const Glucose = ({ props, setGlucose }) => {
   const [localGlucose, setLocalGlucoseLog] = useState(undefined);
-  const calculateLocalGlucose=()=>{
+  const calculateLocalGlucose = () => {
     props.forEach((element) => {
       if (element.glucose) {
         setLocalGlucoseLog(element);
         setGlucose(element.glucose);
-        console.log(element)
+        console.log(element);
       }
-      return null
+      return null;
     });
-  }
+  };
   useEffect(() => {
-    calculateLocalGlucose()
+    calculateLocalGlucose();
   }, []);
 
   return (
