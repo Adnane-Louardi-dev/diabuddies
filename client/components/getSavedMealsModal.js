@@ -31,19 +31,14 @@ export const GetSavedMealsModal = ({savedMealsModalOpen,setSavedMealsModalOpen,s
     const [currentPage, setCurrentPage] = useState(1)
 
     const getMealIcon = React.useCallback((mealTime) =>{
+        const mealTimes = {
+            "breakfast": <Breakfast/>,
+            "lunch": <Lunch/>,
+            "dinner": <Dinner/>,
+            "snack": <Snack/>,
+        }
         if(mealTime) {
-            switch (mealTime) {
-                case "breakfast":
-                    return <Breakfast/>
-                case "lunch":
-                    return <Lunch/>
-                case "dinner":
-                    return <Dinner/>
-                case "snack":
-                    return <Snack/>
-                default:
-                    return <Glucose/>
-            }
+            return mealTimes[mealTime] ?? <Glucose />
         }
         return <Glucose />
     },[])

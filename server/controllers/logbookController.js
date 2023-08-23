@@ -41,7 +41,7 @@ const addNewLog = (req, res) => {
         })
         .then((log) => res.json(log))
         .catch((err) => res.json(err));
-    newActionLog("BoughtAProduct",req.user._id)
+    newActionLog("addedNewLogBook",req.user._id)
 }
 
 const deleteLog = async (req, res) => {
