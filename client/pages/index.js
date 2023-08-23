@@ -111,13 +111,13 @@ export default function Home() {
               </div>
               <NewLogDialog />
             </div>
-            <section className="w-full h-96 overflow-scroll no-scrollbar mb-8 shadow-md bg-white rounded-2xl">
+            <section className="w-full h-64 overflow-scroll no-scrollbar mb-8 shadow-lg bg-white rounded-2xl p-2">
               {Data.logBook[0] ? (
-                <div className="grid gap-3 overflow-scroll">
+                <>
                   {Data.logBook.map((log) => {
                     return <LogBookItem props={log} key={log._id} />;
                   })}
-                </div>
+                </>
               ) : (
                 <div className="grid items-center text-center justify-center m-3 py-5 bg-white rounded-xl">
                   <Image
