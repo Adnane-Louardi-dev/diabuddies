@@ -13,14 +13,8 @@ export default function Document() {
         <meta name="msapplication-tap-highlight" content="no" />
         <meta name="theme-color" content="#000000" />
 
-        <meta
-          name="description"
-          content="Track your health, connect with a supportive community, shop essential supplies, and enhance your knowledge with our diabetes management platform."
-        />
-        <meta
-          name="keywords"
-          content="Diabetes management, Diabetes support, Blood glucose tracking, Insulin dose recording, Health metrics monitoring, Diabetic supplies, Online store for diabetics, Diabetes education, Newly diagnosed diabetics, Blood sugar management, Healthy eating for diabetics, Physical activity and diabetes, Medication management for diabetics, Emotional well-being for diabetics, Diabetic recipes, Diabetic snacks, Diabetes empowerment, Health and wellness for diabetics"
-        />
+        <meta name="description" content="Track your health, connect with a supportive community, shop essential supplies, and enhance your knowledge with our diabetes management platform." />
+        <meta name="keywords" content="Diabetes management, Diabetes support, Blood glucose tracking, Insulin dose recording, Health metrics monitoring, Diabetic supplies, Online store for diabetics, Diabetes education, Newly diagnosed diabetics, Blood sugar management, Healthy eating for diabetics, Physical activity and diabetes, Medication management for diabetics, Emotional well-being for diabetics, Diabetic recipes, Diabetic snacks, Diabetes empowerment, Health and wellness for diabetics" />
         <meta name="robots" content="index, follow" />
         <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="language" content="English" />
@@ -63,10 +57,7 @@ export default function Document() {
 
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
-        <link
-          href="https://fonts.googleapis.com/css2?family=Inter&family=Poppins&family=Roboto:wght@300;400;500;700&family=Rubik&family=Source+Code+Pro&display=swap"
-          rel="stylesheet"
-        />
+        <link href="https://fonts.googleapis.com/css2?family=Inter&family=Poppins&family=Roboto:wght@300;400;500;700&family=Rubik&family=Source+Code+Pro&display=swap" rel="stylesheet" />
       </Head>
       <body>
         <Main />
