@@ -1,4 +1,3 @@
-import {blogAxios} from "../../../lib/blogAuthConfig";
 import ResponsiveAppBar from "../../../components/ResponsiveAppBar";
 import {useQuery} from "@tanstack/react-query";
 import LoadingCircle from "../../../components/loadingCircle";
@@ -8,6 +7,7 @@ import {SmallArticle} from "../../../components/blog/smallArticle";
 import Container from "@mui/material/Container";
 import {Button} from "@mui/material";
 import Link from "next/link";
+import axios from "axios";
 
 
 export default function Posts() {
@@ -15,7 +15,7 @@ export default function Posts() {
     const {data:articles, isLoading} = useQuery({
         queryKey: ["articles"],
         queryFn:async () => {
-            const {data} = await blogAxios.get("/api/articles?populate=image")
+            const {data} = await axios.get("/api/blog/articles/10")
             return data
         }
     })

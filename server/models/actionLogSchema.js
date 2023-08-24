@@ -11,6 +11,7 @@ const actionLogSchema =  mongoose.Schema({
             "makeOrder",
             "postAComment",
             "setupProfile",
+            "submitSurvey",
             "share"]
     }, // E.g., "completedTask", "postedComment"
     pointsEarned: {
@@ -32,7 +33,8 @@ actionLogSchema.post("validate",async function (_,next) {
         "makeOrder": 15,
         "postAComment": 2,
         "share": 7,
-        "setupProfile": 10
+        "setupProfile": 10,
+        "submitSurvey": 15,
     }
     actionLog.pointsEarned = actionLogs[actionLog.actionType] ?? 0
     const newGamify = await gamificationSchema.findOneAndUpdate(

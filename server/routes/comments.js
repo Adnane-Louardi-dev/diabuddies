@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const {isLoggedIn} = require("../middlewares/isLoggedIn");
 const commentSchema = require("../models/commentSchema");
+const {newActionLog} = require("../controllers/gamifyControllers");
 
 router.get("/:articleId",async (req,res)=>{
     const {articleId} = req.params
@@ -20,13 +21,19 @@ router.get("/:articleId",async (req,res)=>{
 })
 router.post("/:articleId",isLoggedIn,async (req,res)=>{
     try {
-        const {articleId} = req.params
+        const {articleId} = req.params;
+        const existedComment = await commentSchema.exists({
+            user: req.user._id,
+            article: articleId
+        })
+        if(!existedComment){
+            newActionLog("postAComment",req.user._id)
+        }
         const comment = await commentSchema.create({
             user: req.user._id,
             article: articleId,
             content: req.body.comment
         })
-        await comment.save()
         return res.status(201).json(comment)
     } catch (e) {
         console.error(e)
