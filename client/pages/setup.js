@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { Box, Button, LinearProgress } from "@mui/material";
-import { Icon } from "@iconify/react";
+import React, {useEffect, useState} from "react";
+import {Box, Button, LinearProgress} from "@mui/material";
+import {Icon} from "@iconify/react";
 import Gender from "../components/stepper/gender";
 import BirthDate from "../components/stepper/birthDate";
 import Tall from "../components/stepper/tall";
@@ -8,7 +8,7 @@ import Weight from "../components/stepper/weight";
 import InsulinSensitivity from "../components/stepper/insulinSensitivity";
 import Hb1ac from "../components/stepper/hb1ac";
 import axios from "axios";
-import { useRouter } from "next/router";
+import {useRouter} from "next/router";
 import Image from "next/image";
 import moment from "moment";
 
@@ -31,8 +31,8 @@ const Setup = () => {
   const handlePOSTSetupUser = async () => {
     axios
       .post(
-        "/api/user/",
-        { ...data, newUser: false },
+        "/api/user/diabetecDetails",
+        {...data},
         {
           headers: {
             "Content-Type": "application/json",

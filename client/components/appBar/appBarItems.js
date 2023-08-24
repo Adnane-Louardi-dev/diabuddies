@@ -31,6 +31,11 @@ export const appBarItems = [
         icon: "material-symbols:help-outline",
     },
     {
+        link: "/myActions",
+        label: "My Actions",
+        icon: "icons8:todo-list",
+    },
+    {
         link: "/settings",
         label: "Settings",
         icon: "solar:settings-linear",

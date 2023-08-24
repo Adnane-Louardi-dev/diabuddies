@@ -9,7 +9,7 @@ import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 import {Icon} from "@iconify/react";
 import ReduceFactors from "./reduceFactors";
-import {useGetCurrentUser} from "../customeHooks/useGetCurrentUser";
+import {useGetCurrentUserDetailed} from "../customeHooks/useGetCurrentUser";
 import moment from "moment";
 import Link from "next/link";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -34,12 +34,12 @@ function CalculatingBolus(carbs, ratio, InsulinSensitivity, IOBcarb, glucose) {
 }
 
 const CarbsCountingDialog = ({ activeInsulinProp, glucose, lastInjectionTime }) => {
-  const { user } = useGetCurrentUser();
-  const [localGlucose, setGlucose] = useState(glucose && user.normalBloodGlucose.min);
+  const { user } = useGetCurrentUserDetailed()
+  const [localGlucose, setGlucose] = useState(glucose && user?.diabetecDetails.normalBloodGlucose.min);
   const [activeInsulin, setActiveInsulin] = useState(0);
   const [localLastInjectionTime] = useState(lastInjectionTime);
-  const [carbsRatio, setcarbsRatio] = useState(user.carbsRatio);
-  const [insulinSensitivity, setinsulinSensitivity] = useState(user.insulinSensitivity.value);
+  const [carbsRatio, setcarbsRatio] = useState(user?.diabetecDetails.carbsRatio);
+  const [insulinSensitivity, setinsulinSensitivity] = useState(user?.diabetecDetails.insulinSensitivity.value);
   const [reduceLevel, setreduceLevel] = useState(0);
   let actingTime = 3;
   let actingTimeDateFormat = moment(localLastInjectionTime)
@@ -144,7 +144,7 @@ const CarbsCountingDialog = ({ activeInsulinProp, glucose, lastInjectionTime }) 
                       variant="standard"
                       className="w-10 font-sourceCode font-semibold text-3xl text-gray-800 text-center"
                       placeholder={"00"}
-                      defaultValue={user.carbsRatio}
+                      defaultValue={user.diabetecDetails.carbsRatio}
                       onChange={(newCarbsRatio) => setcarbsRatio(parseFloat(newCarbsRatio.target.value))}
                       sx={{
                         "& .MuiInputBase-input": {
@@ -174,7 +174,7 @@ const CarbsCountingDialog = ({ activeInsulinProp, glucose, lastInjectionTime }) 
                       variant="standard"
                       className="w-10 font-sourceCode font-semibold text-3xl text-gray-800 text-center"
                       placeholder={"00"}
-                      defaultValue={user.insulinSensitivity.value}
+                      defaultValue={user.diabetecDetails.insulinSensitivity.value}
                       onChange={(newInsulinSensitivity) => setinsulinSensitivity(parseFloat(newInsulinSensitivity.target.value))}
                       sx={{
                         "& .MuiInputBase-input": {
@@ -184,7 +184,7 @@ const CarbsCountingDialog = ({ activeInsulinProp, glucose, lastInjectionTime }) 
                         },
                       }}
                     />
-                    <span className="text-sm">{user.insulinSensitivity.unit}</span>
+                    <span className="text-sm">{user.diabetecDetails.insulinSensitivity.unit}</span>
                   </div>
                 </div>
               </div>
@@ -234,7 +234,7 @@ const CarbsCountingDialog = ({ activeInsulinProp, glucose, lastInjectionTime }) 
                               }}
                           >
                             <Icon icon="ph:drop-light" className="text-white mx-1 h-5 w-5" />
-                            Glucose({user.unit})
+                            Glucose({user.diabetecDetails.unit})
                           </InputAdornment>
                       ),
                       style: {
