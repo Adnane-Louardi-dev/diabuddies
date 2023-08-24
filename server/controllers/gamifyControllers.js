@@ -17,18 +17,6 @@ module.exports = {
         if(exsitedGamification){
             return res.status(404).json({message: "already existed gamification"})
         }
-        const secondLevel = await levelsSchema.create({
-            levelName: "second level",
-            minPoints: 100,
-            maxPoints: 300
-        })
-        const firstLevel = await levelsSchema.create({
-            levelName: "first level",
-            minPoints: 0,
-            maxPoints: 100,
-            nextLevel: secondLevel._id
-        })
-        await Promise.all([firstLevel.save(), secondLevel.save()])
         const gamification = await gamificationSchema.create({
             userId: req.user._id,
             level: firstLevel._id

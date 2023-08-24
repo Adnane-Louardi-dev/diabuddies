@@ -6,6 +6,7 @@ const LocalStrategy = require("passport-local").Strategy;
 var crypto = require("crypto");
 const {diabetecDetailsSchema} = require("../models/diabetecDetailsSchema");
 const {gamificationSchema} = require("../models/gamificationSchema");
+const {levelsSchema} = require("../models/levelsSchema");
 
 const router = express.Router();
 //local strategy
@@ -50,10 +51,10 @@ passport.use(
           await diabetecDetailsSchema.create({
               userId: createdUser._id
           })
-          const level = //
+          const level = await levelsSchema.findOne({level:1})
           await gamificationSchema.create({
               userId: createdUser._id,
-              level: "64e5ff2f0be839c5dfa15d2d"
+              level: level._id
           })
           createdUser.save((err,newUser)=> cb(err,newUser))
         } else {

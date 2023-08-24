@@ -46,7 +46,7 @@ const Settings = () => {
           photo: data.photo,
           bio: data.bio,
           darkMode: data.darkMode}),
-        axios.put("/api/user/", {
+        axios.put("/api/user/diabetecDetails", {
           gender: data.gender === "Gender" ? "none" : data.gender,
           diabetesType: data.diabetesType === "Diabetes Type" ? "other" : data.diabetesType,
           height: data.height,
@@ -58,7 +58,8 @@ const Settings = () => {
           hyperglycemia: data.hyperglycemia,
           normalBloodGlucose: data.normalBloodGlucose,
           hypoglycemia: data.hypoglycemia,
-          unit: data.unit
+          unit: data.unit,
+          dailyCaloriesNeeds:data.dailyCaloriesNeeds
         })
       ])
     },

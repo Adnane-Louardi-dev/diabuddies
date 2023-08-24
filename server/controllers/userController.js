@@ -61,7 +61,8 @@ module.exports = {
             hyperglycemia,
             normalBloodGlucose,
             hypoglycemia,
-            unit
+            unit,
+            dailyCaloriesNeeds
         } = req.body
         const payload = JSON.parse(JSON.stringify({
             birthDate,
@@ -76,7 +77,8 @@ module.exports = {
             hyperglycemia,
             normalBloodGlucose,
             hypoglycemia,
-            unit
+            unit,
+            dailyCaloriesNeeds
         }))
         const updatedDiabetecDetails = await diabetecDetailsSchema.updateOne({
             userId: req.user._id,

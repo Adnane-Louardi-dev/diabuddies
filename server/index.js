@@ -23,11 +23,20 @@ const {schedule} = require("node-cron");
 const {gamificationSchema} = require("./models/gamificationSchema");
 const {isLoggedIn} = require("./middlewares/isLoggedIn");
 const {newActionLog} = require("./controllers/gamifyControllers");
+const {levelsSchema} = require("./models/levelsSchema");
 //DB connect
 const DBConnection =
   process.env.DB_CONNECTION ||
   `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.dgq8q.mongodb.net/?retryWrites=true&w=majority&ssl=true`;
-mongoose.connect(DBConnection, () => console.log("DB connected!"));
+mongoose.connect(DBConnection, async () => {
+    await createLevels()
+    schedule('0 0 0 * * *', ()=>{
+        gamificationSchema.updateMany({},{
+            dailyLogInClaimed: false
+        })
+    });
+    console.log("DB connected!")
+});
 
 //middleswares
 app.use(
@@ -87,8 +96,30 @@ app.post("/daily_log_in",isLoggedIn,async (req,res)=>{
     await newActionLog("dailyLogIn",req.user._id)
     return res.status(201).json({message: "claimed"})
 })
-schedule('0 0 0 * * *', ()=>{
-    gamificationSchema.updateMany({},{
-        dailyLogInClaimed: false
-    })
-});
+
+const createLevels = async () => {
+    const existedLevelsCount = await levelsSchema.countDocuments({})
+    if(!existedLevelsCount){
+        const thirdLevel = await levelsSchema.create({
+            levelName: "Third level",
+            level:3,
+            minPoints: 100,
+            maxPoints: 300
+        })
+        const secondLevel = await levelsSchema.create({
+            levelName: "Second level",
+            level:2,
+            minPoints: 100,
+            maxPoints: 300,
+            nextLevel: thirdLevel._id
+        })
+        const firstLevel = await levelsSchema.create({
+            levelName: "First level",
+            level:1,
+            minPoints: 0,
+            maxPoints: 100,
+            nextLevel: secondLevel._id
+        })
+        await Promise.all([firstLevel.save(), secondLevel.save(),thirdLevel.save()])
+    }
+}
