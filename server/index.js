@@ -86,7 +86,7 @@ app.listen(process.env.PORT, () => {
 
 app.post("/daily_log_in",isLoggedIn,async (req,res)=>{
     const gamify = await gamificationSchema.findOne({
-            userId: req.user._id
+            user: req.user._id
         })
     if(gamify.dailyLogInClaimed){
         return res.status(200).json({message: "already claimed"})

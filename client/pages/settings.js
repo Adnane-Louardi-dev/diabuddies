@@ -66,9 +66,26 @@ const Settings = () => {
     onError: (e) => {
       console.error(e);
     },
-    onSettled: () => {
-      queryClient.invalidateQueries(["getCurrentUser"])
-      queryClient.invalidateQueries(["detailedUser"])
+    onMutate: async (data) => {
+      await queryClient.cancelQueries(["getCurrentUser"])
+      queryClient.setQueryData(["getCurrentUser"],{
+        user: JSON.parse(JSON.stringify({
+          userName: data.userName,
+          givenName: data.givenName,
+          familyName: data.familyName,
+          age: data.age,
+          email: data.email,
+          homeAddress: data.homeAddress,
+          phoneNumber: data.phoneNumber,
+          photo: data.photo,
+          bio: data.bio,
+          darkMode: data.darkMode
+        }))
+      })
+    },
+    onSettled: async () => {
+      await queryClient.invalidateQueries(["getCurrentUser"])
+      await queryClient.invalidateQueries(["detailedUser"])
       setNotificationOpen(true);
     },
   });
@@ -111,8 +128,6 @@ const Settings = () => {
   if (isLoading) {
     return <LoadingCircle />;
   }
-  console.log("diabetecDetails", user)
-
   return (
     <Container maxWidth={"xl"}>
       <form onSubmit={handleSubmit(updateUserSettings)}>

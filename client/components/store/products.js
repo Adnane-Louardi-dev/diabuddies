@@ -1,11 +1,20 @@
 import Link from "next/link";
-import React from "react";
+import React, {useState} from "react";
 import {AddProductToCart} from "./addProductToCart";
 import {WishedIcon} from "./wishedIcon";
 import {ProductImage} from "./ProductImage";
+import {Add, Remove} from "@mui/icons-material";
+import {debounce} from "@mui/material";
+import {useUpdateCart} from "../../customeHooks/useCart";
 
 export default function Product({id,...product}) {
    const {name, selling_price,original_price, pictures,inventory,description, thumbnail} = product.attributes
+   const {cart,updateCart} = useUpdateCart();
+   // const quantity = useMemo(()=>{
+   //    return cart.venteEntries.find((venteEntry)=>venteEntry.product.id === id)?.quantity ?? 0
+   // },[cart.totalItems])
+   const [quantity, setQuantity] = useState(1)
+   console.log('cart ', cart)
    return (
       <>
          <div className="h-screen relative">
@@ -56,18 +65,32 @@ export default function Product({id,...product}) {
             {/*----  ----*/}
             {/*---- subbar ----*/}
             <div className="fixed bottom-0 left-0 right-0 m-5 px-5 py-4 h-16 rounded-2xl bg-gray-200 shadow-lg font-nunito">
-               <div className="flex justify-center sm:justify-between">
+               <div className="flex justify-between sm:justify-between">
                   <button type="submit" className=" hidden sm:inline-flex h-10 w-24 text-white bg-gray-500 hover:bg-gray-400 px-3 py-2 rounded-md">
                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 my-0.5 mr-1" viewBox="0 0 20 20" fill="currentColor">
                         <path fillRule="evenodd" d="M7.707 3.293a1 1 0 010 1.414L5.414 7H11a7 7 0 017 7v2a1 1 0 11-2 0v-2a5 5 0 00-5-5H5.414l2.293 2.293a1 1 0 11-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
                      </svg>
                      <span>Share</span>
                   </button>
+                  <div className={"flex align-middle text-[1rem] mt-0.5 mx-2 py-1 justify-between border-2 border-solid border-diaDarkBlue rounded"}>
+                     <Add className={"cursor-pointer  mr-1"}
+                          onClick={debounce(() => {
+                             setQuantity(quantity + 1)
+                          }, 200)}/>
+                     <span>{quantity}</span>
+                     <Remove className={"cursor-pointer ml-1"}
+                             onClick={debounce(() => {
+                                if(quantity > 0) {
+                                   setQuantity(quantity-1)
+                                }
+                             }, 200)}
+                     />
+                  </div>
                   <div className="inline-flex justify-center">
                      <div className="px-3 py-1 text-blue-700">
                         <h1 className="text-xl mt-0.5 whitespace-nowrap">{selling_price} DH</h1>
                      </div>
-                     <AddProductToCart id={id} product={product}>
+                     <AddProductToCart id={id} product={product} quantity={quantity}>
                         <button type="submit" className="inline-flex text-white h-10 w-32 bg-yellow-500 hover:bg-yellow-400 hover:text-gray-100 px-3 py-2 rounded-md">
                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 my-0.5 mr-0.5" viewBox="0 0 20 20" fill="currentColor">
                               <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
@@ -75,7 +98,6 @@ export default function Product({id,...product}) {
                            <span className="text-md whitespace-nowrap">Add to cart</span>
                         </button>
                      </AddProductToCart>
-
                   </div>
                </div>
             </div>

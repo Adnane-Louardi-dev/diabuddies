@@ -53,7 +53,7 @@ passport.use(
           })
           const level = await levelsSchema.findOne({level:1})
           await gamificationSchema.create({
-              userId: createdUser._id,
+              user: createdUser._id,
               level: level._id
           })
           createdUser.save((err,newUser)=> cb(err,newUser))
