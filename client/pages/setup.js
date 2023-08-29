@@ -11,11 +11,13 @@ import axios from "axios";
 import {useRouter} from "next/router";
 import Image from "next/image";
 import moment from "moment";
+import {useQueryClient} from "@tanstack/react-query";
 
 const steps = [<Gender />, <BirthDate />, <Tall />, <Weight />, <InsulinSensitivity />, <Hb1ac />];
 
 const Setup = () => {
-  const router = useRouter();
+  const router = useRouter()
+  const queryClient = useQueryClient()
   const [data, setData] = useState({
     height: { value: null, unit: "cm" },
     weight: { value: null, unit: "kg" },
@@ -40,7 +42,9 @@ const Setup = () => {
           },
         }
       )
-      .then((res) => console.log(res))
+      .then(() => {
+        queryClient.invalidateQueries(["getCurrentUser"])
+      })
       .catch((err) => console.log(err));
     router.push("/");
   };

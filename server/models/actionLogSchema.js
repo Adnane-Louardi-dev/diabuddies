@@ -39,7 +39,7 @@ actionLogSchema.post("validate",async function (_,next) {
     actionLog.pointsEarned = actionLogs[actionLog.actionType] ?? 0
     const newGamify = await gamificationSchema.findOneAndUpdate(
         {
-                userId: actionLog.userId
+                user: actionLog.userId
             },{
             $inc: {
                 points: actionLogs[actionLog.actionType] ?? 0

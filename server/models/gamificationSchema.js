@@ -3,8 +3,9 @@ const mongoose = require("mongoose");
 
 module.exports = {
     gamificationSchema: mongoose.model("gamificationSchema", mongoose.Schema({
-        userId: {
+        user: {
             type: mongoose.Schema.Types.ObjectId,
+            ref: "userSchema",
             required: true
         },
         level: {

@@ -36,6 +36,11 @@ export const appBarItems = [
         icon: "icons8:todo-list",
     },
     {
+        link: "/leaderboard",
+        label: "LeaderBoard",
+        icon: "ic:outline-leaderboard",
+    },
+    {
         link: "/settings",
         label: "Settings",
         icon: "solar:settings-linear",
