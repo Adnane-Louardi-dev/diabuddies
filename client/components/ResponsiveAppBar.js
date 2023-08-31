@@ -13,7 +13,6 @@ function ResponsiveAppBar() {
     <AppBar position="static" className="bg-transparent shadow-none">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          a
           <Logo />
           <Box sx={{ flexGrow: 0, display: "flex", color: "#000" }}>
             <AIAssistant />

@@ -26,6 +26,7 @@ import BolusAdvisor from "../components/bolusAdvisor";
 import { Button } from "@mui/material";
 import Advice from "../components/advice";
 import { GamifyProgressBar } from "../components/appBar/GamifyProgressBar";
+import showNotification from "../utils/showNotification";
 
 export default function Home() {
   const router = useRouter();
@@ -63,6 +64,7 @@ export default function Home() {
     enabled: router.isReady,
     onSuccess: (data) => {
       router.push({ href: "/", query: { date: date } });
+      navigator.serviceWorker?.controller.postMessage({ action: "logBook", data: data.logBook });
     },
     onError: (e) => {
       console.error(e);

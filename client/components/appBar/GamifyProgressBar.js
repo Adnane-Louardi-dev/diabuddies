@@ -14,7 +14,6 @@ export const GamifyProgressBar = () => {
     const { data } = await axios.get("/api/gamify/");
     return data;
   });
-  console.log(gamify);
   const queryClient = useQueryClient();
   return (
     <>

@@ -3,31 +3,63 @@ import Head from "next/head";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useEffect } from "react";
 import Script from "next/script";
 const queryClient = new QueryClient();
+import showNotification from "../utils/showNotification";
+export function initSW() {
+  window.addEventListener("load", () => {
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.register("/sw.js");
+
+      // if (navigator.serviceWorker.controller) {
+      //   navigator.serviceWorker.controller.postMessage(UPDATE_CHECK);
+      //   navigator.serviceWorker.addEventListener("controllerchange", () => {
+      //     window.location.reload();
+      //   });
+      // }
+
+      navigator.serviceWorker.ready.then(async (registration) => {
+        if ("periodicSync" in registration) {
+          const status = await navigator.permissions.query({
+            // @ts-expect-error
+            name: "periodic-background-sync",
+          });
+
+          if (status.state === "granted") {
+            await registration.periodicSync.register("show-notification", {
+              minInterval: 1000,
+            });
+          }
+        }
+      });
+    }
+  });
+}
+
 function MyApp({ Component, pageProps }) {
   useEffect(() => {
     if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("/service-worker.js").then((registration) => console.log("scope is: ", registration.scope));
-    }
-    if (typeof window !== undefined) {
-      window.OneSignal = window.OneSignal || [];
-      OneSignal.push(function () {
-        OneSignal.init({
-          appId: "6631d4a2-a1df-4cf0-92e1-da016bdd083c",
-          notifyButton: {
-            enable: true,
-          },
-          allowLocalhostAsSecureOrigin: true,
-        });
+      navigator.serviceWorker.register("/sw.js");
+      navigator.serviceWorker.ready.then(async (registration) => {
+        if ("periodicSync" in registration) {
+          const status = await navigator.permissions.query({
+            name: "periodic-background-sync",
+          });
+
+          if (status.state === "granted") {
+            await registration.periodicSync.register("show-notification", {
+              minInterval: 1000,
+            });
+          }
+        }
       });
     }
   }, []);
   return (
     <QueryClientProvider client={queryClient}>
       <Script strategy="lazyOnload" src={`https://www.googletagmanager.com/gtag/js?id=${process.env.NEXT_PUBLIC_GOOGLE_ANALYTICS}`} />
-      <Script strategy="beforeInteractive" src="https://cdn.onesignal.com/sdks/web/v16/OneSignalSDK.page.js" defer />
       <Script
         strategy="afterInteractive"
         dangerouslySetInnerHTML={{
@@ -60,6 +92,7 @@ function MyApp({ Component, pageProps }) {
       <LocalizationProvider dateAdapter={AdapterMoment}>
         <Component {...pageProps} />
       </LocalizationProvider>
+      <ReactQueryDevtools />
     </QueryClientProvider>
   );
 }
