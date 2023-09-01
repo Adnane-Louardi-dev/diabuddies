@@ -298,8 +298,8 @@ const CarbsCountingDialog = ({ activeInsulinProp, glucose, lastInjectionTime }) 
                     },
                   }}
                   onChange={(newCarbsValue) => setMacros({ ...Macros, carbs: parseFloat(newCarbsValue.target.value) })}
-              />
-</div>
+                />
+              </div>
             </section>
             <section className="grid gap-3 rounded-xl my-5 py-2">
               <h3 className="font-sourceCode text-diaGray">{t("activityLevel")}</h3>
