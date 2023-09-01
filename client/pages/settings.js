@@ -1,31 +1,30 @@
-import React, { useState } from "react";
-import { Alert, Button, Grid, Input, InputAdornment, Snackbar } from "@mui/material";
+import React, {useState} from "react";
+import {Alert, Button, Grid, Input, InputAdornment, Snackbar} from "@mui/material";
 import TextField from "@mui/material/TextField";
-import { SettingsCard } from "../components/SettingsCard";
+import {SettingsCard} from "../components/SettingsCard";
 import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
-import { Controller, useForm } from "react-hook-form";
-import { SettingMedication } from "../components/SettingMedication";
-import { Icon } from "@iconify/react";
-import { useRouter } from "next/router";
+import {Controller, useForm} from "react-hook-form";
+import {SettingMedication} from "../components/SettingMedication";
+import {Icon} from "@iconify/react";
 import axios from "axios";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import MenuItem from "@mui/material/MenuItem";
-import { heightUnits, insulinUnits, weightUnits } from "../utils/units";
-import { AddMedicamentModal } from "../components/AddMedicamentModal";
+import {heightUnits, insulinUnits, weightUnits} from "../utils/units";
+import {AddMedicamentModal} from "../components/AddMedicamentModal";
 import Image from "next/image";
 import LoadingCircle from "../components/loadingCircle";
-import { useGetCurrentUser } from "../customeHooks/useGetCurrentUser";
-import { useMutation } from "@tanstack/react-query";
-import { Logo } from "../components/Logo";
+import {useGetCurrentUserDetailed} from "../customeHooks/useGetCurrentUser";
+import {useMutation, useQueryClient} from "@tanstack/react-query";
+import {Logo} from "../components/Logo";
 import Container from "@mui/material/Container";
 import AvatarDialog from "../components/avatarDialog";
 
 const Settings = () => {
   const { register, control, handleSubmit, reset } = useForm();
-  const router = useRouter();
-  const { user, isLoading } = useGetCurrentUser();
+  const queryClient = useQueryClient()
+  const { user, isLoading } = useGetCurrentUserDetailed()
   const [notificationOpen, setNotificationOpen] = useState(false);
 
   const {
@@ -35,26 +34,58 @@ const Settings = () => {
   } = useMutation({
     mutationKey: ["updateUser"],
     mutationFn: (data) => {
-      return axios.post(
-        "/api/user/",
-        {
-          ...user,
-          ...data,
+      return Promise.all([
+        axios.post("/api/user/", {
+          userName: data.userName,
+          givenName: data.givenName,
+          familyName: data.familyName,
+          age: data.age,
+          email: data.email,
+          homeAddress: data.homeAddress,
+          phoneNumber: data.phoneNumber,
+          photo: data.photo,
+          bio: data.bio,
+          darkMode: data.darkMode}),
+        axios.put("/api/user/diabetecDetails", {
           gender: data.gender === "Gender" ? "none" : data.gender,
           diabetesType: data.diabetesType === "Diabetes Type" ? "other" : data.diabetesType,
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "Access-Control-Allow-Origin": "*",
-          },
-        }
-      );
+          height: data.height,
+          weight: data.weight,
+          carbsRatio: data.carbsRatio,
+          bodyFatPercentage: data.bodyFatPercentage,
+          insulinSensitivity: data.insulinSensitivity,
+          hb1ac: data.hb1ac,
+          hyperglycemia: data.hyperglycemia,
+          normalBloodGlucose: data.normalBloodGlucose,
+          hypoglycemia: data.hypoglycemia,
+          unit: data.unit,
+          dailyCaloriesNeeds:data.dailyCaloriesNeeds
+        })
+      ])
     },
     onError: (e) => {
       console.error(e);
     },
-    onSettled: () => {
+    onMutate: async (data) => {
+      await queryClient.cancelQueries(["getCurrentUser"])
+      queryClient.setQueryData(["getCurrentUser"],{
+        user: JSON.parse(JSON.stringify({
+          userName: data.userName,
+          givenName: data.givenName,
+          familyName: data.familyName,
+          age: data.age,
+          email: data.email,
+          homeAddress: data.homeAddress,
+          phoneNumber: data.phoneNumber,
+          photo: data.photo,
+          bio: data.bio,
+          darkMode: data.darkMode
+        }))
+      })
+    },
+    onSettled: async () => {
+      await queryClient.invalidateQueries(["getCurrentUser"])
+      await queryClient.invalidateQueries(["detailedUser"])
       setNotificationOpen(true);
     },
   });
@@ -92,6 +123,7 @@ const Settings = () => {
       </div>
     );
   }, []);
+
 
   if (isLoading) {
     return <LoadingCircle />;
@@ -143,7 +175,7 @@ const Settings = () => {
                   <Controller
                     name={"gender"}
                     control={control}
-                    defaultValue={user.gender || "Gender"}
+                    defaultValue={user.diabetecDetails.gender || "Gender"}
                     render={({ field }) => (
                       <Select {...field} className="w-full">
                         {["Gender", "Male", "Female"].map((gender) => (
@@ -167,7 +199,7 @@ const Settings = () => {
                   <Controller
                     name={"diabetesType"}
                     control={control}
-                    defaultValue={user.diabetesType || "Diabetes Type"}
+                    defaultValue={user.diabetecDetails.diabetesType || "Diabetes Type"}
                     render={({ field }) => (
                       <Select {...field} className="w-full">
                         {["Diabetes Type", "type 1", "type 2", "other", ""].map((type) => (
@@ -182,7 +214,7 @@ const Settings = () => {
                 {/* Height */}
                 <Grid item xs={6}>
                   <UserInput
-                    defaultValue={user.height?.value ? user.height.value : ""}
+                    defaultValue={user.diabetecDetails.height?.value ? user.diabetecDetails.height.value : ""}
                     fieldName={"height.value"}
                     label={"Height"}
                     type={"number"}
@@ -197,7 +229,7 @@ const Settings = () => {
                           <Controller
                             name={"height.unit"}
                             control={control}
-                            defaultValue={user.height?.unit || heightUnits.default}
+                            defaultValue={user.diabetecDetails.height?.unit || heightUnits.default}
                             render={({ field }) => (
                               <Select {...field} className={"w-full"}>
                                 {heightUnits.options.map((unit) => (
@@ -216,7 +248,7 @@ const Settings = () => {
                 {/* weight */}
                 <Grid item xs={6}>
                   <UserInput
-                    defaultValue={user.weight?.value ? user.weight.value : ""}
+                    defaultValue={user.diabetecDetails.weight?.value ? user.diabetecDetails.weight.value : ""}
                     fieldName={"weight.value"}
                     label={"Weight"}
                     type={"number"}
@@ -231,7 +263,7 @@ const Settings = () => {
                           <Controller
                             name={"weight.unit"}
                             control={control}
-                            defaultValue={user.weight?.unit || weightUnits.default}
+                            defaultValue={user.diabetecDetails.weight?.unit || weightUnits.default}
                             render={({ field }) => (
                               <Select {...field} className={"w-full"}>
                                 {weightUnits.options.map((unit) => (
@@ -250,7 +282,7 @@ const Settings = () => {
                 {/* carbs ratio */}
                 <Grid item xs={6}>
                   <UserInput
-                    defaultValue={parseFloat(user.carbsRatio)}
+                    defaultValue={parseFloat(user.diabetecDetails.carbsRatio)}
                     fieldName={"carbsRatio"}
                     label={"Carbs Ratio"}
                     type={"number"}
@@ -266,7 +298,7 @@ const Settings = () => {
                 {/* body fat */}
                 <Grid item xs={6}>
                   <UserInput
-                    defaultValue={parseFloat(user.bodyFatPercentage)}
+                    defaultValue={parseFloat(user.diabetecDetails.bodyFatPercentage)}
                     fieldName={"bodyFatPercentage"}
                     label={"Body Fat Percentage"}
                     type={"number"}
@@ -282,7 +314,7 @@ const Settings = () => {
                 {/* insulin Sensitivity */}
                 <Grid item xs={6}>
                   <UserInput
-                    defaultValue={parseFloat(user.insulinSensitivity?.value)}
+                    defaultValue={parseFloat(user.diabetecDetails.insulinSensitivity?.value)}
                     fieldName={"insulinSensitivity.value"}
                     label={"Insulin Sensitivity"}
                     type={"number"}
@@ -297,7 +329,7 @@ const Settings = () => {
                           <Controller
                             name={"insulinSensitivity.unit"}
                             control={control}
-                            defaultValue={user.insulinSensitivity?.unit || insulinUnits.default}
+                            defaultValue={user.diabetecDetails.insulinSensitivity?.unit || insulinUnits.default}
                             render={({ field }) => (
                               <Select {...field} className={"w-full"}>
                                 {insulinUnits.options.map((unit) => (
@@ -316,7 +348,7 @@ const Settings = () => {
                 {/* hb1ac */}
                 <Grid item xs={6}>
                   <UserInput
-                    defaultValue={user.hb1ac}
+                    defaultValue={user.diabetecDetails.hb1ac}
                     fieldName={"hb1ac"}
                     label={"HB1AC"}
                     type={"number"}
@@ -332,7 +364,7 @@ const Settings = () => {
                 {/* dailyCaloriesNeeds */}
                 <Grid item xs={6}>
                   <UserInput
-                    defaultValue={user?.dailyCaloriesNeeds}
+                    defaultValue={user.diabetecDetails.dailyCaloriesNeeds}
                     fieldName={"dailyCaloriesNeeds"}
                     label={"Daily calories needs"}
                     type={"number"}
@@ -356,10 +388,10 @@ const Settings = () => {
                 </Grid>
                 <Grid item xs={12} className={"grid grid-cols-2"}>
                   <div>
-                    Min. <Input defaultValue={user.hyperglycemia?.min} type={"number"} placeholder={"181"} {...register("hyperglycemia.min")} />
+                    Min. <Input defaultValue={user.diabetecDetails.hyperglycemia?.min} type={"number"} placeholder={"181"} {...register("hyperglycemia.min")} />
                   </div>
                   <div>
-                    Max. <Input defaultValue={user.hyperglycemia?.max} type={"number"} placeholder={"600"} {...register("hyperglycemia.max")} />
+                    Max. <Input defaultValue={user.diabetecDetails.hyperglycemia?.max} type={"number"} placeholder={"600"} {...register("hyperglycemia.max")} />
                   </div>
                 </Grid>
                 <Grid item xs={12}>
@@ -367,10 +399,10 @@ const Settings = () => {
                 </Grid>
                 <Grid item xs={12} className={"grid grid-cols-2"}>
                   <div>
-                    Min. <Input defaultValue={user.normalBloodGlucose?.min} type={"number"} placeholder={"70"} {...register("normalBloodGlucose.min")} />
+                    Min. <Input defaultValue={user.diabetecDetails.normalBloodGlucose?.min} type={"number"} placeholder={"70"} {...register("normalBloodGlucose.min")} />
                   </div>
                   <div>
-                    Max. <Input defaultValue={user.normalBloodGlucose?.max} type={"number"} placeholder={"180"} {...register("normalBloodGlucose.max")} />
+                    Max. <Input defaultValue={user.diabetecDetails.normalBloodGlucose?.max} type={"number"} placeholder={"180"} {...register("normalBloodGlucose.max")} />
                   </div>
                 </Grid>
                 <Grid item xs={12}>
@@ -378,10 +410,10 @@ const Settings = () => {
                 </Grid>
                 <Grid item xs={12} className={"grid grid-cols-2"}>
                   <div>
-                    Min. <Input defaultValue={user.hypoglycemia?.min} type={"number"} placeholder={"20"} {...register("hypoglycemia.min")} />
+                    Min. <Input defaultValue={user.diabetecDetails.hypoglycemia?.min} type={"number"} placeholder={"20"} {...register("hypoglycemia.min")} />
                   </div>
                   <div>
-                    Max. <Input defaultValue={user.hypoglycemia?.max} type={"number"} placeholder={"69"} {...register("hypoglycemia.max")} />
+                    Max. <Input defaultValue={user.diabetecDetails.hypoglycemia?.max} type={"number"} placeholder={"69"} {...register("hypoglycemia.max")} />
                   </div>
                 </Grid>
               </Grid>
@@ -396,7 +428,7 @@ const Settings = () => {
                 </div>
               }
             >
-              {user && user.medications?.map((medication) => <SettingMedication medication={medication} control={control} />)}
+              {user && user.diabetecDetails.medications?.map((medication) => <SettingMedication medication={medication} control={control} />)}
             </SettingsCard>
           </Grid>
           <Grid item xs={12} md={12}>

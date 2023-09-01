@@ -188,7 +188,7 @@ const Cart = () => {
                                            </td>
                                            <td
                                                onClick={() => {
-                                                  updateCart(cart, product, -1000)
+                                                  updateCart(product, -1000)
                                                }}
                                                className="py-4 px-6 whitespace-nowrap text-center text-md font-medium rounded-lg cursor-pointer"
                                            >

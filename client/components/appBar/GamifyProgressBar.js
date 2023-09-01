@@ -1,9 +1,9 @@
 import Box from "@mui/material/Box";
-import { LinearProgress } from "@mui/material";
+import {LinearProgress} from "@mui/material";
 import Typography from "@mui/material/Typography";
-import { Icon } from "@iconify/react";
+import {Icon} from "@iconify/react";
 import * as React from "react";
-import { useQuery, useQueryClient } from "@tanstack/react-query";
+import {useQuery, useQueryClient} from "@tanstack/react-query";
 import axios from "axios";
 import ScienceIcon from "@mui/icons-material/Science";
 import IconButton from "@mui/material/IconButton";
@@ -48,7 +48,7 @@ export const GamifyProgressBar = () => {
                 <LinearProgress
                   sx={{
                     height: "10px",
-
+                    width: "calc(100% - 60px)",
                     borderRadius: "10px",
                     "&.MuiLinearProgress-bar1Determinate": {
                       backgroundColor: "#1e293b",
@@ -58,8 +58,8 @@ export const GamifyProgressBar = () => {
                   value={(gamify.points / gamify.level.maxPoints) * 100}
                 />{" "}
               </Box>
-              <Box sx={{ minWidth: 35 }}>
-                <Typography variant="body2" color="text.secondary">{`${(gamify.points / gamify.level.maxPoints) * 100}%`}</Typography>
+              <Box sx={{ minWidth: 60 }}>
+                <Typography variant="body2" color="text.secondary">{gamify.points} / {gamify.level.maxPoints}</Typography>
               </Box>
             </Box>
           </Box>

@@ -3,10 +3,9 @@ import AppBar from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import Container from "@mui/material/Container";
-import { Logo } from "./Logo";
-import { AIAssistant } from "./appBar/AIAssistant";
-import { GamifyProgressBar } from "./appBar/GamifyProgressBar";
-import { SettingsMenu } from "./appBar/SettingsMenu";
+import {Logo} from "./Logo";
+import {AIAssistant} from "./appBar/AIAssistant";
+import {SettingsMenu} from "./appBar/SettingsMenu";
 
 function ResponsiveAppBar() {
   return (

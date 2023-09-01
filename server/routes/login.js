@@ -4,6 +4,9 @@ const userSchema = require("../models/userSchema");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const LocalStrategy = require("passport-local").Strategy;
 var crypto = require("crypto");
+const {diabetecDetailsSchema} = require("../models/diabetecDetailsSchema");
+const {gamificationSchema} = require("../models/gamificationSchema");
+const {levelsSchema} = require("../models/levelsSchema");
 
 const router = express.Router();
 //local strategy
@@ -35,18 +38,25 @@ passport.use(
       callbackURL: `${process.env.BACKEND_URL}/login/auth/google/callback`,
     },
     async (accessToken, refreshToken, profile, cb) => {
-      userSchema.findOne({ googleId: profile.id }, function (err, user) {
+      userSchema.findOne({ googleId: profile.id }, async function (err, user) {
         //create a new user if the user doesn't exist in the DB
         if (!user) {
-          new userSchema({
+          const createdUser = new userSchema({
             googleId: profile.id,
             givenName: profile.name.givenName,
             familyName: profile.name.familyName,
             email: profile.emails[0].value,
             photo: profile.photos[0].value,
-          }).save((err, newUser) => {
-            return cb(err, newUser);
-          });
+          })
+          await diabetecDetailsSchema.create({
+              userId: createdUser._id
+          })
+          const level = await levelsSchema.findOne({level:1})
+          await gamificationSchema.create({
+              user: createdUser._id,
+              level: level._id
+          })
+          createdUser.save((err,newUser)=> cb(err,newUser))
         } else {
           return cb(err, user);
         }

@@ -6,7 +6,6 @@ import Link from "next/link";
 import MenuItem from "@mui/material/MenuItem";
 import {Icon} from "@iconify/react";
 import Typography from "@mui/material/Typography";
-import axios from "axios";
 import * as React from "react";
 import {useGetCurrentUser} from "../../customeHooks/useGetCurrentUser";
 import {appBarItems} from "./appBarItems";
@@ -53,11 +52,6 @@ export const SettingsMenu = () => {
                         </MenuItem>
                     </Link>
                 ))}
-                <MenuItem onClick={()=>{
-                    axios.post("/api/gamify")
-                }}>
-                    <Typography textAlign="center">Create Your Gamification</Typography>
-                </MenuItem>
             </Menu>
         </>
     )
