@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
 import Dialog from "@mui/material/Dialog";
@@ -7,9 +7,9 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import {Icon} from "@iconify/react";
+import { Icon } from "@iconify/react";
 import ReduceFactors from "./reduceFactors";
-import {useGetCurrentUserDetailed} from "../customeHooks/useGetCurrentUser";
+import { useGetCurrentUserDetailed } from "../customeHooks/useGetCurrentUser";
 import moment from "moment";
 import Link from "next/link";
 import InputAdornment from "@mui/material/InputAdornment";
@@ -34,7 +34,7 @@ function CalculatingBolus(carbs, ratio, InsulinSensitivity, IOBcarb, glucose) {
 }
 
 const CarbsCountingDialog = ({ activeInsulinProp, glucose, lastInjectionTime }) => {
-  const { user } = useGetCurrentUserDetailed()
+  const { user } = useGetCurrentUserDetailed();
   const [localGlucose, setGlucose] = useState(glucose && user?.diabetecDetails.normalBloodGlucose.min);
   const [activeInsulin, setActiveInsulin] = useState(0);
   const [localLastInjectionTime] = useState(lastInjectionTime);
@@ -46,9 +46,7 @@ const CarbsCountingDialog = ({ activeInsulinProp, glucose, lastInjectionTime }) 
     .add(actingTime * 60, "minutes")
     .format();
   let diffBetweenNowAndLastInjection = moment().diff(localLastInjectionTime, "minutes");
-  const [NextMealTimer] = useState(
-    diffBetweenNowAndLastInjection >= actingTime * 60 ? "Now" : moment(actingTimeDateFormat).startOf("minute").fromNow()
-  );
+  const [NextMealTimer] = useState(diffBetweenNowAndLastInjection >= actingTime * 60 ? "Now" : moment(actingTimeDateFormat).startOf("minute").fromNow());
   const [Macros, setMacros] = useState({
     carbs: 0,
     protein: 0,
@@ -65,6 +63,7 @@ const CarbsCountingDialog = ({ activeInsulinProp, glucose, lastInjectionTime }) 
   };
 
   useEffect(() => {
+    console.log(user);
     setActiveInsulin(activeInsulinProp);
     let bolus = CalculatingBolus(Macros.carbs, carbsRatio, insulinSensitivity, activeInsulin, localGlucose);
     setbolusDose(bolus);
@@ -201,56 +200,6 @@ const CarbsCountingDialog = ({ activeInsulinProp, glucose, lastInjectionTime }) 
               <div>
                 <h3 className="font-sourceCode text-diaGray my-2">Glucose</h3>
                 <TextField
-                    id="outlined-number"
-                    type="tel"
-                    variant="standard"
-                    placeholder="0"
-                    sx={{
-                      paddingX: "10px",
-                      textAlign: "center",
-                      borderRadius: "15px",
-                      backgroundColor: "#334155",
-                      width: "full",
-                      "& .MuiInputBase-root::after, .MuiInputBase-root::before": {
-                        display: "none",
-                      },
-                      "& .MuiInputBase-input": {
-                        fontSize: 25,
-                        fontStyle: "bold",
-                        width: "full",
-                      },
-                    }}
-                    InputProps={{
-                      startAdornment: (
-                          <InputAdornment
-                              position="start"
-                              sx={{
-                                "& .MuiTypography-root": {
-                                  display: "flex",
-                                },
-                                marginRight: 3,
-                                fontSize: 12,
-                                color: "white",
-                              }}
-                          >
-                            <Icon icon="ph:drop-light" className="text-white mx-1 h-5 w-5" />
-                            Glucose({user.diabetecDetails.unit})
-                          </InputAdornment>
-                      ),
-                      style: {
-                        color: "white",
-                      },
-                    }}
-                    onChange={(newGlucoseValue) => setGlucose(parseFloat(newGlucoseValue.target.value))}
-
-                />
-              </div>
-
-<div>
-
-
-              <h3 className="font-sourceCode text-diaGray my-2">Macros</h3>
-              <TextField
                   id="outlined-number"
                   type="tel"
                   variant="standard"
@@ -265,37 +214,83 @@ const CarbsCountingDialog = ({ activeInsulinProp, glucose, lastInjectionTime }) 
                       display: "none",
                     },
                     "& .MuiInputBase-input": {
-
                       fontSize: 25,
                       fontStyle: "bold",
                       width: "full",
-                      marginX:5
                     },
                   }}
                   InputProps={{
                     startAdornment: (
-                        <InputAdornment
-                            position="start"
-                            sx={{
-                              "& .MuiTypography-root": {
-                                display: "flex",
-                              },
-                              marginRight: 3,
-                              fontSize: 12,
-                              color: "white",
-                            }}
-                        >
-                          <Icon icon="ph:drop-light" className="text-white mx-1 h-5 w-5" />
-                          Carbs(g)
-                        </InputAdornment>
+                      <InputAdornment
+                        position="start"
+                        sx={{
+                          "& .MuiTypography-root": {
+                            display: "flex",
+                          },
+                          marginRight: 3,
+                          fontSize: 12,
+                          color: "white",
+                        }}
+                      >
+                        <Icon icon="ph:drop-light" className="text-white mx-1 h-5 w-5" />
+                        Glucose({user.diabetecDetails.unit})
+                      </InputAdornment>
+                    ),
+                    style: {
+                      color: "white",
+                    },
+                  }}
+                  onChange={(newGlucoseValue) => setGlucose(parseFloat(newGlucoseValue.target.value))}
+                />
+              </div>
+
+              <div>
+                <h3 className="font-sourceCode text-diaGray my-2">Macros</h3>
+                <TextField
+                  id="outlined-number"
+                  type="tel"
+                  variant="standard"
+                  placeholder="0"
+                  sx={{
+                    paddingX: "10px",
+                    textAlign: "center",
+                    borderRadius: "15px",
+                    backgroundColor: "#334155",
+                    width: "full",
+                    "& .MuiInputBase-root::after, .MuiInputBase-root::before": {
+                      display: "none",
+                    },
+                    "& .MuiInputBase-input": {
+                      fontSize: 25,
+                      fontStyle: "bold",
+                      width: "full",
+                      marginX: 5,
+                    },
+                  }}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment
+                        position="start"
+                        sx={{
+                          "& .MuiTypography-root": {
+                            display: "flex",
+                          },
+                          marginRight: 3,
+                          fontSize: 12,
+                          color: "white",
+                        }}
+                      >
+                        <Icon icon="ph:drop-light" className="text-white mx-1 h-5 w-5" />
+                        Carbs(g)
+                      </InputAdornment>
                     ),
                     style: {
                       color: "white",
                     },
                   }}
                   onChange={(newCarbsValue) => setMacros({ ...Macros, carbs: parseFloat(newCarbsValue.target.value) })}
-              />
-</div>
+                />
+              </div>
             </section>
             <section className="grid gap-3 rounded-xl my-5 py-2">
               <h3 className="font-sourceCode text-diaGray">Activity Level</h3>
