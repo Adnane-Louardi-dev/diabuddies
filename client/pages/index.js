@@ -64,7 +64,7 @@ export default function Home() {
     enabled: router.isReady,
     onSuccess: (data) => {
       router.push({ href: "/", query: { date: date } });
-      navigator.serviceWorker?.controller.postMessage({ action: "logBook", data: data.logBook });
+      navigator.serviceWorker?.controller?.postMessage({ action: "logBook", data: data.logBook });
     },
     onError: (e) => {
       console.error(e);
@@ -73,11 +73,11 @@ export default function Home() {
 
   useEffect(() => {
     refetch();
-    if (!isUserLoading && !user) {
+    if (!isUserLoading && user === undefined) {
       router.push("/login");
-      if (router.isReady && user?.newUser) {
-        router.push("/setup");
-      }
+    }
+    if (!isUserLoading && router.isReady && user?.newUser) {
+      router.push("/setup");
     }
   }, [isUserLoading, router.isReady, date]);
 
