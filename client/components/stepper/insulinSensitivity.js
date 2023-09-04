@@ -1,7 +1,9 @@
 import React from "react";
 import {TextField, ToggleButton, ToggleButtonGroup} from "@mui/material";
+import {useTranslation} from "next-i18next";
 
 const InsulinSensitivity = ({data, setData}) => {
+    const {i18n,t} = useTranslation()
     const handleInsulinSensitivityUnitChange = (_, newInsulinSensitivityUnit) => {
         setData(oldData => ({
             ...oldData,
@@ -19,14 +21,19 @@ const InsulinSensitivity = ({data, setData}) => {
         <section>
             <div className="mt-24 grid items-center justify-center text-center">
                 <h1 className="font-semibold font-poppins text-xl">
-                    What about your <span
-                    className="decoration-none font-bold text-diaBlue">Insulin Sensitivity</span> ?
-        </h1>
-        <p className="my-3 font-rubik text-gray-400">
-          <span className="font-semibold">Skip it</span> if you don't have an idea about it
-          <br />
-          don't worry, we gonna figure it out later
-        </p>
+                    {i18n.language !== "ar" && <>What about your  <span className="decoration-none font-bold text-diaBlue">Insulin Sensitivity</span> ?</>}
+                    {i18n.language === "ar" && <>ماذا عن  <span className="decoration-none font-bold text-diaBlue">حساسيتك للأنسولين</span> ؟</>}
+                </h1>
+                {i18n.language !== "ar" && <p className="my-3 font-rubik text-gray-400">
+                    <span className="font-semibold">Skip it</span> if you don't have an idea about it
+                    <br/>
+                    don't worry, we gonna figure it out later
+                </p>}
+                {i18n.language === "ar" && <p className="my-3 font-rubik text-gray-400">
+                    <span className="font-semibold">تجاوز هذا السؤال</span> إذا كنت لا تعرفه
+                    <br/>
+                    لا تخف ستتعلم عنه فيما بعد ويمكنك تغييره
+                </p>}
       </div>
       <div className="grid items-center justify-center text-center mx-16 my-15 py-8">
         <ToggleButtonGroup
@@ -43,10 +50,10 @@ const InsulinSensitivity = ({data, setData}) => {
             onChange={handleInsulinSensitivityUnitChange}
         >
           <ToggleButton value="mmol/L/1ui" className="rounded-full font-semibold">
-            mmol/L/1ui
+            {t("mmol/L/1ui")}
           </ToggleButton>
           <ToggleButton value="mg/dL/1ui" className="rounded-full font-semibold">
-            mg/dL/1ui
+            {t("mg/dL/1ui")}
           </ToggleButton>
         </ToggleButtonGroup>
         <div className="grid grid-cols-1 items-center justify-center p-2 bg-diaBlue rounded-3xl shadow-md">

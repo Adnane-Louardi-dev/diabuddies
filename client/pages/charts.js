@@ -15,12 +15,15 @@ import { useQuery } from "@tanstack/react-query";
 import { useGetCurrentUser } from "../customeHooks/useGetCurrentUser";
 import InsulinDailyTotalsChart from "../components/charts/insulinDailyTotalsChart";
 import MacrosAndKcalChart from "../components/charts/macrosAndKcalChart";
+import {serverSideTranslations} from "next-i18next/serverSideTranslations";
+import {useTranslation} from "next-i18next";
 
 function Charts() {
   const router = useRouter();
   const [toDate, setToDate] = useState(moment().format("DD/MM/YYYY"));
   const [fromDate, setFromDate] = useState(moment(new Date()).format("DD/MM/YYYY"));
-
+  const {t} = useTranslation("index")
+  const {t:tc} = useTranslation()
   const { user, isLoading: isUserLoading } = useGetCurrentUser();
   const { isLoading, data, error, refetch } = useQuery({
     queryKey: ["chartData"],
@@ -57,7 +60,7 @@ function Charts() {
               <div className="w-full flex justify-end">
                 <Button variant="outlined" className="flex self-end justify-between mx-5 py-1 items-center text-diaGray rounded-full border-diaGray">
                   <Icon icon="bxs:file-pdf" className="h-7 w-7 mr-2" />
-                  <span className="font-codeSource">Export</span>
+                  <span className="font-codeSource">{tc("export")}</span>
                 </Button>
               </div>
             </div>
@@ -71,7 +74,7 @@ function Charts() {
                 </div>
                 <section className="w-full rounded-xl mb-10 ring-1 ring-gray-300 p-2">
                   <div className="flex justify-between text-diaGray items-center">
-                    <h3 className="text-lg font-semibold font-codeSource">Glucose</h3>
+                    <h3 className="text-lg font-semibold font-codeSource">{tc("glucose")}</h3>
                     <Icon icon="ph:info" className="mx-3" />
                   </div>
                   <div className="my-3 bg-white rounded-xl pr-3">
@@ -80,7 +83,7 @@ function Charts() {
                 </section>
                 <section className="w-full rounded-xl mb-10 ring-1 ring-gray-300 p-2">
                   <div className="flex justify-between text-diaGray items-center">
-                    <h3 className="text-lg font-semibold font-codeSource">Glucose distibution</h3>
+                    <h3 className="text-lg font-semibold font-codeSource">{t("glucose_distibution")}</h3>
                     <Icon icon="ph:info" className="mx-3" />
                   </div>
                   <div className="my-3 bg-white rounded-xl">
@@ -89,7 +92,7 @@ function Charts() {
                 </section>
                 <section className="w-full rounded-xl mb-10 ring-1 ring-gray-300 p-2">
                   <div className="flex justify-between text-diaGray items-center">
-                    <h3 className="text-lg font-semibold font-codeSource truncate">Carbs/Insulin averages by meal</h3>
+                    <h3 className="text-lg font-semibold font-codeSource truncate">{t("per_meal_chart")}</h3>
                     <Icon icon="ph:info" className="mx-3" />
                   </div>
                   <div className="flex items-center justify-center bg-white rounded-xl">
@@ -98,7 +101,7 @@ function Charts() {
                 </section>
                 <section className="w-full rounded-xl mb-10 ring-1 ring-gray-300 p-2">
                   <div className="flex justify-between text-diaGray items-center">
-                    <h3 className="text-lg font-semibold font-codeSource truncate">Insulin daily totals</h3>
+                    <h3 className="text-lg font-semibold font-codeSource truncate">{t("insuling_daily_totals")}</h3>
                     <Icon icon="ph:info" className="mx-3" />
                   </div>
                   <div className="flex items-center justify-center bg-white rounded-xl">
@@ -107,7 +110,7 @@ function Charts() {
                 </section>
                 <section className="w-full rounded-xl mb-10 ring-1 ring-gray-300 p-2">
                   <div className="flex justify-between text-diaGray items-center">
-                    <h3 className="text-lg font-semibold font-codeSource truncate">Macros/Kcal daily totals</h3>
+                    <h3 className="text-lg font-semibold font-codeSource truncate">{t("macros_kcal_daily_totals")}</h3>
                     <Icon icon="ph:info" className="mx-3" />
                   </div>
                   <div className="flex items-center justify-center bg-white rounded-xl">
@@ -124,5 +127,11 @@ function Charts() {
     </>
   );
 }
+
+export const getServerSideProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ['common','index']))
+  }
+});
 
 export default Charts;

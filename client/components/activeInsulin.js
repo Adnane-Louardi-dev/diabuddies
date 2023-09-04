@@ -1,9 +1,11 @@
 import moment from "moment";
 import { Icon } from "@iconify/react";
 import { useState, useEffect } from "react";
+import {useTranslation} from "next-i18next";
 
 const ActiveInsulin = ({ props, setActiveInsulin, activeInsulin, lastInjectionTime, setlastInjectionTime }) => {
   const [Data] = useState(props);
+  const {t} = useTranslation("index")
   const userInsulinDurationInSystem = 3 * 60 * 60 * 1000;
   const [LocalActiveInsulin, setLocalActiveInsulin] = useState(activeInsulin);
   useEffect(() => {
@@ -29,7 +31,7 @@ const ActiveInsulin = ({ props, setActiveInsulin, activeInsulin, lastInjectionTi
         <div className="py-2 w-1/2 mx-1">
           <div className="rounded-3xl shadow-md bg-diaOrange text-white p-3">
             <div className="flex justify-between w-full items-center mb-3">
-              <h3 className="font-inter text-md text-semibold truncate">Active insulin </h3> <Icon icon="ph:info" />
+              <h3 className="font-inter text-md text-semibold truncate">{t("active_insuling")} </h3> <Icon icon="ph:info" />
             </div>
 
             <div className="my-3">
@@ -40,7 +42,7 @@ const ActiveInsulin = ({ props, setActiveInsulin, activeInsulin, lastInjectionTi
               </div>
             </div>
             <div className="mt-7 py-1 bg-white truncate rounded-full font-poppins text-semibold text-sm text-center text-diaOrange">
-              <span>{moment(lastInjectionTime).fromNow() || "No active insulin"}</span>
+              <span dir={"ltr"}>{moment(lastInjectionTime).fromNow() || t("no_active_insulin")}</span>
             </div>
           </div>
         </div>
@@ -48,7 +50,7 @@ const ActiveInsulin = ({ props, setActiveInsulin, activeInsulin, lastInjectionTi
         <div className="py-2 w-1/2 mx-1">
           <div className="rounded-3xl shadow-md bg-orange-200 text-white p-3">
             <div className="flex justify-between w-full items-center mb-3">
-              <h3 className="font-inter text-md text-semibold truncate">Active insulin </h3> <Icon icon="ph:info" />
+              <h3 className="font-inter text-md text-semibold truncate">{t("active_insuling")} </h3> <Icon icon="ph:info" />
             </div>
 
             <div className="my-2">
@@ -59,7 +61,7 @@ const ActiveInsulin = ({ props, setActiveInsulin, activeInsulin, lastInjectionTi
               </div>
             </div>
             <div className="py-1 bg-white truncate rounded-full font-poppins text-semibold text-sm text-center text-orange-200">
-              <span>No active insulin</span>
+              <span>{t("no_active_insulin")}</span>
             </div>
           </div>
         </div>

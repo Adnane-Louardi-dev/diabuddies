@@ -11,9 +11,10 @@ import * as React from "react";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useGetCurrentUser } from "../../customeHooks/useGetCurrentUser";
+import {useTranslation} from "next-i18next";
 
 export const AIAssistant = () => {
-  const { user } = useGetCurrentUser();
+  const {user,isLoading:userLoading} = useGetCurrentUser()
   const [anchorElChatBot, setAnchorElChatBot] = React.useState(null);
   const [userQuestion, setUserQuestion] = React.useState("");
   const [discussion, setDiscussion] = React.useState([
@@ -22,6 +23,7 @@ export const AIAssistant = () => {
       content: "How can I help you today?",
     },
   ]);
+  const {t} = useTranslation()
 
   const { mutate: askAI, isLoading } = useMutation({
     mutationFn: (userQuestion) => {
@@ -48,10 +50,16 @@ export const AIAssistant = () => {
       ]);
     },
   });
+  if(userLoading){
+    return <LoadingCircle />
+  }
   return (
     <Box>
       <Tooltip title="Chat with your AI assistant">
-        <IconButton className={"fixed bottom-10 right-10 bg-diaDarkBlue text-white p-2"} onClick={(event) => setAnchorElChatBot(event.currentTarget)} sx={{ p: 0, zIndex: 1000 }}>
+        <IconButton
+            className={"fixed bottom-10 right-10 bg-diaDarkBlue text-white p-2"}
+            onClick={(event) => setAnchorElChatBot(event.currentTarget)}
+            sx={{ p: 0, zIndex: 1000 }}>
           <Icon icon={"healthicons:doctor-outline"} className="h-10 w-10" />
         </IconButton>
       </Tooltip>
@@ -60,8 +68,10 @@ export const AIAssistant = () => {
           "& .MuiPaper-root.MuiMenu-paper": {
             borderRadius: "15px",
             width: "300px",
-            padding: "10px 5px",
           },
+          "& .MuiMenu-list": {
+            paddingTop: 0
+          }
         }}
         id="menu-appbar"
         anchorEl={anchorElChatBot}
@@ -77,46 +87,48 @@ export const AIAssistant = () => {
         open={Boolean(anchorElChatBot)}
         onClose={() => setAnchorElChatBot(null)}
       >
-        <div className={"flex justify-between align-middle"}>
-          <h3>Your Assistant: DiaDoctor</h3>
-          <IconButton className={"-mt-2"} onClick={() => setAnchorElChatBot(null)}>
+        <div className={"flex justify-between align-middle mb-2 p-2 bg-diaDarkBlue text-white"}>
+          <h3>{t("assistant_name")}</h3>
+          <IconButton className={"-mt-2 text-white"} onClick={() => setAnchorElChatBot(null)}>
             <CloseIcon />
           </IconButton>
         </div>
-        <div className={"h-[300px] scroll-auto overflow-y-scroll pb-5"}>
-          {discussion.map(({ role, content }) => (
-            <div className={"flex justify-between gap-2 pb-2"}>
-              {role !== "assistant" ? (
-                <Avatar alt="Profile photo" src={user?.photo} className="h-7 w-7" />
-              ) : (
-                <div>
-                  <Icon icon={"healthicons:doctor-outline"} className="h-7 w-7" />
-                </div>
-              )}
-              <p className={"bg-gray-100 rounded-md p-1 w-full"}>{content}</p>
-            </div>
-          ))}
-          {isLoading && <div>diaDoctor: ...</div>}
-        </div>
-        <div className={"flex justify-between gap-2 pt-2"}>
-          <TextField
-            label={"Your question here"}
-            className={"block border rounded"}
-            size={"small"}
-            placeholder={"Ask your question..."}
-            value={userQuestion}
-            onChange={(e) => {
-              setUserQuestion(e.target.value);
-            }}
-          />
-          <Button
-            className={"bg-green-500 text-white w-[100px]"}
-            onClick={() => {
-              askAI({ role: "user", content: userQuestion });
-            }}
-          >
-            Ask AI
-          </Button>
+        <div className={"mx-3"}>
+          <div className={"h-[300px] scroll-auto overflow-y-scroll pb-5"}>
+            {discussion.map(({ role, content }) => (
+              <div className={"flex justify-between gap-2 pb-2"}>
+                {role !== "assistant" ? (
+                  <Avatar alt="Profile photo" src={user?.photo} className="h-7 w-7" />
+                ) : (
+                  <div>
+                    <Icon icon={"healthicons:doctor-outline"} className="h-7 w-7" />
+                  </div>
+                )}
+                <p className={"bg-gray-100 rounded-md p-1 w-full"}>{content}</p>
+              </div>
+            ))}
+            {isLoading && <div>diaDoctor: ...</div>}
+          </div>
+          <div className={"flex justify-between gap-2 pt-2"}>
+            <TextField
+              label={t("question_input")}
+              className={"block border rounded"}
+              size={"small"}
+              placeholder={"Ask your question..."}
+              value={userQuestion}
+              onChange={(e) => {
+                setUserQuestion(e.target.value);
+              }}
+            />
+            <Button
+              className={"bg-diaDarkBlue text-white w-[100px]"}
+              onClick={() => {
+                askAI({ role: "user", content: userQuestion });
+              }}
+            >
+              {t("ask_ai")}
+            </Button>
+          </div>
         </div>
       </Menu>
     </Box>

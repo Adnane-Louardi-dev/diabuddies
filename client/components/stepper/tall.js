@@ -1,6 +1,9 @@
 import {TextField, ToggleButton, ToggleButtonGroup} from "@mui/material";
+import {useTranslation} from "next-i18next";
+import React from "react";
 
 const Tall = ({data, setData}) => {
+    const {i18n,t} = useTranslation()
     const handleHeightUnitChange = (_, newHeightUnit) => {
         setData(oldData => ({...oldData, height: {...oldData.height, unit: newHeightUnit}}))
     };
@@ -12,9 +15,10 @@ const Tall = ({data, setData}) => {
         <section>
             <div className="mt-24 grid items-center justify-center text-center">
                 <h1 className="font-semibold font-poppins text-xl">
-                    How <span className="decoration-none font-bold text-diaBlue">tall</span> are you?
-        </h1>
-      </div>
+                    {i18n.language !== "ar" && <>How <span className="decoration-none font-bold text-diaBlue">Tall</span> are you ?</>}
+                    {i18n.language === "ar" && <>كم هو  <span className="decoration-none font-bold text-diaBlue">طولك</span> ؟</>}
+                </h1>
+            </div>
       <div className="grid items-center justify-center text-center mx-16 my-16 py-8">
         <ToggleButtonGroup
             className="grid grid-cols-2 gap-5 mx-5 py-5"
@@ -30,10 +34,10 @@ const Tall = ({data, setData}) => {
             onChange={handleHeightUnitChange}
         >
           <ToggleButton value="ft" className="rounded-full font-semibold">
-            ft
+              {t("ft")}
           </ToggleButton>
           <ToggleButton value="cm" className="rounded-full font-semibold">
-            cm
+              {t("cm")}
           </ToggleButton>
         </ToggleButtonGroup>
         <div className="grid grid-cols-1 items-center justify-center p-2 bg-diaBlue rounded-3xl shadow-md">
@@ -65,5 +69,4 @@ const Tall = ({data, setData}) => {
     </section>
   );
 };
-
 export default Tall;
