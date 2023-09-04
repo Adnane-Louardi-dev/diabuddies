@@ -5,10 +5,15 @@ import React from "react";
 import axios from "axios";
 import {useQuery} from "@tanstack/react-query";
 import {Icon} from "@iconify/react";
+import {t} from "i18next";
+import {useTranslation} from "next-i18next";
+import {useRouter} from "next/router";
+import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 
 
 export default function Leaderboard() {
-
+    const {t} = useTranslation()
+    const router = useRouter()
     const {data:leaderBoardPeople, isLoading } = useQuery(["leaderBoard"],async ()=>{
         const {data} = await axios.get("/api/gamify/leaderboard")
         return data
@@ -16,7 +21,8 @@ export default function Leaderboard() {
 
     return <Container maxWidth={"xl"}>
         <ResponsiveAppBar />
-        <Typography typography={"h4"} className={"my-3"} textAlign={"center"}>LeaderBoard</Typography>
+        <Typography typography={"h4"} className={"my-3"} textAlign={"center"}>{t("leaderboard")}</Typography>
+
         {!isLoading && <section>
             {leaderBoardPeople.map(({user,points,level},index)=> <article
                 className={"grid grid-cols-6 gap-5 p-3 mb-2 rounded-lg shadow-lg border-b-2 border-diaDarkBlue bg-white"}
@@ -56,3 +62,9 @@ export default function Leaderboard() {
         </section>}
     </Container>
 }
+
+export const getServerSideProps = async ({ locale }) => ({
+    props: {
+        ...(await serverSideTranslations(locale, ['common']))
+    }
+});

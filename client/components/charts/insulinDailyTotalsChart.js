@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import moment from "moment";
+import {useTranslation} from "next-i18next";
 
 // function to group the data by date and calculate the sum of keys (basal,bolus)
 function getGroupedData(data) {
@@ -31,6 +32,7 @@ function getGroupedData(data) {
 }
 
 const InsulinDailyTotalsChart = ({ props }) => {
+  const {t} = useTranslation()
   const [Data, setData] = useState(null);
   useEffect(() => {
     let groupedData = getGroupedData(props);
@@ -56,8 +58,8 @@ const InsulinDailyTotalsChart = ({ props }) => {
         <YAxis />
         <Tooltip labelFormatter={(date) => moment(date).format("LL")} contentStyle={{ color: "#323D34", borderRadius: 15 }} />
         <Legend />
-        <Bar dataKey="basal" stackId="a" fill="#8884d8" />
-        <Bar dataKey="bolus" stackId="a" fill="#82ca9d" />
+        <Bar dataKey="basal" stackId="a" name={t("basal")} fill="#8884d8" />
+        <Bar dataKey="bolus" stackId="a" name={t("bolus")} fill="#82ca9d" />
       </BarChart>
     </ResponsiveContainer>
   );

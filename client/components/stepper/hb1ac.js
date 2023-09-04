@@ -1,7 +1,9 @@
 import React from "react";
 import {TextField, ToggleButton, ToggleButtonGroup} from "@mui/material";
+import {useTranslation} from "next-i18next";
 
 const Hb1ac = ({data, setData}) => {
+    const {i18n} = useTranslation()
     const handleHb1acUnitChange = (_, newHb1acUnit) => {
         setData(oldData => ({...oldData, hb1ac: {...oldData.hb1ac, unit: newHb1acUnit}}))
     };
@@ -13,13 +15,23 @@ const Hb1ac = ({data, setData}) => {
         <section>
             <div className="mt-24 grid items-center justify-center text-center">
                 <h1 className="font-semibold font-poppins text-xl">
-                    What about your last <span className="decoration-none font-bold text-diaBlue">Hb1ac</span> ?
-        </h1>
-        <p className="my-3 font-rubik text-gray-400">
-          <span className="font-semibold">Skip it</span> if you don't have an idea about it
-          <br />
-          don't worry, we gonna figure it out later
-        </p>
+                    {i18n.language !== "ar" && <>What about your last <span className="decoration-none font-bold text-diaBlue">Hb1ac</span> ?</>}
+                    {i18n.language === "ar" && <>? <span className="decoration-none font-bold text-diaBlue">
+                        <span dir={"ltr"}> (Hb1ac) </span>
+                        <span dir={"rtl"}>اختبار للهيموغلوبين السكري</span>
+                    </span>
+                        ماذا عن قيمة آخر  </>}
+                </h1>
+                {i18n.language !== "ar" && <p className="my-3 font-rubik text-gray-400">
+                    <span className="font-semibold">Skip it</span> if you don't have an idea about it
+                    <br/>
+                    don't worry, we gonna figure it out later
+                </p>}
+                {i18n.language === "ar" && <p className="my-3 font-rubik text-gray-400">
+                    <span className="font-semibold">تجاوز هذا السؤال</span> إذا كنت لا تعرفه
+                    <br/>
+                    لا تخف ستتعلم عنه فيما بعد ويمكنك تغييره
+                </p>}
       </div>
       <div className="grid items-center justify-center text-center mx-16 my-15 py-8">
         <ToggleButtonGroup

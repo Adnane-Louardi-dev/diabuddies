@@ -6,10 +6,11 @@ import Container from "@mui/material/Container";
 import {Logo} from "./Logo";
 import {AIAssistant} from "./appBar/AIAssistant";
 import {SettingsMenu} from "./appBar/SettingsMenu";
+import LanguageSwitcher from "./appBar/LanguageSwitcher";
 
 function ResponsiveAppBar() {
   return (
-    <AppBar position="static" className="bg-transparent shadow-none">
+    <AppBar position="static" className="bg-transparent shadow-none" dir={"ltr"}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <Logo />

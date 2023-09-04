@@ -12,6 +12,8 @@ import {useRouter} from "next/router";
 import Image from "next/image";
 import moment from "moment";
 import {useQueryClient} from "@tanstack/react-query";
+import {useTranslation} from "next-i18next";
+import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 
 const steps = [<Gender />, <BirthDate />, <Tall />, <Weight />, <InsulinSensitivity />, <Hb1ac />];
 
@@ -29,6 +31,7 @@ const Setup = () => {
 
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set());
+  const {i18n,t} = useTranslation()
 
   const handlePOSTSetupUser = async () => {
     axios
@@ -87,17 +90,17 @@ const Setup = () => {
         variant="determinate"
         value={(activeStep / steps.length) * 100}
       />
-      <div className="flex justify-between">
+      <div className="flex justify-between" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
         <Button
           onClick={handleBack}
           disabled={activeStep === 0}
           className={`grid items-center m-3 p-5 bg-diaLightOrange   ${activeStep === 0 ? "text-diaLightGray" : "text-diaGray"}  rounded-2xl`}
         >
-          <Icon icon="material-symbols:arrow-back-ios-new-rounded" className="h-5 w-5" />
+          <Icon icon={t("backIcon") === "backIcon" ? "material-symbols:arrow-forward-ios-rounded" : t("backIcon")} className="h-5 w-5" />
         </Button>
         {activeStep !== steps.length && (
           <Button onClick={handleNext} className="m-3 p-5  rounded-2xl font-poppins font-semibold bg-diaLightOrange text-diaGray">
-            Skip
+            {i18n.language === "ar"? "تجاوز هذا السؤال" : "Skip"}
           </Button>
         )}
       </div>
@@ -107,25 +110,25 @@ const Setup = () => {
             <div className="flex flex-col justify-center items-center text-center my-20">
               <Image src={"/undraw_Completing.png"} height={600} width={300} alt={"diabuddies logo"} className="rounded-full" />
               <div className="my-5">
-                <h2 className="text-2xl font-poppins font-semibold">All is done</h2>
-                <p className="font-poppins text-diaGray text-sm">It is now very easy to reach the best results of management of your diabetes</p>
+                <h2 className="text-2xl font-poppins font-semibold">{t("finished_setup")}</h2>
+                <p className="font-poppins text-diaGray text-sm">{t("finished_setup_detail")}</p>
               </div>
             </div>
             <div className="grid grid-cols-1 gap-3 absolute bottom-10 left-[50%] translate-x-[-50%] w-full">
               <div className="px-5">
                 <Button onClick={handlePOSTSetupUser} className="w-full p-3 rounded-full shadow-md bg-gray-800 text-white font-poppins font-xl">
-                  Setup my app
+                  {t("setup_my_app")}
                 </Button>
               </div>
               <Button onClick={handleSetupAbortion} className="font-poppins text-diaGray">
-                Cancel
+                {t("cancel")}
               </Button>
             </div>
           </Box>
         </>
       ) : (
         <>
-          <div>{React.isValidElement(steps[activeStep]) ? React.cloneElement(steps[activeStep], { data: data, setData: setData }) : steps[activeStep]}</div>
+          <div>{React.isValidElement(steps[activeStep]) ? React.cloneElement(steps[activeStep], { data: data, setData: setData}) : steps[activeStep]}</div>
           <div className="absolute bottom-10 left-[50%] translate-x-[-50%] grid items-center justify-center">
             <Button
               onClick={() => {
@@ -133,7 +136,7 @@ const Setup = () => {
               }}
               className="grid items-center justify-center h-20 w-20 m-5 p-5 rounded-full bg-diaLightOrange text-diaGray"
             >
-              <Icon icon="material-symbols:arrow-forward-ios-rounded" className="h-7 w-7" />
+              <Icon icon={t("forwardIcon") === "forwardIcon" ? "material-symbols:arrow-back-ios-new-rounded" : t("forwardIcon")} className="h-7 w-7" />
             </Button>
           </div>
         </>
@@ -142,4 +145,9 @@ const Setup = () => {
   );
 };
 
+export const getServerSideProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ['common']))
+  }
+});
 export default Setup;

@@ -20,13 +20,17 @@ import {useMutation, useQueryClient} from "@tanstack/react-query";
 import {Logo} from "../components/Logo";
 import Container from "@mui/material/Container";
 import AvatarDialog from "../components/avatarDialog";
+import {useTranslation} from "next-i18next";
+import {serverSideTranslations} from "next-i18next/serverSideTranslations";
+import ResponsiveAppBar from "../components/ResponsiveAppBar";
 
 const Settings = () => {
   const { register, control, handleSubmit, reset } = useForm();
   const queryClient = useQueryClient()
   const { user, isLoading } = useGetCurrentUserDetailed()
   const [notificationOpen, setNotificationOpen] = useState(false);
-
+  const {t} = useTranslation("settings")
+  const {t:tc,i18n} = useTranslation("common")
   const {
     mutate: updateUser,
     isError,
@@ -111,7 +115,7 @@ const Settings = () => {
 
   const UserInput = React.useCallback(({ fieldName, label, ...props }) => {
     return (
-      <div className={"flex justify-between align-middle "}>
+      <div className={"flex justify-between align-middle"} dir={"ltr"}>
         <TextField
           variant="outlined"
           label={label}
@@ -129,13 +133,13 @@ const Settings = () => {
     return <LoadingCircle />;
   }
   return (
-    <Container maxWidth={"xl"}>
+    <Container maxWidth={"xl"} dir={i18n.language === 'ar' ? "rtl" : "ltr"}>
       <form onSubmit={handleSubmit(updateUserSettings)}>
-        <Logo />
-        <section className={"flex justify-end"}>
-          <Button className={"text-gray-500"}>Cancel</Button>
+        <ResponsiveAppBar />
+        <section className={"flex justify-end"} dir={"ltr"}>
+          <Button className={"text-gray-500"}>{tc("cancel")}</Button>
           <Button type={"submit"} className={"bg-diaBlue text-white"}>
-            Save
+            {tc("save")}
           </Button>
         </section>
         <Snackbar open={notificationOpen} autoHideDuration={3000} onClose={handleClose}>
@@ -151,36 +155,36 @@ const Settings = () => {
               <Image src={user?.photo} width={100} height={100} alt={user.userName + " picture"} className="rounded-full" />
               <AvatarDialog user={user} />
             </div>
-            <SettingsCard sectionTitle={"Profile"}>
+            <SettingsCard sectionTitle={t("profile")}>
               <Grid container columnSpacing={2} rowSpacing={2}>
                 <Grid item xs={12}>
-                  <UserInput defaultValue={user.givenName} fieldName={"givenName"} label={"First name"} />
+                  <UserInput defaultValue={user.givenName} fieldName={"givenName"} label={t("givenNameInput")} />
                 </Grid>
                 <Grid item xs={12}>
-                  <UserInput defaultValue={user.familyName} fieldName={"familyName"} label={"Last name"} />
+                  <UserInput defaultValue={user.familyName} fieldName={"familyName"} label={t("familyNameInput")} />
                 </Grid>
                 <Grid item xs={12}>
-                  <UserInput defaultValue={user.email} fieldName={"email"} label={"Email"} />
+                  <UserInput defaultValue={user.email} fieldName={"email"} label={t("emailInput")} />
                 </Grid>
                 <Grid item xs={12}>
-                  <UserInput defaultValue={user.homeAddress} fieldName={"homeAddress"} label={"Home Address"} />
+                  <UserInput defaultValue={user.homeAddress} fieldName={"homeAddress"} label={t("homeAddressInput")} />
                 </Grid>
                 <Grid item xs={12}>
-                  <UserInput defaultValue={user.userName} fieldName={"userName"} label={"userName"} />
+                  <UserInput defaultValue={user.userName} fieldName={"userName"} label={t("userNameInput")} />
                 </Grid>
                 <Grid item xs={6}>
-                  <UserInput defaultValue={user.age} fieldName={"age"} label={"Age"} type={"number"} />
+                  <UserInput defaultValue={user.age} fieldName={"age"} label={tc("ageInput")} type={"number"} />
                 </Grid>
                 <Grid item xs={6}>
                   <Controller
-                    name={"gender"}
+                    name={tc("gender")}
                     control={control}
-                    defaultValue={user.diabetecDetails.gender || "Gender"}
+                    defaultValue={user.diabetecDetails.gender || "gender"}
                     render={({ field }) => (
                       <Select {...field} className="w-full">
-                        {["Gender", "Male", "Female"].map((gender) => (
+                        {["gender", "male", "female"].map((gender) => (
                           <MenuItem key={"gender-" + gender} value={gender}>
-                            {gender}
+                            {tc(gender)}
                           </MenuItem>
                         ))}
                       </Select>
@@ -192,19 +196,19 @@ const Settings = () => {
           </Grid>
           {/* my details */}
           <Grid item xs={12} md={12}>
-            <SettingsCard sectionTitle={"My details"}>
+            <SettingsCard sectionTitle={t("myDetails")}>
               <Grid container columnSpacing={2} rowSpacing={2}>
                 {/* diabetes type */}
                 <Grid item xs={12}>
                   <Controller
                     name={"diabetesType"}
                     control={control}
-                    defaultValue={user.diabetecDetails.diabetesType || "Diabetes Type"}
+                    defaultValue={user.diabetecDetails.diabetesType || "diabetecType"}
                     render={({ field }) => (
                       <Select {...field} className="w-full">
-                        {["Diabetes Type", "type 1", "type 2", "other", ""].map((type) => (
+                        {["diabetecType", "typeOne", "typeTwo", "other"].map((type) => (
                           <MenuItem key={"diabetes" + type} value={type}>
-                            {type}
+                            {tc(type)}
                           </MenuItem>
                         ))}
                       </Select>
@@ -216,7 +220,7 @@ const Settings = () => {
                   <UserInput
                     defaultValue={user.diabetecDetails.height?.value ? user.diabetecDetails.height.value : ""}
                     fieldName={"height.value"}
-                    label={"Height"}
+                    label={tc("height")}
                     type={"number"}
                     sx={{
                       "& .MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-colorPrimary.MuiInputBase-formControl.MuiInputBase-adornedEnd": {
@@ -234,7 +238,7 @@ const Settings = () => {
                               <Select {...field} className={"w-full"}>
                                 {heightUnits.options.map((unit) => (
                                   <MenuItem key={"height" + unit} value={unit}>
-                                    {unit}
+                                    {tc(unit)}
                                   </MenuItem>
                                 ))}
                               </Select>
@@ -250,7 +254,7 @@ const Settings = () => {
                   <UserInput
                     defaultValue={user.diabetecDetails.weight?.value ? user.diabetecDetails.weight.value : ""}
                     fieldName={"weight.value"}
-                    label={"Weight"}
+                    label={tc("weight")}
                     type={"number"}
                     sx={{
                       "& .MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-colorPrimary.MuiInputBase-formControl.MuiInputBase-adornedEnd": {
@@ -268,7 +272,7 @@ const Settings = () => {
                               <Select {...field} className={"w-full"}>
                                 {weightUnits.options.map((unit) => (
                                   <MenuItem key={"weight" + unit} value={unit}>
-                                    {unit}
+                                    {tc(unit)}
                                   </MenuItem>
                                 ))}
                               </Select>
@@ -284,7 +288,7 @@ const Settings = () => {
                   <UserInput
                     defaultValue={parseFloat(user.diabetecDetails.carbsRatio)}
                     fieldName={"carbsRatio"}
-                    label={"Carbs Ratio"}
+                    label={t("carbsRatio")}
                     type={"number"}
                     InputProps={{
                       endAdornment: (
@@ -300,7 +304,7 @@ const Settings = () => {
                   <UserInput
                     defaultValue={parseFloat(user.diabetecDetails.bodyFatPercentage)}
                     fieldName={"bodyFatPercentage"}
-                    label={"Body Fat Percentage"}
+                    label={t("bodyFatPercentage")}
                     type={"number"}
                     InputProps={{
                       endAdornment: (
@@ -316,7 +320,7 @@ const Settings = () => {
                   <UserInput
                     defaultValue={parseFloat(user.diabetecDetails.insulinSensitivity?.value)}
                     fieldName={"insulinSensitivity.value"}
-                    label={"Insulin Sensitivity"}
+                    label={t("insulinSensitivity")}
                     type={"number"}
                     sx={{
                       "& .MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-colorPrimary.MuiInputBase-formControl.MuiInputBase-adornedEnd": {
@@ -334,7 +338,7 @@ const Settings = () => {
                               <Select {...field} className={"w-full"}>
                                 {insulinUnits.options.map((unit) => (
                                   <MenuItem key={"weight" + unit} value={unit}>
-                                    {unit}
+                                    {tc(unit)}
                                   </MenuItem>
                                 ))}
                               </Select>
@@ -362,11 +366,11 @@ const Settings = () => {
                   />
                 </Grid>
                 {/* dailyCaloriesNeeds */}
-                <Grid item xs={6}>
+                <Grid item xs={12}>
                   <UserInput
                     defaultValue={user.diabetecDetails.dailyCaloriesNeeds}
                     fieldName={"dailyCaloriesNeeds"}
-                    label={"Daily calories needs"}
+                    label={t("dailyCaloriesNeeds")}
                     type={"number"}
                     InputProps={{
                       endAdornment: (
@@ -381,39 +385,39 @@ const Settings = () => {
             </SettingsCard>
           </Grid>
           <Grid item xs={12} md={12}>
-            <SettingsCard sectionTitle={"Ranges"}>
+            <SettingsCard sectionTitle={t("ranges")}>
               <Grid container columnSpacing={2} rowSpacing={2}>
                 <Grid item xs={12}>
-                  <InputLabel>Hyperglycemia</InputLabel>
+                  <InputLabel>{t("hyperglycemia")}</InputLabel>
                 </Grid>
                 <Grid item xs={12} className={"grid grid-cols-2"}>
                   <div>
-                    Min. <Input defaultValue={user.diabetecDetails.hyperglycemia?.min} type={"number"} placeholder={"181"} {...register("hyperglycemia.min")} />
+                    {tc("min")} <Input defaultValue={user.diabetecDetails.hyperglycemia?.min} type={"number"} placeholder={"181"} {...register("hyperglycemia.min")} />
                   </div>
                   <div>
-                    Max. <Input defaultValue={user.diabetecDetails.hyperglycemia?.max} type={"number"} placeholder={"600"} {...register("hyperglycemia.max")} />
+                    {tc("max")} <Input defaultValue={user.diabetecDetails.hyperglycemia?.max} type={"number"} placeholder={"600"} {...register("hyperglycemia.max")} />
                   </div>
                 </Grid>
                 <Grid item xs={12}>
-                  <InputLabel>Normal blood glucose</InputLabel>
+                  <InputLabel>{t("normalBloodGlugose")}</InputLabel>
                 </Grid>
                 <Grid item xs={12} className={"grid grid-cols-2"}>
                   <div>
-                    Min. <Input defaultValue={user.diabetecDetails.normalBloodGlucose?.min} type={"number"} placeholder={"70"} {...register("normalBloodGlucose.min")} />
+                    {tc("min")} <Input defaultValue={user.diabetecDetails.normalBloodGlucose?.min} type={"number"} placeholder={"70"} {...register("normalBloodGlucose.min")} />
                   </div>
                   <div>
-                    Max. <Input defaultValue={user.diabetecDetails.normalBloodGlucose?.max} type={"number"} placeholder={"180"} {...register("normalBloodGlucose.max")} />
+                    {tc("max")}  <Input defaultValue={user.diabetecDetails.normalBloodGlucose?.max} type={"number"} placeholder={"180"} {...register("normalBloodGlucose.max")} />
                   </div>
                 </Grid>
                 <Grid item xs={12}>
-                  <InputLabel>Hypoglycemia</InputLabel>
+                  <InputLabel>{t("hypoglycemia")}</InputLabel>
                 </Grid>
                 <Grid item xs={12} className={"grid grid-cols-2"}>
                   <div>
-                    Min. <Input defaultValue={user.diabetecDetails.hypoglycemia?.min} type={"number"} placeholder={"20"} {...register("hypoglycemia.min")} />
+                    {tc("min")} <Input defaultValue={user.diabetecDetails.hypoglycemia?.min} type={"number"} placeholder={"20"} {...register("hypoglycemia.min")} />
                   </div>
                   <div>
-                    Max. <Input defaultValue={user.diabetecDetails.hypoglycemia?.max} type={"number"} placeholder={"69"} {...register("hypoglycemia.max")} />
+                    {tc("max")} <Input defaultValue={user.diabetecDetails.hypoglycemia?.max} type={"number"} placeholder={"69"} {...register("hypoglycemia.max")} />
                   </div>
                 </Grid>
               </Grid>
@@ -423,7 +427,7 @@ const Settings = () => {
             <SettingsCard
               sectionTitle={
                 <div className={"flex justify-between"}>
-                  <p>Medications</p>
+                  <p>{t("medications")}</p>
                   <AddMedicamentModal />
                 </div>
               }
@@ -432,38 +436,38 @@ const Settings = () => {
             </SettingsCard>
           </Grid>
           <Grid item xs={12} md={12}>
-            <SettingsCard sectionTitle={"General"}>
+            <SettingsCard sectionTitle={t("general")}>
               <Grid container>
                 <Grid item xs={12}>
-                  <h5 className={"text-lg pb-5"}>Security</h5>
+                  <h5 className={"text-lg pb-5"}>{t("security")}</h5>
                   <div className={"pb-5"}>
-                    <InputLabel className={"text-black text-xs"}>{"Current password"}</InputLabel>
-                    <Input placeholder={"Current password"} type={"password"} {...register("currentPassword")} />
+                    <InputLabel className={"text-black text-xs"}>{t("currentPassword")}</InputLabel>
+                    <Input placeholder={t("currentPassword")} type={"password"} {...register("currentPassword")} />
                   </div>
                   <div className={"pb-5"}>
-                    <InputLabel className={"text-xs"}>{"New password"}</InputLabel>
-                    <Input placeholder={"New password"} type={"password"} {...register("newPassword")} />
+                    <InputLabel className={"text-xs"}>{t("newPassword")}</InputLabel>
+                    <Input placeholder={t("newPassword")} type={"password"} {...register("newPassword")} />
                   </div>
                   <div className={"pb-5"}>
-                    <InputLabel className={"text-xs"}>{"Confirm password"}</InputLabel>
-                    <Input placeholder={"Confirm password"} type={"password"} {...register("confirmPassword")} />
+                    <InputLabel className={"text-xs"}>{t("confirmPassword")}</InputLabel>
+                    <Input placeholder={t("confirmPassword")} type={"password"} {...register("confirmPassword")} />
                   </div>
-                  <Button className={"bg-diaBlue text-white w-[100%]"}>Change password</Button>
+                  <Button className={"bg-diaBlue text-white w-[100%]"}>{t('changePassword')}</Button>
                 </Grid>
                 <Grid item xs={12} className={"text-gray-500"}>
-                  <h5>Delete the Account</h5>
-                  <p className={"text-sm pt-2 pb-8"}>want to delete your account permanently. Click delete permanently</p>
+                  <h5>{t("deleteAccount")}</h5>
+                  <p className={"text-sm pt-2 pb-8"}></p>
 
-                  <Button className={"bg-red-600 text-white w-[100%]"}>Delete account permanently</Button>
+                  <Button className={"bg-red-600 text-white w-[100%]"}>{t("deletePermanently")}</Button>
                 </Grid>
               </Grid>
             </SettingsCard>
           </Grid>
           <Grid item xs={12} md={12}>
-            <SettingsCard sectionTitle={"Appearance"}>
-              <h5>Change the theme of the platform</h5>
-              <p>Appearance let you customize your background</p>
-              <ToggleButtonGroup value={"light"} className={"grid grid-cols-2"}>
+            <SettingsCard sectionTitle={t("appearance")}>
+              <h5>{t("appearanceDescription")}</h5>
+              <p>{t("appearanceDescriptionInfo")}</p>
+              <ToggleButtonGroup value={"light"} className={"grid grid-cols-2"} dir={"ltr"}>
                 <ToggleButton value={"light"} className={"theme-picker "}>
                   <Icon icon="ph:sun-bold" />
                 </ToggleButton>
@@ -474,9 +478,9 @@ const Settings = () => {
             </SettingsCard>
           </Grid>
           <div className={"flex py-5"}>
-            <Button>Cancel</Button>
+            <Button>{tc("cancel")}</Button>
             <Button type={"submit"} className={"bg-diaBlue text-white"}>
-              Save
+              {tc("save")}
             </Button>
           </div>
         </Grid>
@@ -486,3 +490,10 @@ const Settings = () => {
 };
 
 export default Settings;
+
+
+export const getServerSideProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ['common','settings']))
+  }
+});

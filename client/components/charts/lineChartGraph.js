@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { Area, AreaChart, CartesianGrid, linearGradient, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 import moment from "moment";
+import {useTranslation} from "next-i18next";
 const LineChartGraph = ({ props }) => {
   const [data, setData] = useState(props);
+  const {i18n} = useTranslation()
   useEffect(() => {
     setData(props);
     // console.log("line chart", data);
@@ -20,7 +22,7 @@ const LineChartGraph = ({ props }) => {
         <YAxis type="number" tickSize={10} axisLine={false} tickLine={false} ticks={[50, 70, 180, 250, 400]} domain={[0, 400]} />
         <Tooltip
           formatter={(value) => {
-            return [value, "Blood Glucose"];
+            return [value, i18n.language === "ar" ? "كلوجوز الدم" :"Blood Glucose"];
           }}
           labelFormatter={(date) => moment(date).format("DD/MM/YYYY HH:mm:ss")}
           contentStyle={{ color: "#323D34", borderRadius: 15 }}

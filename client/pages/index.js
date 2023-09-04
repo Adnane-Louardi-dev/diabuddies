@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useEffect, useState } from "react";
+import {useEffect, useMemo, useState} from "react";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
@@ -27,6 +27,8 @@ import { Button } from "@mui/material";
 import Advice from "../components/advice";
 import { GamifyProgressBar } from "../components/appBar/GamifyProgressBar";
 import showNotification from "../utils/showNotification";
+import {appWithTranslation, useTranslation} from "next-i18next";
+import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 
 export default function Home() {
   const router = useRouter();
@@ -34,6 +36,8 @@ export default function Home() {
   const [activeInsulin, setActiveInsulin] = useState(0);
   const [glucose, setGlucose] = useState(120);
   const [lastInjectionTime, setLastInjectionTime] = useState(moment());
+  const {t,i18n} = useTranslation("index")
+  const {t:tc} = useTranslation("common")
 
   //GET method to get user info
   const { user, isLoading: isUserLoading } = useGetCurrentUser();
@@ -81,17 +85,37 @@ export default function Home() {
     }
   }, [isUserLoading, router.isReady, date]);
 
+  const userGreeting = useMemo(()=>{
+    if(!isUserLoading && user){
+      const timeNow = moment().format("LT")
+      if(timeNow >= moment("12:00 AM", "LT") && timeNow < moment("12:00 PM")){
+        return t("morning_greeting") +  `, ${user.givenName}`
+      }
+      if(timeNow >= moment("12:00 PM", "LT") && timeNow < moment("05:00 PM")){
+        return t("afternoon_greeting") +  `, ${user.givenName}`
+      }
+      if(timeNow >= moment("05:00 PM", "LT") && timeNow < moment("09:00 PM")){
+        return t("evening_greeting") +  `, ${user.givenName}`
+      }
+      return t("night_greeting") +  `, ${user.givenName}`
+    }
+    return t("morning_greeting")
+  },[isUserLoading])
+
   return (
     <>
       {!isLoading && !isUserLoading && user ? (
         <>
-          <Head>
+          <Head lang={i18n.language}>
             <meta name="title" content="Diabuddies | All-in-One Solution for Diabetes Management" />
+            <meta name="language" content={i18n.language === "ar" ? "Arabic" : "English"} />
             <title>Home | Diabuddies</title>
           </Head>
           <ResponsiveAppBar user={user} />
-          <main className="p-4 relative overflow-y-hidden">
-            <span className="font-inter text-2xl text-semibold">{`Good ${moment().format("LT") > (moment("12:00 AM", "LT") && moment().format("LT") < moment("12:00 PM")) ? "morning" : moment().format("LT") > (moment("12:00 PM", "LT") && moment().format("LT") < moment("05:00 PM")) ? "afternoon" : moment().format("LT") > (moment("05:00 PM", "LT") && moment().format("LT") < moment("09:00 PM")) ? "evening" : "night"}, ${user.givenName}`}</span>
+          <main className="p-4 relative overflow-y-hidden" dir={i18n.language ==="ar" ? "rtl" : "ltr"}>
+            <span className="font-inter text-2xl text-semibold">
+              {userGreeting}
+            </span>
             {user.newUser ? <CompleteYourProfile /> : null}
             <DayPicker setDate={setDate} date={date} />
             <GamifyProgressBar />
@@ -106,10 +130,10 @@ export default function Home() {
             <BolusAdvisor activeInsulin={activeInsulin} glucose={glucose} lastInjectionTime={lastInjectionTime} />
             <div className="flex justify-between items-center my-5">
               <div className="flex items-center">
-                <div className="ring-1 ring-gray-300 p-1 rounded-md mr-3">
-                  <Icon icon="bi:book" className="h-5 w-5 text-diaGray" />
+                <div className="ring-1 ring-gray-300 p-1 rounded-md mx-3">
+                  <Icon icon="bi:book" className={`h-5 w-5 text-diaGray`} />
                 </div>
-                <h3 className="text-lg text-diaGray font-semibold font-rubik">Recently</h3>
+                <h3 className="text-lg text-diaGray font-semibold font-rubik">{tc("recently")}</h3>
               </div>
               <NewLogDialog />
             </div>
@@ -134,7 +158,7 @@ export default function Home() {
                     alt="no data in blue folder"
                   />
                   <h2 className={"text-xl font-poppins text-gray-900 font-semibold"}>Oops!</h2>
-                  <p className={"font-poppins text-sm text-gray-900"}>No log found for today</p>
+                  <p className={"font-poppins text-sm text-gray-900"}>{t("logNotFound")}</p>
                 </div>
               )}
             </section>
@@ -143,19 +167,19 @@ export default function Home() {
               <>
                 <div className="flex justify-between items-center my-5">
                   <div className="flex items-center">
-                    <div className="ring-1 ring-gray-300 p-1 rounded-md mr-3">
+                    <div className="ring-1 ring-gray-300 p-1 rounded-md mx-3">
                       <Icon icon="ic:round-bar-chart" className="h-5 w-5 text-diaGray" />
                     </div>
-                    <h3 className="text-lg text-diaGray font-semibold font-rubik">Charts</h3>
+                    <h3 className="text-lg text-diaGray font-semibold font-rubik">{tc("charts")}</h3>
                   </div>
                   <Link href={"/charts"} aria-label="Charts page" passHref>
-                    <Icon icon="ep:arrow-right-bold" className="h-6 w-6 text-diaGray" />
+                    <Icon icon="ep:arrow-right-bold" className={`h-6 w-6 text-diaGray ${i18n.language === "ar" ? "rotate-180" : ""}`} />
                   </Link>
                 </div>
                 <section className="shadow-2xl p-4 bg-white rounded-2xl mb-8">
                   <section className="w-full rounded-xl mb-10 ring-1 ring-gray-300 p-2">
                     <div className="flex justify-between text-diaGray items-center">
-                      <h3 className="text-lg font-semibold font-rubik">Glucose</h3>
+                      <h3 className="text-lg font-semibold font-rubik">{tc("glucose")}</h3>
                       <Icon icon="ph:info" className="mx-3" />
                     </div>
                     <div className="my-3 bg-white rounded-xl pr-3">
@@ -165,7 +189,7 @@ export default function Home() {
                   </section>
                   <section className="w-full rounded-xl mb-10 ring-1 ring-gray-300 p-2">
                     <div className="flex justify-between text-diaGray items-center">
-                      <h3 className="text-lg font-semibold font-rubik">Glucose distibution</h3>
+                      <h3 className="text-lg font-semibold font-rubik">{t("glucose_distibution")}</h3>
                       <Icon icon="ph:info" className="mx-3" />
                     </div>
                     <div className="my-3 bg-white rounded-xl">
@@ -174,7 +198,7 @@ export default function Home() {
                   </section>
                   <section className="w-full rounded-xl mb-10 ring-1 ring-gray-300 p-2">
                     <div className="flex justify-between text-diaGray items-center">
-                      <h3 className="text-lg font-semibold font-rubik truncate">Carbs/Insulin averages by meal</h3>
+                      <h3 className="text-lg font-semibold font-rubik truncate">{t("per_meal_chart")}</h3>
                       <Icon icon="ph:info" className="mx-3" />
                     </div>
                     <div className="flex items-center justify-center bg-white rounded-xl w-full">
@@ -186,14 +210,14 @@ export default function Home() {
                   <section>
                     <div className={"flex justify-between items-center my-5"}>
                       <div className="flex items-center">
-                        <div className="ring-1 ring-gray-300 p-1 rounded-md mr-3">
-                          <Icon icon="majesticons:article-line" className="h-7 w-7 text-diaGray" />
+                        <div className="ring-1 ring-gray-300 p-1 rounded-md mx-3">
+                          <Icon icon="majesticons:article-line" className={`h-7 w-7 text-diaGray`} />
                         </div>
                         <h3 className="text-lg text-diaGray font-semibold font-rubik">Dia-Blog</h3>
                       </div>
                       <Link href={"/blog/articles"} className={"flex text-diaGray"} aria-label="Charts page" passHref>
-                        <h4>Read More Articles</h4>
-                        <Icon icon="ep:arrow-right-bold" className="h-6 w-6" />
+                        <h4>{t("read_more_articles")}</h4>
+                        <Icon icon="ep:arrow-right-bold" className={`h-6 w-6 ${i18n.language === "ar" ? "rotate-180" : ""}`} />
                       </Link>
                     </div>
                     <div className={"shadow-2xl p-4 bg-white rounded-2xl mb-8 pb-8"}>
@@ -209,14 +233,14 @@ export default function Home() {
                   <section>
                     <div className={"flex justify-between items-center my-5"}>
                       <div className="flex items-center">
-                        <div className="ring-1 ring-gray-300 p-1 rounded-md mr-3">
-                          <Icon icon="iconamoon:store-light" className="h-7 w-7 text-diaGray" />
+                        <div className="ring-1 ring-gray-300 p-1 rounded-md mx-3">
+                          <Icon icon="iconamoon:store-light" className={`h-7 w-7 text-diaGray`} />
                         </div>
                         <h3 className="text-lg text-diaGray font-semibold font-rubik ">E-Diabuddies</h3>
                       </div>
-                      <Link href={"/blog/articles"} className={"flex text-diaGray"} aria-label="Charts page" passHref>
-                        <h4>Explore Products</h4>
-                        <Icon icon="ep:arrow-right-bold" className="h-6 w-6" />
+                      <Link href={"/store"} className={"flex text-diaGray"} aria-label="Charts page" passHref>
+                        <h4>{t("explore_products")}</h4>
+                        <Icon icon="ep:arrow-right-bold" className={`h-6 w-6 ${i18n.language === "ar" ? "rotate-180" : ""}`}/>
                       </Link>
                     </div>
                     <div className={"shadow-2xl p-4 bg-white rounded-2xl mb-8 pb-8"}>
@@ -228,14 +252,6 @@ export default function Home() {
                     </div>
                   </section>
                 )}
-
-                <Button
-                  onClick={() => {
-                    axios.get("/api/aiAssistant/connect").then((res) => res);
-                  }}
-                >
-                  Connec to api
-                </Button>
               </>
             ) : null}
           </main>
@@ -248,3 +264,9 @@ export default function Home() {
     </>
   );
 }
+
+export const getServerSideProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ['common','index']))
+  }
+});

@@ -9,10 +9,15 @@ import Typography from "@mui/material/Typography";
 import * as React from "react";
 import {useGetCurrentUser} from "../../customeHooks/useGetCurrentUser";
 import {appBarItems} from "./appBarItems";
+import {useTranslation} from "next-i18next";
+import LanguageSwitcher from "./LanguageSwitcher";
+import {useRouter} from "next/router";
 
 export const SettingsMenu = () => {
     const { user } = useGetCurrentUser();
     const [anchorElUser, setAnchorElUser] = React.useState(null);
+    const {t,i18n} = useTranslation();
+    const router = useRouter();
     const handleOpenUserMenu = (event) => {
         setAnchorElUser(event.currentTarget);
     };
@@ -29,7 +34,12 @@ export const SettingsMenu = () => {
                 </IconButton>
             </Tooltip>
             <Menu
-                sx={{ mt: "45px", "& .MuiPaper-root.MuiMenu-paper": { borderRadius: "15px" } }}
+                sx={{ mt: "45px",
+                    "& .MuiPaper-root.MuiMenu-paper": {
+                    borderRadius: "15px"
+                    },
+                    direction: i18n.language === "ar" ? "rtl" : "ltr"
+            }}
                 id="menu-appbar"
                 anchorEl={anchorElUser}
                 anchorOrigin={{
@@ -46,12 +56,42 @@ export const SettingsMenu = () => {
             >
                 {appBarItems.map((appBarItem, i) => (
                     <Link key={i} href={appBarItem.link} passHref>
-                        <MenuItem key={appBarItems.link} onClick={handleCloseUserMenu} className="flex">
-                            <Icon icon={appBarItem.icon} className="h-6 w-6 mr-2 text-diaGray" />
-                            <Typography textAlign="center">{appBarItem.label}</Typography>
+                        <MenuItem key={appBarItem.link} onClick={handleCloseUserMenu} className="flex">
+                            <Icon icon={appBarItem.icon} className={`h-6 w-6 text-diaGray ${i18n.language === "ar" ? "ml-2" : "mr-2"}`} />
+                            <Typography textAlign="center">{!!appBarItem.localLabel? t(appBarItem.localLabel) : appBarItem.label}</Typography>
                         </MenuItem>
                     </Link>
                 ))}
+                <MenuItem className={"flex justify-between"} dir={"ltr"}>
+                    <IconButton
+                        onClick={()=>{
+                            router.push(
+                                {
+                                    pathname: router.pathname,
+                                    query: router.query,
+                                },
+                                null,
+                                {locale: "ar"}
+                            )
+                        }}
+                        >
+                        <Icon icon={"emojione:flag-for-morocco"} />
+                    </IconButton>
+                    <IconButton
+                        onClick={()=>{
+                            router.push(
+                                {
+                                    pathname: router.pathname,
+                                    query: router.query,
+                                },
+                                null,
+                                {locale: "en"}
+                            )
+                        }}
+                        >
+                        <Icon icon={"emojione:flag-for-united-kingdom"} />
+                    </IconButton>
+                </MenuItem>
             </Menu>
         </>
     )

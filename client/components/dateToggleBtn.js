@@ -2,11 +2,13 @@ import * as React from "react";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import moment from "moment/moment";
+import {useTranslation} from "next-i18next";
 
 export default function DateToggleBtn({ setDate }) {
   const [alignment, setAlignment] = React.useState(0);
+    const {t} = useTranslation()
 
-  const handleChange = (event, newAlignment) => {
+    const handleChange = (event, newAlignment) => {
     if (newAlignment != null) {
       setAlignment(newAlignment);
       setDate(moment(new Date()).subtract(newAlignment, "day").format("DD/MM/YYYY"));
@@ -30,9 +32,9 @@ export default function DateToggleBtn({ setDate }) {
       onChange={handleChange}
       aria-label="Platform"
     >
-      <ToggleButton value={30}>Month</ToggleButton>
-      <ToggleButton value={7}>Week</ToggleButton>
-      <ToggleButton value={0}>Today</ToggleButton>
+      <ToggleButton value={30}>{t("month")}</ToggleButton>
+      <ToggleButton value={7}>{t("week")}</ToggleButton>
+      <ToggleButton value={0}>{t("year")}</ToggleButton>
     </ToggleButtonGroup>
   );
 }
