@@ -12,18 +12,21 @@ import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useGetCurrentUser } from "../../customeHooks/useGetCurrentUser";
 import {useTranslation} from "next-i18next";
+import {useEffect} from "react";
 
 export const AIAssistant = () => {
   const {user,isLoading:userLoading} = useGetCurrentUser()
   const [anchorElChatBot, setAnchorElChatBot] = React.useState(null);
   const [userQuestion, setUserQuestion] = React.useState("");
   const {t, i18n} = useTranslation()
-  const [discussion, setDiscussion] = React.useState([
-    {
+  const [discussion, setDiscussion] = React.useState([]);
+
+  useEffect(() => {
+    setDiscussion([{
       role: "assistant",
       content: i18n.language === "ar" ? "السلام عليكم، كيف يمكنني مساعدتك اليوم؟" :"How can I help you today?",
-    },
-  ]);
+    }])
+  }, [i18n.language]);
 
   const { mutate: askAI, isLoading } = useMutation({
     mutationFn: (userQuestion) => {
