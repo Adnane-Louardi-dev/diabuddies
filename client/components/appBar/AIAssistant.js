@@ -17,13 +17,13 @@ export const AIAssistant = () => {
   const {user,isLoading:userLoading} = useGetCurrentUser()
   const [anchorElChatBot, setAnchorElChatBot] = React.useState(null);
   const [userQuestion, setUserQuestion] = React.useState("");
+  const {t, i18n} = useTranslation()
   const [discussion, setDiscussion] = React.useState([
     {
       role: "assistant",
-      content: "How can I help you today?",
+      content: i18n.language === "ar" ? "السلام عليكم، كيف يمكنني مساعدتك اليوم؟" :"How can I help you today?",
     },
   ]);
-  const {t} = useTranslation()
 
   const { mutate: askAI, isLoading } = useMutation({
     mutationFn: (userQuestion) => {
