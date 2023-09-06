@@ -15,8 +15,7 @@ export default function Post() {
         queryFn:async () => {
             const {data} = await axios.get(`/api/blog/article/${id}`)
             return data
-        },
-        enabled: router.isReady
+        }
     })
 
     if(isLoading) {
@@ -30,7 +29,7 @@ export default function Post() {
                  isLiked={article.isLiked}
                  likeCount={article.likeCount}
                  relatedArticles={article.relatedArticles}
-                 {...article.data.attributes} />
+                 {...article.data?.attributes} />
 
     </Container>
 }

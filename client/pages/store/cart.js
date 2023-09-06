@@ -87,8 +87,8 @@ const Cart = () => {
                          name={"city"}
                          control={control}
                          defaultValue={user.cityId ?? {
-                            label: cities[0].attributes.name,
-                            value: cities[0].id
+                            label: cities.length > 0 ? cities[0].attributes.name : null,
+                            value: cities.length > 0 ? cities[0].id: null
                          }}
                          render={({field: {ref, onChange, ...field}}) => (
                              <Autocomplete
