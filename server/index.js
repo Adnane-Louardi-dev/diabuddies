@@ -28,6 +28,8 @@ const {levelsSchema} = require("./models/levelsSchema");
 const DBConnection =
   process.env.DB_CONNECTION ||
   `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.dgq8q.mongodb.net/?retryWrites=true&w=majority&ssl=true`;
+
+console.log("db coneection", DBConnection)
 mongoose.connect(DBConnection, async () => {
     await createLevels()
     schedule('0 0 0 * * *', ()=>{

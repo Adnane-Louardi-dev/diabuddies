@@ -1,6 +1,9 @@
 # Logs
 logs
 *.log
+.*_env
+strapiV
+mongodbV
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
@@ -81,7 +84,7 @@ server/.env
 .env.development.local
 .env.test.local
 .env.production.local
-.env.local
+.client_env
 
 # parcel-bundler cache (https://parceljs.org/)
 .parcel-cache

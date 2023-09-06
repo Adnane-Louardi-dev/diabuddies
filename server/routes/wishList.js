@@ -2,7 +2,7 @@ const express = require("express")
 const router = express.Router();
 const wishListSchema = require("../models/wishListSchema")
 const {isLoggedIn} = require("../middlewares/isLoggedIn");
-const {strapiInstance, storeInstance} = require("../middlewares/blogAxios");
+const {strapiInstance} = require("../middlewares/blogAxios");
 const {productQuery} = require("../util/baseQueries");
 
 router.get("/:slug", isLoggedIn,async (req, res) => {

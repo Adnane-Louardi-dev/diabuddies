@@ -58,7 +58,7 @@ export const Article = ({id,title,content, image,createdAt, relatedArticles,isLi
         return <LoadingCircle />
     }
     const thumbnail = image ? image.data : ""
-    const {name, biography, avatar} = writer.data ? writer.data.attributes : {name: null, avatar: {url: null,size:20}, biography: null}
+    const {name, biography, avatar} = writer.data?.attributes ?? {name: null, biography: null, avatar: {data: null}}
     const createdDate = moment(createdAt).format("DD/MM/YYYY")
 
     return  (
@@ -71,11 +71,11 @@ export const Article = ({id,title,content, image,createdAt, relatedArticles,isLi
                     <header className="mb-4 lg:mb-6 not-format">
                         <address className="flex justify-between mb-6 not-italic">
                             <div className="inline-flex items-center mr-3 text-sm text-gray-900">
-                                <img className="mr-4 w-16 h-16 rounded-full"
-                                     src={`http://localhost:1337${avatar.data.attributes.url}`}
-                                     width={avatar.size}
-                                     height={avatar.size}
-                                     alt={name} />
+                                {avatar?.data && <img className="mr-4 w-16 h-16 rounded-full"
+                                      src={`http://localhost:1337${avatar.data.attributes.url}`}
+                                      width={avatar.size}
+                                      height={avatar.size}
+                                      alt={name}/>}
                                     <div>
                                         <span rel="author"
                                            className="text-xl font-bold text-gray-900">{name}</span>
@@ -95,12 +95,11 @@ export const Article = ({id,title,content, image,createdAt, relatedArticles,isLi
                             {title}
                         </h1>
                     </header>
-                    <div dangerouslySetInnerHTML={{__html: html}} />
+                    <div className={"max-w-full break-words"} dangerouslySetInnerHTML={{__html: html}} />
 
                     {!isLoading && isSuccess && <section className="not-format">
                         <div ref={ref} className="flex justify-between items-center my-6">
-                            <h2 className="text-lg lg:text-2xl font-bold text-gray-900">Discussion
-                                ({data.data.length})</h2>
+                            <h2 className="text-lg lg:text-2xl font-bold text-gray-900">Discussion ({data.data.length})</h2>
                             <div>
                                 <Typography sx={{
                                     "&.MuiTypography-root":{

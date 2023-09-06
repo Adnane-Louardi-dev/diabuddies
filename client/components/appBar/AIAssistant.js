@@ -13,6 +13,7 @@ import axios from "axios";
 import { useGetCurrentUser } from "../../customeHooks/useGetCurrentUser";
 import {useTranslation} from "next-i18next";
 import {useEffect} from "react";
+import LoadingCircle from "../loadingCircle";
 
 export const AIAssistant = () => {
   const {user,isLoading:userLoading} = useGetCurrentUser()
