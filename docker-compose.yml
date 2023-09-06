@@ -1,10 +1,63 @@
-version: "3.2"
+version: "3"
 services:
-  front:
+  front-service:
     build: ./client
     ports:
       - "3001:3001"
-  backend:
-    build: .
+    env_file:
+      - "./.client_env"
+    networks:
+      dia-network:
+        ipv4_address: 10.56.1.19
+  backend-service:
+    build: ./server
     ports:
       - "3000:3000"
+    depends_on:
+      - db
+    env_file:
+      - "./.server_env"
+    networks:
+      dia-network:
+        ipv4_address: 10.56.1.18
+  strapi-service:
+    build: ./blog
+    ports:
+      - "1337:1337"
+    env_file:
+      - "./.blog_env"
+    volumes:
+      - strapi:/usr/src/app
+    networks:
+      dia-network:
+        ipv4_address: 10.56.1.17
+  website:
+    image: nginx
+    restart: always
+    ports:
+      - "80:80"
+    networks:
+      dia-network:
+        ipv4_address: 10.56.1.20
+  db:
+    image: mongo
+    restart: always
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: ourBeautifulPassWord
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongodb:/data/db
+    networks:
+      dia-network:
+        ipv4_address: 10.56.1.21
+networks:
+  dia-network:
+    ipam:
+      driver: default
+      config:
+        - subnet: "10.56.1.0/24"
+volumes:
+  mongodb:
+  strapi:

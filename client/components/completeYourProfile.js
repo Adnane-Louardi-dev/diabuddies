@@ -4,14 +4,13 @@ import Image from "next/image";
 import Link from "next/link";
 import {useTranslation} from "next-i18next";
 const CompleteYourProfile = () => {
-  const {t:tc} = useTranslation("common")
-  const {t} = useTranslation("index")
+  const {t,i18n} = useTranslation("index")
   return (
     <>
       <div className="grid grid-cols-5 gap-4 p-4 my-4 bg-white rounded-xl shadow-md">
         <div className="relative grid col-span-2 bg-diaLightBlue h-full rounded-lg items-center justify-center">
           <Link href="/setup" passHref>
-            <Image src={"/profile_illust.png"} style={{ objectFit: "cover" }} fill sizes="(max-width: 200px), (max-width: 130px)" alt="profile illustration" />
+            <Image src={"/profile_illustration.png"} style={{ objectFit: "cover" }} fill sizes="(max-width: 200px), (max-width: 130px)" alt="profile illustration" />
           </Link>
         </div>
         <div className="col-span-3">
@@ -21,7 +20,7 @@ const CompleteYourProfile = () => {
             </div>
             <div className="pt-1 self-start">
               <Link href="/setup" passHref>
-                <Icon icon={tc("forwardIcon") === "forwardIcon" ? "material-symbols:arrow-forward-ios-rounded" : tc("backIcon") } className="text-diaGray bg-gray-200 rounded-full p-1.5 h-7 w-7" />
+                <Icon icon={"material-symbols:arrow-forward-ios-rounded"} className={`text-diaGray bg-gray-200 rounded-full p-1.5 h-7 w-7 ${i18n.language === "ar" ? "rotate-180" : ""}`} />
               </Link>
             </div>
           </div>
