@@ -5,13 +5,14 @@ import {useGetCurrentUser} from "../../customeHooks/useGetCurrentUser";
 import Menu from "@mui/material/Menu";
 import MenuItem from "@mui/material/MenuItem";
 import moment from "moment";
+import {useTranslation} from "next-i18next";
 
 
 export const Comment = ({user,comments, content, createdAt, _id,articleId, parentComment}) => {
     const [actionsVisible, setActoinVisible] = useState(null)
     const [editMode, setEditMode] = useState(false)
     const [replyMode, setReplyMode] = useState(false)
-
+    const {t} = useTranslation("blogStore")
     const {mutate: reportComment} = useReportComment()
     const {mutate: updateComment, component:editedCommentNotification} = useUpdateComment()
     const {mutate: replyToComment, component:replyNotification} = useReplyToComment()
@@ -44,8 +45,8 @@ export const Comment = ({user,comments, content, createdAt, _id,articleId, paren
                       src={`${user.photo}`}
                       alt={user.name}/>{user.name}</p>
                   <p className="text-sm text-gray-600 dark:text-gray-400">
-                      <time pubdate dateTime="2022-02-12"
-                            title="February 12th, 2022">
+                      <time pubdate dateTime={moment(createdAt).format("DD/MM/YYYY")}
+                            title={moment(createdAt).format("DD/MM/YYYY")}>
                           {moment(createdAt).format("DD/MM/YYYY")}
                       </time>
                   </p>
@@ -63,7 +64,7 @@ export const Comment = ({user,comments, content, createdAt, _id,articleId, paren
                                   d="M6 10a2 2 0 11-4 0 2 2 0 014 0zM12 10a2 2 0 11-4 0 2 2 0 014 0zM16 12a2 2 0 100-4 2 2 0 000 4z">
                               </path>
                           </svg>
-                          <span className="sr-only">Comment settings</span>
+                          <span className="sr-only">{t("commentSettings")}</span>
                       </button>
                       <Menu
                           sx={{ mt: "45px"}}
@@ -88,7 +89,7 @@ export const Comment = ({user,comments, content, createdAt, _id,articleId, paren
                                   setEditMode(true)
                                   handleCloseCommentMenu()
                               }}>
-                              Edit
+                              {t("edit")}
                           </MenuItem>
                           {/*<MenuItem*/}
                           {/*    className="block w-full text-gray-600 py-2 px-4 hover:bg-gray-100"*/}
@@ -107,7 +108,7 @@ export const Comment = ({user,comments, content, createdAt, _id,articleId, paren
                                   reportComment({articleId,id:_id})
                                   handleCloseCommentMenu()
                               }}>
-                              Report
+                              {t("report")}
                           </MenuItem>
 
                       </Menu>
@@ -117,7 +118,7 @@ export const Comment = ({user,comments, content, createdAt, _id,articleId, paren
           {!editMode ? <p>{content}</p> :
             <div>
                 <div className="py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg">
-                    <label htmlFor="comment" className="sr-only">Your comment</label>
+                    <label htmlFor="comment" className="sr-only">{t("yourComment")}</label>
                     <textarea id="comment"
                               value={comment}
                               onChange={(e)=>{
@@ -125,7 +126,7 @@ export const Comment = ({user,comments, content, createdAt, _id,articleId, paren
                               }}
                               rows="auto"
                               className="p-3 w-full text-sm text-gray-900 border"
-                              placeholder="Write a comment..." required />
+                              placeholder={t("yourComment")} required />
                 </div>
                 <Button
                     disabled={comment.length === 0}
@@ -139,7 +140,7 @@ export const Comment = ({user,comments, content, createdAt, _id,articleId, paren
                             }})
                     }}
                     className={`${comment.length === 0 ? "cursor-not-allowed opacity-50" : ""} text-black bg-cyan-100 inline-flex items-center py-2.5 px-4 text-xs font-medium text-center bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200  hover:bg-primary-800`}>
-                    Edit comment
+                    {t("commentEdit")}
                 </Button>
             </div>
           }
@@ -154,7 +155,7 @@ export const Comment = ({user,comments, content, createdAt, _id,articleId, paren
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2"
                             d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
                   </svg>
-                  Reply
+                  {t("reply")}
               </button>
           </div>
           {replyMode && !isLoading &&
@@ -166,14 +167,14 @@ export const Comment = ({user,comments, content, createdAt, _id,articleId, paren
                               src={`${me.photo}`}
                               alt={me.givenName}/>{me.givenName} {me.familyName}</p>
                       <p className="text-sm text-gray-600 dark:text-gray-400">
-                          <time pubdate dateTime="2022-02-12"
-                                title="February 12th, 2022">
+                          <time pubdate dateTime={moment().format("DD-MM-YYYY")}
+                                title={moment().format("DD/MM/YYYY")}>
                               {moment().format("DD/MM/YYYY")}
                           </time>
                       </p>
                   </div>
                   <div className="py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg">
-                      <label htmlFor="reply" className="sr-only">Your reply</label>
+                      <label htmlFor="reply" className="sr-only">{t("yourReply")}</label>
                       <textarea id="reply"
                                 value={reply}
                                 onChange={(e)=>{
@@ -181,7 +182,7 @@ export const Comment = ({user,comments, content, createdAt, _id,articleId, paren
                                 }}
                                 rows="auto"
                                 className="p-3 w-full text-sm text-gray-900 border"
-                                placeholder="Write a reply..." required />
+                                placeholder={t("replyInput")} required />
                   </div>
                   <div className={"flex justify-end"}>
                       <Button
@@ -195,7 +196,7 @@ export const Comment = ({user,comments, content, createdAt, _id,articleId, paren
                                   }})
                           }}
                           className={`${reply.length === 0 ? "cursor-not-allowed opacity-50" : ""} text-black bg-cyan-100 py-2.5 px-4 text-xs font-medium text-center bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200  hover:bg-primary-800`}>
-                          Reply
+                          {t("reply")}
                       </Button>
                   </div>
               </>

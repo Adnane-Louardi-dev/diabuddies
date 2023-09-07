@@ -29,6 +29,7 @@ import { GamifyProgressBar } from "../components/appBar/GamifyProgressBar";
 import showNotification from "../utils/showNotification";
 import {appWithTranslation, useTranslation} from "next-i18next";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
+import {getDir} from "../utils/getDir";
 
 export default function Home() {
   const router = useRouter();
@@ -89,18 +90,18 @@ export default function Home() {
     if(!isUserLoading && user){
       const timeNow = moment().format("LT")
       if(timeNow >= moment("12:00 AM", "LT") && timeNow < moment("12:00 PM")){
-        return t("morning_greeting") +  `, ${user.givenName}`
+        return `${i18n.language !== "ar" ? "Good morning":"صباح الخير"}, ${user.givenName}`
       }
       if(timeNow >= moment("12:00 PM", "LT") && timeNow < moment("05:00 PM")){
-        return t("afternoon_greeting") +  `, ${user.givenName}`
+        return `${i18n.language !== "ar" ? "Good afternoon":"مساء الخير"}, ${user.givenName}`
       }
       if(timeNow >= moment("05:00 PM", "LT") && timeNow < moment("09:00 PM")){
-        return t("evening_greeting") +  `, ${user.givenName}`
+        return `${i18n.language !== "ar" ? "Good evening":"مساء الخير"}, ${user.givenName}`
       }
-      return t("night_greeting") +  `, ${user.givenName}`
+      return `${i18n.language !== "ar" ? "Good night":"تصبح على خير"}, ${user.givenName}`
     }
-    return t("morning_greeting")
-  },[isUserLoading])
+    return `${i18n.language !== "ar" ? "Good morning":"صباح الخير"}`
+  },[isUserLoading,i18n.language])
 
   return (
     <>
@@ -112,7 +113,7 @@ export default function Home() {
             <title>Home | Diabuddies</title>
           </Head>
           <ResponsiveAppBar user={user} />
-          <main className="p-4 relative overflow-y-hidden" dir={i18n.language ==="ar" ? "rtl" : "ltr"}>
+          <main className="p-4 relative overflow-y-hidden" dir={getDir(i18n.language)}>
             <span className="font-inter text-2xl text-semibold">
               {userGreeting}
             </span>

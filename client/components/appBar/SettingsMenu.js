@@ -12,6 +12,7 @@ import {appBarItems} from "./appBarItems";
 import {useTranslation} from "next-i18next";
 import LanguageSwitcher from "./LanguageSwitcher";
 import {useRouter} from "next/router";
+import {getDir} from "../../utils/getDir";
 
 export const SettingsMenu = () => {
     const { user } = useGetCurrentUser();
@@ -38,7 +39,7 @@ export const SettingsMenu = () => {
                     "& .MuiPaper-root.MuiMenu-paper": {
                     borderRadius: "15px"
                     },
-                    direction: i18n.language === "ar" ? "rtl" : "ltr"
+                    direction: getDir(i18n.language)
             }}
                 id="menu-appbar"
                 anchorEl={anchorElUser}

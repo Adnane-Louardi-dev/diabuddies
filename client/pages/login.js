@@ -7,11 +7,14 @@ import FacebookIcon from "@mui/icons-material/Facebook";
 import EastIcon from "@mui/icons-material/East";
 import axios from "axios";
 import {useRouter} from "next/router";
+import {useTranslation} from "next-i18next";
+import {serverSideTranslations} from "next-i18next/serverSideTranslations";
+import {getDir} from "../utils/getDir";
 
 export default function Login() {
   const router = useRouter();
   const { register, control, handleSubmit, reset } = useForm();
-
+  const {t,i18n} = useTranslation("login")
   const onSubmit = (data) => {
     axios
       .post("/api/login/", data, {
@@ -33,17 +36,20 @@ export default function Login() {
   const onErrors = (err) => console.log(err);
 
   return (
-    <div className="h-full h-screen">
+    <div className="h-full h-screen" dir={getDir(i18n.language)}>
       {/* <Image src={"/signup_promo.jpg"} className="brightness-50 blur-xs " fill objectFit="cover" alt={"black woman checking blood sugar"} /> */}
-      <div className="relative lg:hidden h-52 w-screen pt-8 px-6">
-        <p className="text-md text-diaGray leading-relaxed font-poppins">
-          With <span className="font hover:underline hover:text-diaBlue decoration-diaOrange">DIABUDDIES</span> you can easily control <br />
+      <div className="relative h-52 w-screen pt-8 px-6 text-center">
+        {i18n.language !== "ar" && <p className="text-md text-diaGray leading-relaxed font-poppins">
+          With <span className="font hover:underline hover:text-diaBlue decoration-diaOrange">DIABUDDIES</span> you can
+          easily control <br/>
           and track your diabetes in one single platform.
-          <br />
-          <Button endIcon={<EastIcon />} className="font-roboto text-diaGray hover:text-diaOrange text-md underline hover:decoration-diaOrange">
-            Discover why and how
-          </Button>
-        </p>
+        </p>}
+        {i18n.language === "ar" && <p className="text-md text-diaGray leading-relaxed font-poppins" >
+          <span>مع </span>
+          <span className="font hover:underline hover:text-diaBlue decoration-diaOrange" dir={"rtl"}>DIABUDDIES </span>
+          <span>يمكنك بسهولة التحكم </span><br/>
+          ومتابعة مرض السكري في تطبيق واحد
+        </p>}
       </div>
       <div className="flex flex-row -mt-12 bg-white justify-center lg:items-center h-full w-full rounded-3xl lg:rounded-none">
         <div className="absolute">
@@ -55,13 +61,13 @@ export default function Login() {
               <Link href="/api/login/auth/google" passHref>
                 <Button fullWidth variant="outlined" className="mb-7 p-2 text-diaGray text-md rounded-full border-2 border-diaGray">
                   <GoogleIcon className="text-md mx-5" />
-                  Sign up with Google
+                  {t("googleSignUp")}
                 </Button>
               </Link>
               <Link href="/api/login/auth/facebook" to={`${process.env.BACKEND_URL}:3000/login/auth/facebook`} as="/login" passHref>
                 <Button fullWidth variant="outlined" className="mb-7 p-2 text-diaGray text-md rounded-full border-2 border-diaGray">
                   <FacebookIcon className="text-md mx-5" />
-                  Sign up with Facebook
+                  {t("facebookSignUp")}
                 </Button>
               </Link>
             </div>
@@ -85,7 +91,7 @@ export default function Login() {
                 {...register("username")}
                 fullWidth
                 id="standard-required"
-                label="username"
+                label={t("username")}
                 variant="standard"
                 margin="normal"
               />
@@ -107,7 +113,7 @@ export default function Login() {
                 {...register("password")}
                 fullWidth
                 id="standard-password-input"
-                label="Password"
+                label={t("password")}
                 type="password"
                 autoComplete="current-password"
                 variant="standard"
@@ -120,7 +126,7 @@ export default function Login() {
                 type="submit"
                 margin="normal"
               >
-                Sign in
+                {t("signIn")}
               </Button>
             </form>
           </div>
@@ -145,3 +151,8 @@ export default function Login() {
     </div>
   );
 }
+export const getServerSideProps = async ({ locale }) => ({
+  props: {
+    ...(await serverSideTranslations(locale, ['login']))
+  }
+});

@@ -4,6 +4,7 @@ import LoadingCircle from "../../../components/loadingCircle";
 import {useRouter} from "next/router";
 import {useQuery} from "@tanstack/react-query";
 import axios from "axios";
+import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 
 //create component that handle a data passed from getStaticProps
 export default function ProductPage() {
@@ -24,3 +25,9 @@ export default function ProductPage() {
       </StoreLayout>
    );
 }
+
+export const getServerSideProps = async ({ locale }) => ({
+    props: {
+        ...(await serverSideTranslations(locale, ['common','blogStore']))
+    }
+});

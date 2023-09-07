@@ -14,6 +14,7 @@ import moment from "moment";
 import {useQueryClient} from "@tanstack/react-query";
 import {useTranslation} from "next-i18next";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
+import {getDir} from "../utils/getDir";
 
 const steps = [<Gender />, <BirthDate />, <Tall />, <Weight />, <InsulinSensitivity />, <Hb1ac />];
 
@@ -90,7 +91,7 @@ const Setup = () => {
         variant="determinate"
         value={(activeStep / steps.length) * 100}
       />
-      <div className="flex justify-between" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
+      <div className="flex justify-between" dir={getDir(i18n.language)}>
         <Button
           onClick={handleBack}
           disabled={activeStep === 0}

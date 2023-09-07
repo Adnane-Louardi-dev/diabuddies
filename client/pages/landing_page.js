@@ -4,12 +4,13 @@ import {Button} from "@mui/material";
 import {useTranslation} from "next-i18next";
 import Container from "@mui/material/Container";
 import LanguageSwitcher from "../components/appBar/LanguageSwitcher";
+import {getDir} from "../utils/getDir";
 
 export default function LandingPage() {
     const {t,i18n} = useTranslation("landingPage")
 
     return (
-        <Container maxWidth={"xl"} dir={i18n.language === "ar" ? "rtl" : "ltr"}>
+        <Container maxWidth={"xl"} dir={getDir(i18n.language)}>
             <LanguageSwitcher lang={i18n.language}/>
             <header>
                 <nav className={"flex justify-between align-middle"}>

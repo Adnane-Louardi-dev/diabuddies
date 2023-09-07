@@ -5,6 +5,7 @@ import Container from "@mui/material/Container";
 import ResponsiveAppBar from "../../../components/ResponsiveAppBar";
 import {Article} from "../../../components/blog/article";
 import axios from "axios";
+import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 
 
 export default function Post() {
@@ -21,7 +22,6 @@ export default function Post() {
     if(isLoading) {
         return <LoadingCircle />
     }
-    console.log("article", article)
     return <Container maxWidth={"xl"}>
         <ResponsiveAppBar />
 
@@ -33,3 +33,9 @@ export default function Post() {
 
     </Container>
 }
+
+export const getServerSideProps = async ({ locale }) => ({
+    props: {
+        ...(await serverSideTranslations(locale, ['common','blogStore']))
+    }
+});
