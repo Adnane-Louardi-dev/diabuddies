@@ -12,14 +12,6 @@ export function initSW() {
   window.addEventListener("load", () => {
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("/sw.js");
-
-      // if (navigator.serviceWorker.controller) {
-      //   navigator.serviceWorker.controller.postMessage(UPDATE_CHECK);
-      //   navigator.serviceWorker.addEventListener("controllerchange", () => {
-      //     window.location.reload();
-      //   });
-      // }
-
       navigator.serviceWorker.ready.then(async (registration) => {
         if ("periodicSync" in registration) {
           const status = await navigator.permissions.query({
@@ -29,7 +21,7 @@ export function initSW() {
 
           if (status.state === "granted") {
             await registration.periodicSync.register("show-notification", {
-              minInterval: 1000,
+              minInterval: 3 * 60 * 60 * 1000,
             });
           }
         }
