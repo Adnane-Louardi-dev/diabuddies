@@ -6,6 +6,7 @@ import {Icon} from "@iconify/react";
 import {actionsLogbook} from "../utils/actionLogbook";
 import {useTranslation} from "next-i18next";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
+import {getDir} from "../utils/getDir";
 
 
 export default function Guide() {
@@ -14,7 +15,7 @@ export default function Guide() {
         <ResponsiveAppBar />
         <Typography typography={"h4"} className={"my-3"} textAlign={"center"}>{t("guide")}</Typography>
         {actionsLogbook.map(({labelAr,descriptionAr,pointsEarned,label,description,icon}) => (
-            <div key={label} className="grid grid-cols-6 gap-5 p-3 mb-2 rounded-lg shadow-lg border-r-4 border-diaDarkBlue bg-white cursor-pointer" dir={i18n.language === "ar" ? "rtl" : "ltr"}>
+            <div key={label} className="grid grid-cols-6 gap-5 p-3 mb-2 rounded-lg shadow-lg border-r-4 border-diaDarkBlue bg-white cursor-pointer" dir={getDir(i18n.language)}>
                 <div className="self-start col-span-1 flex items-center p-1 bg-diaDarkBlue h-12 w-12 rounded-full shadow-md">
                     <Icon icon={icon} className={"mx-auto text-white h-8 w-8"} />
                 </div>

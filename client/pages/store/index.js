@@ -4,6 +4,7 @@ import {useRouter} from "next/router";
 import {StoreLayout} from "../../components/store/storeLayout";
 import {useAxios} from "../../customeHooks/useAxios";
 import LoadingCircle from "../../components/loadingCircle";
+import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 
 const Home = () => {
     const router = useRouter()
@@ -33,3 +34,9 @@ const Home = () => {
 };
 
 export default Home;
+
+export const getServerSideProps = async ({ locale }) => ({
+    props: {
+        ...(await serverSideTranslations(locale, ['common','blogStore']))
+    }
+});

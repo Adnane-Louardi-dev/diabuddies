@@ -6,10 +6,13 @@ import Menu from "@mui/material/Menu";
 import {Button} from "@mui/material";
 import {ProductImage} from "./ProductImage";
 import {useGetCart} from "../../customeHooks/useCart";
+import {SettingsMenu} from "../appBar/SettingsMenu";
+import {useTranslation} from "next-i18next";
 
 const Navbar = () => {
     const [anchorElCart, setAnchorElCart] = React.useState(null);
     const {data: cart} = useGetCart()
+    const {t} = useTranslation("blogStore")
     const handleOpenCartMenu = (event) => {
         setAnchorElCart(event.currentTarget);
     };
@@ -24,7 +27,7 @@ const Navbar = () => {
             <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
                <div className="relative flex items-center justify-between h-16">
                   <Logo />
-                  <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:inset-auto sm:ml-6 sm:pr-0">
+                  <div className="absolute inset-y-0 right-20 flex items-center px-5 sm:static sm:inset-auto sm:ml-6 sm:pr-4">
                      <Link href={"/store/wish_list"} className="p-1 rounded-full text-gray-400 focus:outline-none focus:ring-2 focus:ring-offset-2">
                         <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 stroke-current hover:fill-current" fill="none" viewBox="0 0 24 24">
                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
@@ -75,13 +78,10 @@ const Navbar = () => {
                                               <h1 className="mt-1 w-48 text-sm">{name}</h1>
                                               <h1 className="my-1 text-sm flex justify-between">
                                                   <p>
-                                                      {quantity} * <span
-                                                      className={"text-blue-700"}>
-                                                      {selling_price}
-                                                  </span>
+                                                      {quantity} * <span className={"text-blue-700"}>{selling_price}</span> {t("currency")}
                                                   </p>
                                                   <p>
-                                                      {total}
+                                                      {total} {t("currency")}
                                                   </p>
                                               </h1>
                                           </div>
@@ -93,17 +93,18 @@ const Navbar = () => {
                               {cart?.totalItems !== 0 &&
                                   <Link href="/store/cart" passHref={true}>
                                       <Button className={"bg-amber-500 text-white my-5 w-full"}>
-                                          Goto cart
+                                          {t("checkout")}
                                       </Button>
                                   </Link>}
                               <Link href="/store/orders" passHref={true}>
                                   <Button className={"bg-amber-500 text-white w-full"}>
-                                      My Orders
+                                      {t("myOrders")}
                                   </Button>
                               </Link>
                           </div>
                       </Menu>
                   </div>
+                   <SettingsMenu />
                </div>
             </div>
          </nav>

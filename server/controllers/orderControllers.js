@@ -59,6 +59,7 @@ const checkoutOrder = async (req,res) => {
           }
       })
       const {data:updatedOrder} = await strapiInstance.put(`/api/orders/${order.data.id}`,JSON.parse(orderUpdating))
+      console.log(orderUpdating)
       return res.status(200).json(updatedOrder)
   } catch (e) {
       console.error(e.message)

@@ -6,6 +6,7 @@ import {ProductImage} from "./ProductImage";
 import {Add, Remove} from "@mui/icons-material";
 import {debounce} from "@mui/material";
 import {useUpdateCart} from "../../customeHooks/useCart";
+import {useTranslation} from "next-i18next";
 
 export default function Product({id,...product}) {
    const {name, selling_price,original_price, pictures,inventory,description, thumbnail} = product.attributes
@@ -14,6 +15,7 @@ export default function Product({id,...product}) {
    //    return cart.venteEntries.find((venteEntry)=>venteEntry.product.id === id)?.quantity ?? 0
    // },[cart.totalItems])
    const [quantity, setQuantity] = useState(1)
+   const {t} = useTranslation("blogStore")
    console.log('cart ', cart)
    return (
       <>
@@ -88,14 +90,14 @@ export default function Product({id,...product}) {
                   </div>
                   <div className="inline-flex justify-center">
                      <div className="px-3 py-1 text-blue-700">
-                        <h1 className="text-xl mt-0.5 whitespace-nowrap">{selling_price} DH</h1>
+                        <h1 className="text-xl mt-0.5 whitespace-nowrap">{selling_price} {t("currency")}</h1>
                      </div>
                      <AddProductToCart id={id} product={product} quantity={quantity}>
                         <button type="submit" className="inline-flex text-white h-10 w-32 bg-yellow-500 hover:bg-yellow-400 hover:text-gray-100 px-3 py-2 rounded-md">
                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 my-0.5 mr-0.5" viewBox="0 0 20 20" fill="currentColor">
                               <path fillRule="evenodd" d="M10 3a1 1 0 011 1v5h5a1 1 0 110 2h-5v5a1 1 0 11-2 0v-5H4a1 1 0 110-2h5V4a1 1 0 011-1z" clipRule="evenodd" />
                            </svg>
-                           <span className="text-md whitespace-nowrap">Add to cart</span>
+                           <span className="text-md whitespace-nowrap">{t("addToCart")}</span>
                         </button>
                      </AddProductToCart>
                   </div>

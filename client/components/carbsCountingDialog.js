@@ -14,6 +14,7 @@ import moment from "moment";
 import Link from "next/link";
 import InputAdornment from "@mui/material/InputAdornment";
 import {useTranslation} from "next-i18next";
+import {getDir} from "../utils/getDir";
 
 function CalculatingBolus(carbs, ratio, InsulinSensitivity, IOBcarb, glucose) {
   let IOBcorr = 0,
@@ -78,7 +79,7 @@ const CarbsCountingDialog = ({ activeInsulinProp, glucose, lastInjectionTime }) 
       <Button onClick={handleClickOpen} variant="filled" className="flex justify-end mt-3 text-diaLightBlue bg-white pt-2 rounded-full shadow-md">
         {t("calculate_now")}
       </Button>
-      <Dialog open={open} onClose={handleClose} fullScreen sx={{direction: i18n.language === "ar" ? "rtl" : "ltr"}}>
+      <Dialog open={open} onClose={handleClose} fullScreen sx={{direction: getDir(i18n.language)}}>
         <DialogTitle className="flex justify-between">
           <p className="font-sourceCode text-2xl text-gray-900">{t("bolus_advisor")}</p>
           <Button onClick={handleClose} className="self-center p-2 bg-gray-100 rounded-md">
