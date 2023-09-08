@@ -32,7 +32,7 @@ module.exports = {
       userId: req.user._id,
     });
 
-    return res.status(200).json({ diabetecDetails: detailedUser });
+    return res.status(200).json({ ...detailedUser, diabetecDetails });
   },
   addMedicament: async (req, res) => {
     try {

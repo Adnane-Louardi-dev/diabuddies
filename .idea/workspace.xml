@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="47d41590-a06d-4130-8666-cd245f35a61d" name="Changes" comment="notifications implementation" />
+    <list default="true" id="47d41590-a06d-4130-8666-cd245f35a61d" name="Changes" comment="notifications implementation">
+      <change beforePath="$PROJECT_DIR$/server/controllers/userController.js" beforeDir="false" afterPath="$PROJECT_DIR$/server/controllers/userController.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -42,13 +44,13 @@
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "WebServerToolWindowFactoryState": "false",
-    "git-widget-placeholder": "master",
+    "git-widget-placeholder": "TEST",
     "ignore.virus.scanning.warn.message": "true",
     "last_opened_file_path": "C:/Users/dell/Desktop/diabuddies/client/public",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.standard": "true",
     "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "",
+    "node.js.selected.package.eslint": "(autodetect)",
     "node.js.selected.package.standard": "",
     "node.js.selected.package.tslint": "(autodetect)",
     "nodejs_package_manager_path": "npm",
@@ -106,6 +108,7 @@
       <workItem from="1689413198214" duration="5795000" />
       <workItem from="1692380989930" duration="4339000" />
       <workItem from="1692555339625" duration="19242000" />
+      <workItem from="1693677514170" duration="593000" />
     </task>
     <task id="LOCAL-00001" summary="improve UI">
       <created>1692561288369</created>

@@ -59,7 +59,8 @@ function checkRecentLogsAndDisplayNotification() {
       if (cachedResponse) {
         return cachedResponse.json().then((result) => result);
       }
-      return cachedResponse.json();
+      console.log(cachedResponse);
+      return cachedResponse.json().then((result) => result);
     })
     .catch((err) => console.log(err));
   return logBooksFromCache.then((logs) => {
@@ -68,7 +69,7 @@ function checkRecentLogsAndDisplayNotification() {
 
     //meal must push to notifications
 
-    if (logs) {
+    if (logs[0]) {
       return logs.forEach((element) => {
         let differenceBetweenNowAndMissingMeal = new Date() - mealsTime[mealRequiredComparedToTime].min;
         if (differenceBetweenNowAndMissingMeal > 1000 * 60 * 30 && element.meal !== mealRequiredComparedToTime) {
