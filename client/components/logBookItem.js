@@ -1,12 +1,12 @@
-import React, {useState} from "react";
+import React, { useState } from "react";
 import axios from "axios";
 import moment from "moment";
-import {Breakfast, Dinner, Glucose, Lunch, Snack} from "./mealIcons";
-import {useMutation, useQueryClient} from "@tanstack/react-query";
+import { Breakfast, Dinner, Glucose, Lunch, Snack } from "./mealIcons";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
-import {Alert, Snackbar} from "@mui/material";
-import {Icon} from "@iconify/react";
+import { Alert, Snackbar } from "@mui/material";
+import { Icon } from "@iconify/react";
 
 const LogBookItem = ({ props }) => {
   const [data, setData] = useState(props);
@@ -29,7 +29,6 @@ const LogBookItem = ({ props }) => {
     },
     onSuccess: (log) => {
       queryClient.invalidateQueries(["indexChart"]);
-      console.log(log);
     },
     onError: (e) => {
       console.error(e);
@@ -43,19 +42,19 @@ const LogBookItem = ({ props }) => {
     setNotificationOpen(false);
   };
 
-  const getMealIcon = React.useCallback((mealTime) =>{
+  const getMealIcon = React.useCallback((mealTime) => {
     const mealTimes = {
-      "breakfast": <Breakfast/>,
-      "lunch": <Lunch/>,
-      "dinner": <Dinner/>,
-      "snack": <Snack/>,
+      breakfast: <Breakfast />,
+      lunch: <Lunch />,
+      dinner: <Dinner />,
+      snack: <Snack />,
+    };
+    if (mealTime) {
+      return mealTimes[mealTime] ?? <Glucose />;
     }
-    if(mealTime) {
-      return mealTimes[mealTime] ?? <Glucose />
-    }
-    return <Glucose />
-  },[])
-
+    return <Glucose />;
+  }, []);
+  let bgColor = data.glucose >= 180 ? "diaRed" : data.glucose <= 70 ? "diaBlue" : "diaGreen";
   return (
     <>
       <Box sx={{ display: "flex" }}>
@@ -68,9 +67,7 @@ const LogBookItem = ({ props }) => {
       </Snackbar>
 
       <div className="grid grid-cols-6 gap-5 p-3 rounded-lg shadow-lg border-r-4 border-diaDarkBlue bg-white">
-        <div className="self-start col-span-1 flex items-center p-1 bg-diaDarkBlue h-12 w-12 rounded-full shadow-md">
-          {getMealIcon(data.meal)}
-        </div>
+        <div className="self-start col-span-1 flex items-center p-1 bg-diaDarkBlue h-12 w-12 rounded-full shadow-md">{getMealIcon(data.meal)}</div>
         <div className="grid gap-2 col-span-5">
           <div className="flex justify-between items-center">
             <h4 className="font-sourceCode font-bold text-diaDarkBlue text-lg">{data.meal}</h4>
@@ -83,7 +80,7 @@ const LogBookItem = ({ props }) => {
           </div>
           {data.glucose && (
             <div className="flex items-center justify-between">
-              <div className={`flex items-center justify-center mr-3 p-1 text-white rounded-lg bg-${data.glucose >= 180 ? "diaRed" : data.glucose <= 70 ? "diaBlue" : "diaGreen"}`}>
+              <div className={`flex items-center justify-center mr-3 p-1 text-white rounded-lg bg-${bgColor}`}>
                 <Icon icon="ph:drop" className="mx-1" />
                 <span className="font-sourceCode">{`${data.glucose} mg/dL`}</span>
               </div>
@@ -91,7 +88,7 @@ const LogBookItem = ({ props }) => {
             </div>
           )}
           <div className="flex items-center justify-between">
-            {data.carbs!==0 && (
+            {data.carbs !== 0 && (
               <div className="flex items-center justify-center p-1 text-white rounded-lg bg-diaDarkBlue">
                 <Icon icon="fluent:food-grains-20-regular" className="mx-1" />
                 <span className="font-sourceCode text-xs">Carbs</span>

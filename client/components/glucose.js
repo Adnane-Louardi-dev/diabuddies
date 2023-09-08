@@ -18,12 +18,12 @@ const Glucose = ({ props, setGlucose }) => {
   useEffect(() => {
     calculateLocalGlucose();
   }, []);
-
+  let bgColor = localGlucose?.glucose >= 180 ? "diaRed" : localGlucose?.glucose <= 70 ? "diaBlue" : "diaGreen";
   return (
     <>
       {localGlucose ? (
         <div className="py-2 w-1/2 mx-1">
-          <div className={`rounded-3xl shadow-md bg-${localGlucose.glucose >= 180 ? "diaRed" : localGlucose.glucose <= 70 ? "diaBlue" : "diaGreen"} text-white p-3`}>
+          <div className={`rounded-3xl shadow-md bg-${bgColor} text-white p-3`}>
             <div className="flex justify-between w-full items-center mb-3">
               <h3 className="font-inter text-md text-semibold truncate">Glucose</h3> <Icon icon="ph:info" />
             </div>
