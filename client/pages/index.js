@@ -30,6 +30,7 @@ import showNotification from "../utils/showNotification";
 import {appWithTranslation, useTranslation} from "next-i18next";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import {getDir} from "../utils/getDir";
+import Container from "@mui/material/Container";
 
 export default function Home() {
   const router = useRouter();
@@ -222,11 +223,13 @@ export default function Home() {
                       </Link>
                     </div>
                     <div className={"shadow-2xl p-4 bg-white rounded-2xl mb-8 pb-8"}>
-                      <div className="gap-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                        {articles?.data?.map(({ id, attributes }) => (
-                          <SmallArticle {...attributes} id={id} key={id} />
-                        ))}
-                      </div>
+                      <Container maxWidth={"xl"}>
+                          <div className="gap-12 grid grid-cols-1 lg:grid-cols-2">
+                            {articles?.data?.map(({ id, attributes }) => (
+                              <SmallArticle {...attributes} id={id} key={id} />
+                            ))}
+                          </div>
+                      </Container>
                     </div>
                   </section>
                 )}

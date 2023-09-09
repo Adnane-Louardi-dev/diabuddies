@@ -17,7 +17,9 @@ export const WishedIcon = ({itemId,type}) => {
 
 
     return !isLoading ?
-        <IconButton onClick={debounce(()=>{
+        <IconButton onClick={debounce((e)=>{
+            e.preventDefault();
+            e.stopPropagation();
             if(!toggleProductLoading){
                 toggleWishItem(itemId)
                 setIsWished((wished) => !wished)
