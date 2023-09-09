@@ -4,22 +4,16 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { useEffect } from "react";
+import {useEffect, useTransition} from "react";
 import Script from "next/script";
 const queryClient = new QueryClient();
 import showNotification from "../utils/showNotification";
+import {appWithTranslation, useTranslation} from 'next-i18next';
+
 export function initSW() {
   window.addEventListener("load", () => {
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("/sw.js");
-
-      // if (navigator.serviceWorker.controller) {
-      //   navigator.serviceWorker.controller.postMessage(UPDATE_CHECK);
-      //   navigator.serviceWorker.addEventListener("controllerchange", () => {
-      //     window.location.reload();
-      //   });
-      // }
-
       navigator.serviceWorker.ready.then(async (registration) => {
         if ("periodicSync" in registration) {
           const status = await navigator.permissions.query({
@@ -29,7 +23,7 @@ export function initSW() {
 
           if (status.state === "granted") {
             await registration.periodicSync.register("show-notification", {
-              minInterval: 1000,
+              minInterval: 3 * 60 * 60 * 1000,
             });
           }
         }
@@ -39,6 +33,7 @@ export function initSW() {
 }
 
 function MyApp({ Component, pageProps }) {
+  const {i18n} = useTranslation()
   useEffect(() => {
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("/sw.js");
@@ -89,7 +84,7 @@ function MyApp({ Component, pageProps }) {
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
       </Head>
-      <LocalizationProvider dateAdapter={AdapterMoment}>
+      <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale={i18n.language}>
         <Component {...pageProps} />
       </LocalizationProvider>
       <ReactQueryDevtools />
@@ -97,4 +92,4 @@ function MyApp({ Component, pageProps }) {
   );
 }
 
-export default MyApp;
+export default appWithTranslation(MyApp);

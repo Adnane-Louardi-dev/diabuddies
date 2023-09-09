@@ -2,8 +2,10 @@ import {Icon} from "@iconify/react";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import * as React from "react";
+import {useTranslation} from "next-i18next";
 
 export const NutrationLogInput = ({ onChange, label, bgColor,value, textColor, icon, inputAdornmentLabel }) => {
+  const {t} = useTranslation()
   return (
     <div className={`p-2.5 bg-diaDarkBlue rounded-xl shadow-md`}>
       <div className="flex justify-between items-center">
@@ -49,7 +51,7 @@ export const NutrationLogInput = ({ onChange, label, bgColor,value, textColor, i
                 },
               }}
             >
-              {inputAdornmentLabel}
+              {t(inputAdornmentLabel)}
             </InputAdornment>
           ),
           style: {

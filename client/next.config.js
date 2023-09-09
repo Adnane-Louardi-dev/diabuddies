@@ -1,16 +1,24 @@
 /** @type {import('next').NextConfig} */
+const { i18n } = require('./next-i18next.config.js');
 const withPWA = require("next-pwa")({
   dest: "public",
   disable: process.env.NODE_ENV === "development",
 });
 const nextConfig = {
+  i18n,
   reactStrictMode: true,
   images: {
-    domains: ["cdn.chec.io"],
+    domains: ["cdn.chec.io", "images.openfoodfacts.net"],
     remotePatterns: [
       {
         protocol: "https",
         hostname: "lh3.googleusercontent.com",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "https",
+        hostname: "images.openfoodfacts.net",
         port: "",
         pathname: "/**",
       },
@@ -27,6 +35,10 @@ const nextConfig = {
       {
         source: "/api/:path*",
         destination: `${process.env.BACKEND_URL}/:path*`,
+      },
+      {
+        source: "/food/api/:path*",
+        destination: `https://world.openfoodfacts.net/api/v2/:path*`,
       },
     ];
   },

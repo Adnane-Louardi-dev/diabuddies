@@ -5,6 +5,7 @@ import Container from "@mui/material/Container";
 import ResponsiveAppBar from "../../../components/ResponsiveAppBar";
 import {Article} from "../../../components/blog/article";
 import axios from "axios";
+import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 
 
 export default function Post() {
@@ -15,14 +16,12 @@ export default function Post() {
         queryFn:async () => {
             const {data} = await axios.get(`/api/blog/article/${id}`)
             return data
-        },
-        enabled: router.isReady
+        }
     })
 
     if(isLoading) {
         return <LoadingCircle />
     }
-    console.log("article", article)
     return <Container maxWidth={"xl"}>
         <ResponsiveAppBar />
 
@@ -30,7 +29,13 @@ export default function Post() {
                  isLiked={article.isLiked}
                  likeCount={article.likeCount}
                  relatedArticles={article.relatedArticles}
-                 {...article.data.attributes} />
+                 {...article.data?.attributes} />
 
     </Container>
 }
+
+export const getServerSideProps = async ({ locale }) => ({
+    props: {
+        ...(await serverSideTranslations(locale, ['common','blogStore']))
+    }
+});

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import moment from "moment";
+import {useTranslation} from "next-i18next";
 // function to group the data by date and calculate the sum of keys (macros)
 function getGroupedData(data) {
   //group the data
@@ -35,6 +36,7 @@ function getGroupedData(data) {
   });
 }
 const MacrosAndKcalChart = ({ props, dailyCaloriesNeeds }) => {
+  const {t} = useTranslation("common")
   const [Data, setData] = useState(null);
   useEffect(() => {
     let groupedData = getGroupedData(props);
@@ -60,10 +62,10 @@ const MacrosAndKcalChart = ({ props, dailyCaloriesNeeds }) => {
         <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" domain={[0, dailyCaloriesNeeds]} />
         <Tooltip labelFormatter={(date) => moment(date).format("LL")} contentStyle={{ color: "#323D34", borderRadius: 15 }} />
         <Legend />
-        <Bar yAxisId="left" stackId={"a"} dataKey="carbs" fill="#666666" />
-        <Bar yAxisId="left" stackId={"a"} dataKey="protein" fill="#FFD7AA" />
-        <Bar yAxisId="left" stackId={"a"} dataKey="fat" fill="#F87474" />
-        <Bar yAxisId="right" dataKey="kcal" fill="#82ca9d" background={{ fill: "#eee" }} />
+        <Bar yAxisId="left" stackId={"a"} dataKey="carbs" name={t("carbs")} fill="#666666" />
+        <Bar yAxisId="left" stackId={"a"} dataKey="protein" name={t("protein")} fill="#FFD7AA" />
+        <Bar yAxisId="left" stackId={"a"} dataKey="fat" name={t("fat")} fill="#F87474" />
+        <Bar yAxisId="right" dataKey="kcal" name={t("kcal")} fill="#82ca9d" background={{ fill: "#eee" }} />
       </BarChart>
     </ResponsiveContainer>
   );

@@ -6,8 +6,8 @@ const {cartCalculationService} = require("../util/calculationService");
 const {orderQuery} = require("../util/baseQueries");
 const checkoutOrder = async (req,res) => {
   try {
-      const customerId = await getUserCustomerId(req.user)
-      const {phoneNumber, shippingAddress, email, customerName, cityId, venteEntries} = req.body;
+      const {phoneNumber, shippingAddress, customerName, cityId, venteEntries} = req.body;
+      const customerId = await getUserCustomerId({_id: req.user._id,customerId: req.user.customerId, shippingAddress, phoneNumber, customerName})
       const productIds = venteEntries.map(entry => entry.productId)
       const url = `/api/products?${
           productIds.map((productId,idx) => `filters[id][$in][${idx}]=${productId}`)
@@ -20,7 +20,6 @@ const checkoutOrder = async (req,res) => {
               status: "NEW",
               phoneNumber,
               address: shippingAddress,
-              email,
               customerName,
               total: 0,
               subtotal: 0,
@@ -59,10 +58,11 @@ const checkoutOrder = async (req,res) => {
           }
       })
       const {data:updatedOrder} = await strapiInstance.put(`/api/orders/${order.data.id}`,JSON.parse(orderUpdating))
+      console.log(orderUpdating)
       return res.status(200).json(updatedOrder)
   } catch (e) {
       console.error(e.message)
-      return res.status(404).json({message: "There was an error creating the order",...e})
+      return res.status(404).json({message: "There was an error creating the order"})
   }
 }
 

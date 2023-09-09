@@ -1,7 +1,9 @@
 import React from "react";
 import carbs_counting from "../public/carbs-counting.png";
 import CarbsCountingDialog from "./carbsCountingDialog";
+import {useTranslation} from "next-i18next";
 const BolusAdvisor = ({ activeInsulin, glucose, lastInjectionTime }) => {
+    const {t} = useTranslation("index")
   return (
     <div className="my-5">
       <div
@@ -15,7 +17,9 @@ const BolusAdvisor = ({ activeInsulin, glucose, lastInjectionTime }) => {
           backgroundPositionY: 10,
         }}
       >
-        <h2 className="font-sourceCode text-2xl font-semibold text-white">Control your blood sugar by calculating your macros.</h2>
+        <h2 className="font-sourceCode text-2xl font-semibold text-white">
+            {t("hero_text")}
+        </h2>
         <CarbsCountingDialog activeInsulinProp={activeInsulin} glucose={glucose} lastInjectionTime={lastInjectionTime} />
       </div>
     </div>

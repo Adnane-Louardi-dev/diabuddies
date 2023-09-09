@@ -13,6 +13,8 @@ import { useGetCurrentUserDetailed } from "../customeHooks/useGetCurrentUser";
 import moment from "moment";
 import Link from "next/link";
 import InputAdornment from "@mui/material/InputAdornment";
+import { useTranslation } from "next-i18next";
+import { getDir } from "../utils/getDir";
 
 function CalculatingBolus(carbs, ratio, InsulinSensitivity, IOBcarb, glucose) {
   let IOBcorr = 0,
@@ -41,6 +43,8 @@ const CarbsCountingDialog = ({ activeInsulinProp, glucose, lastInjectionTime }) 
   const [carbsRatio, setcarbsRatio] = useState(user?.diabetecDetails.carbsRatio);
   const [insulinSensitivity, setinsulinSensitivity] = useState(user?.diabetecDetails.insulinSensitivity.value);
   const [reduceLevel, setreduceLevel] = useState(0);
+  const { t, i18n } = useTranslation("index");
+  const { t: tc } = useTranslation("common");
   let actingTime = 3;
   let actingTimeDateFormat = moment(localLastInjectionTime)
     .add(actingTime * 60, "minutes")
@@ -72,23 +76,23 @@ const CarbsCountingDialog = ({ activeInsulinProp, glucose, lastInjectionTime }) 
   return (
     <div>
       <Button onClick={handleClickOpen} variant="filled" className="flex justify-end mt-3 text-diaLightBlue bg-white pt-2 rounded-full shadow-md">
-        Calculate now
+        {t("calculate_now")}
       </Button>
-      <Dialog open={open} onClose={handleClose} fullScreen>
+      <Dialog open={open} onClose={handleClose} fullScreen sx={{ direction: getDir(i18n.language) }}>
         <DialogTitle className="flex justify-between">
-          <p className="font-sourceCode text-2xl text-gray-900">Bolus advisor</p>
+          <p className="font-sourceCode text-2xl text-gray-900">{t("bolus_advisor")}</p>
           <Button onClick={handleClose} className="self-center p-2 bg-gray-100 rounded-md">
             <Icon icon="ic:round-close" className="h-5 w-5 text-diaGray" />
           </Button>
         </DialogTitle>
         {user ? (
           <DialogContent>
-            <DialogContentText className="font-sourceCode text-sm text-diaGray">Calculate your macros and get the ideal bolus.</DialogContentText>
+            <DialogContentText className="font-sourceCode text-sm text-diaGray">{t("bolus_advisor_description")}</DialogContentText>
 
             {(localGlucose || Macros.carbs > 0) && bolusDose > 0 ? (
               <section className="py-4">
                 <div className="grid gap-4 rounded-xl shadow-md p-4 bg-diaLightGreen">
-                  <h3 className="font-sourceCode text-xl text-diaGray">Total bolus</h3>
+                  <h3 className="font-sourceCode text-xl text-diaGray">{t("total_bolus")}</h3>
                   <p className="font-sourceCode font-2xl text-gray-800 mx-4">{bolusDose.toFixed(2)} UI</p>
                 </div>
               </section>
@@ -97,7 +101,7 @@ const CarbsCountingDialog = ({ activeInsulinProp, glucose, lastInjectionTime }) 
               <div className="flex w-full mx-2 p-4 rounded-md shadow-lg">
                 <Icon icon="fluent:syringe-20-regular" className="text-diaBlue rounded-full self-center mr-2 p-1 h-10 w-10" />
                 <div className="grid">
-                  <span className="self-center font-rubik text-2xs text-diaGray">Active Insulin</span>
+                  <span className="self-center font-rubik text-2xs text-diaGray">{t("active_insuling")}</span>
                   <span className="self-center font-rubik text-md">{activeInsulin.toFixed(2)} UI</span>
                 </div>
               </div>
@@ -105,12 +109,12 @@ const CarbsCountingDialog = ({ activeInsulinProp, glucose, lastInjectionTime }) 
                 <Icon icon="mingcute:time-fill" className="text-diaRed rounded-full self-center mr-2 p-1 h-10 w-10" />
                 {NextMealTimer !== 0 ? (
                   <div className="grid">
-                    <span className="self-center font-rubik text-2xs text-diaGray">next meal's</span>
+                    <span className="self-center font-rubik text-2xs text-diaGray">{t("next_meal_time")}</span>
                     <span className="self-center font-rubik text-sm">{NextMealTimer}</span>
                   </div>
                 ) : (
                   <div className="grid">
-                    <span className="self-center  font-rubik text-xs text-diaGray">Your body is bolus free</span>
+                    <span className="self-center  font-rubik text-xs text-diaGray">{t("next_meal_time_0")}</span>
                   </div>
                 )}
               </div>
@@ -119,18 +123,20 @@ const CarbsCountingDialog = ({ activeInsulinProp, glucose, lastInjectionTime }) 
               {activeInsulin !== 0 ? (
                 <div className="flex items-center px-2 rounded-lg bg-diaRed shadow-md">
                   <Icon icon="ph:warning" className="h-10 w-10 text-white m-1" />
-                  <span className="mx-2 w-full text-xs font-poppins text-white">It's recommended to wait until your blood stream is out of bolus insulin.</span>
+                  <span className="mx-2 w-full text-xs font-poppins text-white">{t("active_insulin_not_null")}</span>
                 </div>
               ) : null}
             </section>
             <section className="grid gap-3 mb-5">
-              <h3 className="font-sourceCode text-diaGray text-sm">Carbs Ratio & Insulin Sensitivity</h3>
+              <h3 className="font-sourceCode text-diaGray text-sm">
+                {t("carbsRatio")} & {t("insulinSensitivity")}{" "}
+              </h3>
               <div className="flex justify-around">
                 <div className="grid gap-2 rounded-lg shadow-md w-full p-3 mx-1 text-diaGray bg-blue-200">
                   <div className="flex justify-between items-center">
                     <div className="flex items-center">
                       <Icon icon="fluent:ratio-one-to-one-24-regular" className="h-7 w-7" />
-                      <p className="mx-1 font-rubik text-sm">Carbs Ratio</p>
+                      <p className="mx-1 font-rubik text-sm">{t("carbsRatio")} </p>
                     </div>
                   </div>
                   <div className="flex justify-around items-center">
@@ -160,7 +166,7 @@ const CarbsCountingDialog = ({ activeInsulinProp, glucose, lastInjectionTime }) 
                   <div className="flex justify-between items-center">
                     <div className="flex items-center">
                       <Icon icon="mdi:feather" className="h-7 w-7" />
-                      <p className="mx-1 font-rubik text-sm">Ins. Sensitivity</p>
+                      <p className="mx-1 font-rubik text-sm">{t("insulinSensitivity")}</p>
                     </div>
                   </div>
                   <div className="flex justify-around items-center">
@@ -189,7 +195,7 @@ const CarbsCountingDialog = ({ activeInsulinProp, glucose, lastInjectionTime }) 
               </div>
               <div className="flex items-center p-2 rounded-lg bg-blue-200 shadow-md">
                 <Icon icon="tabler:bulb" className="h-8 w-8 text-white" />
-                <span className="mx-2 w-full text-xs font-poppins text-diaGray">Learn how to calculate them by your self.</span>
+                <span className="mx-2 w-full text-xs font-poppins text-diaGray">{t("carbsCountingDescription")}</span>
                 <Link href={"/blog/how-to-calculate-insulin-sensitivity-and-carbs-ratio"} aria-label="blog page" passHref>
                   <Icon icon="ep:arrow-right-bold" className="h-5 w-5 text-white" />
                 </Link>
@@ -198,7 +204,7 @@ const CarbsCountingDialog = ({ activeInsulinProp, glucose, lastInjectionTime }) 
 
             <section className="grid gap-3 my-5">
               <div>
-                <h3 className="font-sourceCode text-diaGray my-2">Glucose</h3>
+                <h3 className="font-sourceCode text-diaGray my-2">{tc("glucose")}</h3>
                 <TextField
                   id="outlined-number"
                   type="tel"
@@ -233,7 +239,7 @@ const CarbsCountingDialog = ({ activeInsulinProp, glucose, lastInjectionTime }) 
                         }}
                       >
                         <Icon icon="ph:drop-light" className="text-white mx-1 h-5 w-5" />
-                        Glucose({user.diabetecDetails.unit})
+                        {tc("glucose")}({user.diabetecDetails.unit})
                       </InputAdornment>
                     ),
                     style: {
@@ -245,7 +251,7 @@ const CarbsCountingDialog = ({ activeInsulinProp, glucose, lastInjectionTime }) 
               </div>
 
               <div>
-                <h3 className="font-sourceCode text-diaGray my-2">Macros</h3>
+                <h3 className="font-sourceCode text-diaGray my-2">{tc("macros")}</h3>
                 <TextField
                   id="outlined-number"
                   type="tel"
@@ -281,7 +287,7 @@ const CarbsCountingDialog = ({ activeInsulinProp, glucose, lastInjectionTime }) 
                         }}
                       >
                         <Icon icon="ph:drop-light" className="text-white mx-1 h-5 w-5" />
-                        Carbs(g)
+                        {tc("carbs")}({tc("g")})
                       </InputAdornment>
                     ),
                     style: {
@@ -293,11 +299,11 @@ const CarbsCountingDialog = ({ activeInsulinProp, glucose, lastInjectionTime }) 
               </div>
             </section>
             <section className="grid gap-3 rounded-xl my-5 py-2">
-              <h3 className="font-sourceCode text-diaGray">Activity Level</h3>
+              <h3 className="font-sourceCode text-diaGray">{t("activityLevel")}</h3>
               <ReduceFactors setreduceLevel={setreduceLevel} reduceLevel={reduceLevel} />
             </section>
             <section className="grid gap-3 rounded-xl my-5 py-2">
-              <h3 className="font-sourceCode text-diaGray">Sickness Factor</h3>
+              <h3 className="font-sourceCode text-diaGray">{t("sicknessFactor")}</h3>
               <ReduceFactors setreduceLevel={setreduceLevel} reduceLevel={reduceLevel} />
             </section>
           </DialogContent>
@@ -305,7 +311,7 @@ const CarbsCountingDialog = ({ activeInsulinProp, glucose, lastInjectionTime }) 
 
         <DialogActions>
           <Button onClick={handleClose} className="w-full p-3 rounded-full shadow-md bg-gray-800 text-white font-codeSource font-xl">
-            Add it as a log
+            {t("addAsLog")}
           </Button>
         </DialogActions>
       </Dialog>

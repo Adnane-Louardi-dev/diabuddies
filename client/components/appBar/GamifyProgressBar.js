@@ -8,12 +8,14 @@ import axios from "axios";
 import ScienceIcon from "@mui/icons-material/Science";
 import IconButton from "@mui/material/IconButton";
 import Link from "next/link";
+import {useTranslation} from "next-i18next";
 
 export const GamifyProgressBar = () => {
   const { data: gamify, isLoading: isLoadingGamification } = useQuery(["gamify"], async () => {
     const { data } = await axios.get("/api/gamify/");
     return data;
   });
+  const {i18n} = useTranslation()
   const queryClient = useQueryClient();
   return (
     <>
@@ -64,8 +66,8 @@ export const GamifyProgressBar = () => {
             </Box>
           </Box>
           <Box sx={{ display: "grid", gridColumn: "span 1 / span 1" }} className="items-center justify-items-center">
-            <Link href={"/gamification"} aria-label="Charts page" passHref>
-              <Icon icon="ep:arrow-right-bold" className="self-center h-6 w-6 text-diaDarkBlue" />
+            <Link href={"/myActions"} aria-label="Charts page" passHref>
+              <Icon icon="ep:arrow-right-bold" className={`self-center h-6 w-6 text-diaDarkBlue ${i18n.language === "ar" ? "rotate-180" : ""}`} />
             </Link>
           </Box>
         </Box>

@@ -8,6 +8,8 @@ import Container from "@mui/material/Container";
 import {Button} from "@mui/material";
 import Link from "next/link";
 import axios from "axios";
+import {serverSideTranslations} from "next-i18next/serverSideTranslations";
+import {useTranslation} from "next-i18next";
 
 
 export default function Posts() {
@@ -19,6 +21,7 @@ export default function Posts() {
             return data
         }
     })
+    const {t} = useTranslation("blogStore")
 
     if(isLoading) {
         return <LoadingCircle />
@@ -30,7 +33,7 @@ export default function Posts() {
         <div className={"text-center mb-5"}>
             <Link href={"/blog/articles/saved"}>
                 <Button className={"bg-gray-300 text-gray-800"}>
-                    My Favorite Articles
+                    {t("favoritArticles")}
                 </Button>
             </Link>
         </div>
@@ -40,3 +43,9 @@ export default function Posts() {
 
     </Container>
 }
+
+export const getServerSideProps = async ({ locale }) => ({
+    props: {
+        ...(await serverSideTranslations(locale, ['common','blogStore']))
+    }
+});

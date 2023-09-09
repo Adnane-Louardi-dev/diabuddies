@@ -1,8 +1,10 @@
 import { useEffect, useState } from "react";
 import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import moment from "moment";
+import {useTranslation} from "next-i18next";
 const BarGraph = ({ props }) => {
   const [data, setData] = useState(undefined);
+  const {t} = useTranslation()
   //group and calculate the avg
   function getGroupedData(data, whitelist) {
     // Calculate the sums and group data (while tracking count)
@@ -59,8 +61,8 @@ const BarGraph = ({ props }) => {
         <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" />
         <Tooltip contentStyle={{ color: "#323D34", borderRadius: 15 }} />
         <Legend />
-        <Bar yAxisId="left" dataKey="carbs" fill="#8884d8" />
-        <Bar yAxisId="right" dataKey="bolus" fill="#82ca9d" />
+        <Bar yAxisId="left" dataKey="carbs" name={t("carbs")} fill="#8884d8" />
+        <Bar yAxisId="right" dataKey="bolus" name={t("bolus")} fill="#82ca9d" />
       </BarChart>
     </ResponsiveContainer>
   );

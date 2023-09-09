@@ -1,10 +1,11 @@
 import { useState } from "react";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import {useTranslation} from "next-i18next";
 
 export default function ReduceFactors({ setreduceLevel, reduceLevel }) {
   const [alignment, setAlignment] = useState(0);
-
+  const {t} = useTranslation("index")
   const handleChange = (event, newAlignment) => {
     setAlignment(newAlignment);
     setreduceLevel(alignment + newAlignment);
@@ -31,16 +32,16 @@ export default function ReduceFactors({ setreduceLevel, reduceLevel }) {
       aria-label="Platform"
     >
       <ToggleButton value={0} className="grid gap-2 rounded-full w-full rounded-md normal-case font-rubik text-lg">
-        Low
-        <span className="font-sourceCode text-diaGray text-2xs">no reduce</span>
+        {t("low")}
+        <span className="font-sourceCode text-diaGray text-2xs">{t("low_reduce")}</span>
       </ToggleButton>
       <ToggleButton value={15} className="grid gap-2 rounded-full w-full rounded-md normal-case font-rubik text-lg">
-        Moderate
-        <span className="font-sourceCode text-diaGray text-2xs">reduce by 15%</span>
+        {t("moderate")}
+        <span className="font-sourceCode text-diaGray text-2xs">{t("moderate_reduce")}</span>
       </ToggleButton>
       <ToggleButton value={30} className="grid gap-2 rounded-full w-full rounded-md normal-case font-rubik text-lg">
-        High
-        <span className="font-sourceCode text-diaGray text-2xs">reduce by 30%</span>
+        {t("moderate")}
+        <span className="font-sourceCode text-diaGray text-2xs">{t("high_reduce")}</span>
       </ToggleButton>
     </ToggleButtonGroup>
   );

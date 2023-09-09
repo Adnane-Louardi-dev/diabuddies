@@ -1,8 +1,9 @@
 import React from "react";
 import {TextField, ToggleButton, ToggleButtonGroup} from "@mui/material";
+import {useTranslation} from "next-i18next";
 
 const Weight = ({data, setData}) => {
-
+    const {i18n, t} = useTranslation()
     const handleWeightUnitChange = (_, newWeightUnit) => {
         setData(oldData => ({...oldData, weight: {...oldData.weight, unit: newWeightUnit}}))
     };
@@ -14,8 +15,9 @@ const Weight = ({data, setData}) => {
         <section>
             <div className="mt-24 grid items-center justify-center text-center">
                 <h1 className="font-semibold font-poppins text-xl">
-                    What about your <span className="decoration-none font-bold text-diaBlue">Weight</span> ?
-        </h1>
+                    {i18n.language !== "ar" && <>What about your  <span className="decoration-none font-bold text-diaBlue">Weight</span> ?</>}
+                    {i18n.language === "ar" && <>ماذا عن  <span className="decoration-none font-bold text-diaBlue">وزنك</span> ؟</>}
+                </h1>
       </div>
       <div className="grid items-center justify-center text-center mx-16 my-16 py-8">
         <ToggleButtonGroup
@@ -32,10 +34,10 @@ const Weight = ({data, setData}) => {
             onChange={handleWeightUnitChange}
         >
           <ToggleButton value="lbs" className="rounded-full font-semibold">
-            lbs
+            {t("lbs")}
           </ToggleButton>
           <ToggleButton value="kg" className="rounded-full font-semibold">
-            kg
+            {t("kg")}
           </ToggleButton>
         </ToggleButtonGroup>
         <div className="grid grid-cols-1 items-center justify-center p-2 bg-diaBlue rounded-3xl shadow-md">

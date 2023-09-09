@@ -1,5 +1,4 @@
-import * as React from "react";
-import {useEffect} from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import moment from "moment";
 import Button from "@mui/material/Button";
@@ -22,6 +21,9 @@ import Switch from "@mui/material/Switch";
 import {AddMealNameModal} from "./addMealNameModal";
 import {GetSavedMealsModal} from "./getSavedMealsModal";
 import {nullLogBook} from "../utils/nulls";
+import {useTranslation} from "next-i18next";
+import SearchForFood from "./searchForFood";
+import Image from "next/image";
 
 const Android12Switch = styled(Switch)(({ theme }) => ({
   padding: 8,
@@ -53,15 +55,18 @@ const Android12Switch = styled(Switch)(({ theme }) => ({
 }));
 
 export default function NewLogDialog() {
-  const [InsulinType, setInsulinType] = React.useState("bolus");
+  const [InsulinType, setInsulinType] = useState("bolus");
 
-  const [dateOpen, setDateOpen] = React.useState(false);
-  const [mealModalOpen, setMealModalOpen] = React.useState(false)
-  const [savedMealsModalOpen, setSavedMealsModalOpen] = React.useState(false)
-  const [data, setData] = React.useState({...nullLogBook, time: moment()._d});
+  const [dateOpen, setDateOpen] = useState(false);
+  const [mealModalOpen, setMealModalOpen] = useState(false);
+  //won't forget this model to use it later
+  const [savedMealsModalOpen, setSavedMealsModalOpen] = useState(false);
+  const [addedFood, setAddedFood] = useState([]);
+  const [data, setData] = useState({ ...nullLogBook, time: moment()._d, food: addedFood });
   const queryClient = useQueryClient();
-  const [notificationOpen, setNotificationOpen] = React.useState(false);
-
+  const [notificationOpen, setNotificationOpen] = useState(false);
+  const {t} = useTranslation("index")
+  const {t:tc} = useTranslation("common")
   const {
     mutate: addNewLogBook,
     isLoading,
@@ -89,8 +94,8 @@ export default function NewLogDialog() {
   });
 
   useEffect(() => {
-    setInsulinType(data.basal !== 0 ? "basal" : "bolus")
-  }, [data.bolus, data.basal]);
+    setInsulinType(data.basal !== 0 ? "basal" : "bolus");
+  }, [data.bolus, data.basal, addedFood]);
   const handlePOSTNewLog = async () => {
     setDateOpen(false);
     await addNewLogBook(data);
@@ -127,7 +132,7 @@ export default function NewLogDialog() {
         }}
         className="flex justify-between items-center text-diaBlue bg-diaBlue bg-opacity-25 pt-2 rounded-full shadow-md"
       >
-        Add
+          {tc("add")}
         <Icon icon="material-symbols:add-circle-rounded" className="mx-1 mb-0.5" />
       </Button>
       <Dialog
@@ -191,45 +196,39 @@ export default function NewLogDialog() {
               aria-label="Platform"
             >
               <ToggleButton value="other" className="rounded-full border-none mr-3 mb-5 shadow-md">
-                Other
+                  {t("other_meal")}
               </ToggleButton>
               <ToggleButton value="breakfast" className="rounded-full border-none mr-3 mb-5 shadow-md">
-                Breakfast
+                  {t("breakfast_meal")}
               </ToggleButton>
               <ToggleButton value="lunch" className="rounded-full border-none mr-3 mb-5 shadow-md">
-                Lunch
+                  {t("lunch_meal")}
               </ToggleButton>
               <ToggleButton value="snack" className="rounded-full border-none mr-3 mb-5 shadow-md">
-                Snack
+                  {t("snack_meal")}
               </ToggleButton>
               <ToggleButton value="dinner" className="rounded-full border-none mr-3 mb-5 shadow-md">
-                Dinner
+                  {t("dinner_meal")}
               </ToggleButton>
               <ToggleButton value="sport" className="rounded-full border-none mr-3 mb-5 shadow-md">
-                Sport
+                  {t("other_meal")}
               </ToggleButton>
             </ToggleButtonGroup>
           </section>
           <section className="flex items-center justify-between my-3">
             <button variant="outlined" className="grid w-36 justify-items-center mx-2 py-2 px-3 rounded-lg ring-2 ring-diaDarkBlue bg-slate-300">
-              <h2 className="font-rubik text-sm text-diaDarkBlue my-2">Scan a barcode</h2>
+              <h2 className="font-rubik text-sm text-diaDarkBlue my-2">{t("scan_barcode")}</h2>
               <Icon icon="material-symbols:barcode" className="h-10 w-10 text-diaDarkBlue" />
             </button>
-            <button
-                onClick={()=>{
-                  setSavedMealsModalOpen(true)
-                }} variant="outlined" className="grid w-36  justify-items-center mx-2 py-2 px-3 rounded-lg ring-2 ring-diaDarkBlue bg-slate-300">
-              <h2 className="font-rubik text-sm text-diaDarkBlue my-2">Search for a meal</h2>
-              <Icon icon="tabler:search" className="h-10 w-10 text-diaDarkBlue" />
-            </button>
+            <SearchForFood setAddedFood={setAddedFood} addedFood={addedFood} />
           </section>
           <div className="flex justify-between items-center">
-            <h3 className="font-sourceCode text-diaGray text-md">Meal's info</h3>
-            <h3 className="font-sourceCode text-diaGreen text-sm">{`${data.kcal} KCal`}</h3>
+            <h3 className="font-sourceCode text-diaGray text-md">{t("mealInfo")}</h3>
+            <h3 className="font-sourceCode text-diaGreen text-sm">{`${data.kcal} Kcal`}</h3>
           </div>
           <div className="grid grid-cols-2 gap-2 my-3">
             <NutrationLogInput
-              label={"Glucose"}
+              label={tc("glucose")}
               textColor={"text-blue-400"}
               bgColor={"bg-blue-400"}
               icon={"system-uicons:cubes"}
@@ -241,7 +240,7 @@ export default function NewLogDialog() {
               }}
             />
             <NutrationLogInput
-              label={"Carbs"}
+              label={tc("carbs")}
               textColor={"text-gray-400"}
               bgColor={"bg-gray-400"}
               icon={"fluent:food-grains-20-regular"}
@@ -259,7 +258,7 @@ export default function NewLogDialog() {
               <div className="flex justify-between items-center">
                 <div className="flex">
                   <Icon icon={"fluent:syringe-20-regular"} className={`bg-white text-diaDarkBlue rounded-full self-center m-1 p-1 h-7 w-7`} />
-                  <p className="text-white font-rubik font-sm self-center">{"Insulin"}</p>
+                  <p className="text-white font-rubik font-sm self-center">{tc("insulin")}</p>
                 </div>
                 <div className="flex justify-around items-center">
                   <Android12Switch defaultChecked={false} />
@@ -302,7 +301,7 @@ export default function NewLogDialog() {
                       }}
                     >
                       <Icon icon="ph:drop-light" className="text-white mx-1 h-5 w-5" />
-                      Dose
+                        {t("dose")}
                     </InputAdornment>
                   ),
                   endAdornment: (
@@ -364,13 +363,13 @@ export default function NewLogDialog() {
                     },
                   }}
                 >
-                  <ToggleButton value="bolus">Short</ToggleButton>
-                  <ToggleButton value="basal">Long</ToggleButton>
+                  <ToggleButton value="bolus">{t("short")}</ToggleButton>
+                  <ToggleButton value="basal">{t("long")}</ToggleButton>
                 </ToggleButtonGroup>
               </div>
             </div>
             <NutrationLogInput
-              label={"Protein"}
+              label={tc("protein")}
               textColor={"text-amber-300"}
               bgColor={"text-amber-300"}
               icon={"fluent-emoji-high-contrast:cut-of-meat"}
@@ -385,7 +384,7 @@ export default function NewLogDialog() {
               }}
             />
             <NutrationLogInput
-              label={"Fat"}
+              label={tc("fat")}
               textColor={"text-red-400"}
               bgColor={"bg-red-400"}
               icon={"circum:pizza"}
@@ -400,6 +399,48 @@ export default function NewLogDialog() {
               }}
             />
           </div>
+          {addedFood[0] ? (
+            <>
+              <h3 className="font-sourceCode text-diaGray text-md">Meal's Food Added</h3>
+              <div className="rounded-lg my-3 bg-diaDarkBlue">
+                {addedFood.map((oneFood, i) => {
+                  return (
+                    <div className="flex items-center justify-between m-2 border-t-2 border-gray-700">
+                      <div key={i} className="mx-2 p-2">
+                        <h1 className="text-blue-500 font-poppins">{`${oneFood.name}`}</h1>
+                        <p className="text-gray-500 font-poppins">{`100g (${oneFood.carbs}g carbs)`} </p>
+                      </div>
+                      <Button
+                        className="self-center"
+                        onClick={() => {
+                          let filredAddedFood = addedFood.filter((item, j) => addedFood[j] !== addedFood[i]);
+                          setAddedFood(filredAddedFood);
+                        }}
+                      >
+                        <Icon icon="ic:outline-delete" className="text-diaGray h-7 w-7" />
+                      </Button>
+                    </div>
+                  );
+                })}
+              </div>
+            </>
+          ) : (
+            <div className="grid items-center text-center justify-center my-3 py-5 bg-diaDarkBlue rounded-xl">
+              <Image
+                src={"/No-data-cuate.webp"}
+                priority
+                style={{
+                  width: "auto",
+                  height: "auto",
+                }}
+                height={300}
+                width={200}
+                alt="no data in blue folder"
+              />
+              <h2 className={"text-xl font-poppins text-gray-500 font-semibold"}>Oops!</h2>
+              <p className={"font-poppins text-sm text-gray-500"}>You didn't add food yet</p>
+            </div>
+          )}
         </DialogContent>
         <DialogActions sx={{ display: "grid", gap: 1, gridTemplateColumns: "repeat(3, minmax(0, 1fr))", width: "full" }}>
           <Button
@@ -408,13 +449,13 @@ export default function NewLogDialog() {
             }}
             className="w-full p-3 rounded-full shadow-md text-gray-800 font-codeSource font-xl"
           >
-            Cancel
+              {tc("cancel")}
           </Button>
           <Button disabled={isLoading} onClick={handlePOSTNewLog} variant="filled" className="w-full p-3 rounded-full shadow-md bg-gray-800 text-white  font-codeSource font-xl">
-            Save
+              {tc("save")}
           </Button>
           <Button disabled={isLoading} onClick={()=> setMealModalOpen(true)} variant="filled" className="w-full p-3 rounded-full shadow-md bg-gray-800 text-white  font-codeSource font-xl">
-            Save as a meal
+              {t("save_as_meal")}
           </Button>
         </DialogActions>
       </Dialog>

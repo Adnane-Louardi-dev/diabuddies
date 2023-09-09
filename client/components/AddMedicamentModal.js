@@ -7,6 +7,7 @@ import {Controller, useForm} from "react-hook-form";
 import {actingTimes, colors, fakeDataProducts} from "../utils/utils";
 import axios from "axios";
 import {useMutation} from "@tanstack/react-query";
+import {useTranslation} from "next-i18next";
 
 const style = {
   position: "absolute",
@@ -25,7 +26,7 @@ const style = {
 export const AddMedicamentModal = () => {
     const [open, setOpen] = useState(false);
     const {control, handleSubmit} = useForm();
-
+    const {t} = useTranslation()
     const addNewMedicalMutation = useMutation({
         mutationFn: (medicament) => (axios.post("/api/user/addMedicament", medicament)),
         onSuccess: () => {
@@ -48,12 +49,12 @@ export const AddMedicamentModal = () => {
                     setOpen(true);
         }}
       >
-        New add
+                {t("add")}
       </Button>
       <Modal open={open} onClose={() => setOpen(false)}>
         <form onSubmit={handleSubmit(addNewMedical)}>
           <Box sx={{ ...style, width: 400 }}>
-            <h2>Add New Medicament Modal</h2>
+            <h2>{t("addMedicament")}</h2>
             <section className={"mt-5"}>
               <div>
                 <Controller
@@ -70,7 +71,7 @@ export const AddMedicamentModal = () => {
                 />
               </div>
               <div className={"my-5 flex justify-between"}>
-                <label>Acting time</label>
+                <label>{t("actingTime")}</label>
                 <Controller
                   name={"actingTime"}
                   control={control}
@@ -94,10 +95,10 @@ export const AddMedicamentModal = () => {
             </section>
             <div className={"mt-5 flex justify-between"}>
               <Button className={""} onClick={() => setOpen(false)}>
-                Cancel
+                  {t("cancel")}
               </Button>
               <Button onClick={handleSubmit(addNewMedical)} className={"bg-diaBlue text-white"}>
-                Add
+                  {t("add")}
               </Button>
             </div>
           </Box>

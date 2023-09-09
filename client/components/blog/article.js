@@ -14,6 +14,8 @@ import IconButton from "@mui/material/IconButton";
 import {Icon} from "@iconify/react";
 import Typography from "@mui/material/Typography";
 import {useElementOnScreen} from "../../customeHooks/useElementOnScreen";
+import {useTranslation} from "next-i18next";
+import {getDir} from "../../utils/getDir";
 
 
 export const Article = ({id,title,content, image,createdAt, relatedArticles,isLiked,likeCount, author:writer}) => {
@@ -21,6 +23,7 @@ export const Article = ({id,title,content, image,createdAt, relatedArticles,isLi
         rootMargin: "0px",
         threshold: 1
     })
+    const {t,i18n} = useTranslation("blogStore")
     const queryClient = useQueryClient()
     const {data:html, isLoading:isHtmlLoading} = useGetHTML(content)
     const [comment, setComment] = useState("")
@@ -58,24 +61,24 @@ export const Article = ({id,title,content, image,createdAt, relatedArticles,isLi
         return <LoadingCircle />
     }
     const thumbnail = image ? image.data : ""
-    const {name, biography, avatar} = writer.data ? writer.data.attributes : {name: null, avatar: {url: null,size:20}, biography: null}
+    const {name, biography, avatar} = writer.data?.attributes ?? {name: null, biography: null, avatar: {data: null}}
     const createdDate = moment(createdAt).format("DD/MM/YYYY")
 
     return  (
     <>
         {addCommentNotification}
-        <main className="pt-8 pb-16 lg:pt-16 lg:pb-24">
+        <main className="pt-8 pb-16 lg:pt-16 lg:pb-24" dir={getDir(i18n.language)}>
             <div className="flex justify-between px-4 mx-auto max-w-screen-xl ">
                 <article
                     className="mx-auto w-full max-w-2xl format format-sm sm:format-base lg:format-lg format-blue">
                     <header className="mb-4 lg:mb-6 not-format">
                         <address className="flex justify-between mb-6 not-italic">
                             <div className="inline-flex items-center mr-3 text-sm text-gray-900">
-                                <img className="mr-4 w-16 h-16 rounded-full"
-                                     src={`http://localhost:1337${avatar.data.attributes.url}`}
-                                     width={avatar.size}
-                                     height={avatar.size}
-                                     alt={name} />
+                                {avatar?.data && <img className="mr-4 w-16 h-16 rounded-full"
+                                      src={`http://localhost:1337${avatar.data.attributes.url}`}
+                                      width={avatar.size}
+                                      height={avatar.size}
+                                      alt={name}/>}
                                     <div>
                                         <span rel="author"
                                            className="text-xl font-bold text-gray-900">{name}</span>
@@ -95,12 +98,11 @@ export const Article = ({id,title,content, image,createdAt, relatedArticles,isLi
                             {title}
                         </h1>
                     </header>
-                    <div dangerouslySetInnerHTML={{__html: html}} />
+                    <div className={"max-w-full break-words"} dangerouslySetInnerHTML={{__html: html}} />
 
                     {!isLoading && isSuccess && <section className="not-format">
                         <div ref={ref} className="flex justify-between items-center my-6">
-                            <h2 className="text-lg lg:text-2xl font-bold text-gray-900">Discussion
-                                ({data.data.length})</h2>
+                            <h2 className="text-lg lg:text-2xl font-bold text-gray-900">{t("discussion")} ({data.data.length})</h2>
                             <div>
                                 <Typography sx={{
                                     "&.MuiTypography-root":{
@@ -108,9 +110,7 @@ export const Article = ({id,title,content, image,createdAt, relatedArticles,isLi
                                     }}} variant="span" color="text.secondary">
                                     {likesCount}
                                 </Typography>
-                                <IconButton onClick={()=>{
-                                    likePost()
-                                }}>
+                                <IconButton onClick={likePost}>
                                     <Icon icon={"mdi:like"} color={liked ? "#3AB0FF": undefined} />
                                 </IconButton>
                                 <ShareBlog title={title} />
@@ -120,7 +120,7 @@ export const Article = ({id,title,content, image,createdAt, relatedArticles,isLi
 
                         <form className="mb-6">
                             <div className="py-2 px-4 mb-4 bg-white rounded-lg rounded-t-lg">
-                                <label htmlFor="comment" className="sr-only">Your comment</label>
+                                <label htmlFor="comment" className="sr-only">{t("yourComment")}</label>
                                 <textarea id="comment"
                                           value={comment}
                                           onChange={(e) => {
@@ -128,7 +128,7 @@ export const Article = ({id,title,content, image,createdAt, relatedArticles,isLi
                                           }}
                                           rows="6"
                                           className="p-3 w-full text-sm text-gray-900 border"
-                                          placeholder="Write a comment..." required/>
+                                          placeholder={t("commentInput")} required/>
                             </div>
                             <Button
                                 disabled={comment.length === 0}
@@ -142,7 +142,7 @@ export const Article = ({id,title,content, image,createdAt, relatedArticles,isLi
                                     })
                                 }}
                                 className={`${comment.length === 0 ? "cursor-not-allowed opacity-50" : ""} bg-diaBlue inline-flex items-center py-2.5 px-4 text-xs font-medium text-center text-white bg-primary-700 rounded-lg focus:ring-4 focus:ring-primary-200  hover:bg-primary-800`}>
-                                Post comment
+                                {t("postComment")}
                             </Button>
                         </form>
 
@@ -153,9 +153,9 @@ export const Article = ({id,title,content, image,createdAt, relatedArticles,isLi
             </div>
         </main>
 
-    <aside aria-label="Related articles" className="py-8 mb-8 lg:py-24">
+    <aside aria-label="Related articles" className="py-8 mb-8 lg:py-24" dir={getDir(i18n.language)}>
         <div className="px-4 mx-auto max-w-screen-xl">
-            <h2 className="mb-8 text-2xl font-bold text-gray-900">Related articles</h2>
+            <h2 className="mb-8 text-2xl font-bold text-gray-900">{t("relatedArticles")}</h2>
             <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
                 {relatedArticles.map(({id,attributes}) => <SmallArticle key={id} id={id} {...attributes} />)}
             </div>
