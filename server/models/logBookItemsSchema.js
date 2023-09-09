@@ -13,5 +13,6 @@ const logBookItemsSchema = mongoose.Schema({
   protein: Number,
   fat: Number,
   kcal: Number,
+  food: Array,
 });
 module.exports = mongoose.model("logBookItemsSchema", logBookItemsSchema);

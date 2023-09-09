@@ -19,8 +19,6 @@ const Advice = () => {
     setRandomIndex(Math.floor(Math.random() * advice.length))
   }, [i18n.language]);
 
-  console.log("i188n", i18n.language)
-
   useEffect(() => {
     setchoosenAdvice(advice[RandomIndex]);
   }, [RandomIndex]);

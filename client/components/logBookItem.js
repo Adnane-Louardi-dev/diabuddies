@@ -31,7 +31,6 @@ const LogBookItem = ({ props }) => {
     },
     onSuccess: (log) => {
       queryClient.invalidateQueries(["indexChart"]);
-      console.log(log);
     },
     onError: (e) => {
       console.error(e);
@@ -93,7 +92,7 @@ const LogBookItem = ({ props }) => {
             </div>
           )}
           <div className="flex items-center justify-between">
-            {data.carbs!==0 && (
+            {data.carbs !==0 && (
               <div className="flex items-center justify-center p-1 text-white rounded-lg bg-diaDarkBlue">
                 <Icon icon="fluent:food-grains-20-regular" className="mx-1" />
                 <span className="font-sourceCode text-xs">{tc("carbs")}</span>
