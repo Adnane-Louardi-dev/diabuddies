@@ -66,7 +66,7 @@ export const GamifyProgressBar = () => {
             </Box>
           </Box>
           <Box sx={{ display: "grid", gridColumn: "span 1 / span 1" }} className="items-center justify-items-center">
-            <Link href={"/gamification"} aria-label="Charts page" passHref>
+            <Link href={"/myActions"} aria-label="Charts page" passHref>
               <Icon icon="ep:arrow-right-bold" className={`self-center h-6 w-6 text-diaDarkBlue ${i18n.language === "ar" ? "rotate-180" : ""}`} />
             </Link>
           </Box>

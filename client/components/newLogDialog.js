@@ -64,7 +64,7 @@ export default function NewLogDialog() {
   const [addedFood, setAddedFood] = useState([]);
   const [data, setData] = useState({ ...nullLogBook, time: moment()._d, food: addedFood });
   const queryClient = useQueryClient();
-  const [notificationOpen, setNotificationOpen] = React.useState(false);
+  const [notificationOpen, setNotificationOpen] = useState(false);
   const {t} = useTranslation("index")
   const {t:tc} = useTranslation("common")
   const {

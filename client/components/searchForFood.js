@@ -27,10 +27,9 @@ export default function SearchForFood({ addedFood, setAddedFood }) {
     data: Data,
     refetch,
   } = useQuery({
-    queryKey: ["food"],
+    queryKey: ["food",searchQuery],
     queryFn: async () => {
       const result = await axios.get(`/food/api/search?categories_tags=${searchQuery}&fields=product_name,nutriments,image_url,quantity&page_size=5&json=true`, { withCredentials: true });
-      console.log(result.data);
       return result.data;
     },
     enabled: ReadyToSearch,
@@ -77,7 +76,11 @@ export default function SearchForFood({ addedFood, setAddedFood }) {
 
         <div className="flex p-3">
           <TextField fullWidth label="Search" id="fullWidth" value={searchQuery} onChange={(newSearchQuery) => setsearchQuery(newSearchQuery.target.value)} />
-          <Button onClick={() => setReadyToSearch(true)} className="flex items-center rounded-lg bg-diaLightBlue p-1 ml-4">
+          <Button onClick={()=>{
+            setReadyToSearch(true);
+            refetch();
+            setReadyToSearch(false);
+          }} className="flex items-center rounded-lg bg-diaBlue p-1 ml-4">
             <Icon icon="tabler:search" className="self-center text-white h-7 w-7 text-diaDarkBlue" />
           </Button>
         </div>
