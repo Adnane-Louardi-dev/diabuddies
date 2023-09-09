@@ -37,5 +37,7 @@
   "COMPLETED": "تم تسليمه",
   "CANCELLED": "تم إلغاءه",
   "currency": "درهم",
-  "remove": "حذف"
+  "remove": "حذف",
+  "products": "المنتجات",
+  "orderId": "رقم الطلب"
 }

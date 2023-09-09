@@ -33,5 +33,7 @@
   "COMPLETED": "Completed",
   "CANCELLED": "Cancelled",
   "currency": "DH",
-  "remove": "Remove"
+  "remove": "Remove",
+  "products": "Products",
+  "orderId": "ORDER ID"
 }
