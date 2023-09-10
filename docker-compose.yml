@@ -22,6 +22,8 @@ services:
         ipv4_address: 10.56.1.18
   strapi-service:
     build: ./blog
+    depends_on:
+      - mysql
     ports:
       - "1337:1337"
     env_file:
@@ -52,6 +54,18 @@ services:
     networks:
       dia-network:
         ipv4_address: 10.56.1.21
+  mysql:
+    image: mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: example
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql:/var/lib/mysql
+    networks:
+      dia-network:
+        ipv4_address: 10.56.1.15
 networks:
   dia-network:
     ipam:
@@ -61,3 +75,4 @@ networks:
 volumes:
   mongodb:
   strapi:
+  mysql:

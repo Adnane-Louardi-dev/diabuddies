@@ -8,7 +8,7 @@ const nextConfig = {
   i18n,
   reactStrictMode: true,
   images: {
-    domains: ["cdn.chec.io", "images.openfoodfacts.net"],
+    domains: ["cdn.chec.io", "images.openfoodfacts.net","localhost"],
     remotePatterns: [
       {
         protocol: "https",
@@ -19,6 +19,12 @@ const nextConfig = {
       {
         protocol: "https",
         hostname: "images.openfoodfacts.net",
+        port: "",
+        pathname: "/**",
+      },
+      {
+        protocol: "http",
+        hostname: "localhost",
         port: "",
         pathname: "/**",
       },
