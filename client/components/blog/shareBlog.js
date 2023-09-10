@@ -28,7 +28,11 @@ export const ShareBlog = ({title}) => {
     };
 
     return <>
-        <IconButton onClick={handleOpenUserMenu} >
+        <IconButton onClick={(e)=>{
+            e.preventDefault();
+            e.stopPropagation();
+            handleOpenUserMenu(e);
+        }} >
             <ShareRounded />
         </IconButton>
         <Menu

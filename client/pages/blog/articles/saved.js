@@ -2,13 +2,15 @@ import {BlogLayout} from "../../../components/store/blogLayout";
 import {useGetWishListItems} from "../../../customeHooks/wishListHooks";
 import LoadingCircle from "../../../components/loadingCircle";
 import {SmallArticle} from "../../../components/blog/smallArticle";
-import React from "react";
+import React, {useState} from "react";
 import Typography from "@mui/material/Typography";
+import {useTranslation} from "next-i18next";
+import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 
 
 export default function Saved(){
     const {wishedItems, isLoading} = useGetWishListItems("blog")
-
+    const {t} = useTranslation("blogStore")
     if(isLoading){
         return <LoadingCircle />
     }
@@ -16,12 +18,19 @@ export default function Saved(){
     console.log("wish ",wishedItems)
     return <BlogLayout>
 
-        <Typography typography={"h4"} className={"mb-3"} textAlign={"center"}>My Favorite Articles</Typography>
+        <Typography typography={"h4"} className={"mb-3"} textAlign={"center"}>{t("favoritArticles")}</Typography>
 
-        <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-12 grid-cols-1 md:grid-cols-2">
             {wishedItems.map(({id, attributes}) => <SmallArticle {...attributes} id={id} key={id} />)}
         </div>
 
 
     </BlogLayout>
 }
+
+
+export const getServerSideProps = async ({ locale }) => ({
+    props: {
+        ...(await serverSideTranslations(locale, ['common','blogStore']))
+    }
+});

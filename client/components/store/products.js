@@ -1,22 +1,37 @@
 import Link from "next/link";
-import React, {useState} from "react";
+import React, {useMemo, useState} from "react";
 import {AddProductToCart} from "./addProductToCart";
 import {WishedIcon} from "./wishedIcon";
-import {ProductImage} from "./ProductImage";
+import {ProductImage, ProductImageGallery} from "./ProductImage";
 import {Add, Remove} from "@mui/icons-material";
 import {debounce} from "@mui/material";
 import {useUpdateCart} from "../../customeHooks/useCart";
 import {useTranslation} from "next-i18next";
+import CarouselThumbs from "./CarouselThumbs";
 
 export default function Product({id,...product}) {
    const {name, selling_price,original_price, pictures,inventory,description, thumbnail} = product.attributes
    const {cart,updateCart} = useUpdateCart();
-   // const quantity = useMemo(()=>{
-   //    return cart.venteEntries.find((venteEntry)=>venteEntry.product.id === id)?.quantity ?? 0
-   // },[cart.totalItems])
+   const gallery = useMemo(()=>{
+      const firstImage = {
+         id: thumbnail.data.id,
+         src: "http://localhost:1337" + thumbnail.data.attributes.url,
+         alt: thumbnail.data.attributes.alternativeText,
+         width: thumbnail.data.attributes.width,
+         height: thumbnail.data.attributes.height,
+      }
+      const otherImages = pictures?.data ? pictures.data.map((picture) => ({
+         id: picture.id,
+         src: "http://localhost:1337" + picture.attributes.url,
+         alt: picture.attributes.alternativeText,
+         width: picture.attributes.width,
+         height: picture.attributes.height,
+      })) : []
+      return [firstImage, ...otherImages]
+   },[pictures])
    const [quantity, setQuantity] = useState(1)
    const {t} = useTranslation("blogStore")
-   console.log('cart ', cart)
+   console.log('cart ', cart, "products", pictures)
    return (
       <>
          <div className="h-screen relative">
@@ -37,26 +52,23 @@ export default function Product({id,...product}) {
             {/*---- ----*/}
             {/*---- product section ----*/}
             <div className=" m-5 md:flex justify-between">
-               <div className="relative rounded-lg shadow-lg overflow-hidden bg-blue-300 w-full md:w-1/2 lg:w-2/5 h-80 my-10">
-                  {/*<Image src={imageSrc} width={500} height={300}  alt={name} />*/}
-                  {!!thumbnail.data && <ProductImage className={"w-full h-full bg-center bg-cover"} src={thumbnail.data}/>}
-               </div>
+               <ProductImageGallery gallery={gallery} />
                <div className="px-2 md:w-1/2 lg:w-3/5 lg:ml-14">
-                  <div className="flex justify-between my-10 md:mt-14 ">
-                     <div className="font-nunito">
+                  <div className="flex justify-between gap-2 my-10 md:mt-14 ">
+                     <div className="sm:w-[calc(100%-150px)] font-nunito">
                         <h1 className="text-3xl ">{name}</h1>
                      </div>
-                     <div className="hidden sm:flex rounded-md shadow-md bg-blue-200 px-2 h-10">
-                        {inventory.data && <div className="mt-1 text-lg mr-1 whitespace-nowrap">
+                     {inventory.data && <div className="w-[150px] flex rounded-md shadow-md bg-blue-200 px-2 h-10">
+                        <div className="mt-1 text-lg mr-1 whitespace-nowrap">
                            {`${inventory.data.attributes.available} available`}
-                        </div>}
+                        </div>
                         <svg xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink" xmlnssvgjs="http://svgjs.com/svgjs" version="1.1" width="16" height="16" className="mt-2.5" x="0" y="0" viewBox="0 0 512 512" style={{ enableBackground: "new 0 0 512 512" }} xmlSpace="preserve">
                            <g>
                               <path xmlns="http://www.w3.org/2000/svg" d="m512 256c0 141.386719-114.613281 256-256 256s-256-114.613281-256-256 114.613281-256 256-256 256 114.613281 256 256zm0 0" fill="#a7f3d0" />
                               <path xmlns="http://www.w3.org/2000/svg" d="m384 256c0 70.691406-57.308594 128-128 128s-128-57.308594-128-128 57.308594-128 128-128 128 57.308594 128 128zm0 0" fill="#34d399" />
                            </g>
                         </svg>
-                     </div>
+                     </div>}
                   </div>
 
                   <div className="text-gray-500 font-openSans">

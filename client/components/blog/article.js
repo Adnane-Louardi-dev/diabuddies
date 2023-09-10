@@ -156,7 +156,7 @@ export const Article = ({id,title,content, image,createdAt, relatedArticles,isLi
     <aside aria-label="Related articles" className="py-8 mb-8 lg:py-24" dir={getDir(i18n.language)}>
         <div className="px-4 mx-auto max-w-screen-xl">
             <h2 className="mb-8 text-2xl font-bold text-gray-900">{t("relatedArticles")}</h2>
-            <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="grid gap-12 grid-cols-1 md:grid-cols-2">
                 {relatedArticles.map(({id,attributes}) => <SmallArticle key={id} id={id} {...attributes} />)}
             </div>
         </div>
