@@ -13,6 +13,7 @@ import FoodModal from "./foodModal";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
+import LoadingCircle from "../components/loadingCircle";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
@@ -23,11 +24,11 @@ export default function SearchForFood({ addedFood, setAddedFood }) {
   const [ReadyToSearch, setReadyToSearch] = useState(false);
   const [open, setOpen] = useState(false);
   const {
-    isLoading,
+    isLoading: isLoading,
     data: Data,
     refetch,
   } = useQuery({
-    queryKey: ["food",searchQuery],
+    queryKey: ["food", searchQuery],
     queryFn: async () => {
       const result = await axios.get(`/food/api/search?categories_tags=${searchQuery}&fields=product_name,nutriments,image_url,quantity&page_size=5&json=true`, { withCredentials: true });
       return result.data;
@@ -76,23 +77,32 @@ export default function SearchForFood({ addedFood, setAddedFood }) {
 
         <div className="flex p-3">
           <TextField fullWidth label="Search" id="fullWidth" value={searchQuery} onChange={(newSearchQuery) => setsearchQuery(newSearchQuery.target.value)} />
-          <Button onClick={()=>{
-            setReadyToSearch(true);
-            refetch();
-            setReadyToSearch(false);
-          }} className="flex items-center rounded-lg bg-diaBlue p-1 ml-4">
+          <Button
+            onClick={() => {
+              setReadyToSearch(true);
+              refetch();
+              setReadyToSearch(false);
+            }}
+            className="flex items-center rounded-lg bg-diaBlue p-1 ml-4"
+          >
             <Icon icon="tabler:search" className="self-center text-white h-7 w-7 text-diaDarkBlue" />
           </Button>
         </div>
-        <section className="p-3">
-          {!isLoading && Data ? (
-            <>
-              {Data?.products.map((product) => {
-                return <FoodModal name={product.product_name} image={product.image_url} carbs={product.nutriments.carbohydrates_100g} kcal={product.nutriments["energy-kcal_100g"]} weight={product.quantity} addedFood={addedFood} setAddedFood={setAddedFood} />;
-              })}
-            </>
-          ) : null}
-        </section>
+        {isLoading && !ReadyToSearch ? (
+          <div className="grid h-screen justify-center content-center">
+            <LoadingCircle />
+          </div>
+        ) : (
+          <section className="p-3">
+            {!isLoading && Data ? (
+              <>
+                {Data?.products.map((product) => {
+                  return <FoodModal name={product.product_name} image={product.image_url} carbs={product.nutriments.carbohydrates_100g} kcal={product.nutriments["energy-kcal_100g"]} weight={product.quantity} addedFood={addedFood} setAddedFood={setAddedFood} />;
+                })}
+              </>
+            ) : null}
+          </section>
+        )}
 
         {/* <FoodModal /> */}
       </Dialog>

@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useEffect, useMemo, useState} from "react";
+import { useEffect, useMemo, useState } from "react";
 import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
@@ -27,9 +27,9 @@ import { Button } from "@mui/material";
 import Advice from "../components/advice";
 import { GamifyProgressBar } from "../components/appBar/GamifyProgressBar";
 import showNotification from "../utils/showNotification";
-import {appWithTranslation, useTranslation} from "next-i18next";
-import {serverSideTranslations} from "next-i18next/serverSideTranslations";
-import {getDir} from "../utils/getDir";
+import { appWithTranslation, useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { getDir } from "../utils/getDir";
 
 export default function Home() {
   const router = useRouter();
@@ -37,8 +37,8 @@ export default function Home() {
   const [activeInsulin, setActiveInsulin] = useState(0);
   const [glucose, setGlucose] = useState(120);
   const [lastInjectionTime, setLastInjectionTime] = useState(moment());
-  const {t,i18n} = useTranslation("index")
-  const {t:tc} = useTranslation("common")
+  const { t, i18n } = useTranslation("index");
+  const { t: tc } = useTranslation("common");
 
   //GET method to get user info
   const { user, isLoading: isUserLoading } = useGetCurrentUser();
@@ -86,22 +86,22 @@ export default function Home() {
     }
   }, [isUserLoading, router.isReady, date]);
 
-  const userGreeting = useMemo(()=>{
-    if(!isUserLoading && user){
-      const timeNow = moment().format("LT")
-      if(timeNow >= moment("12:00 AM", "LT") && timeNow < moment("12:00 PM")){
-        return `${i18n.language !== "ar" ? "Good morning":"صباح الخير"}, ${user.givenName}`
+  const userGreeting = useMemo(() => {
+    if (!isUserLoading && user) {
+      const timeNow = moment().format("LT");
+      if (timeNow >= moment("12:00 AM", "LT") && timeNow < moment("12:00 PM")) {
+        return `${i18n.language !== "ar" ? "Good morning" : "صباح الخير"}, ${user.givenName}`;
       }
-      if(timeNow >= moment("12:00 PM", "LT") && timeNow < moment("05:00 PM")){
-        return `${i18n.language !== "ar" ? "Good afternoon":"مساء الخير"}, ${user.givenName}`
+      if (timeNow >= moment("12:00 PM", "LT") && timeNow < moment("05:00 PM")) {
+        return `${i18n.language !== "ar" ? "Good afternoon" : "مساء الخير"}, ${user.givenName}`;
       }
-      if(timeNow >= moment("05:00 PM", "LT") && timeNow < moment("09:00 PM")){
-        return `${i18n.language !== "ar" ? "Good evening":"مساء الخير"}, ${user.givenName}`
+      if (timeNow >= moment("05:00 PM", "LT") && timeNow < moment("09:00 PM")) {
+        return `${i18n.language !== "ar" ? "Good evening" : "مساء الخير"}, ${user.givenName}`;
       }
-      return `${i18n.language !== "ar" ? "Good night":"تصبح على خير"}, ${user.givenName}`
+      return `${i18n.language !== "ar" ? "Good night" : "تصبح على خير"}, ${user.givenName}`;
     }
-    return `${i18n.language !== "ar" ? "Good morning":"صباح الخير"}`
-  },[isUserLoading,i18n.language])
+    return `${i18n.language !== "ar" ? "Good morning" : "صباح الخير"}`;
+  }, [isUserLoading, i18n.language]);
 
   return (
     <>
@@ -114,9 +114,7 @@ export default function Home() {
           </Head>
           <ResponsiveAppBar user={user} />
           <main className="p-4 relative overflow-y-hidden" dir={getDir(i18n.language)}>
-            <span className="font-inter text-2xl text-semibold">
-              {userGreeting}
-            </span>
+            <span className="font-inter text-2xl text-semibold">{userGreeting}</span>
             {user.newUser ? <CompleteYourProfile /> : null}
             <DayPicker setDate={setDate} date={date} />
             <GamifyProgressBar />
@@ -241,7 +239,7 @@ export default function Home() {
                       </div>
                       <Link href={"/store"} className={"flex text-diaGray"} aria-label="Charts page" passHref>
                         <h4>{t("explore_products")}</h4>
-                        <Icon icon="ep:arrow-right-bold" className={`h-6 w-6 ${i18n.language === "ar" ? "rotate-180" : ""}`}/>
+                        <Icon icon="ep:arrow-right-bold" className={`h-6 w-6 ${i18n.language === "ar" ? "rotate-180" : ""}`} />
                       </Link>
                     </div>
                     <div className={"shadow-2xl p-4 bg-white rounded-2xl mb-8 pb-8"}>
@@ -268,6 +266,6 @@ export default function Home() {
 
 export const getServerSideProps = async ({ locale }) => ({
   props: {
-    ...(await serverSideTranslations(locale, ['common','index']))
-  }
+    ...(await serverSideTranslations(locale, ["common", "index"])),
+  },
 });
