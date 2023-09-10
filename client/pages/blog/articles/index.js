@@ -37,7 +37,7 @@ export default function Posts() {
                 </Button>
             </Link>
         </div>
-        <div className="grid gap-12 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="grid gap-12 grid-cols-1 md:grid-cols-2">
             {articles.data.map(({id, attributes}) => <SmallArticle {...attributes} id={id} key={id} />)}
         </div>
 
