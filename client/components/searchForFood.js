@@ -6,7 +6,6 @@ import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
-import CloseIcon from "@mui/icons-material/Close";
 import Slide from "@mui/material/Slide";
 import { Icon } from "@iconify/react";
 import FoodModal from "./foodModal";
@@ -21,8 +20,9 @@ const Transition = React.forwardRef(function Transition(props, ref) {
 
 export default function SearchForFood({ addedFood, setAddedFood }) {
   const [searchQuery, setsearchQuery] = useState(undefined);
-  const [ReadyToSearch, setReadyToSearch] = useState(false);
+  const [IsSearching, setIsSearching] = useState(undefined);
   const [open, setOpen] = useState(false);
+  const [SearchError, setSearchError] = useState(false);
   const {
     isLoading: isLoading,
     data: Data,
@@ -31,14 +31,17 @@ export default function SearchForFood({ addedFood, setAddedFood }) {
     queryKey: ["food", searchQuery],
     queryFn: async () => {
       const result = await axios.get(`/food/api/search?categories_tags=${searchQuery}&fields=product_name,nutriments,image_url,quantity&page_size=5&json=true`, { withCredentials: true });
+      console.log(result);
       return result.data;
     },
-    enabled: ReadyToSearch,
+    enabled: IsSearching,
     onSuccess: (data) => {
       //if we want to cache it later
       navigator.serviceWorker?.controller?.postMessage({ action: "food", data: data });
+      setIsSearching(false);
     },
     onError: (e) => {
+      setSearchError(true);
       console.error(e);
     },
   });
@@ -51,61 +54,62 @@ export default function SearchForFood({ addedFood, setAddedFood }) {
   };
 
   useEffect(() => {
-    console.log(Data);
-  }, [Data]);
+    console.log(IsSearching);
+  }, [Data, IsSearching]);
 
   return (
-    <div>
-      <button onClick={handleClickOpen} variant="outlined" className="grid w-36  justify-items-center mx-2 py-2 px-3 rounded-lg ring-2 ring-diaDarkBlue bg-slate-300">
+    <>
+      <button onClick={handleClickOpen} variant="outlined" className="grid col-span-1 w-full justify-items-center mx-2 py-2 px-3 rounded-lg ring-2 ring-diaDarkBlue bg-slate-300">
         <h2 className="font-rubik text-sm text-diaDarkBlue my-2">Search for a meal</h2>
         <Icon icon="tabler:search" className="h-10 w-10 text-diaDarkBlue" />
       </button>
       <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
-        <AppBar sx={{ position: "relative" }}>
-          <Toolbar>
-            <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
-              <CloseIcon />
-            </IconButton>
-            <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div">
-              Add Food
-            </Typography>
-            <Button autoFocus color="inherit" onClick={handleClose}>
-              save
-            </Button>
-          </Toolbar>
-        </AppBar>
+        <div className="p-2">
+          <AppBar sx={{ position: "relative", borderRadius: "10px" }} className="bg-diaDarkBlue">
+            <Toolbar>
+              <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
+                <Icon icon="mingcute:left-line" className="h-7 w-7" />
+              </IconButton>
+              <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div" className="font-poppins">
+                Add Food
+              </Typography>
+            </Toolbar>
+          </AppBar>
+        </div>
 
-        <div className="flex p-3">
-          <TextField fullWidth label="Search" id="fullWidth" value={searchQuery} onChange={(newSearchQuery) => setsearchQuery(newSearchQuery.target.value)} />
+        <div className="flex px-5 py-3">
+          <TextField fullWidth sx={{ "& fieldset": { borderRadius: "25px" }, "& input": { padding: "10px" }, "& label": { marginY: "-5px" } }} label="Search" id="fullWidth" value={searchQuery} onChange={(newSearchQuery) => setsearchQuery(newSearchQuery.target.value)} />
           <Button
             onClick={() => {
-              setReadyToSearch(true);
+              setIsSearching(true);
               refetch();
-              setReadyToSearch(false);
             }}
-            className="flex items-center rounded-lg bg-diaBlue p-1 ml-4"
+            className="flex items-center rounded-full bg-diaDarkBlue ml-4"
           >
-            <Icon icon="tabler:search" className="self-center text-white h-7 w-7 text-diaDarkBlue" />
+            <Icon icon="tabler:search" className="self-center text-white h-7 w-7" />
           </Button>
         </div>
-        {isLoading && !ReadyToSearch ? (
+        {(SearchError || Data?.products.length === 0) && (
+          <div className="p-5">
+            <div className="flex p-3 items-center justify-center rounded-lg bg-diaRed">
+              <h1 className="font-rubik text-lg text-white">No Food found</h1>
+            </div>
+          </div>
+        )}
+        {IsSearching ? (
           <div className="grid h-screen justify-center content-center">
             <LoadingCircle />
           </div>
         ) : (
           <section className="p-3">
-            {!isLoading && Data ? (
-              <>
-                {Data?.products.map((product) => {
-                  return <FoodModal name={product.product_name} image={product.image_url} carbs={product.nutriments.carbohydrates_100g} kcal={product.nutriments["energy-kcal_100g"]} weight={product.quantity} addedFood={addedFood} setAddedFood={setAddedFood} />;
-                })}
-              </>
-            ) : null}
+            {Data?.products.map((product, i) => {
+              return <FoodModal key={i} name={product.product_name} image={product.image_url} protein={product.nutriments.proteins_100g} fat={product.nutriments.fat_100g} carbs={product.nutriments.carbohydrates_100g} kcal={product.nutriments["energy-kcal_100g"]} weight={product.quantity} addedFood={addedFood} setAddedFood={setAddedFood} />;
+            })}
           </section>
         )}
 
         {/* <FoodModal /> */}
       </Dialog>
-    </div>
+    </>
   );
 }

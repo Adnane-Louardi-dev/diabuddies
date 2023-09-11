@@ -11,22 +11,24 @@ import * as React from "react";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useGetCurrentUser } from "../../customeHooks/useGetCurrentUser";
-import {useTranslation} from "next-i18next";
-import {useEffect} from "react";
+import { useTranslation } from "next-i18next";
+import { useEffect } from "react";
 import LoadingCircle from "../loadingCircle";
 
 export const AIAssistant = () => {
-  const {user,isLoading:userLoading} = useGetCurrentUser()
+  const { user, isLoading: userLoading } = useGetCurrentUser();
   const [anchorElChatBot, setAnchorElChatBot] = React.useState(null);
   const [userQuestion, setUserQuestion] = React.useState("");
-  const {t, i18n} = useTranslation()
+  const { t, i18n } = useTranslation();
   const [discussion, setDiscussion] = React.useState([]);
 
   useEffect(() => {
-    setDiscussion([{
-      role: "assistant",
-      content: i18n.language === "ar" ? "السلام عليكم، كيف يمكنني مساعدتك اليوم؟" :"How can I help you today?",
-    }])
+    setDiscussion([
+      {
+        role: "assistant",
+        content: i18n.language === "ar" ? "السلام عليكم، كيف يمكنني مساعدتك اليوم؟" : "How can I help you today?",
+      },
+    ]);
   }, [i18n.language]);
 
   const { mutate: askAI, isLoading } = useMutation({
@@ -54,16 +56,13 @@ export const AIAssistant = () => {
       ]);
     },
   });
-  if(userLoading){
-    return <LoadingCircle />
+  if (userLoading) {
+    return <LoadingCircle />;
   }
   return (
     <Box>
       <Tooltip title="Chat with your AI assistant">
-        <IconButton
-            className={"fixed bottom-10 right-10 bg-diaDarkBlue text-white p-2"}
-            onClick={(event) => setAnchorElChatBot(event.currentTarget)}
-            sx={{ p: 0, zIndex: 1000 }}>
+        <IconButton className={"fixed bottom-10 right-10 bg-diaDarkBlue text-white p-2"} onClick={(event) => setAnchorElChatBot(event.currentTarget)} sx={{ p: 0, zIndex: 1000 }}>
           <Icon icon={"healthicons:doctor-outline"} className="h-10 w-10" />
         </IconButton>
       </Tooltip>
@@ -74,8 +73,8 @@ export const AIAssistant = () => {
             width: "300px",
           },
           "& .MuiMenu-list": {
-            paddingTop: 0
-          }
+            paddingTop: 0,
+          },
         }}
         id="menu-appbar"
         anchorEl={anchorElChatBot}
@@ -99,8 +98,8 @@ export const AIAssistant = () => {
         </div>
         <div className={"mx-3"}>
           <div className={"h-[300px] scroll-auto overflow-y-scroll pb-5"}>
-            {discussion.map(({ role, content }) => (
-              <div className={"flex justify-between gap-2 pb-2"}>
+            {discussion.map(({ role, content }, i) => (
+              <div key={i} className={"flex justify-between gap-2 pb-2"}>
                 {role !== "assistant" ? (
                   <Avatar alt="Profile photo" src={user?.photo} className="h-7 w-7" />
                 ) : (

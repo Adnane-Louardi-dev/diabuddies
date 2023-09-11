@@ -3,7 +3,7 @@ import { Icon } from "@iconify/react";
 import { Button } from "@mui/material";
 import Image from "next/image";
 
-const FoodModal = ({ name, weight, kcal, carbs, image, addedFood, setAddedFood }) => {
+const FoodModal = ({ name, weight, kcal, carbs, image, protein, fat, addedFood, setAddedFood }) => {
   return (
     <div className="grid grid-cols-6 m-2 p-1 rounded-xl bg-diaDarkBlue">
       <div className="relative col-span-1 m-2 rounded-lg bg-slate-200 h-16 w-16">
@@ -15,7 +15,7 @@ const FoodModal = ({ name, weight, kcal, carbs, image, addedFood, setAddedFood }
         <p className="font-poppins text-gray-400 text-sm">{`${weight}`}</p>
       </div>
       <div className="grid items-center justify-items-center col-span-1">
-        <Button className="grid items-center justify-items-center rounded-full bg-diaBlue" onClick={() => setAddedFood([...addedFood,{ name, weight, kcal, carbs, image }])}>
+        <Button className="grid items-center justify-items-center rounded-full bg-diaBlue" onClick={() => setAddedFood([...addedFood, { name, weight, kcal, carbs, image, fat, protein }])}>
           <Icon icon="material-symbols:add-circle-rounded" className="self-center h-7 w-7 text-white" />
         </Button>
       </div>

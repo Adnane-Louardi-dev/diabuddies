@@ -5,23 +5,23 @@ import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
 import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
-import {Icon} from "@iconify/react";
+import { Icon } from "@iconify/react";
 import TextField from "@mui/material/TextField";
-import {MobileDateTimePicker} from "@mui/x-date-pickers/MobileDateTimePicker";
+import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker";
 import InputAdornment from "@mui/material/InputAdornment";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-import {useMutation, useQueryClient} from "@tanstack/react-query";
-import {Alert, Snackbar} from "@mui/material";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Alert, Snackbar } from "@mui/material";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
-import {NutrationLogInput} from "./NutrationLogInput";
-import {styled} from "@mui/material/styles";
+import { NutrationLogInput } from "./NutrationLogInput";
+import { styled } from "@mui/material/styles";
 import Switch from "@mui/material/Switch";
-import {AddMealNameModal} from "./addMealNameModal";
-import {GetSavedMealsModal} from "./getSavedMealsModal";
-import {nullLogBook} from "../utils/nulls";
-import {useTranslation} from "next-i18next";
+import { AddMealNameModal } from "./addMealNameModal";
+import { GetSavedMealsModal } from "./getSavedMealsModal";
+import { nullLogBook } from "../utils/nulls";
+import { useTranslation } from "next-i18next";
 import SearchForFood from "./searchForFood";
 import Image from "next/image";
 
@@ -65,8 +65,8 @@ export default function NewLogDialog() {
   const [data, setData] = useState({ ...nullLogBook, time: moment()._d, food: addedFood });
   const queryClient = useQueryClient();
   const [notificationOpen, setNotificationOpen] = useState(false);
-  const {t} = useTranslation("index")
-  const {t:tc} = useTranslation("common")
+  const { t } = useTranslation("index");
+  const { t: tc } = useTranslation("common");
   const {
     mutate: addNewLogBook,
     isLoading,
@@ -95,11 +95,21 @@ export default function NewLogDialog() {
 
   useEffect(() => {
     setInsulinType(data.basal !== 0 ? "basal" : "bolus");
+    let newMacrosBasedOnFood = addedFood?.reduce(
+      (accum, item) => {
+        accum.carbs += parseFloat(item?.carbs);
+        accum.protein += parseFloat(item?.protein);
+        accum.fat += parseFloat(item?.fat);
+        return accum;
+      },
+      { ...nullLogBook }
+    );
+    setData({ ...data, ...newMacrosBasedOnFood });
   }, [data.bolus, data.basal, addedFood]);
   const handlePOSTNewLog = async () => {
     setDateOpen(false);
     await addNewLogBook(data);
-    setData({...nullLogBook, time: moment()._d})
+    setData({ ...nullLogBook, time: moment()._d });
   };
 
   const handleClose = () => {
@@ -107,15 +117,8 @@ export default function NewLogDialog() {
   };
   return (
     <>
-      <AddMealNameModal mealModalOpen={mealModalOpen}
-                        setMealModalOpen={setMealModalOpen}
-                        data={data}
-                        onSave={handlePOSTNewLog}
-      />
-      <GetSavedMealsModal savedMealsModalOpen={savedMealsModalOpen}
-                        setSavedMealsModalOpen={setSavedMealsModalOpen}
-                        setData={setData}
-      />
+      <AddMealNameModal mealModalOpen={mealModalOpen} setMealModalOpen={setMealModalOpen} data={data} onSave={handlePOSTNewLog} />
+      <GetSavedMealsModal savedMealsModalOpen={savedMealsModalOpen} setSavedMealsModalOpen={setSavedMealsModalOpen} setData={setData} />
 
       <Box sx={{ display: "flex" }}>
         <CircularProgress hidden={!isLoading} />
@@ -132,7 +135,7 @@ export default function NewLogDialog() {
         }}
         className="flex justify-between items-center text-diaBlue bg-diaBlue bg-opacity-25 pt-2 rounded-full shadow-md"
       >
-          {tc("add")}
+        {tc("add")}
         <Icon icon="material-symbols:add-circle-rounded" className="mx-1 mb-0.5" />
       </Button>
       <Dialog
@@ -191,32 +194,32 @@ export default function NewLogDialog() {
               value={data.meal}
               exclusive
               onChange={(event, newAlignment) => {
-                setData({...data, meal:newAlignment});
+                setData({ ...data, meal: newAlignment });
               }}
               aria-label="Platform"
             >
               <ToggleButton value="other" className="rounded-full border-none mr-3 mb-5 shadow-md">
-                  {t("other_meal")}
+                {t("other_meal")}
               </ToggleButton>
               <ToggleButton value="breakfast" className="rounded-full border-none mr-3 mb-5 shadow-md">
-                  {t("breakfast_meal")}
+                {t("breakfast_meal")}
               </ToggleButton>
               <ToggleButton value="lunch" className="rounded-full border-none mr-3 mb-5 shadow-md">
-                  {t("lunch_meal")}
+                {t("lunch_meal")}
               </ToggleButton>
               <ToggleButton value="snack" className="rounded-full border-none mr-3 mb-5 shadow-md">
-                  {t("snack_meal")}
+                {t("snack_meal")}
               </ToggleButton>
               <ToggleButton value="dinner" className="rounded-full border-none mr-3 mb-5 shadow-md">
-                  {t("dinner_meal")}
+                {t("dinner_meal")}
               </ToggleButton>
               <ToggleButton value="sport" className="rounded-full border-none mr-3 mb-5 shadow-md">
-                  {t("other_meal")}
+                {t("other_meal")}
               </ToggleButton>
             </ToggleButtonGroup>
           </section>
-          <section className="flex items-center justify-between my-3">
-            <button variant="outlined" className="grid w-36 justify-items-center mx-2 py-2 px-3 rounded-lg ring-2 ring-diaDarkBlue bg-slate-300">
+          <section className="grid grid-cols-2 gap-4 items-center justify-around my-3 py-1">
+            <button variant="outlined" className="grid col-span-1 w-full justify-items-center mx-2 py-2 px-3 rounded-lg ring-2 ring-diaDarkBlue bg-slate-300">
               <h2 className="font-rubik text-sm text-diaDarkBlue my-2">{t("scan_barcode")}</h2>
               <Icon icon="material-symbols:barcode" className="h-10 w-10 text-diaDarkBlue" />
             </button>
@@ -245,7 +248,7 @@ export default function NewLogDialog() {
               bgColor={"bg-gray-400"}
               icon={"fluent:food-grains-20-regular"}
               inputAdornmentLabel={"g"}
-              value={data.carbs}
+              value={data.carbs.toFixed(1)}
               onChange={(event) => {
                 if (event.target.value) {
                   setData({ ...data, carbs: parseFloat(event.target.value), kcal: data.protein * 4 + data.fat * 9 + parseFloat(event.target.value) * 4 });
@@ -301,7 +304,7 @@ export default function NewLogDialog() {
                       }}
                     >
                       <Icon icon="ph:drop-light" className="text-white mx-1 h-5 w-5" />
-                        {t("dose")}
+                      {t("dose")}
                     </InputAdornment>
                   ),
                   endAdornment: (
@@ -323,11 +326,11 @@ export default function NewLogDialog() {
                 }}
                 value={data.bolus !== 0 ? data.bolus : data.basal}
                 onChange={(event) => {
-                  const value = event.target.value
+                  const value = event.target.value;
                   if (InsulinType === "bolus") {
-                    setData({ ...data, basal:0, bolus: value ? parseFloat(value) : 0});
+                    setData({ ...data, basal: 0, bolus: value ? parseFloat(value) : 0 });
                   } else {
-                    setData({ ...data, bolus:0, basal: value ? parseFloat(value) : 0 });
+                    setData({ ...data, bolus: 0, basal: value ? parseFloat(value) : 0 });
                   }
                 }}
               />
@@ -374,7 +377,7 @@ export default function NewLogDialog() {
               bgColor={"text-amber-300"}
               icon={"fluent-emoji-high-contrast:cut-of-meat"}
               inputAdornmentLabel={"g"}
-              value={data.protein}
+              value={data.protein.toFixed(1)}
               onChange={(event) => {
                 if (event.target.value) {
                   setData({ ...data, protein: parseFloat(event.target.value), kcal: data.carbs * 4 + data.fat * 9 + parseFloat(event.target.value) * 4 });
@@ -389,7 +392,7 @@ export default function NewLogDialog() {
               bgColor={"bg-red-400"}
               icon={"circum:pizza"}
               inputAdornmentLabel={"g"}
-              value={data.fat}
+              value={data.fat.toFixed(1)}
               onChange={(event) => {
                 if (event.target.value) {
                   setData({ ...data, fat: parseFloat(event.target.value), kcal: data.carbs * 4 + data.protein * 4 + parseFloat(event.target.value) * 9 });
@@ -405,8 +408,8 @@ export default function NewLogDialog() {
               <div className="rounded-lg my-3 bg-diaDarkBlue">
                 {addedFood.map((oneFood, i) => {
                   return (
-                    <div className="flex items-center justify-between m-2 border-t-2 border-gray-700">
-                      <div key={i} className="mx-2 p-2">
+                    <div key={i} className="flex items-center justify-between mx-2 border-t-2 border-gray-700">
+                      <div className="mx-2 p-2">
                         <h1 className="text-blue-500 font-poppins">{`${oneFood.name}`}</h1>
                         <p className="text-gray-500 font-poppins">{`100g (${oneFood.carbs}g carbs)`} </p>
                       </div>
@@ -449,13 +452,13 @@ export default function NewLogDialog() {
             }}
             className="w-full p-3 rounded-full shadow-md text-gray-800 font-codeSource font-xl"
           >
-              {tc("cancel")}
+            {tc("cancel")}
           </Button>
           <Button disabled={isLoading} onClick={handlePOSTNewLog} variant="filled" className="w-full p-3 rounded-full shadow-md bg-gray-800 text-white  font-codeSource font-xl">
-              {tc("save")}
+            {tc("save")}
           </Button>
-          <Button disabled={isLoading} onClick={()=> setMealModalOpen(true)} variant="filled" className="w-full p-3 rounded-full shadow-md bg-gray-800 text-white  font-codeSource font-xl">
-              {t("save_as_meal")}
+          <Button disabled={isLoading} onClick={() => setMealModalOpen(true)} variant="filled" className="w-full p-3 rounded-full shadow-md bg-gray-800 text-white  font-codeSource font-xl">
+            {t("save_as_meal")}
           </Button>
         </DialogActions>
       </Dialog>
