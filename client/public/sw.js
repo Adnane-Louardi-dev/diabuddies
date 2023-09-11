@@ -6,6 +6,10 @@ function showNotification(title, body, tag) {
     tag: tag,
   });
 }
+self.addEventListener("notificationclick", function (event) {
+  event.notification.close();
+  clients.openWindow("localhost:3001/");
+});
 // on periodic error
 self.addEventListener("periodicsyncerror", (event) => {
   console.log("error", event);
@@ -28,6 +32,7 @@ self.addEventListener("message", (event) => {
       })
     );
   }
+  //cache recent food
 });
 let mealsTime = {
   breakfast: { min: 7, max: 10 },

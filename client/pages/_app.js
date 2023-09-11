@@ -4,11 +4,11 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import {useEffect, useTransition} from "react";
+import { useEffect, useTransition } from "react";
 import Script from "next/script";
 const queryClient = new QueryClient();
 import showNotification from "../utils/showNotification";
-import {appWithTranslation, useTranslation} from 'next-i18next';
+import { appWithTranslation, useTranslation } from "next-i18next";
 
 export function initSW() {
   window.addEventListener("load", () => {
@@ -33,7 +33,7 @@ export function initSW() {
 }
 
 function MyApp({ Component, pageProps }) {
-  const {i18n} = useTranslation()
+  const { i18n } = useTranslation();
   useEffect(() => {
     if ("serviceWorker" in navigator) {
       navigator.serviceWorker.register("/sw.js");
