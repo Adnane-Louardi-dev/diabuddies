@@ -1,32 +1,6 @@
 const {stringify} = require("qs");
-const productQuery = stringify({
-    populate: {
-        pictures:true,
-        thumbnail:true,
-        inventory:true
-    }
-})
+const qs = require("qs");
 
-const orderQuery = stringify({
-    populate: {
-      vente_entries: {
-          populate: {
-              product: {
-                  populate: ["thumbnail"]
-              }
-          }
-      },
-    }
-})
-
-const cityQuery = (start,limit) => {
-    return stringify({
-        pagination: {
-            start: start,
-            limit: limit
-        }
-    })
-}
 // const cartQuery = stringify({
 //     populate: {
 //         venteEntries: {
@@ -37,4 +11,39 @@ const cityQuery = (start,limit) => {
 
 
 
-module.exports = {productQuery, orderQuery, cityQuery}
+module.exports = {
+    productQuery: stringify({
+        populate: {
+            pictures:true,
+            thumbnail:true,
+            inventory:true
+        }
+    }),
+    orderQuery: stringify({
+        populate: {
+            vente_entries: {
+                populate: {
+                    product: {
+                        populate: ["thumbnail"]
+                    }
+                }
+            },
+        }
+    }),
+    cityQuery: (start,limit) => {
+        return stringify({
+            pagination: {
+                start: start,
+                limit: limit
+            }
+        })
+    },
+    articleQuery: qs.stringify({
+        populate: {
+            image: true,
+            categories: true,
+            author: {
+                populate: ["avatar"]
+            }
+        }
+    })}

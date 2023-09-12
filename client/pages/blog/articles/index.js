@@ -10,6 +10,7 @@ import Link from "next/link";
 import axios from "axios";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import {useTranslation} from "next-i18next";
+import {Categories} from "../../../components/blog/categories";
 
 
 export default function Posts() {
@@ -29,15 +30,20 @@ export default function Posts() {
 
     return <Container maxWidth={"xl"}>
         <ResponsiveAppBar />
-
         <div className={"text-center mb-5"}>
+            <Link href={"/blog/articles"}>
+                <Button className={"bg-diaDarkBlue text-white opacity-100 hover:opacity-100 mx-5"}>
+                    {t("articles")}
+                </Button>
+            </Link>
+            <Categories />
             <Link href={"/blog/articles/saved"}>
-                <Button className={"bg-gray-300 text-gray-800"}>
+                <Button className={`bg-diaDarkBlue text-white opacity-60 hover:opacity-100 mx-5`}>
                     {t("favoritArticles")}
                 </Button>
             </Link>
         </div>
-        <div className="grid gap-12 grid-cols-1 md:grid-cols-2">
+        <div className="grid gap-12 grid-cols-1 lg:grid-cols-2">
             {articles.data.map(({id, attributes}) => <SmallArticle {...attributes} id={id} key={id} />)}
         </div>
 

@@ -24,7 +24,7 @@ router.get("/articles/:limit",isLoggedIn, (req,res) =>{
     console.log("home articles", query)
     return getArticles(req,res,query)
 } )
-router.get("/categories/:categoryId",isLoggedIn, getCategoryArticles)
+router.get("/categories/:categorySlug",isLoggedIn, getCategoryArticles)
 router.get("/categories",isLoggedIn, getBlogCategories)
 
 

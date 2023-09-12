@@ -3,7 +3,7 @@ const router = express.Router();
 const wishListSchema = require("../models/wishListSchema")
 const {isLoggedIn} = require("../middlewares/isLoggedIn");
 const {strapiInstance} = require("../middlewares/blogAxios");
-const {productQuery} = require("../util/baseQueries");
+const {productQuery, articleQuery} = require("../util/baseQueries");
 
 router.get("/:slug", isLoggedIn,async (req, res) => {
     try {
@@ -17,7 +17,7 @@ router.get("/:slug", isLoggedIn,async (req, res) => {
         let wishedItems;
         if(slug === "blog") {
             wishedItems = await Promise.all(wishList ?
-                wishList.map((wishItem) => strapiInstance.get(`/api/articles/${wishItem.itemId}?populate=image`).then(res => res.data?.data)) :
+                wishList.map((wishItem) => strapiInstance.get(`/api/articles/${wishItem.itemId}?${articleQuery}`).then(res => res.data?.data)) :
                 [])
         } else {
             wishedItems = await Promise.all(
