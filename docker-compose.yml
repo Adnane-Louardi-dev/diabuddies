@@ -9,6 +9,17 @@ services:
     networks:
       dia-network:
         ipv4_address: 10.56.1.19
+  backend-service-dev-3:
+    build: ./server
+    ports:
+      - "3000:3000"
+    depends_on:
+      - db
+    environment:
+      - STRAPI_URL:http://10.56.1.17:1337/api
+    networks:
+      dia-network:
+        ipv4_address: 10.56.1.18
   backend-service:
     build: ./server
     ports:

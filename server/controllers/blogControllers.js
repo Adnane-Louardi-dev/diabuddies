@@ -3,6 +3,7 @@ const {strapiInstance} = require("../middlewares/blogAxios");
 const qs = require("qs");
 const {likeSchema} = require("../models/likeSchema");
 const {actionLogSchema} = require("../models/actionLogSchema");
+const {articleQuery} = require("../util/baseQueries");
 
 const toggleLikeAnArticle = async (req,res) => {
     const isLiked =  await likeSchema.exists({
@@ -44,17 +45,8 @@ const readArticle = async (req,res) => {
 }
 const getArticle = async (req,res) => {
     try {
-        const baseQuery = qs.stringify({
-            populate: {
-                image: true,
-                categories: true,
-                author: {
-                    populate: ["avatar"]
-                }
-            }
-        })
         const [{data:article},likeCount,isLiked] = await Promise.all([
-            strapiInstance.get(`/api/articles/${req.params.articleId}?${baseQuery}`),
+            strapiInstance.get(`/api/articles/${req.params.articleId}?${articleQuery}`),
             likeSchema.countDocuments({
                 articleId: req.params.articleId
             }),
@@ -102,7 +94,7 @@ const getArticles = async (req,res,query="") => {
 
 const getBlogCategories = async (req,res) => {
     try {
-        const {data:articles} = await strapiInstance.get(`/api/categories/`)
+        const {data:articles} = await strapiInstance.get(`/api/categories`)
         return res.status(200).json(articles)
     } catch (e) {
         return res.status(404).json({message: "cannot get categories"})
@@ -114,11 +106,13 @@ const getCategoryArticles = async (req,res) => {
         const query = qs.stringify({
             filters: {
                 categories: {
-                    $eq: req.params.categoryId
+                    slug: {
+                        $eq: req.params.categorySlug
+                    }
                 }
             }
         })
-        const {data:articles} = await strapiInstance.get(`/api/products/?${query}`)
+        const {data:articles} = await strapiInstance.get(`/api/articles/?${query}&${articleQuery}`)
         return res.status(200).json(articles)
     } catch (e) {
         return res.status(404).json({message: "cannot create articles"})

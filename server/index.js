@@ -37,7 +37,7 @@ mongoose.connect(DBConnection, async () => {
     });
     console.log("DB connected!")
 });
-
+console.log("stapi url", process.env.STRAPI_URL)
 //middleswares
 app.use(
   cors({
