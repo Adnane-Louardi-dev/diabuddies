@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useMemo, useState} from "react";
 import {Alert, Button, Grid, Input, InputAdornment, Snackbar} from "@mui/material";
 import TextField from "@mui/material/TextField";
 import {SettingsCard} from "../components/SettingsCard";
@@ -23,10 +23,11 @@ import AvatarDialog from "../components/avatarDialog";
 import {useTranslation} from "next-i18next";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import ResponsiveAppBar from "../components/ResponsiveAppBar";
-
+import QRcode from "qrcode"
 const Settings = () => {
   const { register, control, handleSubmit, reset } = useForm();
   const queryClient = useQueryClient()
+  const [qrSrc, setQrSrc] = useState('')
   const { user, isLoading } = useGetCurrentUserDetailed()
   const [notificationOpen, setNotificationOpen] = useState(false);
   const {t} = useTranslation("settings")
@@ -113,6 +114,13 @@ const Settings = () => {
     await updateUser(data);
   };
 
+  useEffect(() => {
+    if(user && user.detailedUser.userName){
+      const host = typeof window !== 'undefined' && window.location.hostname ? window.location.hostname : '';
+      QRcode.toDataURL(`${host}/profile/${user.detailedUser.userName}`).then(setQrSrc)
+    }
+  }, [typeof window, user]);
+
   const UserInput = React.useCallback(({ fieldName, label, ...props }) => {
     return (
       <div className={"flex justify-between align-middle"} dir={"ltr"}>
@@ -155,25 +163,26 @@ const Settings = () => {
               <Image src={user?.photo} width={100} height={100} alt={user.userName + " picture"} className="rounded-full" />
               <AvatarDialog user={user} />
             </div>
+
             <SettingsCard sectionTitle={t("profile")}>
               <Grid container columnSpacing={2} rowSpacing={2}>
                 <Grid item xs={12}>
-                  <UserInput defaultValue={user.givenName} fieldName={"givenName"} label={t("givenNameInput")} />
+                  <UserInput defaultValue={user.detailedUser.givenName} fieldName={"givenName"} label={t("givenNameInput")} />
                 </Grid>
                 <Grid item xs={12}>
-                  <UserInput defaultValue={user.familyName} fieldName={"familyName"} label={t("familyNameInput")} />
+                  <UserInput defaultValue={user.detailedUser.familyName} fieldName={"familyName"} label={t("familyNameInput")} />
                 </Grid>
                 <Grid item xs={12}>
-                  <UserInput defaultValue={user.email} fieldName={"email"} label={t("emailInput")} />
+                  <UserInput defaultValue={user.detailedUser.email} fieldName={"email"} label={t("emailInput")} />
                 </Grid>
                 <Grid item xs={12}>
-                  <UserInput defaultValue={user.homeAddress} fieldName={"homeAddress"} label={t("homeAddressInput")} />
+                  <UserInput defaultValue={user.detailedUser.homeAddress} fieldName={"homeAddress"} label={t("homeAddressInput")} />
                 </Grid>
                 <Grid item xs={12}>
-                  <UserInput defaultValue={user.userName} fieldName={"userName"} label={t("userNameInput")} />
+                  <UserInput defaultValue={user.detailedUser.userName} fieldName={"userName"} label={t("userNameInput")} />
                 </Grid>
                 <Grid item xs={6}>
-                  <UserInput defaultValue={user.age} fieldName={"age"} label={tc("ageInput")} type={"number"} />
+                  <UserInput defaultValue={user.detailedUser.age} fieldName={"age"} label={tc("ageInput")} type={"number"} />
                 </Grid>
                 <Grid item xs={6}>
                   <Controller
@@ -435,6 +444,10 @@ const Settings = () => {
               {user && user.diabetecDetails.medications?.map((medication) => <SettingMedication medication={medication} control={control} />)}
             </SettingsCard>
           </Grid>
+          {user.detailedUser.userName && <div className={"text-center w-full mt-5"}>
+            <div dangerouslySetInnerHTML={{__html: t("qrCodeText")}} />
+            <img src={qrSrc} alt={`${user.detailedUser.userName} Qr code`} className={"w-[250px] mt-5 mx-auto"}/>
+          </div>}
           <Grid item xs={12} md={12}>
             <SettingsCard sectionTitle={t("general")}>
               <Grid container>

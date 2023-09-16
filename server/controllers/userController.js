@@ -1,4 +1,5 @@
 const userSchema = require("../models/userSchema");
+const logBookItemsSchema = require("../models/logBookItemsSchema");
 const { diabetecDetailsSchema } = require("../models/diabetecDetailsSchema");
 const { newActionLog } = require("./gamifyControllers");
 
@@ -31,8 +32,32 @@ module.exports = {
     const diabetecDetails = await diabetecDetailsSchema.findOne({
       userId: req.user._id,
     });
+    return res.status(200).json({ detailedUser, diabetecDetails });
+  },
+  getProfile: async (req,res) => {
+    try {
+        const user = await userSchema.findOne({userName: req.params.username})
+        if(user){
+            const diabetecDetails = await diabetecDetailsSchema.findOne({
+                userId: user._id,
+            });
+            const recentLogBooks = await logBookItemsSchema
+                .find({userId: user._id})
+                .sort({time:-1})
+                .limit(5)
 
-    return res.status(200).json({ ...detailedUser, diabetecDetails });
+            return res.status(201).json({
+                givenName: user.givenName,
+                familyName: user.familyName,
+                photo: user.photo,
+                diabetecDetails,
+                recentLogBooks
+            })
+        }
+        return res.status(404).json({msg: "didn't find a user with this username. verify it pleaser."})
+    } catch (e){
+        return res.status(404).json({msg: "some error occurred, try again later."})
+    }
   },
   addMedicament: async (req, res) => {
     try {

@@ -7,7 +7,6 @@ import {Add, Remove} from "@mui/icons-material";
 import {debounce} from "@mui/material";
 import {useUpdateCart} from "../../customeHooks/useCart";
 import {useTranslation} from "next-i18next";
-import CarouselThumbs from "./CarouselThumbs";
 
 export default function Product({id,...product}) {
    const {name, selling_price,original_price, pictures,inventory,description, thumbnail} = product.attributes

@@ -59,9 +59,9 @@ const LogBookItem = ({ props }) => {
 
   return (
     <>
-      <Box sx={{ display: "flex" }}>
-        <CircularProgress hidden={!isLoading} />
-      </Box>
+      {isLoading && <Box sx={{display: "flex"}}>
+        <CircularProgress/>
+      </Box>}
       <Snackbar open={notificationOpen} autoHideDuration={6000} onClose={handleClose}>
         <Alert onClose={handleClose} severity={isError ? "danger" : "warning"} sx={{ width: "100%" }}>
           {isError ? "There was an error while deleting log book" : "Log book was deleted successfully"}
