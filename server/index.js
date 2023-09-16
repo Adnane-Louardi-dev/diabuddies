@@ -7,23 +7,13 @@ const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const passport = require("passport");
 const morgan = require("morgan");
-const login = require("./routes/login");
-const logbook = require("./routes/logbook");
-const userRoutes = require("./routes/userRoutes");
-const user = require("./routes/user");
-const charts = require("./routes/charts");
-const wishList = require("./routes/wishList");
-const order = require("./routes/order");
-const comments = require("./routes/comments");
-const store = require("./routes/store");
-const blog = require("./routes/blog");
-const aiAssistant = require("./routes/aiAssistant");
-const {gamifyRouter} = require("./routes/gamify");
+const {login,logbook, userRoutes, user, charts, wishList, order, comments, store, blog, aiAssistant, gamifyRouter} = require("./routes")
 const {schedule} = require("node-cron");
 const {gamificationSchema} = require("./models/gamificationSchema");
 const {isLoggedIn} = require("./middlewares/isLoggedIn");
 const {newActionLog} = require("./controllers/gamifyControllers");
 const {levelsSchema} = require("./models/levelsSchema");
+const initialize = require("./util/DBconnect");
 //DB connect
 const DBConnection =
   process.env.DB_CONNECTION ||
@@ -37,7 +27,11 @@ mongoose.connect(DBConnection, async () => {
     });
     console.log("DB connected!")
 });
-console.log("stapi url", process.env.STRAPI_URL)
+
+initialize().then(()=>{
+    console.log("db connected successfully")
+})
+
 //middleswares
 app.use(
   cors({

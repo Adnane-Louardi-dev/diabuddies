@@ -1,11 +1,12 @@
 const express = require("express");
 const router = express.Router();
 const userSchema = require("../models/userSchema");
-const { updateUser, addMedicament, getMe, updateDiabetecDetails, setupProfile, getMeDetailed } = require("../controllers/userController");
+const { updateUser, addMedicament, getMe, updateDiabetecDetails, setupProfile, getMeDetailed, getProfile} = require("../controllers/userController");
 const { isLoggedIn } = require("../middlewares/isLoggedIn");
 
 //get user data
 router.get("/me", isLoggedIn, getMe);
+router.get("/profile/:username", getProfile);
 router.get("/diabetecDetails", isLoggedIn, getMeDetailed);
 router.post("/diabetecDetails", isLoggedIn, setupProfile);
 router.put("/diabetecDetails", isLoggedIn, updateDiabetecDetails);

@@ -22,6 +22,7 @@ services:
         ipv4_address: 10.56.1.18
   backend-service:
     build: ./server
+    restart: unless-stopped
     ports:
       - "3000:3000"
     depends_on:
