@@ -39,7 +39,7 @@ export default function Posts({articles,categories}) {
     </Container>
 }
 
-export async function getStaticProps() {
+export async function getStaticProps({locale}) {
     const articles = await axios.get(`${process.env.BACKEND_URL}/blog/articles/10`);
     const categories = await axios.get(`${process.env.BACKEND_URL}/blog/categories`);
 
@@ -47,7 +47,7 @@ export async function getStaticProps() {
         props: {
             articles: articles.data.data,
             categories: categories.data.data,
-            ...(await serverSideTranslations("en", ['common','blogStore']))
+            ...(await serverSideTranslations(locale, ['common','blogStore']))
         },
     }
 }

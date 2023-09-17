@@ -20,7 +20,6 @@ import showNotification from "../utils/showNotification";
 import { appWithTranslation, useTranslation } from "next-i18next";
 import Snackbar from "@mui/material/Snackbar";
 import { initSW } from "../utils/initSW";
-const queryClient = new QueryClient();
 function MyApp({ Component, pageProps }) {
   const [devices, setDevices] = useState([]);
   const [SnackbarMessage, setSnackbarMessage] = useState("");

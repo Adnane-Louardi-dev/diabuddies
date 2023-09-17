@@ -13,11 +13,12 @@ import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 
 export default function Leaderboard() {
     const {t} = useTranslation()
-    const router = useRouter()
     const {data:leaderBoardPeople, isLoading } = useQuery(["leaderBoard"],async ()=>{
         const {data} = await axios.get("/api/gamify/leaderboard")
         return data
     })
+
+    console.log("leaderBoardPeople", leaderBoardPeople)
 
     return <Container maxWidth={"xl"}>
         <ResponsiveAppBar />

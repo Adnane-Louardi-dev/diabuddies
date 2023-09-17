@@ -21,12 +21,6 @@ export default function Post({article}) {
     </Container>
 }
 
-// export const getServerSideProps = async ({ locale }) => ({
-//     props: {
-//         ...(await serverSideTranslations(locale, ['common','blogStore']))
-//     }
-// });
-
 export async function getStaticPaths() {
     const res = await axios.get(`${process.env.BACKEND_URL}/blog/articles/100`)
     const articles = await res.data.data
@@ -37,12 +31,12 @@ export async function getStaticPaths() {
 }
 
 
-export async function getStaticProps({ params }) {
+export async function getStaticProps({ params, locale}) {
     console.log("article id ..........", params.id,`${process.env.BACKEND_URL}/blog/article/${params.id}`)
     const res = await axios.get(`${process.env.BACKEND_URL}/blog/article/${params.id}`)
     const article = await res.data;
 
     return { props: { article,
-            ...(await serverSideTranslations("ar", ['common','blogStore']))
+            ...(await serverSideTranslations(locale, ['common','blogStore']))
         } }
 }

@@ -19,7 +19,7 @@ const Home = ({products, categories}) => {
    );
 };
 
-export async function getStaticProps() {
+export async function getStaticProps({locale}) {
     const products = await axios.get(`${process.env.BACKEND_URL}/store/products`);
     const categories = await axios.get(`${process.env.BACKEND_URL}/store/categories`);
 
@@ -27,7 +27,7 @@ export async function getStaticProps() {
         props: {
             products: products.data.data,
             categories: categories.data.data,
-            ...(await serverSideTranslations("en", ['common','blogStore']))
+            ...(await serverSideTranslations(locale, ['common','blogStore']))
         },
     }
 }
