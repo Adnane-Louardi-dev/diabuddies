@@ -23,7 +23,7 @@ export const SmallArticle = ({id,title,introduction, image,categories, horizenta
                 <Link href={`/blog/article/${id}`}>
                     <p className={`font-light text-gray-500 h-[100px] mb-5`}>{introduction}</p>
                 </Link>
-                <div className={"max-w-[150px] overflow-hidden absolute bottom-2 left-4"}>
+                <div className={"max-w-[calc(100%-120px)] overflow-hidden absolute bottom-2 left-4"}>
                     <ArticleCategories categories={categories?.data} />
                 </div>
                 <div className={"w-full text-right absolute bottom-2 right-4"}>

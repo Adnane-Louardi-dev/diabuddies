@@ -8,20 +8,7 @@ import axios from "axios";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 
 
-export default function Post() {
-    const router = useRouter()
-    const {id} = router.query
-    const {data:article, isLoading} = useQuery({
-        queryKey: ["article",id],
-        queryFn:async () => {
-            const {data} = await axios.get(`/api/blog/article/${id}`)
-            return data
-        }
-    })
-
-    if(isLoading) {
-        return <LoadingCircle />
-    }
+export default function Post({article}) {
     return <Container maxWidth={"xl"}>
         <ResponsiveAppBar />
 
@@ -34,8 +21,22 @@ export default function Post() {
     </Container>
 }
 
-export const getServerSideProps = async ({ locale }) => ({
-    props: {
-        ...(await serverSideTranslations(locale, ['common','blogStore']))
-    }
-});
+export async function getStaticPaths() {
+    const res = await axios.get(`${process.env.BACKEND_URL}/blog/articles/100`)
+    const articles = await res.data.data
+    const paths = articles.map((article) => ({
+        params: {id: `${article.id}`},
+    }))
+    return { paths, fallback: false }
+}
+
+
+export async function getStaticProps({ params, locale}) {
+    console.log("article id ..........", params.id,`${process.env.BACKEND_URL}/blog/article/${params.id}`)
+    const res = await axios.get(`${process.env.BACKEND_URL}/blog/article/${params.id}`)
+    const article = await res.data;
+
+    return { props: { article,
+            ...(await serverSideTranslations(locale, ['common','blogStore']))
+        } }
+}

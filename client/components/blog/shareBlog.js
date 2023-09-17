@@ -18,7 +18,7 @@ import {ShareRounded} from "@mui/icons-material";
 
 export const ShareBlog = ({title}) => {
     const [anchorShareButton, setAnchorShareButton] = React.useState(null);
-    const url =  window.location.href
+    const url =  typeof window !== "undefined" ? window.location.href : ""
     const handleOpenUserMenu = (event) => {
         setAnchorShareButton(event.currentTarget);
     };

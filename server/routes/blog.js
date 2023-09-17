@@ -10,11 +10,11 @@ const {getArticles,
     readArticle} = require("../controllers/blogControllers");
 const router = express.Router();
 
-router.get("/article/:articleId",isLoggedIn,getArticle)
+router.get("/article/:articleId",getArticle)
 router.get("/article/like/:articleId",isLoggedIn,isArticleLiked)
 router.post("/article/like/:articleId",isLoggedIn,toggleLikeAnArticle)
 router.post("/article/read/:articleId",isLoggedIn,readArticle)
-router.get("/articles/:limit",isLoggedIn, (req,res) =>{
+router.get("/articles/:limit", (req,res) =>{
     const query = qs.stringify({
         pagination: {
             start: 0,
@@ -24,8 +24,8 @@ router.get("/articles/:limit",isLoggedIn, (req,res) =>{
     console.log("home articles", query)
     return getArticles(req,res,query)
 } )
-router.get("/categories/:categorySlug",isLoggedIn, getCategoryArticles)
-router.get("/categories",isLoggedIn, getBlogCategories)
+router.get("/categories/:categorySlug", getCategoryArticles)
+router.get("/categories", getBlogCategories)
 
 
 module.exports = router
