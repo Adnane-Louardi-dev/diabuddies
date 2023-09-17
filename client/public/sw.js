@@ -35,7 +35,7 @@ self.addEventListener("message", (event) => {
   //cache recent food
 });
 let mealsTime = {
-  breakfast: { min: 7, max: 10 },
+  breakfast: { min: 1, max: 10 },
   lunch: { min: 11, max: 15 },
   snack: { min: 17, max: 19 },
   dinner: { min: 20, max: 23 },
@@ -73,11 +73,10 @@ function checkRecentLogsAndDisplayNotification() {
     let mealRequiredComparedToTime = checkMealValidity(todayTimeInHours);
 
     //meal must push to notifications
-
     if (logs[0]) {
       return logs.forEach((element) => {
-        let differenceBetweenNowAndMissingMeal = new Date() - mealsTime[mealRequiredComparedToTime].min;
-        if (differenceBetweenNowAndMissingMeal > 1000 * 60 * 30 && element.meal !== mealRequiredComparedToTime) {
+        let differenceBetweenNowAndMissingMeal = new Date() - mealsTime[mealRequiredComparedToTime]?.min;
+        if (differenceBetweenNowAndMissingMeal > 1000 * 60 * 90 && element.meal !== mealRequiredComparedToTime) {
           showNotification(`you haven't logged your ${mealRequiredComparedToTime} for today`, "Would you like to do it now?", "meal");
         }
       });
@@ -91,4 +90,11 @@ async function updateBadge() {
     console.log("Error setting badge.");
   });
 }
+self.addEventListener("install", (event) => {
+  console.log("Installed");
+});
+
+self.addEventListener("activate", (event) => {
+  console.log("Activated");
+});
 //# sourceMappingURL=sw.js.map

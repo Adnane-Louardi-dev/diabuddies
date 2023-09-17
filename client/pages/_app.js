@@ -4,53 +4,46 @@ import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { AdapterMoment } from "@mui/x-date-pickers/AdapterMoment";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { useEffect, useTransition } from "react";
+import { useEffect, useState } from "react";
 import Script from "next/script";
-const queryClient = new QueryClient();
 import showNotification from "../utils/showNotification";
 import { appWithTranslation, useTranslation } from "next-i18next";
-
-export function initSW() {
-  window.addEventListener("load", () => {
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("/sw.js");
-      navigator.serviceWorker.ready.then(async (registration) => {
-        if ("periodicSync" in registration) {
-          const status = await navigator.permissions.query({
-            // @ts-expect-error
-            name: "periodic-background-sync",
-          });
-
-          if (status.state === "granted") {
-            await registration.periodicSync.register("show-notification", {
-              minInterval: 3 * 60 * 60 * 1000,
-            });
-          }
-        }
-      });
-    }
-  });
-}
-
+import Snackbar from "@mui/material/Snackbar";
+import { initSW } from "../utils/initSW";
+const queryClient = new QueryClient();
 function MyApp({ Component, pageProps }) {
+  const [devices, setDevices] = useState([]);
+  const [SnackbarMessage, setSnackbarMessage] = useState("");
+  const [open, setOpen] = useState(false);
   const { i18n } = useTranslation();
-  useEffect(() => {
-    if ("serviceWorker" in navigator) {
-      navigator.serviceWorker.register("/sw.js");
-      navigator.serviceWorker.ready.then(async (registration) => {
-        if ("periodicSync" in registration) {
-          const status = await navigator.permissions.query({
-            name: "periodic-background-sync",
-          });
 
-          if (status.state === "granted") {
-            await registration.periodicSync.register("show-notification", {
-              minInterval: 1000,
-            });
-          }
-        }
-      });
+  const handleClose = (event, reason) => {
+    if (reason === "clickaway") {
+      return;
     }
+    setOpen(false);
+  };
+
+  useEffect(() => {
+    initSW();
+    (async () => {
+      try {
+        const availableDevices = await navigator.mediaDevices.enumerateDevices();
+        const availableVideoDevices = availableDevices.filter((device) => device.kind === "videoinput");
+        if (availableVideoDevices.length === 0) {
+          setSnackbarMessage("No cameras found");
+          setOpen(true);
+          console.log("camera wowo");
+        } else {
+          setDevices(availableVideoDevices);
+          console.log("devices", devices);
+        }
+      } catch (e) {
+        setSnackbarMessage("Failed to find cameras. This could be permissions problem");
+        console.log(new Error(e));
+        setOpen(true);
+      }
+    })();
   }, []);
   return (
     <QueryClientProvider client={queryClient}>
@@ -84,6 +77,7 @@ function MyApp({ Component, pageProps }) {
       <Head>
         <meta name="viewport" content="width=device-width, initial-scale=1, minimum-scale=1" />
       </Head>
+      <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} message={SnackbarMessage} />
       <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale={i18n.language}>
         <Component {...pageProps} />
       </LocalizationProvider>
