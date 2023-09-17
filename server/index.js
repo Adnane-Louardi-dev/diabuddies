@@ -7,26 +7,28 @@ const session = require("express-session");
 const MongoStore = require("connect-mongo");
 const passport = require("passport");
 const morgan = require("morgan");
-const {login,logbook, userRoutes, user, charts, wishList, order, comments, store, blog, aiAssistant, gamifyRouter} = require("./routes")
-const {schedule} = require("node-cron");
-const {gamificationSchema} = require("./models/gamificationSchema");
-const {isLoggedIn} = require("./middlewares/isLoggedIn");
-const {newActionLog} = require("./controllers/gamifyControllers");
-const {levelsSchema} = require("./models/levelsSchema");
+const { login, logbook, userRoutes, user, charts, wishList, order, comments, store, blog, aiAssistant, gamifyRouter } = require("./routes");
+const { schedule } = require("node-cron");
+const { gamificationSchema } = require("./models/gamificationSchema");
+const { isLoggedIn } = require("./middlewares/isLoggedIn");
+const { newActionLog } = require("./controllers/gamifyControllers");
+const { levelsSchema } = require("./models/levelsSchema");
 const initialize = require("./util/DBconnect");
 //DB connect
-const DBConnection = process.env.DB_CONNECTION ||
-  `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.dgq8q.mongodb.net/?retryWrites=true&w=majority&ssl=true`;
+const DBConnection = process.env.DB_CONNECTION || `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.dgq8q.mongodb.net/?retryWrites=true&w=majority&ssl=true`;
+mongoose.set("strictQuery", false);
 mongoose.connect(DBConnection, async () => {
-    await createLevels()
-    schedule('0 0 0 * * *', ()=>{
-        gamificationSchema.updateMany({},{
-            dailyLogInClaimed: false
-        })
-    });
-    console.log("DB connected!")
+  await createLevels();
+  schedule("0 0 0 * * *", () => {
+    gamificationSchema.updateMany(
+      {},
+      {
+        dailyLogInClaimed: false,
+      }
+    );
+  });
+  console.log("DB connected!");
 });
-
 
 //middleswares
 app.use(
@@ -74,42 +76,42 @@ app.listen(process.env.PORT, () => {
   console.log(`Server listening on ${process.env.PORT}`);
 });
 
-app.post("/daily_log_in",isLoggedIn,async (req,res)=>{
-    const gamify = await gamificationSchema.findOne({
-            user: req.user._id
-        })
-    if(gamify.dailyLogInClaimed){
-        return res.status(200).json({message: "already claimed"})
-    }
-    gamify.dailyLogInClaimed = true
-    await gamify.save()
-    await newActionLog("dailyLogIn",req.user._id)
-    return res.status(201).json({message: "claimed"})
-})
+app.post("/daily_log_in", isLoggedIn, async (req, res) => {
+  const gamify = await gamificationSchema.findOne({
+    user: req.user._id,
+  });
+  if (gamify.dailyLogInClaimed) {
+    return res.status(200).json({ message: "already claimed" });
+  }
+  gamify.dailyLogInClaimed = true;
+  await gamify.save();
+  await newActionLog("dailyLogIn", req.user._id);
+  return res.status(201).json({ message: "claimed" });
+});
 
 const createLevels = async () => {
-    const existedLevelsCount = await levelsSchema.countDocuments({})
-    if(!existedLevelsCount){
-        const thirdLevel = await levelsSchema.create({
-            levelName: "Third level",
-            level:3,
-            minPoints: 100,
-            maxPoints: 300
-        })
-        const secondLevel = await levelsSchema.create({
-            levelName: "Second level",
-            level:2,
-            minPoints: 100,
-            maxPoints: 300,
-            nextLevel: thirdLevel._id
-        })
-        const firstLevel = await levelsSchema.create({
-            levelName: "First level",
-            level:1,
-            minPoints: 0,
-            maxPoints: 100,
-            nextLevel: secondLevel._id
-        })
-        await Promise.all([firstLevel.save(), secondLevel.save(),thirdLevel.save()])
-    }
-}
+  const existedLevelsCount = await levelsSchema.countDocuments({});
+  if (!existedLevelsCount) {
+    const thirdLevel = await levelsSchema.create({
+      levelName: "Third level",
+      level: 3,
+      minPoints: 100,
+      maxPoints: 300,
+    });
+    const secondLevel = await levelsSchema.create({
+      levelName: "Second level",
+      level: 2,
+      minPoints: 100,
+      maxPoints: 300,
+      nextLevel: thirdLevel._id,
+    });
+    const firstLevel = await levelsSchema.create({
+      levelName: "First level",
+      level: 1,
+      minPoints: 0,
+      maxPoints: 100,
+      nextLevel: secondLevel._id,
+    });
+    await Promise.all([firstLevel.save(), secondLevel.save(), thirdLevel.save()]);
+  }
+};
