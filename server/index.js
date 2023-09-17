@@ -15,7 +15,7 @@ const {newActionLog} = require("./controllers/gamifyControllers");
 const {levelsSchema} = require("./models/levelsSchema");
 const initialize = require("./util/DBconnect");
 //DB connect
-const DBConnection =
+const DBConnection = process.env.DB_CONNECTION ||
   `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.dgq8q.mongodb.net/?retryWrites=true&w=majority&ssl=true`;
 mongoose.connect(DBConnection, async () => {
     await createLevels()
@@ -27,9 +27,6 @@ mongoose.connect(DBConnection, async () => {
     console.log("DB connected!")
 });
 
-initialize().then(()=>{
-    console.log("db connected successfully")
-})
 
 //middleswares
 app.use(
