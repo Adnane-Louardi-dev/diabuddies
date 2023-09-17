@@ -6,6 +6,16 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import { useEffect, useState } from "react";
 import Script from "next/script";
+const STALE_TIME = 10*60*1000;
+const CACHE_TIME = 20*60*1000;
+const queryClient = new QueryClient({
+    defaultOptions: {
+        queries: {
+            staleTime: STALE_TIME,
+            cacheTime: CACHE_TIME
+        }
+    }
+});
 import showNotification from "../utils/showNotification";
 import { appWithTranslation, useTranslation } from "next-i18next";
 import Snackbar from "@mui/material/Snackbar";

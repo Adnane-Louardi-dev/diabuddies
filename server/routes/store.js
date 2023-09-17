@@ -13,15 +13,15 @@ router.get("/orders",isLoggedIn,getCurrentUserOrders)
 router.get("/carts/:cartId", getCart)
 router.post("/carts", updateCart)
 router.post("/checkout",isLoggedIn,checkoutOrder)
-router.get("/product/:productId",isLoggedIn, getProduct)
-router.get("/products",isLoggedIn, (req,res)=>{
+router.get("/product/:productId", getProduct)
+router.get("/products", (req,res)=>{
     return getProducts(req,res)
 })
-router.get("/products/:limit",isLoggedIn, (req,res) =>{
+router.get("/products/:limit", (req,res) =>{
     return getProducts(req,res,`&pagination[start]=0&pagination[limit]=${req.params.limit}`)
 } )
-router.get("/categories/:category_slug",isLoggedIn, getProductsInCategory)
-router.get("/categories",isLoggedIn, getCategories)
+router.get("/categories/:category_slug", getProductsInCategory)
+router.get("/categories", getCategories)
 router.post("/customer",isLoggedIn, createCustomerController)
 router.get("/cities", getCitiesAvailableForShipping)
 

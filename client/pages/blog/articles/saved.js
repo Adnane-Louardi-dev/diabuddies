@@ -9,25 +9,25 @@ import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import Link from "next/link";
 import {Button} from "@mui/material";
 import {Categories} from "../../../components/blog/categories";
+import axios from "axios";
 
 
-export default function Saved(){
+export default function Saved({categories}){
     const {wishedItems, isLoading} = useGetWishListItems("blog")
     const {t} = useTranslation("blogStore")
     if(isLoading){
         return <LoadingCircle />
     }
 
-    console.log("wish ",wishedItems)
+    console.log("wish ",wishedItems, categories)
     return <BlogLayout>
-        <div className={"text-center mb-5"}>
+        <div className={"flex gap-2 flex-wrap justify-center mb-5"}>
             <Link href={"/blog/articles"}>
                 <Button className={"bg-diaDarkBlue text-white opacity-60 hover:opacity-100 mx-5"}>
                     {t("articles")}
                 </Button>
             </Link>
-            <Categories />
-
+            <Categories categories={categories} />
             <Link href={"/blog/articles/saved"}>
                 <Button className={`bg-diaDarkBlue text-white opacity-100 hover:opacity-100 mx-5`}>
                     {t("favoritArticles")}
@@ -44,8 +44,11 @@ export default function Saved(){
 }
 
 
-export const getServerSideProps = async ({ locale }) => ({
-    props: {
-        ...(await serverSideTranslations(locale, ['common','blogStore']))
-    }
-});
+export async function getStaticProps() {
+    const categories = await axios.get(`${process.env.BACKEND_URL}/blog/categories/`)
+
+    return { props: {
+            categories: categories.data.data,
+            ...(await serverSideTranslations("en", ['common','blogStore']))
+        } }
+}

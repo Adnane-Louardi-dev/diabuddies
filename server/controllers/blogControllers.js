@@ -25,7 +25,10 @@ const isArticleLiked = async (req,res) => {
         userId: req.user._id,
         articleId: req.params.articleId
     })
-    return res.status(200).json({isLiked: !!isLiked})
+    const likesCount = await likeSchema.countDocuments({
+        articleId: req.params.articleId
+    })
+    return res.status(200).json({isLiked: !!isLiked, likesCount})
 }
 const readArticle = async (req,res) => {
     const haveReadArticle = await actionLogSchema.findOne({
@@ -45,13 +48,9 @@ const readArticle = async (req,res) => {
 }
 const getArticle = async (req,res) => {
     try {
-        const [{data:article},likeCount,isLiked] = await Promise.all([
+        const [{data:article},likeCount] = await Promise.all([
             strapiInstance.get(`/api/articles/${req.params.articleId}?${articleQuery}`),
             likeSchema.countDocuments({
-                articleId: req.params.articleId
-            }),
-            likeSchema.exists({
-                userId: req.user._id,
                 articleId: req.params.articleId
             })
         ])
@@ -71,7 +70,8 @@ const getArticle = async (req,res) => {
             // }
         })
         const {data:relatedArticles} = await strapiInstance.get(`/api/articles/?${query}`)
-        return res.status(200).json({...article, relatedArticles:relatedArticles.data, likeCount, isLiked: !!isLiked})
+        return res.status(200).json({...article, relatedArticles:relatedArticles.data, likeCount
+        })
     } catch (e) {
         return res.status(404).json({message: "cannot get this article"})
     }
@@ -88,7 +88,8 @@ const getArticles = async (req,res,query="") => {
         const {data:articles} = await strapiInstance.get(`/api/articles/?${baseQuery}&${query}`)
         return res.status(200).json(articles)
     } catch (e) {
-        return res.status(404).json({message: "cannot create articles"})
+        console.error(e.data)
+        return res.status(404).json({message: "cannot get articles"})
     }
 }
 
