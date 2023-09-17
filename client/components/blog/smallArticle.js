@@ -7,7 +7,7 @@ import {getDir} from "../../utils/getDir";
 import {ArticleCategories} from "./articleCategories";
 
 
-export const SmallArticle = ({id,title,introduction, image,categories, horizental=true}) => {
+export const SmallArticle = ({id,title,introduction, image,categories, horizental=false}) => {
     const thumbnail = image ? image.data.attributes : ""
     const {i18n} = useTranslation()
     return <article className={`w-full ${!horizental ? "w-[340px]" : ""} mx-auto grid ${horizental ? "grid-cols-2" : "grid-cols-1"} gap-4 border-2 border-diaDarkBlue border-solid px-14 py-8 rounded-md hover:shadow-xl hover:cursor-pointer relative`}>
