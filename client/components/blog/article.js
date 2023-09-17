@@ -6,7 +6,7 @@ import {SmallArticle} from "./smallArticle";
 import {Comment} from "./comment";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
 import axios from "axios";
-import {Button} from "@mui/material";
+import {Button, debounce} from "@mui/material";
 import {useAddComment, useGetComment} from "../../customeHooks/useComments";
 import {WishedIcon} from "../store/wishedIcon";
 import {ShareBlog} from "./shareBlog";
@@ -16,9 +16,10 @@ import Typography from "@mui/material/Typography";
 import {useElementOnScreen} from "../../customeHooks/useElementOnScreen";
 import {useTranslation} from "next-i18next";
 import {getDir} from "../../utils/getDir";
+import {useAxios} from "../../customeHooks/useAxios";
 
 
-export const Article = ({id,title,content, image,createdAt, relatedArticles,isLiked,likeCount, author:writer}) => {
+export const Article = ({id,title,content, image,createdAt, relatedArticles,isLiked, likeCount, author:writer}) => {
     const [ref,haveReadArticle] = useElementOnScreen({
         rootMargin: "0px",
         threshold: 1
@@ -44,8 +45,9 @@ export const Article = ({id,title,content, image,createdAt, relatedArticles,isLi
                     setLiked((l) => !l)
                },
                 onSettled: async () => {
-                    const {data:liked} = await axios.get(`/api/blog/article/like/${id}`)
-                    setLiked(liked.isLiked)
+                    const {data} = await axios.get(`/api/blog/article/like/${id}`)
+                    setLiked(data.isLiked)
+                    setLikesCount(data.likesCount)
                 }
             })
     useEffect(() => {
@@ -56,6 +58,13 @@ export const Article = ({id,title,content, image,createdAt, relatedArticles,isLi
                 }})
         }
     }, [haveReadArticle]);
+
+    useEffect(() => {
+        axios.get(`/api/blog/article/like/${id}`)
+            .then(res => {
+                setLiked(res.data.isLiked)
+            })
+    }, []);
     const {data, isLoading, isSuccess} = useGetComment(id)
     if(isHtmlLoading) {
         return <LoadingCircle />
@@ -110,7 +119,7 @@ export const Article = ({id,title,content, image,createdAt, relatedArticles,isLi
                                     }}} variant="span" color="text.secondary">
                                     {likesCount}
                                 </Typography>
-                                <IconButton onClick={likePost}>
+                                <IconButton onClick={debounce(likePost)}>
                                     <Icon icon={"mdi:like"} color={liked ? "#3AB0FF": undefined} />
                                 </IconButton>
                                 <ShareBlog title={title} />

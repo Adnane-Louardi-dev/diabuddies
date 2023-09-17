@@ -21,14 +21,13 @@ import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import {getDir} from "../../utils/getDir";
 
 
-const Cart = () => {
+const Cart = ({cities}) => {
    const router = useRouter()
    const queryClient = useQueryClient()
    const {t, i18n} = useTranslation("blogStore")
 
    const {data:cart} = useGetCart()
    const {updateCart} = useUpdateCart()
-   const {data:cities, isLoading:isCitiesLoading} = useAxios("get","/api/store/cities")
    const {register, control, handleSubmit} = useForm();
    const {user, isLoading:isUserLoading} = useGetCurrentUser()
 
@@ -90,17 +89,17 @@ const Cart = () => {
                      <div className={"mx-10"}>
                         <TextField variant="outlined" className={"mt-2 w-full"} {...register("shippingAddress")} label={t("shippingAddress")} defaultValue={user.homeAddress} required type={"text"} />
                      </div>
-                     {!isCitiesLoading && <Controller
+                       <Controller
                          name={"city"}
                          control={control}
                          defaultValue={user.cityId ?? {
-                            label: cities?.length > 0 ? cities[0].attributes.name : null,
-                            value: cities?.length > 0 ? cities[0].id: null
+                            label: cities.length > 0 ? cities[0].attributes.name : null,
+                            value: cities.length > 0 ? cities[0].id: null
                          }}
                          render={({field: {ref, onChange, ...field}}) => (
                              <Autocomplete
                                  className={"w-full"}
-                                 options={cities?.map(city => ({
+                                 options={cities.map(city => ({
                                     label: city.attributes.name,
                                     value: city.id
                                  }))}
@@ -111,7 +110,7 @@ const Cart = () => {
                                  </div>}
                              />
                          )}
-                     />}
+                     />
                      <div className={"mx-10"}>
                         <TextField variant="outlined" className={"mt-2 w-full"} {...register("phoneNumber")} label={t("phoneNumber")} defaultValue={user.phoneNumber} required type={"text"} />
                      </div>
@@ -225,8 +224,13 @@ const Cart = () => {
 };
 export default Cart;
 
-export const getServerSideProps = async ({ locale }) => ({
-   props: {
-      ...(await serverSideTranslations(locale, ['common','blogStore']))
+export async function getStaticProps() {
+   const cities = await axios.get(`${process.env.BACKEND_URL}/store/cities`);
+
+   return {
+      props: {
+         cities: cities.data,
+         ...(await serverSideTranslations("en", ['common','blogStore']))
+      },
    }
-});
+}

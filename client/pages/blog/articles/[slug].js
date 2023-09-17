@@ -16,30 +16,20 @@ import Container from "@mui/material/Container";
 import ResponsiveAppBar from "../../../components/ResponsiveAppBar";
 
 
-export default function CategoryArticles(){
-    const router = useRouter()
-    const {data:articles, isLoading} = useQuery({
-        queryKey: ["categoryArticles",router.query.slug],
-        queryFn:async () => {
-            const {data} = await axios.get(`/api/blog/categories/${router.query.slug}`)
-            return data
-        }
-    })
+export default function CategoryArticles({categories,articles}){
+
     const {t} = useTranslation("blogStore")
 
-    if(isLoading) {
-        return <LoadingCircle />
-    }
 
     return <Container maxWidth={"xl"}>
         <ResponsiveAppBar />
-        <div className={"text-center mb-5"}>
+        <div className={"flex gap-2 flex-wrap justify-center mb-5"}>
             <Link href={"/blog/articles"}>
                 <Button className={"bg-diaDarkBlue text-white opacity-60 hover:opacity-100 mx-5"}>
                     {t("articles")}
                 </Button>
             </Link>
-            <Categories />
+            <Categories categories={categories} />
             <Link href={"/blog/articles/saved"}>
                 <Button className={`bg-diaDarkBlue text-white opacity-60 hover:opacity-100 mx-5`}>
                     {t("favoritArticles")}
@@ -47,15 +37,30 @@ export default function CategoryArticles(){
             </Link>
         </div>
         <div className="grid gap-12 grid-cols-1 lg:grid-cols-2">
-            {articles.data.map(({id, attributes}) => <SmallArticle {...attributes} id={id} key={id} />)}
+            {articles.map(({id, attributes}) => <SmallArticle {...attributes} id={id} key={id} />)}
         </div>
 
     </Container>
 }
 
-export const getServerSideProps = async ({ locale }) => ({
-    props: {
-        ...(await serverSideTranslations(locale, ['common','blogStore']))
-    }
-});
 
+export async function getStaticPaths() {
+    const res = await axios.get(`${process.env.BACKEND_URL}/blog/categories/`)
+    const categories = await res.data.data
+    console.log("categories", categories)
+    const paths = categories.map((category) => ({
+        params: {slug: `${category.attributes.slug}`},
+    }))
+    return { paths, fallback: false }
+}
+
+
+export async function getStaticProps({ params }) {
+    const articles = await axios.get(`${process.env.BACKEND_URL}/blog/categories/${params.slug}`)
+    const categories = await axios.get(`${process.env.BACKEND_URL}/blog/categories/`)
+
+    return { props: { articles:articles.data.data,
+            categories: categories.data.data,
+            ...(await serverSideTranslations("en", ['common','blogStore']))
+        } }
+}

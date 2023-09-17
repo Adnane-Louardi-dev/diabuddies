@@ -8,7 +8,7 @@ import {debounce} from "@mui/material";
 import {useUpdateCart} from "../../customeHooks/useCart";
 import {useTranslation} from "next-i18next";
 
-export default function Product({id,...product}) {
+export default function Product({id, ...product}) {
    const {name, selling_price,original_price, pictures,inventory,description, thumbnail} = product.attributes
    const {cart,updateCart} = useUpdateCart();
    const gallery = useMemo(()=>{

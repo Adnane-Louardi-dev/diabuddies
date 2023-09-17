@@ -1,35 +1,35 @@
 import Card from "../../components/store/card";
 import Categories from "../../components/store/categories";
-import { useRouter } from "next/router";
-import { StoreLayout } from "../../components/store/storeLayout";
-import { useAxios } from "../../customeHooks/useAxios";
-import LoadingCircle from "../../components/loadingCircle";
-import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import {StoreLayout} from "../../components/store/storeLayout";
+import {serverSideTranslations} from "next-i18next/serverSideTranslations";
+import axios from "axios";
 
-const Home = () => {
-  const router = useRouter();
-  const { data: products, isLoading: isLoadingProducts } = useAxios("get", "/api/store/products");
-  const { data: categories, isLoading: isLoadingCategories, error } = useAxios("get", "/api/store/categories");
-  if (isLoadingProducts || isLoadingCategories) {
-    return <LoadingCircle />;
-  }
-  // console.log("products",products, categories)
-  return (
-    <StoreLayout>
-      {categories && <Categories categories={categories?.data} />}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {products?.data.map((product) => (
-          <Card product={product} key={product.id} />
-        ))}
-      </div>
-    </StoreLayout>
-  );
+const Home = ({products, categories}) => {
+
+   return (
+      <StoreLayout>
+         <Categories categories={categories}/>
+         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+            {products.map((product) => (
+                    <Card product={product} key={product.id}/>
+                )
+            )}
+         </div>
+      </StoreLayout>
+   );
 };
 
-export default Home;
+export async function getStaticProps({locale}) {
+    const products = await axios.get(`${process.env.BACKEND_URL}/store/products`);
+    const categories = await axios.get(`${process.env.BACKEND_URL}/store/categories`);
 
-export const getServerSideProps = async ({ locale }) => ({
-  props: {
-    ...(await serverSideTranslations(locale, ["common", "blogStore"])),
-  },
-});
+    return {
+        props: {
+            products: products.data.data,
+            categories: categories.data.data,
+            ...(await serverSideTranslations(locale, ['common','blogStore']))
+        },
+    }
+}
+
+export default Home;

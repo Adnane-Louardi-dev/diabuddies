@@ -222,9 +222,9 @@ export default function Home() {
                     </div>
                     <div className={"shadow-2xl p-4 bg-white rounded-2xl mb-8 pb-8"}>
                       <Container maxWidth={"xl"}>
-                        <div className="gap-12 grid grid-cols-1 lg:grid-cols-2">
+                        <div className="gap-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
                           {articles?.data?.map(({ id, attributes }) => (
-                            <SmallArticle {...attributes} id={id} key={id} />
+                            <SmallArticle {...attributes} id={id} key={id} horizental={false} />
                           ))}
                         </div>
                       </Container>
