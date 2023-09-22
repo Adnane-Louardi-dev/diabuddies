@@ -24,76 +24,21 @@ import {useTranslation} from "next-i18next";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import ResponsiveAppBar from "../components/ResponsiveAppBar";
 import QRcode from "qrcode"
-const Settings = () => {
+import {useProfile} from "../customeHooks/useProfile";
+import getURL from "../utils/getURL";
+import IconButton from "@mui/material/IconButton";
+import withAuth from "../components/withAuth";
+import {nullMedication} from "../utils/nulls";
+const Settings = ({medications}) => {
   const { register, control, handleSubmit, reset } = useForm();
-  const queryClient = useQueryClient()
-  const [qrSrc, setQrSrc] = useState('')
-  const { user, isLoading } = useGetCurrentUserDetailed()
+  const [modalMedication, setModalMedication] = useState(undefined)
+  const [qrSrc, setQrSrc] = useState(undefined)
+  const { user, isLoading,refetch } = useGetCurrentUserDetailed()
+  const [token, setToken] = useState(undefined)
   const [notificationOpen, setNotificationOpen] = useState(false);
   const {t} = useTranslation("settings")
   const {t:tc,i18n} = useTranslation("common")
-  const {
-    mutate: updateUser,
-    isError,
-    isLoading: updateUserLoading,
-  } = useMutation({
-    mutationKey: ["updateUser"],
-    mutationFn: (data) => {
-      return Promise.all([
-        axios.post("/api/user/", {
-          userName: data.userName,
-          givenName: data.givenName,
-          familyName: data.familyName,
-          age: data.age,
-          email: data.email,
-          homeAddress: data.homeAddress,
-          phoneNumber: data.phoneNumber,
-          photo: data.photo,
-          bio: data.bio,
-          darkMode: data.darkMode}),
-        axios.put("/api/user/diabetecDetails", {
-          gender: data.gender === "Gender" ? "none" : data.gender,
-          diabetesType: data.diabetesType === "Diabetes Type" ? "other" : data.diabetesType,
-          height: data.height,
-          weight: data.weight,
-          carbsRatio: data.carbsRatio,
-          bodyFatPercentage: data.bodyFatPercentage,
-          insulinSensitivity: data.insulinSensitivity,
-          hb1ac: data.hb1ac,
-          hyperglycemia: data.hyperglycemia,
-          normalBloodGlucose: data.normalBloodGlucose,
-          hypoglycemia: data.hypoglycemia,
-          unit: data.unit,
-          dailyCaloriesNeeds:data.dailyCaloriesNeeds
-        })
-      ])
-    },
-    onError: (e) => {
-      console.error(e);
-    },
-    onMutate: async (data) => {
-      await queryClient.cancelQueries(["getCurrentUser"])
-      queryClient.setQueryData(["getCurrentUser"],{
-        user: JSON.parse(JSON.stringify({
-          userName: data.userName,
-          givenName: data.givenName,
-          familyName: data.familyName,
-          age: data.age,
-          email: data.email,
-          homeAddress: data.homeAddress,
-          phoneNumber: data.phoneNumber,
-          photo: data.photo,
-          bio: data.bio,
-          darkMode: data.darkMode
-        }))
-      })
-    },
-    onSettled: async () => {
-      await queryClient.invalidateQueries(["getCurrentUser"])
-      await queryClient.invalidateQueries(["detailedUser"])
-      setNotificationOpen(true);
-    },
-  });
+  const {mutate: updateUser, isError, isLoading: updateUserLoading} = useProfile(setNotificationOpen);
 
   const handleClose = () => {
     setNotificationOpen(false);
@@ -111,16 +56,23 @@ const Settings = () => {
       alert("passwords must match");
       return;
     }
-    await updateUser(data);
+    await updateUser({...data,profileId: {token}});
   };
 
+  const generateToken = () => {
+    const token = crypto.randomUUID();
+    setToken(token)
+    QRcode.toDataURL(getURL(`/profile/${token}`)).then(setQrSrc)
+  }
   useEffect(() => {
-    if(user && user.detailedUser.userName){
-      const host = typeof window !== 'undefined' && window.location.hostname ? window.location.hostname : '';
-      QRcode.toDataURL(`${host}/profile/${user.detailedUser.userName}`).then(setQrSrc)
+    if(user?.detailedUser.profileId){
+      setToken(user.detailedUser.profileId.token)
+      QRcode.toDataURL(getURL(`/profile/${user.detailedUser.profileId.token}`)).then(setQrSrc)
     }
-  }, [typeof window, user]);
+  }, [user]);
 
+
+  console.log(" fdsafdsagdsags ", modalMedication)
   const UserInput = React.useCallback(({ fieldName, label, ...props }) => {
     return (
       <div className={"flex justify-between align-middle"} dir={"ltr"}>
@@ -135,7 +87,6 @@ const Settings = () => {
       </div>
     );
   }, []);
-
 
   if (isLoading) {
     return <LoadingCircle />;
@@ -160,7 +111,7 @@ const Settings = () => {
           {/* profile */}
           <Grid item xs={12}>
             <div className="grid grid-cols-1 gap-5 items-center justify-items-center">
-              <Image src={user?.photo} width={100} height={100} alt={user.userName + " picture"} className="rounded-full" />
+              <Image src={user?.detailedUser.photo} width={100} height={100} alt={user?.detailedUser.userName + " picture"} className="rounded-full" />
               <AvatarDialog user={user} />
             </div>
 
@@ -435,19 +386,37 @@ const Settings = () => {
           <Grid item xs={12}>
             <SettingsCard
               sectionTitle={
-                <div className={"flex justify-between"}>
+                <div className={"flex justify-between mb-2"}>
                   <p>{t("medications")}</p>
-                  <AddMedicamentModal />
+                  <AddMedicamentModal refetch={refetch} medications={medications} medication={modalMedication} setModalMedication={setModalMedication} />
                 </div>
               }
             >
-              {user && user.diabetecDetails.medications?.map((medication) => <SettingMedication medication={medication} control={control} />)}
+              <div className={"[&>section(:last-child)]:border-b-transparent"}>
+              {user?.diabetecDetails.medications.map((medication) => (
+                  <SettingMedication key={medication._id} refetch={refetch} medication={medication} setMedicament={setModalMedication}/>
+              ))}
+              </div>
             </SettingsCard>
           </Grid>
-          {user.detailedUser.userName && <div className={"text-center w-full mt-5"}>
+          <div className={"text-center w-full mt-5"}>
             <div dangerouslySetInnerHTML={{__html: t("qrCodeText")}} />
-            <img src={qrSrc} alt={`${user.detailedUser.userName} Qr code`} className={"w-[250px] mt-5 mx-auto"}/>
-          </div>}
+            {qrSrc && <img src={qrSrc}
+                           alt={`${user.detailedUser.userName} Qr code`}
+                           className={"w-[250px] mt-5 mx-auto"}
+            />}
+            <div className={"flex justify-center gap-2"}>
+              <Button className={"bg-diaDarkBlue text-white mt-4"} onClick={generateToken}>
+                {user.detailedUser.profileId ? "Regenerate Token" : "Generate Token"}
+              </Button>
+              <IconButton className={"w-12 h-12 mt-4"}
+                  onClick={()=>{
+                    navigator.clipboard.writeText(getURL(`/profile/${token}`))
+                }}>
+                <Icon icon="ph:copy-bold" />
+              </IconButton>
+            </div>
+          </div>
           <Grid item xs={12} md={12}>
             <SettingsCard sectionTitle={t("general")}>
               <Grid container>
@@ -455,23 +424,21 @@ const Settings = () => {
                   <h5 className={"text-lg pb-5"}>{t("security")}</h5>
                   <div className={"pb-5"}>
                     <InputLabel className={"text-black text-xs"}>{t("currentPassword")}</InputLabel>
-                    <Input placeholder={t("currentPassword")} type={"password"} {...register("currentPassword")} />
+                    <Input className={"w-full mt-2"} placeholder={t("currentPassword")} type={"password"} {...register("currentPassword")} />
                   </div>
                   <div className={"pb-5"}>
                     <InputLabel className={"text-xs"}>{t("newPassword")}</InputLabel>
-                    <Input placeholder={t("newPassword")} type={"password"} {...register("newPassword")} />
+                    <Input className={"w-full mt-2"} placeholder={t("newPassword")} type={"password"} {...register("newPassword")} />
                   </div>
                   <div className={"pb-5"}>
                     <InputLabel className={"text-xs"}>{t("confirmPassword")}</InputLabel>
-                    <Input placeholder={t("confirmPassword")} type={"password"} {...register("confirmPassword")} />
+                    <Input className={"w-full mt-2"} placeholder={t("confirmPassword")} type={"password"} {...register("confirmPassword")} />
                   </div>
                   <Button className={"bg-diaBlue text-white w-[100%]"}>{t('changePassword')}</Button>
                 </Grid>
-                <Grid item xs={12} className={"text-gray-500"}>
+                <Grid item xs={12} className={"text-gray-500 mt-5"}>
                   <h5>{t("deleteAccount")}</h5>
-                  <p className={"text-sm pt-2 pb-8"}></p>
-
-                  <Button className={"bg-red-600 text-white w-[100%]"}>{t("deletePermanently")}</Button>
+                  <Button className={"bg-red-600 text-white w-[100%] mt-2"}>{t("deletePermanently")}</Button>
                 </Grid>
               </Grid>
             </SettingsCard>
@@ -502,11 +469,15 @@ const Settings = () => {
   );
 };
 
-export default Settings;
+export default withAuth(Settings);
 
 
-export const getServerSideProps = async ({ locale }) => ({
-  props: {
-    ...(await serverSideTranslations(locale, ['common','settings']))
+export const getServerSideProps = async ({ locale }) => {
+  const {data:medications} = await axios.get(`${process.env.BACKEND_URL}/user/medicaments`);
+  return {
+    props: {
+      medications,
+      ...(await serverSideTranslations(locale, ['common', 'settings']))
+    }
   }
-});
+};

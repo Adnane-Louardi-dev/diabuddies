@@ -16,7 +16,6 @@ const findComment = (comments, id) => {
 const removeComment = (comments, id) => {
     if(comments.find(({_id}) => _id === id))
         return comments.filter(({_id}) => _id !== id)
-    console.log("com", comments)
     return {
         ...comments,
         comments: removeComment(comments.flatMap(comment => comment.comments),id)
@@ -143,7 +142,6 @@ export const useReplyToComment = () => {
                 content: data.comment,
                 comments: []
             })
-            console.log("comment",comment)
             queryClient.setQueryData(["getComments",articleId],comments)
         },
         onSettled: ({articleId}) => {

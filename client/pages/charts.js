@@ -17,6 +17,8 @@ import InsulinDailyTotalsChart from "../components/charts/insulinDailyTotalsChar
 import MacrosAndKcalChart from "../components/charts/macrosAndKcalChart";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import {useTranslation} from "next-i18next";
+import withAuth from "../components/withAuth";
+import {GraphSkeleton} from "../components/skeleton/graphSkeleton";
 
 function Charts() {
   const router = useRouter();
@@ -33,11 +35,7 @@ function Charts() {
     },
     onSuccess: () => {
       router.push({ href: "/charts", query: { from: fromDate, to: toDate } });
-    },
-    onError: (e) => {
-      console.error(e);
-    },
-    enabled: router.isReady,
+    }
   });
   useEffect(() => {
     refetch();
@@ -48,10 +46,8 @@ function Charts() {
   }
 
   return (
-    <>
-      {!isLoading && !isUserLoading ? (
         <>
-          <ResponsiveAppBar user={user} />
+          <ResponsiveAppBar />
           <div className="py-2 mb-4">
             <div className="flex justify-between items-center">
               <Link href="/?date=" passHref>
@@ -78,7 +74,7 @@ function Charts() {
                     <Icon icon="ph:info" className="mx-3" />
                   </div>
                   <div className="my-3 bg-white rounded-xl pr-3">
-                    <LineChartGraph props={data.logs} />
+                    {!isLoading ? <LineChartGraph props={data.logs}/> : <GraphSkeleton />}
                   </div>
                 </section>
                 <section className="w-full rounded-xl mb-10 ring-1 ring-gray-300 p-2">
@@ -87,7 +83,7 @@ function Charts() {
                     <Icon icon="ph:info" className="mx-3" />
                   </div>
                   <div className="my-3 bg-white rounded-xl">
-                    <PiGraph props={data.logs} />
+                    {!isLoading ? <PiGraph props={data.logs} /> : <GraphSkeleton />}
                   </div>
                 </section>
                 <section className="w-full rounded-xl mb-10 ring-1 ring-gray-300 p-2">
@@ -96,7 +92,7 @@ function Charts() {
                     <Icon icon="ph:info" className="mx-3" />
                   </div>
                   <div className="flex items-center justify-center bg-white rounded-xl">
-                    <BarGraph props={data.logs} />
+                    {!isLoading ? <BarGraph props={data.logs} /> : <GraphSkeleton />}
                   </div>
                 </section>
                 <section className="w-full rounded-xl mb-10 ring-1 ring-gray-300 p-2">
@@ -105,7 +101,7 @@ function Charts() {
                     <Icon icon="ph:info" className="mx-3" />
                   </div>
                   <div className="flex items-center justify-center bg-white rounded-xl">
-                    <InsulinDailyTotalsChart props={data.logs} />
+                    {!isLoading ? <InsulinDailyTotalsChart props={data.logs}/> : <GraphSkeleton />}
                   </div>
                 </section>
                 <section className="w-full rounded-xl mb-10 ring-1 ring-gray-300 p-2">
@@ -114,17 +110,13 @@ function Charts() {
                     <Icon icon="ph:info" className="mx-3" />
                   </div>
                   <div className="flex items-center justify-center bg-white rounded-xl">
-                    <MacrosAndKcalChart props={data.logs} dailyCaloriesNeeds={user?.dailyCaloriesNeeds} />
+                    {!isLoading ? <MacrosAndKcalChart props={data.logs} dailyCaloriesNeeds={user?.dailyCaloriesNeeds}/> : <GraphSkeleton />}
                   </div>
                 </section>
               </section>
             </Grid>
           </Grid>
         </>
-      ) : (
-        <LoadingCircle />
-      )}
-    </>
   );
 }
 
@@ -134,4 +126,4 @@ export const getServerSideProps = async ({ locale }) => ({
   }
 });
 
-export default Charts;
+export default withAuth(Charts);

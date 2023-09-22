@@ -14,6 +14,7 @@ import {useQuery} from "@tanstack/react-query";
 import axios from "axios";
 import Container from "@mui/material/Container";
 import ResponsiveAppBar from "../../../components/ResponsiveAppBar";
+import ArticlesList from "../../../components/blog/articlesList";
 
 
 export default function CategoryArticles({categories,articles}){
@@ -36,9 +37,7 @@ export default function CategoryArticles({categories,articles}){
                 </Button>
             </Link>
         </div>
-        <div className="grid gap-12 grid-cols-1 lg:grid-cols-2">
-            {articles.map(({id, attributes}) => <SmallArticle {...attributes} id={id} key={id} />)}
-        </div>
+        <ArticlesList articles={articles} />
 
     </Container>
 }
@@ -47,7 +46,6 @@ export default function CategoryArticles({categories,articles}){
 export async function getStaticPaths() {
     const res = await axios.get(`${process.env.BACKEND_URL}/blog/categories/`)
     const categories = await res.data.data
-    console.log("categories", categories)
     const paths = categories.map((category) => ({
         params: {slug: `${category.attributes.slug}`},
     }))

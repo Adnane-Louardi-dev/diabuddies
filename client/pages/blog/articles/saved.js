@@ -10,6 +10,7 @@ import Link from "next/link";
 import {Button} from "@mui/material";
 import {Categories} from "../../../components/blog/categories";
 import axios from "axios";
+import ArticlesList from "../../../components/blog/articlesList";
 
 
 export default function Saved({categories}){
@@ -19,7 +20,6 @@ export default function Saved({categories}){
         return <LoadingCircle />
     }
 
-    console.log("wish ",wishedItems, categories)
     return <BlogLayout>
         <div className={"flex gap-2 flex-wrap justify-center mb-5"}>
             <Link href={"/blog/articles"}>
@@ -34,11 +34,7 @@ export default function Saved({categories}){
                 </Button>
             </Link>
         </div>
-
-        <div className="grid gap-12 grid-cols-1 md:grid-cols-2">
-            {wishedItems.map(({id, attributes}) => <SmallArticle {...attributes} id={id} key={id} />)}
-        </div>
-
+        <ArticlesList articles={wishedItems}  />
 
     </BlogLayout>
 }

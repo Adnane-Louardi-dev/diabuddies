@@ -31,8 +31,11 @@ import { appWithTranslation, useTranslation } from "next-i18next";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { getDir } from "../utils/getDir";
 import Container from "@mui/material/Container";
+import withAuth from "../components/withAuth";
+import {useHomeArticles, useHomeProducts, useIndexCharts} from "../customeHooks/useHomePage";
+import {HomePageSkeleton} from "../components/skeleton/homePageSkeleton";
 
-export default function Home() {
+function Home() {
   const router = useRouter();
   const [date, setDate] = useState(router.query.date || moment().format("L"));
   const [activeInsulin, setActiveInsulin] = useState(0);
@@ -43,45 +46,11 @@ export default function Home() {
 
   //GET method to get user info
   const { user, isLoading: isUserLoading } = useGetCurrentUser();
-  const { data: articles, isLoading: isArticlesLoading } = useQuery({
-    queryKey: ["articles", 3],
-    queryFn: async () => {
-      const { data } = await axios.get("/api/blog/articles/3");
-      return data;
-    },
-  });
-  const { data: products, isLoading: isProductsLoading } = useQuery({
-    queryKey: ["products", 3],
-    queryFn: async () => {
-      const { data } = await axios.get("/api/store/products/");
-      return data.data;
-    },
-  });
-  const {
-    isLoading,
-    data: Data,
-    refetch,
-  } = useQuery({
-    queryKey: ["indexChart"],
-    queryFn: async () => {
-      const result = await axios.get(`/api/?date=${date}`, { withCredentials: true });
-      return result.data;
-    },
-    enabled: router.isReady,
-    onSuccess: (data) => {
-      router.push({ href: "/", query: { date: date } });
-      navigator.serviceWorker?.controller?.postMessage({ action: "logBook", data: data.logBook });
-    },
-    onError: (e) => {
-      console.error(e);
-    },
-  });
+  const { data: articles, isLoading: isArticlesLoading } = useHomeArticles();
+  const { data: products, isLoading: isProductsLoading } = useHomeProducts();
+  const { data: Data, isLoading, refetch } = useIndexCharts(date)
 
   useEffect(() => {
-    refetch();
-    if (!isUserLoading && user === undefined) {
-      router.push("/login");
-    }
     if (!isUserLoading && router.isReady && user?.newUser) {
       router.push("/setup");
     }
@@ -106,14 +75,14 @@ export default function Home() {
 
   return (
     <>
+      <Head lang={i18n.language}>
+        <meta name="title" content="Diabuddies | All-in-One Solution for Diabetes Management" />
+        <meta name="language" content={i18n.language === "ar" ? "Arabic" : "English"} />
+        <title>Home | Diabuddies</title>
+      </Head>
       {!isLoading && !isUserLoading && user ? (
         <>
-          <Head lang={i18n.language}>
-            <meta name="title" content="Diabuddies | All-in-One Solution for Diabetes Management" />
-            <meta name="language" content={i18n.language === "ar" ? "Arabic" : "English"} />
-            <title>Home | Diabuddies</title>
-          </Head>
-          <ResponsiveAppBar user={user} />
+          <ResponsiveAppBar />
           <main className="p-4 relative overflow-y-hidden" dir={getDir(i18n.language)}>
             <span className="font-inter text-2xl text-semibold">{userGreeting}</span>
             {user.newUser ? <CompleteYourProfile /> : null}
@@ -137,7 +106,7 @@ export default function Home() {
               </div>
               <NewLogDialog />
             </div>
-            <section className="w-full h-64 overflow-scroll no-scrollbar mb-8 shadow-lg bg-white rounded-2xl p-2">
+            <section className="w-full h-96 overflow-scroll no-scrollbar mb-8 shadow-lg bg-white rounded-2xl px-2 py-6">
               {Data.logBook[0] ? (
                 <>
                   {Data.logBook.map((log) => {
@@ -258,15 +227,12 @@ export default function Home() {
             ) : null}
           </main>
         </>
-      ) : (
-        <div className="grid h-screen justify-center content-center">
-          <LoadingCircle />
-        </div>
-      )}
+      ) : <HomePageSkeleton />}
     </>
   );
 }
 
+export default withAuth(Home)
 export const getServerSideProps = async ({ locale }) => ({
   props: {
     ...(await serverSideTranslations(locale, ["common", "index"])),

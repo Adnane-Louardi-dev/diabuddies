@@ -14,6 +14,7 @@ import {Button} from "@mui/material";
 import Container from "@mui/material/Container";
 import ResponsiveAppBar from "../components/ResponsiveAppBar";
 import Box from "@mui/material/Box";
+import withAuth from "../components/withAuth";
 
 const PDFViewer = dynamic(
     import("@react-pdf/renderer").then((module) => module.PDFViewer),
@@ -78,4 +79,4 @@ function Pdf() {
     );
 }
 
-export default Pdf;
+export default withAuth(Pdf);

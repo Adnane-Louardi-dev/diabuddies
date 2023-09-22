@@ -16,19 +16,21 @@ import LogBookItem from "../../components/logBookItem";
 import Image from "next/image";
 import Typography from "@mui/material/Typography";
 import {getDir} from "../../utils/getDir";
+import {Icon} from "@iconify/react";
+import LineChartGraph from "../../components/charts/lineChartGraph";
 
 
 export default function UserProfile(){
     const router = useRouter()
-    const username = router.query.username;
+    const token = router.query.token;
     const [activeInsulin, setActiveInsulin] = useState(0);
     const [glucose, setGlucose] = useState(120);
     const [lastInjectionTime, setLastInjectionTime] = useState(moment());
     const { t, i18n } = useTranslation("settings");
     const { t:tc } = useTranslation("common");
 
-    const {data:user,isLoading, isError,error} = useQuery(["profile",username],async ()=>{
-        const {data} = await axios.get(`/api/user/profile/${username}`)
+    const {data:user,isLoading, isError,error} = useQuery(["profile",token],async ()=>{
+        const {data} = await axios.get(`/api/user/profile/${token}`)
         return data;
     }, {enabled: router.isReady})
     if(isLoading || isError){
@@ -51,9 +53,17 @@ export default function UserProfile(){
                 </div>
             </div>
         </div>
-        <section className="flex justify-around my-5">
-            <Glucose props={[...user.recentLogBooks].reverse()} setGlucose={setGlucose} />
-            <ActiveInsulin props={user.recentLogBooks} activeInsulin={activeInsulin} setActiveInsulin={setActiveInsulin} lastInjectionTime={lastInjectionTime} setlastInjectionTime={setLastInjectionTime} />
+        <section className="shadow-2xl p-4 bg-white rounded-2xl my-8">
+            <section className="w-full rounded-xl mb-10 ring-1 ring-gray-300 p-2">
+                <div className="flex justify-between text-diaGray items-center">
+                    <h3 className="text-lg font-semibold font-rubik">{tc("glucose")}</h3>
+                    <Icon icon="ph:info" className="mx-3" />
+                </div>
+                <div className="my-3 bg-white rounded-xl pr-3">
+                    {/* //reverse the graph to show the recent egvs from RTL */}
+                    <LineChartGraph props={user.recentLogBooks.reverse()} />
+                </div>
+            </section>
         </section>
         <Typography variant={"h5"} className={"my-4"}>
             {tc("recentLogs")}
@@ -84,7 +94,7 @@ export default function UserProfile(){
             </div>
         )}
 
-        <section>
+        <section className={"shadow-2xl p-4 bg-white rounded-2xl my-8"}>
             <Typography variant={"h5"} className={"my-4"}>
                 {tc("diabetecDetails")}
             </Typography>

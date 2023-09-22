@@ -32,7 +32,6 @@ export async function getStaticPaths() {
 
 
 export async function getStaticProps({ params, locale}) {
-    console.log("article id ..........", params.id,`${process.env.BACKEND_URL}/blog/article/${params.id}`)
     const res = await axios.get(`${process.env.BACKEND_URL}/blog/article/${params.id}`)
     const article = await res.data;
 

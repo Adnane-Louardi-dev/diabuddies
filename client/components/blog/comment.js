@@ -134,7 +134,6 @@ export const Comment = ({user,comments, content, createdAt, _id,articleId, paren
                         e.stopPropagation()
                         e.preventDefault()
                         setEditMode(false)
-                        console.log(articleId, _id, comment)
                         updateComment({articleId,id:_id, data: {
                                 content: comment
                             }})

@@ -1,8 +1,8 @@
 import ResponsiveAppBar from "../../../components/ResponsiveAppBar";
-import {useQuery} from "@tanstack/react-query";
+import {useInfiniteQuery, useQuery} from "@tanstack/react-query";
 import LoadingCircle from "../../../components/loadingCircle";
 import {useRouter} from "next/router";
-import React from "react";
+import React, {useEffect} from "react";
 import {SmallArticle} from "../../../components/blog/smallArticle";
 import Container from "@mui/material/Container";
 import {Button} from "@mui/material";
@@ -11,12 +11,45 @@ import axios from "axios";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import {useTranslation} from "next-i18next";
 import {Categories} from "../../../components/blog/categories";
+import qs from "qs";
+import {articleQuery} from "../../../utils/baseQueries";
+import {useElementOnScreen} from "../../../customeHooks/useElementOnScreen";
+import ArticlesList from "../../../components/blog/articlesList";
 
-
-export default function Posts({articles,categories}) {
+const PAGE_SIZE = 3
+export default function Posts({articles:initialArticles,categories}) {
     const {t} = useTranslation("blogStore")
-
-
+    const [ref,isVisible] = useElementOnScreen({
+        threshold: 0.8
+    })
+    const {data, fetchNextPage, isFetchingNextPage} = useInfiniteQuery(
+        ["infinitArticles"],
+        async ({pageParam = 1}) => {
+            const query = qs.stringify({
+                pagination: {
+                    page: pageParam,
+                    pageSize: PAGE_SIZE
+                }
+            })
+            const {data:articles} = await axios.get(`/api/service-api/articles?${query}&${articleQuery}`)
+            return articles.data;
+        }, {
+            getNextPageParam: (_,pages) => {
+                return pages.length + 1
+            },
+            initialData: {
+                pages: Array.from({length: Math.ceil(initialArticles.length / PAGE_SIZE)}, (_, i) =>
+                    initialArticles.slice(i * PAGE_SIZE, (i+1) * PAGE_SIZE)
+                ),
+                pageParams: Array.from({length: Math.ceil(initialArticles.length / PAGE_SIZE)}, (_,i)=> i+1)
+            }
+        })
+    const articles = data?.pages.flatMap((page)=>page) ?? initialArticles;
+    useEffect(() => {
+        if(isVisible){
+            fetchNextPage()
+        }
+    }, [isVisible]);
     return <Container maxWidth={"xl"}>
         <ResponsiveAppBar />
         <div className={"flex gap-2 flex-wrap justify-center mb-5"}>
@@ -32,15 +65,14 @@ export default function Posts({articles,categories}) {
                 </Button>
             </Link>
         </div>
-        <div className="grid gap-12 grid-cols-1 lg:grid-cols-2">
-            {articles.map(({id, attributes}) => <SmallArticle {...attributes} id={id} key={id} />)}
-        </div>
+
+        <ArticlesList articles={articles} ref={ref} />
 
     </Container>
 }
 
 export async function getStaticProps({locale}) {
-    const articles = await axios.get(`${process.env.BACKEND_URL}/blog/articles/10`);
+    const articles = await axios.get(`${process.env.BACKEND_URL}/blog/articles/9`);
     const categories = await axios.get(`${process.env.BACKEND_URL}/blog/categories`);
 
     return {

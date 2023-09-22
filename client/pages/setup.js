@@ -15,6 +15,7 @@ import {useQueryClient} from "@tanstack/react-query";
 import {useTranslation} from "next-i18next";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import {getDir} from "../utils/getDir";
+import withAuth from "../components/withAuth";
 
 const steps = [<Gender />, <BirthDate />, <Tall />, <Weight />, <InsulinSensitivity />, <Hb1ac />];
 
@@ -151,4 +152,4 @@ export const getServerSideProps = async ({ locale }) => ({
     ...(await serverSideTranslations(locale, ['common']))
   }
 });
-export default Setup;
+export default withAuth(Setup);

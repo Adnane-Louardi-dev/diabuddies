@@ -4,6 +4,7 @@ const app = express();
 const mongoose = require("mongoose");
 const cors = require("cors");
 const session = require("express-session");
+const httpProxy = require('http-proxy')
 const MongoStore = require("connect-mongo");
 const passport = require("passport");
 const morgan = require("morgan");
@@ -14,11 +15,13 @@ const { isLoggedIn } = require("./middlewares/isLoggedIn");
 const { newActionLog } = require("./controllers/gamifyControllers");
 const { levelsSchema } = require("./models/levelsSchema");
 const initialize = require("./util/DBconnect");
+const {createLevels, initMedicament} = require("./util/initDB");
 //DB connect
 const DBConnection = process.env.DB_CONNECTION || `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.dgq8q.mongodb.net/?retryWrites=true&w=majority&ssl=true`;
 mongoose.set("strictQuery", false);
 mongoose.connect(DBConnection, async () => {
   await createLevels();
+  await initMedicament();
   schedule("0 0 0 * * *", () => {
     gamificationSchema.updateMany(
       {},
@@ -53,6 +56,21 @@ app.use(
 );
 app.use(passport.session());
 app.use(passport.initialize());
+let proxy = httpProxy.createProxyServer({
+    host: 'http://localhost',
+    port: process.env.PORT,
+
+});
+
+proxy.on('proxyReq', function(proxyReq, req, res, options) {
+    proxyReq.setHeader('Authorization', `Bearer ${process.env.STRAPI}`);
+});
+app.use('/service-api', function(req, res, next) {
+    proxy.web(req, res, {
+        target: 'http://localhost:1337/api'
+    }, next);
+});
+
 app.use("/", userRoutes);
 app.use("/login", login);
 app.use("/logbook", logbook);
@@ -89,29 +107,7 @@ app.post("/daily_log_in", isLoggedIn, async (req, res) => {
   return res.status(201).json({ message: "claimed" });
 });
 
-const createLevels = async () => {
-  const existedLevelsCount = await levelsSchema.countDocuments({});
-  if (!existedLevelsCount) {
-    const thirdLevel = await levelsSchema.create({
-      levelName: "Third level",
-      level: 3,
-      minPoints: 100,
-      maxPoints: 300,
-    });
-    const secondLevel = await levelsSchema.create({
-      levelName: "Second level",
-      level: 2,
-      minPoints: 100,
-      maxPoints: 300,
-      nextLevel: thirdLevel._id,
-    });
-    const firstLevel = await levelsSchema.create({
-      levelName: "First level",
-      level: 1,
-      minPoints: 0,
-      maxPoints: 100,
-      nextLevel: secondLevel._id,
-    });
-    await Promise.all([firstLevel.save(), secondLevel.save(), thirdLevel.save()]);
-  }
-};
+
+const initalMedicament = async () => {
+
+}
