@@ -1,7 +1,6 @@
 import Link from "next/link";
 
 const Categories = ({categories}) => {
-    console.log("cat", categories)
    return (
       <div className="my-3 pl-3 overflow-hidden font-rubik">
          <h1 className="text-2xl mt-5">Categories</h1>

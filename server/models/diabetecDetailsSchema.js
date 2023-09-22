@@ -94,12 +94,12 @@ module.exports = {
             {
                 brand: {
                     type: mongoose.Schema.Types.ObjectId,
-                    ref: "medications",
+                    ref: "medicamentModel",
                 },
                 actingTime: String,
                 color: {
                     type: String,
-                    enum: ["orange", "red", "blue", "purple", "grey"],
+                    enum: ["orange", "red", "pink", "purple", "gray"],
                 },
             },
         ],

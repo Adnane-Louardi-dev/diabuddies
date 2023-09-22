@@ -79,6 +79,7 @@ const getArticle = async (req,res) => {
 
 const getArticles = async (req,res,query="") => {
     try {
+        console.log("articles query", req.header.requestUrl)
         const baseQuery = qs.stringify({
             populate: {
                 image: true,

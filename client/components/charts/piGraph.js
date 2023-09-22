@@ -29,7 +29,6 @@ const PiGraph = ({ props }) => {
       { name: "high", value: props?.filter((item) => item.status === "high").length },
       { name: "veryHigh", value: props?.filter((item) => item.status === "veryHigh").length },
     ]);
-    // console.log("piChart", fakeData);
   }, [props]);
   return (
     <ResponsiveContainer width="100%" height={250}>

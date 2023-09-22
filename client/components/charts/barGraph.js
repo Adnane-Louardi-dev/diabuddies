@@ -38,7 +38,6 @@ const BarGraph = ({ props }) => {
     let groupedData = getGroupedData(filtredData, ["carbs", "bolus"]);
     setData(groupedData);
   }, [props]);
-  // console.log(data);
   return (
     <ResponsiveContainer width="100%" height={300}>
       <BarChart

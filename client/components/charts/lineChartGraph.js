@@ -7,7 +7,6 @@ const LineChartGraph = ({ props }) => {
   const {i18n} = useTranslation()
   useEffect(() => {
     setData(props);
-    // console.log("line chart", data);
   }, [props]);
   return (
     <ResponsiveContainer width="100%" height={250}>

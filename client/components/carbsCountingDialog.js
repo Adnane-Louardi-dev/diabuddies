@@ -67,7 +67,6 @@ const CarbsCountingDialog = ({ activeInsulinProp, glucose, lastInjectionTime }) 
   };
 
   useEffect(() => {
-    console.log(user);
     setActiveInsulin(activeInsulinProp);
     let bolus = CalculatingBolus(Macros.carbs, carbsRatio, insulinSensitivity, activeInsulin, localGlucose);
     setbolusDose(bolus);

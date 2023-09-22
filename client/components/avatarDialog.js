@@ -29,7 +29,6 @@ export default function FormDialog({ user }) {
 
   const handleClose = () => {
     setOpen(false);
-    console.log(process.env.FRONTEND_URL);
   };
   const handleUpdateAvatar = () => {
     setOpen(false);
@@ -47,7 +46,6 @@ export default function FormDialog({ user }) {
           },
         }
       )
-      .then((data) => console.log(data));
   };
 
   return (

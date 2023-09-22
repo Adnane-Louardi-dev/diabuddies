@@ -41,7 +41,11 @@ const userSchema = mongoose.Schema(
       type: Boolean,
       default: false,
     },
-    customerId: String
+    customerId: String,
+    profileId: {
+        token: String,
+        regenerate: Date
+    }
   },
   { timestamps: true }
 );

@@ -14,7 +14,6 @@ export const useToggleWishItem = (type) => {
             itemId = String(itemId)
             await queryClient.cancelQueries(["wishList",type])
             const previousWishList = queryClient.getQueryData(["wishList",type])
-            console.log("prev", previousWishList)
             let newWishList
             const item = previousWishList.find((item) => item.id === itemId)
             if(item){
@@ -25,7 +24,6 @@ export const useToggleWishItem = (type) => {
             queryClient.setQueryData(["wishList",type], newWishList)
         },
         onError: (err,productId,context) => {
-            console.log("ctx", context)
             queryClient.setQueryData(["wishList",type],context.wishedProducts)
         },
         onSettled: () => {

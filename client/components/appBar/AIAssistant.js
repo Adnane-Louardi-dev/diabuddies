@@ -14,9 +14,10 @@ import { useGetCurrentUser } from "../../customeHooks/useGetCurrentUser";
 import { useTranslation } from "next-i18next";
 import { useEffect } from "react";
 import LoadingCircle from "../loadingCircle";
+import {AvatarSkeleton} from "../skeleton/avatarSkeleton";
 
 export const AIAssistant = () => {
-  const { user, isLoading: userLoading } = useGetCurrentUser();
+  const { user, isLoading:isUserLoading } = useGetCurrentUser();
   const [anchorElChatBot, setAnchorElChatBot] = React.useState(null);
   const [userQuestion, setUserQuestion] = React.useState("");
   const { t, i18n } = useTranslation();
@@ -42,11 +43,9 @@ export const AIAssistant = () => {
       setDiscussion([...discussion, userQuestion]);
     },
     onSuccess: (result) => {
-      console.log("result", result);
       setDiscussion([...discussion, result.data.assistantOutput]);
     },
     onError: (error) => {
-      console.error(error);
       setDiscussion([
         ...discussion,
         {
@@ -56,9 +55,6 @@ export const AIAssistant = () => {
       ]);
     },
   });
-  if (userLoading) {
-    return <LoadingCircle />;
-  }
   return (
     <Box>
       <Tooltip title="Chat with your AI assistant">
@@ -100,9 +96,10 @@ export const AIAssistant = () => {
           <div className={"h-[300px] scroll-auto overflow-y-scroll pb-5"}>
             {discussion.map(({ role, content }, i) => (
               <div key={i} className={"flex justify-between gap-2 pb-2"}>
-                {role !== "assistant" ? (
-                  <Avatar alt="Profile photo" src={user?.photo} className="h-7 w-7" />
-                ) : (
+                {role !== "assistant" ? !isUserLoading ?
+                        <Avatar alt="Profile photo" src={user?.photo} className="h-7 w-7"/> :
+                        <AvatarSkeleton size={7} />
+                    : (
                   <div>
                     <Icon icon={"healthicons:doctor-outline"} className="h-7 w-7" />
                   </div>
@@ -110,7 +107,10 @@ export const AIAssistant = () => {
                 <p className={"bg-gray-100 rounded-md p-1 w-full"}>{content}</p>
               </div>
             ))}
-            {isLoading && <div>diaDoctor: ...</div>}
+            {isLoading && <div className={"flex align-middle"}>
+                  <Icon icon={"healthicons:doctor-outline"} className="h-7 w-7" />
+                  <Icon icon={"eos-icons:three-dots-loading"} className="h-7 w-7 mt-1" />
+              </div>}
           </div>
           <div className={"flex justify-between gap-2 pt-2"}>
             <TextField

@@ -30,7 +30,6 @@ export default function Product({id, ...product}) {
    },[pictures])
    const [quantity, setQuantity] = useState(1)
    const {t} = useTranslation("blogStore")
-   console.log('cart ', cart, "products", pictures)
    return (
       <>
          <div className="h-screen relative">

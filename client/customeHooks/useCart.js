@@ -84,7 +84,6 @@ export const useUpdateCart = () => {
                     venteEntries: currentCart.venteEntries
                         .filter(entry => entry.product.id !== product.id)
                 }
-                console.log("between cart bro", newCart)
                 const newQty = existedEntry.quantity + quantity,
                     total = roundNum(newQty*existedEntry.product.attributes.selling_price),
                     subtotal = roundNum(newQty*existedEntry.product.attributes.original_price)

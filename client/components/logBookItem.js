@@ -68,7 +68,7 @@ const LogBookItem = ({ props }) => {
         </Alert>
       </Snackbar>
 
-      <div className="grid grid-cols-6 gap-5 p-3 mb-2 rounded-lg shadow-lg border-r-4 border-diaDarkBlue bg-white">
+      <div className="grid grid-cols-6 gap-5 p-3 mb-4 rounded-lg shadow-lg border-2 border-r-4 border-diaDarkBlue bg-white">
         <div className="self-start col-span-1 flex items-center p-1 bg-diaDarkBlue h-12 w-12 rounded-full shadow-md">
           {getMealIcon(data.meal)}
         </div>
@@ -84,7 +84,7 @@ const LogBookItem = ({ props }) => {
           </div>
           {data.glucose && (
             <div className="flex items-center justify-between">
-              <div className={`flex items-center justify-center mr-3 p-1 text-white rounded-lg bg-${data.glucose >= 180 ? "diaRed" : data.glucose <= 70 ? "diaBlue" : "diaGreen"}`}>
+              <div className={`flex items-center justify-center mr-3 p-1 text-white rounded-lg ${data.glucose >= 180 ? "bg-diaRed" : data.glucose <= 70 ? "bg-diaBlue" : "bg-diaGreen"}`}>
                 <Icon icon="ph:drop" className="mx-1" />
                 <span className="font-sourceCode">{`${data.glucose} ${tc("mg/dL")}`}</span>
               </div>
