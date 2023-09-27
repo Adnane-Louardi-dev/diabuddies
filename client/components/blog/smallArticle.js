@@ -13,7 +13,7 @@ export const SmallArticle = ({id,title,introduction, image,categories, horizenta
     return <article className={`w-full ${!horizental ? "w-[340px]" : ""} mx-auto grid ${horizental ? "grid-cols-2" : "grid-cols-1"} gap-4 border-2 border-diaDarkBlue border-solid px-14 py-8 rounded-md hover:shadow-xl hover:cursor-pointer relative`}>
             <div className={""}>
                 <Link href={`/blog/article/${id}`}>
-                    <img src={`${process.env.STRAPI_URL}${thumbnail.url}`} className="mb-2 rounded-lg h-[200px] mb-5" alt={thumbnail.name} width={"100%"} height={"auto"} />
+                    <img src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${thumbnail.url}`} className="mb-2 rounded-lg h-[200px] mb-5" alt={thumbnail.name} width={"100%"} height={"auto"} />
                 </Link>
             </div>
             <div dir={getDir(i18n.language)}>
