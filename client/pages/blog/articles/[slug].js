@@ -44,7 +44,7 @@ export default function CategoryArticles({categories,articles}){
 
 
 export async function getStaticPaths() {
-    const res = await axios.get(`${process.env.BACKEND_URL}/blog/categories/`)
+    const res = await axios.get(`${process.env.BACKEND_URL}/blog/categories/`).catch(()=> ({data: {data: []}}))
     const categories = await res.data.data
     const paths = categories.map((category) => ({
         params: {slug: `${category.attributes.slug}`},
@@ -54,8 +54,8 @@ export async function getStaticPaths() {
 
 
 export async function getStaticProps({ params }) {
-    const articles = await axios.get(`${process.env.BACKEND_URL}/blog/categories/${params.slug}`)
-    const categories = await axios.get(`${process.env.BACKEND_URL}/blog/categories/`)
+    const articles = await axios.get(`${process.env.BACKEND_URL}/blog/categories/${params.slug}`).catch(()=> ({data: {data: []}}))
+    const categories = await axios.get(`${process.env.BACKEND_URL}/blog/categories/`).catch(()=> ({data: {data: []}}))
 
     return { props: { articles:articles.data.data,
             categories: categories.data.data,

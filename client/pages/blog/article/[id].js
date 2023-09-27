@@ -22,7 +22,7 @@ export default function Post({article}) {
 }
 
 export async function getStaticPaths() {
-    const res = await axios.get(`${process.env.BACKEND_URL}/blog/articles/100`)
+    const res = await axios.get(`${process.env.BACKEND_URL}/blog/articles/100`).catch(()=> ({data: {data: []}}))
     const articles = await res.data.data
     const paths = articles.map((article) => ({
         params: {id: `${article.id}`},

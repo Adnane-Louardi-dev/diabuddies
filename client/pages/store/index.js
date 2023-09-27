@@ -20,8 +20,8 @@ const Home = ({products, categories}) => {
 };
 
 export async function getStaticProps({locale}) {
-    const products = await axios.get(`${process.env.BACKEND_URL}/store/products`);
-    const categories = await axios.get(`${process.env.BACKEND_URL}/store/categories`);
+    const products = await axios.get(`${process.env.BACKEND_URL}/store/products`).catch(()=> ({data: {data: []}}));
+    const categories = await axios.get(`${process.env.BACKEND_URL}/store/categories`).catch(()=> ({data: {data: []}}));
 
     return {
         props: {
