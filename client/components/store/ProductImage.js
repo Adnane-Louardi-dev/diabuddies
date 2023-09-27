@@ -4,7 +4,7 @@ import Image from "next/image";
 export const ProductImage = ({src, ...props}) => {
     if(src) {
         return <div {...props} style={{
-            backgroundImage: `url(${encodeURI("http://localhost:1337"+src.attributes?.url)})`
+            backgroundImage: `url(${encodeURI(process.env.STRAPI_URL+src.attributes?.url)})`
         }}/>
     }
     return null
