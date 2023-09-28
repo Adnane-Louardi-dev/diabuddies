@@ -1,18 +1,18 @@
-import React from "react";
+import React, {useState} from "react";
 import { Icon } from "@iconify/react";
-import { Button } from "@mui/material";
+import {Button, Input, TextField} from "@mui/material";
 import Image from "next/image";
+import useLocalStorage from "../customeHooks/useLocalStorage";
+import {useAddFood} from "../customeHooks/useAddFood";
+import {formatQty} from "../utils/utils";
+import InputAdornment from "@mui/material/InputAdornment";
+
+
 
 const FoodModal = ({ props }) => {
-  const addFoodToLocalStorage = async () => {
-    try {
-      let old_data = JSON.parse(localStorage.getItem("addedFood")) || [];
-      old_data.push(props);
-      localStorage.setItem("addedFood", JSON.stringify(old_data));
-    } catch (e) {
-      console.log(e);
-    }
-  };
+  const {addFood} = useAddFood();
+  const [qty ,setQty] = useState(formatQty(props.quantity));
+
   return (
     <div className="grid grid-cols-6 m-2 p-1 rounded-xl bg-diaDarkBlue">
       <div className="relative col-span-1 m-2 rounded-lg bg-slate-200 h-16 w-16">
@@ -23,8 +23,52 @@ const FoodModal = ({ props }) => {
         <p className="font-rubik text-diaBlue font-semibold text-sm">{`${props.nutriments.energy_100g}Kcal, ${props.nutriments.carbohydrates_100g}g carbs per 100g`}</p>
         <p className="font-poppins text-gray-400 text-sm">{`${props.quantity}`}</p>
       </div>
-      <div className="grid items-center justify-items-center col-span-1">
-        <Button className="grid items-center justify-items-center rounded-full bg-diaBlue" onClick={addFoodToLocalStorage}>
+      <div className="flex justify-between align-middle px-2 mt-4 rounded-full bg-diaBlue h-10">
+          <TextField
+              id="outlined-number"
+              type="tel"
+              variant="standard"
+              placeholder="100"
+              value={qty}
+              sx={{
+                  marginTop: "4px",
+                  marginX: 1,
+                  textAlign: "center",
+                  border: "none",
+                  "& .MuiInputBase-root::after, .MuiInputBase-root::before": {
+                      display: "none",
+                  },
+                  "& .MuiInputBase-input": {
+                      fontSize: 16,
+                      fontStyle: "bold",
+                  },
+              }}
+              InputProps={{
+                  endAdornment: (
+                      <InputAdornment
+                          position="end"
+                          sx={{
+                              "& .MuiTypography-root": {
+                                  color: "white",
+                                  fontSize: 16,
+                              },
+                          }}
+                      >
+                          g
+                      </InputAdornment>
+                  ),
+                  style: {
+                      color: "white",
+                  },
+              }}
+              onChange={(e)=>{
+                  setQty(e.target.value)
+              }}
+          />
+        <Button className="grid  items-center justify-items-center"
+            onClick={()=>{
+                addFood({...props, id: crypto.randomUUID(), qty})
+            }}>
           <Icon icon="material-symbols:add-circle-rounded" className="self-center h-7 w-7 text-white" />
         </Button>
       </div>

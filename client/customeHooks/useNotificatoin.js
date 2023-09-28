@@ -13,7 +13,9 @@ export const useNotificatoin = ({successMessage, errorMessage, isError}) => {
     }
     const component = useMemo(()=>{
         return <Snackbar open={notificationOpen} autoHideDuration={6000} onClose={handleClose}>
-            <Alert onClose={handleClose} severity={isError ? "danger" : "success"} sx={{width: '100%'}}>
+            <Alert onClose={handleClose}
+                   severity={isError ? "error" : "success"}
+                   sx={{width: '100%'}}>
                 {isError ? errorMessage : successMessage}
             </Alert>
         </Snackbar>

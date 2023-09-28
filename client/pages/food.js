@@ -7,12 +7,13 @@ import { useRouter } from "next/router";
 import { AppBar, Toolbar, IconButton, Typography, InputAdornment, Select, MenuItem, TextField, Button } from "@mui/material";
 import LoadingCircle from "../components/loadingCircle";
 import Image from "next/image";
+import {useAddFood} from "../customeHooks/useAddFood";
 const Food = () => {
   const router = useRouter();
   const [Barecode, setBarecode] = useState(localStorage.getItem("barecode"));
   const [IsSearching, setIsSearching] = useState(true);
   const [SearchError, setSearchError] = useState(false);
-
+  const {foods,addFood,removeFood} = useAddFood()
   const {
     isLoading: isLoading,
     data: Data,
