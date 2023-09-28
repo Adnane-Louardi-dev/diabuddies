@@ -17,16 +17,25 @@ export const actingTimes = ["3h00min","3h30min", "4h00min","4h30min","5h00min","
 export const colors = ["orange","red","pink","purple","gray"]
 
 export const formatQty = (qty) => {
-    if(qty.includes("l") ){
-        return parseFloat(qty.replace("l","")) * 1000
+    if(qty) {
+        if (qty.includes("mg")) {
+            return parseFloat(qty.replace("mg", "")) / 1000
+        }
+        if(qty.includes("ml")){
+            return parseFloat(qty.replace("ml", ""))
+        }
+        if (qty.includes("cl")) {
+            return parseFloat(qty.replace("l", "")) * 10
+        }
+        if (qty.includes("dl")) {
+            return parseFloat(qty.replace("l", "")) * 100
+        }
+        if (qty.includes("l")) {
+            return parseFloat(qty.replace("l", "")) * 1000
+        }
+        return parseFloat(qty.replace("g", "").replace("ml", ""))
     }
-    if(qty.includes("dl")){
-        return parseFloat(qty.replace("l","")) / 10
-    }
-    if(qty.includes("mg")){
-        return parseFloat(qty.replace("mg","")) / 1000
-    }
-    return parseFloat(qty.replace("g","").replace("ml",""))
+    return undefined
 }
 
 export const kcalCalculate = (data) => {

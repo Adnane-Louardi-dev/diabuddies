@@ -12,18 +12,18 @@ import InputAdornment from "@mui/material/InputAdornment";
 const FoodModal = ({ props }) => {
   const {addFood} = useAddFood();
   const [qty ,setQty] = useState(formatQty(props.quantity));
-
+  //
   return (
     <div className="grid grid-cols-6 m-2 p-1 rounded-xl bg-diaDarkBlue">
       <div className="relative col-span-1 m-2 rounded-lg bg-slate-200 h-16 w-16">
         <Image src={props.image_url || "/diabuddies_logo_D_placeholder.png"} alt={props.product_name} style={{ objectFit: "cover" }} fill sizes="(max-width: 20px), (max-width: 30px)" className="rounded-lg" />
       </div>
-      <div className="grid col-span-4 mx-2">
+      <div className="grid col-span-3 mx-1">
         <h2 className="font-sourceCode text-lg font-semibold text-white">{props.product_name}</h2>
         <p className="font-rubik text-diaBlue font-semibold text-sm">{`${props.nutriments.energy_100g}Kcal, ${props.nutriments.carbohydrates_100g}g carbs per 100g`}</p>
         <p className="font-poppins text-gray-400 text-sm">{`${props.quantity}`}</p>
       </div>
-      <div className="flex justify-between align-middle px-2 mt-4 rounded-full bg-diaBlue h-10">
+      <div className="flex justify-between align-middle text-white mt-4 min-w-[140px] rounded-full bg-diaBlue h-10">
           <TextField
               id="outlined-number"
               type="tel"
@@ -65,7 +65,7 @@ const FoodModal = ({ props }) => {
                   setQty(e.target.value)
               }}
           />
-        <Button className="grid  items-center justify-items-center"
+        <Button className="grid items-center justify-items-center"
             onClick={()=>{
                 addFood({...props, id: crypto.randomUUID(), qty})
             }}>

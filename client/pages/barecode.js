@@ -3,28 +3,47 @@ import { useZxing } from "react-zxing";
 import { AppBar, Toolbar, IconButton, Typography, TextField, Button } from "@mui/material";
 import { Icon } from "@iconify/react";
 import { useRouter } from "next/router";
+import {useQuery} from "@tanstack/react-query";
+import axios from "axios";
+import LoadingCircle from "../components/loadingCircle";
+import FoodModal from "../components/foodModal";
 
 export default function Barecode() {
   const router = useRouter();
-  const [result, setResult] = useState("");
+  const [barecode, setBarecode] = useState("");
+  const [food,setFood] = useState(undefined)
+  const {
+      isLoading: isLoading,
+      isError,
+      data,
+      refetch
+  } = useQuery({
+    queryKey: ["foodBarecode", barecode],
+    queryFn: async () => {
+      const result = await axios.get(`/food/api/product/${barecode}&fields=product_name,nutriments,image_url,quantity`, { withCredentials: true });
+      console.log(result.data);
+      return result.data;
+    },
+    enabled: barecode !== "",
+    onSuccess: () => {
+        setBarecode("")
+    },
+    onError: () => {
+        setBarecode("")
+    }
+  });
   const { ref } = useZxing({
     onDecodeResult(result) {
-      setResult(result.getText());
-      localStorage.setItem("barecode", result.getText());
-    },
-  });
-  useEffect(() => {
-    if (result) {
-      localStorage.setItem("barecode", result);
+      setBarecode(result.getText());
+      refetch();
     }
-  }, [result]);
-
+  });
   const handleClose = () => {
-    router.push("/food");
+    router.push("/add");
   };
 
   return (
-    <div className="bg-diaDarkBlue px-3 h-[100vh]">
+    <div className="bg-diaDarkBlue px-3 min-h-[100vh]">
       <AppBar sx={{ position: "relative", borderRadius: "10px" }} className="bg-white my-3 text-diaDarkBlue">
         <Toolbar>
           <IconButton edge="start" color="inherit" onClick={handleClose} aria-label="close">
@@ -44,18 +63,26 @@ export default function Barecode() {
           <video ref={ref} style={{ borderRadius: "25px" }} />
         </div>
       </section>
-      <section className="bg-white rounded-lg">
+      <section className="bg-white rounded-lg mb-5">
         <TextField
           id="outlined-controlled"
           label="Barecode"
           type="number"
-          value={result}
+          value={barecode}
           onChange={(event) => {
-            setResult(event.target.value);
+            setBarecode(event.target.value);
           }}
           className="w-full"
         />
       </section>
+
+      {barecode !== "" ? isLoading ? <LoadingCircle /> :
+          !isError? <FoodModal props={data.product} /> : <div className="p-5">
+              <div className="flex p-3 items-center justify-center rounded-lg bg-diaRed">
+                  <h1 className="font-rubik text-lg text-white">No food found by this barecode</h1>
+              </div>
+          </div> : null
+      }
 
       <Button onClick={handleClose} className="w-full p-3 rounded-lg my-3 shadow-md bg-blue-600 text-white font-poppins font-xl">
         Accept
