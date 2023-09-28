@@ -12,7 +12,6 @@ export const Categories = ({categories}) => {
   const router = useRouter()
   const {t} = useTranslation()
   const currentSlug = router.query.slug
-  console.log("categories", categories,"currentSlug",currentSlug)
   return <>
       {categories.map(({attributes})=>(
           <Link href={`/blog/articles/${attributes.slug}`} key={attributes.slug}>

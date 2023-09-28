@@ -11,9 +11,10 @@ import {orderStatusEnum} from "../../../utils/enums";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import {useTranslation} from "next-i18next";
 import {getDir} from "../../../utils/getDir";
+import withAuth from "../../../components/withAuth";
 
 
-export default function Orders() {
+function Orders() {
 
     const {data:orders, isLoading} = useQuery({
         queryKey: ["orders"],
@@ -128,3 +129,5 @@ export const getServerSideProps = async ({ locale }) => ({
         ...(await serverSideTranslations(locale, ['blogStore']))
     }
 });
+
+export default withAuth(Orders)

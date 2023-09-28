@@ -14,14 +14,14 @@ export default function Product({id, ...product}) {
    const gallery = useMemo(()=>{
       const firstImage = {
          id: thumbnail.data.id,
-         src: "http://localhost:1337" + thumbnail.data.attributes.url,
+         src: process.env.NEXT_PUBLIC_STRAPI_URL + thumbnail.data.attributes.url,
          alt: thumbnail.data.attributes.alternativeText,
          width: thumbnail.data.attributes.width,
          height: thumbnail.data.attributes.height,
       }
       const otherImages = pictures?.data ? pictures.data.map((picture) => ({
          id: picture.id,
-         src: "http://localhost:1337" + picture.attributes.url,
+         src: process.env.NEXT_PUBLIC_STRAPI_URL + picture.attributes.url,
          alt: picture.attributes.alternativeText,
          width: picture.attributes.width,
          height: picture.attributes.height,
@@ -30,7 +30,6 @@ export default function Product({id, ...product}) {
    },[pictures])
    const [quantity, setQuantity] = useState(1)
    const {t} = useTranslation("blogStore")
-   console.log('cart ', cart, "products", pictures)
    return (
       <>
          <div className="h-screen relative">

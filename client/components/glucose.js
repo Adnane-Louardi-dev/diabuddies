@@ -12,7 +12,6 @@ const Glucose = ({ props, setGlucose }) => {
       if (element.glucose) {
         setLocalGlucoseLog(element);
         setGlucose(element.glucose);
-        console.log(element);
       }
       return null;
     });

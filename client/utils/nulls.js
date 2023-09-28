@@ -16,3 +16,8 @@ export const nullLogBook = {
     glucose: 0,
     basal: 0
 }
+export const nullMedication = {
+    brand: undefined,
+    actingTimes: "3h00min",
+    color: undefined
+}

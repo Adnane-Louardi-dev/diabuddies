@@ -14,6 +14,7 @@ import {useQuery} from "@tanstack/react-query";
 import axios from "axios";
 import Container from "@mui/material/Container";
 import ResponsiveAppBar from "../../../components/ResponsiveAppBar";
+import ArticlesList from "../../../components/blog/articlesList";
 
 
 export default function CategoryArticles({categories,articles}){
@@ -36,18 +37,15 @@ export default function CategoryArticles({categories,articles}){
                 </Button>
             </Link>
         </div>
-        <div className="grid gap-12 grid-cols-1 lg:grid-cols-2">
-            {articles.map(({id, attributes}) => <SmallArticle {...attributes} id={id} key={id} />)}
-        </div>
+        <ArticlesList articles={articles} />
 
     </Container>
 }
 
 
 export async function getStaticPaths() {
-    const res = await axios.get(`${process.env.BACKEND_URL}/blog/categories/`)
+    const res = await axios.get(`${process.env.BACKEND_URL}/blog/categories/`).catch(()=> ({data: {data: []}}))
     const categories = await res.data.data
-    console.log("categories", categories)
     const paths = categories.map((category) => ({
         params: {slug: `${category.attributes.slug}`},
     }))
@@ -56,8 +54,8 @@ export async function getStaticPaths() {
 
 
 export async function getStaticProps({ params }) {
-    const articles = await axios.get(`${process.env.BACKEND_URL}/blog/categories/${params.slug}`)
-    const categories = await axios.get(`${process.env.BACKEND_URL}/blog/categories/`)
+    const articles = await axios.get(`${process.env.BACKEND_URL}/blog/categories/${params.slug}`).catch(()=> ({data: {data: []}}))
+    const categories = await axios.get(`${process.env.BACKEND_URL}/blog/categories/`).catch(()=> ({data: {data: []}}))
 
     return { props: { articles:articles.data.data,
             categories: categories.data.data,

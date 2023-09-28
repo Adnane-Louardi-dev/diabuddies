@@ -13,9 +13,10 @@ import {useTranslation} from "next-i18next";
 import LanguageSwitcher from "./LanguageSwitcher";
 import {useRouter} from "next/router";
 import {getDir} from "../../utils/getDir";
+import {AvatarSkeleton} from "../skeleton/avatarSkeleton";
 
 export const SettingsMenu = () => {
-    const { user } = useGetCurrentUser();
+    const { user, isLoading} = useGetCurrentUser();
     const [anchorElUser, setAnchorElUser] = React.useState(null);
     const {t,i18n} = useTranslation();
     const router = useRouter();
@@ -31,7 +32,9 @@ export const SettingsMenu = () => {
         <>
             <Tooltip title="Open settings">
                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                    <Avatar alt="Profile photo" src={user?.photo} className="h-12 w-12" />
+                    {!isLoading ?
+                        <Avatar alt="Profile photo" src={user?.photo} className="h-12 w-12"/> :
+                        <AvatarSkeleton />}
                 </IconButton>
             </Tooltip>
             <Menu

@@ -9,6 +9,7 @@ import {t} from "i18next";
 import {useTranslation} from "next-i18next";
 import {useRouter} from "next/router";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
+import {MyActionSkeletonComponent} from "../components/gamifiy/MyActionSkeletonComponent";
 
 
 export default function Leaderboard() {
@@ -18,12 +19,14 @@ export default function Leaderboard() {
         return data
     })
 
-    console.log("leaderBoardPeople", leaderBoardPeople)
-
     return <Container maxWidth={"xl"}>
         <ResponsiveAppBar />
         <Typography typography={"h4"} className={"my-3"} textAlign={"center"}>{t("leaderboard")}</Typography>
-
+        {isLoading && <section role={"status"}>
+            <MyActionSkeletonComponent parentClass={"border-b-2"} />
+            <MyActionSkeletonComponent parentClass={"border-b-2"} />
+            <MyActionSkeletonComponent parentClass={"border-b-2"} />
+        </section>}
         {!isLoading && <section>
             {leaderBoardPeople.map(({user,points,level},index)=> <article
                 className={"grid grid-cols-6 gap-5 p-3 mb-2 rounded-lg shadow-lg border-b-2 border-diaDarkBlue bg-white"}

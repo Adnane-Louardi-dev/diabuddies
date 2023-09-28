@@ -1,89 +1,37 @@
 version: "3"
 services:
-  front-service:
+  front-service-4:
     build: ./client
     ports:
       - "3001:3001"
-    env_file:
-      - "./.client_env"
-    networks:
-      dia-network:
-        ipv4_address: 10.56.1.19
-  backend-service-dev-3:
-    build: ./server
-    ports:
-      - "3000:3000"
-    depends_on:
-      - db
-    environment:
-      - STRAPI_URL:http://10.56.1.17:1337/api
-    networks:
-      dia-network:
-        ipv4_address: 10.56.1.18
-  backend-service:
+    network_mode: "host"
+  backend-service-7:
     build: ./server
     restart: unless-stopped
     ports:
       - "3000:3000"
-    depends_on:
-      - db
-    env_file:
-      - "./.server_env"
-    networks:
-      dia-network:
-        ipv4_address: 10.56.1.18
-  strapi-service:
+    environment:
+      DB_CONNECTION: "mongodb+srv://adnane:adonatos@cluster0.dgq8q.mongodb.net/?retryWrites=true&w=majority&ssl=true"
+      STRAPI: "54d1d11e99a1026e274a9b8d7fafa8053c4537c708a08a97ac1ec94fee584021b83a77f72d1a4d6a3212f449b528bc990cd0e6ccca7045fb9343fe4c83ff4aac6e0cc794dc913e220bd3a6ac326df07b86e2d460cc73d238501e2f46e9fa039fd7c5090bd5b8327792f8a3d2294fcbad75dab55fd4d304cba5b9de511f2c0fd2"
+    network_mode: "host"
+  strapi-service-4:
     build: ./blog
     depends_on:
-      - mysql
+      - mysql-4
     ports:
       - "1337:1337"
-    env_file:
-      - "./.blog_env"
     volumes:
       - strapi:/usr/src/app
-    networks:
-      dia-network:
-        ipv4_address: 10.56.1.17
-  website:
-    image: nginx
-    restart: always
-    ports:
-      - "80:80"
-    networks:
-      dia-network:
-        ipv4_address: 10.56.1.20
-  db:
-    image: mongo
-    restart: always
-    environment:
-      MONGO_INITDB_ROOT_USERNAME: root
-      MONGO_INITDB_ROOT_PASSWORD: ourBeautifulPassWord
-    ports:
-      - "27017:27017"
-    volumes:
-      - mongodb:/data/db
-    networks:
-      dia-network:
-        ipv4_address: 10.56.1.21
-  mysql:
+    network_mode: "host"
+  mysql-4:
     image: mysql
     restart: always
     environment:
       MYSQL_ROOT_PASSWORD: example
+      MYSQL_DATABASE: strapi
     ports:
       - "3306:3306"
-    volumes:
-      - mysql:/var/lib/mysql
-    networks:
-      dia-network:
-        ipv4_address: 10.56.1.15
-networks:
-  dia-network:
-    ipam:
-      driver: default
-      config:
-        - subnet: "10.56.1.0/24"
+    network_mode: "host"
 volumes:
   mongodb:
   strapi:

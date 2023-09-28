@@ -2,6 +2,8 @@ const userSchema = require("../models/userSchema");
 const logBookItemsSchema = require("../models/logBookItemsSchema");
 const { diabetecDetailsSchema } = require("../models/diabetecDetailsSchema");
 const { newActionLog } = require("./gamifyControllers");
+const {orderQuery} = require("../util/baseQueries");
+const {medicamentModel} = require("../models/medicamentSchema");
 
 module.exports = {
   updateUser: async (req, res) => {
@@ -14,6 +16,7 @@ module.exports = {
           return res.json({ user });
         })
         .catch((err) => res.json(err));
+      console.log("changed user", changedData)
     } catch (e) {
       console.error(e);
       return res.json({ msg: e });
@@ -29,14 +32,21 @@ module.exports = {
   },
   getMeDetailed: async (req, res) => {
     const detailedUser = await userSchema.findById(req.user._id);
-    const diabetecDetails = await diabetecDetailsSchema.findOne({
-      userId: req.user._id,
-    });
+    const diabetecDetails = await diabetecDetailsSchema
+        .findOne({
+          userId: req.user._id,
+        })
+        .populate({
+            path: "medications",
+            populate: {
+                path: "brand"
+            }
+        });
     return res.status(200).json({ detailedUser, diabetecDetails });
   },
   getProfile: async (req,res) => {
     try {
-        const user = await userSchema.findOne({userName: req.params.username})
+        const user = await userSchema.findOne({profileId: {token: req.params.token}})
         if(user){
             const diabetecDetails = await diabetecDetailsSchema.findOne({
                 userId: user._id,
@@ -54,17 +64,52 @@ module.exports = {
                 recentLogBooks
             })
         }
-        return res.status(404).json({msg: "didn't find a user with this username. verify it pleaser."})
+        return res.status(404).json({msg: "didn't find a user with this token. verify it pleaser."})
     } catch (e){
         return res.status(404).json({msg: "some error occurred, try again later."})
     }
   },
+  getMedicaments: async (req,res) => {
+      const medicaments = await medicamentModel.find({})
+      return res.status(200).json(medicaments)
+  },
   addMedicament: async (req, res) => {
     try {
-      const userId = req.user.id;
-      const user = await userSchema.findById(userId);
-      user.medications = [...user.medications, req.body];
-      await user.save();
+      const {brand, color, actingTime} = req.body;
+      const user = await diabetecDetailsSchema.findOne({userId: req.user._id});
+      user.medications = [...user.medications, {brand,color,actingTime }];
+      await user.save()
+      return res.status(201).json(user.medications);
+    } catch (e) {
+      console.error(e);
+      return res.json({ msg: e });
+    }
+  },
+  editMedicament: async (req,res) => {
+      try {
+          const {brand, color, actingTime, id} = req.body;
+          const user = await diabetecDetailsSchema.findOne({userId: req.user._id});
+          const medication = user.medications.find((medication)=> medication._id.equals(id));
+          if(medication) {
+              medication.brand = brand;
+              medication.color = color;
+              medication.actingTime = actingTime;
+              await user.save()
+              return res.status(201).json(user.medications);
+          }
+          throw new Error("this medication doesn't exist")
+      } catch (e) {
+          console.error(e);
+          return res.json({ msg: e });
+      }
+  },
+  deleteMedicament: async (req,res) => {
+    try {
+      const {id} = req.params;
+      const user = await diabetecDetailsSchema.findOne({userId: req.user._id});
+      console.log("to delete", id)
+      user.medications = user.medications.filter((medication)=>!medication._id.equals(id));
+      await user.save()
       return res.status(201).json(user.medications);
     } catch (e) {
       console.error(e);

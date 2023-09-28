@@ -31,9 +31,16 @@ module.exports = {
         })
     },
     getUserActions: async (req,res) => {
-        const actions = await actionLogSchema.find({
-            userId: req.user._id
-        }).sort({ _id: -1 })
+        const pageSize = req.query.pageSize ?? 10;
+        const pageParam = req.query.pageParam ?? 1;
+        console.log({pageSize,pageParam})
+        const actions = await actionLogSchema
+            .find({
+                userId: req.user._id
+            })
+            .sort({ _id: -1 })
+            .limit(pageSize)
+            .skip(pageSize*(pageParam-1))
         return res.status(200).json(actions)
     },
     getLeaderboard: async (req,res) => {

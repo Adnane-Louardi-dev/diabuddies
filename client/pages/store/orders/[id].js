@@ -11,9 +11,10 @@ import TextField from "@mui/material/TextField";
 import React from "react";
 import {useForm} from "react-hook-form";
 import useLocalStorage from "../../../customeHooks/useLocalStorage";
+import withAuth from "../../../components/withAuth";
 
 
-export default function Checkout() {
+function Checkout() {
 
     const router = useRouter()
     const {query: {id}} = router
@@ -77,9 +78,8 @@ export default function Checkout() {
             </div>
 
         </form>
-        <pre>
-                {JSON.stringify(checkout,null,2)}
-            </pre>
     </StoreLayout>
 }
+
+export default withAuth(Checkout)
 

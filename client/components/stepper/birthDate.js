@@ -6,7 +6,6 @@ import {useTranslation} from "next-i18next";
 const BirthDate = ({data, setData}) => {
     const {i18n,t} = useTranslation()
     const handleBirthDateChange = (newBirthDateValue) => {
-        console.log("date", newBirthDateValue._d)
         setData(oldData => ({...oldData, birthDate: newBirthDateValue._d}))
     };
     return (
