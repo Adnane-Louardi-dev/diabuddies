@@ -135,7 +135,17 @@ export default function Home() {
                 </div>
                 <h3 className="text-lg text-diaGray font-semibold font-rubik">{tc("recently")}</h3>
               </div>
-              <NewLogDialog />
+              <Button
+                variant="filled"
+                onClick={() => {
+                  router.push("/add");
+                }}
+                className="flex justify-between items-center text-diaBlue bg-diaBlue bg-opacity-25 pt-2 rounded-full shadow-md"
+              >
+                {tc("add")}
+                <Icon icon="material-symbols:add-circle-rounded" className="mx-1 mb-0.5" />
+              </Button>
+              {/* <NewLogDialog /> */}
             </div>
             <section className="w-full h-64 overflow-scroll no-scrollbar mb-8 shadow-lg bg-white rounded-2xl p-2">
               {Data.logBook[0] ? (

@@ -9,7 +9,7 @@ import LoadingCircle from "../components/loadingCircle";
 import Image from "next/image";
 const Food = () => {
   const router = useRouter();
-  const [Codebare, setCodebare] = useState(localStorage.getItem("codeBare"));
+  const [Barecode, setBarecode] = useState(localStorage.getItem("barecode"));
   const [IsSearching, setIsSearching] = useState(true);
   const [SearchError, setSearchError] = useState(false);
 
@@ -18,9 +18,9 @@ const Food = () => {
     data: Data,
     refetch,
   } = useQuery({
-    queryKey: ["foodCodebare", Codebare],
+    queryKey: ["foodBarecode", Barecode],
     queryFn: async () => {
-      const result = await axios.get(`/food/api/product/${Codebare}&fields=product_name,nutriments,image_url,quantity`, { withCredentials: true });
+      const result = await axios.get(`/food/api/product/${Barecode}&fields=product_name,nutriments,image_url,quantity`, { withCredentials: true });
       console.log(result.data);
       return result.data;
     },
@@ -43,6 +43,7 @@ const Food = () => {
       console.log(old_data);
       old_data.push(Data.product);
       localStorage.setItem("addedFood", JSON.stringify(old_data));
+      handleClose();
     } catch (e) {
       console.log(e);
     }

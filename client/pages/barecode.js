@@ -4,23 +4,23 @@ import { AppBar, Toolbar, IconButton, Typography, TextField, Button } from "@mui
 import { Icon } from "@iconify/react";
 import { useRouter } from "next/router";
 
-export default function Codebare() {
+export default function Barecode() {
   const router = useRouter();
   const [result, setResult] = useState("");
   const { ref } = useZxing({
     onDecodeResult(result) {
       setResult(result.getText());
-      localStorage.setItem("codeBare", result.getText());
+      localStorage.setItem("barecode", result.getText());
     },
   });
   useEffect(() => {
     if (result) {
-      localStorage.setItem("codeBare", result);
+      localStorage.setItem("barecode", result);
     }
   }, [result]);
 
   const handleClose = () => {
-    router.push("/searchForFood");
+    router.push("/food");
   };
 
   return (
@@ -31,13 +31,13 @@ export default function Codebare() {
             <Icon icon="mingcute:left-line" className="h-7 w-7" />
           </IconButton>
           <Typography sx={{ ml: 2, flex: 1 }} variant="h6" component="div" className="font-poppins">
-            Scan Codebare
+            Scan Barecode
           </Typography>
         </Toolbar>
       </AppBar>
       <section className="flex flex-col justify-center my-24">
         <div className="text-center mb-20">
-          <h1 className="font-sourceCode font-semibold text-white text-lg">Place the codebare inside area</h1>
+          <h1 className="font-sourceCode font-semibold text-white text-lg">Place the barecode inside area</h1>
           <p className="font-sourceCode text-xs my-2 text-white">scanning will starts automatically</p>
         </div>
         <div className="self-center">
