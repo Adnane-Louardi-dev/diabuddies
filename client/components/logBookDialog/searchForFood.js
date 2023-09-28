@@ -8,20 +8,19 @@ import IconButton from "@mui/material/IconButton";
 import Typography from "@mui/material/Typography";
 import Slide from "@mui/material/Slide";
 import { Icon } from "@iconify/react";
-import FoodModal from "./foodModal";
+import FoodModal from "../foodModal";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-import LoadingCircle from "../components/loadingCircle";
+import LoadingCircle from "../loadingCircle";
 
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
 
-export default function SearchForFood({ addedFood, setAddedFood }) {
+export default function SearchForFood({ isSearchForAMealOpen, setIsSearchForAMealOpen }) {
   const [searchQuery, setsearchQuery] = useState(undefined);
   const [IsSearching, setIsSearching] = useState(undefined);
-  const [open, setOpen] = useState(false);
   const [SearchError, setSearchError] = useState(false);
   const {
     isLoading: isLoading,
@@ -46,11 +45,11 @@ export default function SearchForFood({ addedFood, setAddedFood }) {
     },
   });
   const handleClickOpen = () => {
-    setOpen(true);
+    setIsSearchForAMealOpen(true);
   };
 
   const handleClose = () => {
-    setOpen(false);
+    setIsSearchForAMealOpen(false);
   };
 
   useEffect(() => {
@@ -63,7 +62,7 @@ export default function SearchForFood({ addedFood, setAddedFood }) {
         <h2 className="font-rubik text-sm text-diaDarkBlue my-2">Search for a meal</h2>
         <Icon icon="tabler:search" className="h-10 w-10 text-diaDarkBlue" />
       </button>
-      <Dialog fullScreen open={open} onClose={handleClose} TransitionComponent={Transition}>
+      <Dialog fullScreen open={isSearchForAMealOpen} onClose={handleClose} TransitionComponent={Transition}>
         <div className="p-2">
           <AppBar sx={{ position: "relative", borderRadius: "10px" }} className="bg-diaDarkBlue">
             <Toolbar>
@@ -103,7 +102,7 @@ export default function SearchForFood({ addedFood, setAddedFood }) {
         ) : (
           <section className="p-3">
             {Data?.products.map((product, i) => {
-              return <FoodModal key={i} name={product.product_name} image={product.image_url} protein={product.nutriments.proteins_100g} fat={product.nutriments.fat_100g} carbs={product.nutriments.carbohydrates_100g} kcal={product.nutriments["energy-kcal_100g"]} weight={product.quantity} addedFood={addedFood} setAddedFood={setAddedFood} />;
+              return <FoodModal key={i} props={product} />;
             })}
           </section>
         )}

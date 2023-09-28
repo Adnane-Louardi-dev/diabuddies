@@ -48,6 +48,7 @@ export default function Codebare() {
         <TextField
           id="outlined-controlled"
           label="Barecode"
+          type="number"
           value={result}
           onChange={(event) => {
             setResult(event.target.value);

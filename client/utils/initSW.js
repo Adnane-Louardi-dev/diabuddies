@@ -9,7 +9,7 @@ export function initSW() {
         return Notification.requestPermission().then((res) => {
           if (res === "granted" && status.state === "granted") {
             return registration.periodicSync.register("show-notification", {
-              minInterval: 1000,
+              minInterval: 1000 * 60 * 60 * 3,
             });
           }
         });

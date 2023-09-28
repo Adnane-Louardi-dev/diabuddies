@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import moment from "moment";
 import Button from "@mui/material/Button";
@@ -15,15 +15,16 @@ import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { Alert, Snackbar } from "@mui/material";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
-import { NutrationLogInput } from "./NutrationLogInput";
+import { NutrationLogInput } from "../NutrationLogInput";
 import { styled } from "@mui/material/styles";
 import Switch from "@mui/material/Switch";
-import { AddMealNameModal } from "./addMealNameModal";
-import { GetSavedMealsModal } from "./getSavedMealsModal";
-import { nullLogBook } from "../utils/nulls";
+import { AddMealNameModal } from "../addMealNameModal";
+import { GetSavedMealsModal } from "../getSavedMealsModal";
+import { nullLogBook } from "../../utils/nulls";
 import { useTranslation } from "next-i18next";
 import SearchForFood from "./searchForFood";
 import Image from "next/image";
+import Link from "next/link";
 
 const Android12Switch = styled(Switch)(({ theme }) => ({
   padding: 8,
@@ -61,6 +62,7 @@ export default function NewLogDialog() {
   const [mealModalOpen, setMealModalOpen] = useState(false);
   //won't forget this model to use it later
   const [savedMealsModalOpen, setSavedMealsModalOpen] = useState(false);
+  const [isSearchForAMealOpen, setIsSearchForAMealOpen] = useState(false);
   const [addedFood, setAddedFood] = useState([]);
   const [data, setData] = useState({ ...nullLogBook, time: moment()._d, food: addedFood });
   const queryClient = useQueryClient();
@@ -94,18 +96,21 @@ export default function NewLogDialog() {
   });
 
   useEffect(() => {
+    setAddedFood(JSON.parse(localStorage.getItem("addedFood")) || []);
     setInsulinType(data.basal !== 0 ? "basal" : "bolus");
-    let newMacrosBasedOnFood = addedFood?.reduce(
+    let newMacrosBasedOnFoodChange = addedFood?.reduce(
       (accum, item) => {
-        accum.carbs += parseFloat(item?.carbs);
-        accum.protein += parseFloat(item?.protein);
-        accum.fat += parseFloat(item?.fat);
+        accum.carbs += parseFloat(item?.nutriments.carbohydrates_100g);
+        accum.protein += parseFloat(item?.nutriments.proteins_100g);
+        accum.fat += parseFloat(item?.nutriments.fat_100g);
         return accum;
       },
       { ...nullLogBook }
     );
-    setData({ ...data, ...newMacrosBasedOnFood });
-  }, [data.bolus, data.basal, addedFood]);
+    setData({ ...data, ...newMacrosBasedOnFoodChange });
+    console.log("halooo");
+  }, [data.bolus, data.basal, isSearchForAMealOpen]);
+
   const handlePOSTNewLog = async () => {
     setDateOpen(false);
     await addNewLogBook(data);
@@ -219,11 +224,14 @@ export default function NewLogDialog() {
             </ToggleButtonGroup>
           </section>
           <section className="grid grid-cols-2 gap-4 items-center justify-around my-3 py-1">
-            <button variant="outlined" className="grid col-span-1 w-full justify-items-center mx-2 py-2 px-3 rounded-lg ring-2 ring-diaDarkBlue bg-slate-300">
-              <h2 className="font-rubik text-sm text-diaDarkBlue my-2">{t("scan_barcode")}</h2>
-              <Icon icon="material-symbols:barcode" className="h-10 w-10 text-diaDarkBlue" />
-            </button>
-            <SearchForFood setAddedFood={setAddedFood} addedFood={addedFood} />
+            {/* <Barecode /> */}
+            <Link href={"/codebare"} passHref>
+              <button variant="outlined" className="grid col-span-1 w-full justify-items-center mx-2 py-2 px-3 rounded-lg ring-2 ring-diaDarkBlue bg-slate-300">
+                <h2 className="font-rubik text-sm text-diaDarkBlue my-2">{t("scan_barcode")}</h2>
+                <Icon icon="material-symbols:barcode" className="h-10 w-10 text-diaDarkBlue" />
+              </button>
+            </Link>
+            <SearchForFood isSearchForAMealOpen={isSearchForAMealOpen} setIsSearchForAMealOpen={setIsSearchForAMealOpen} />
           </section>
           <div className="flex justify-between items-center">
             <h3 className="font-sourceCode text-diaGray text-md">{t("mealInfo")}</h3>
@@ -402,7 +410,7 @@ export default function NewLogDialog() {
               }}
             />
           </div>
-          {addedFood[0] ? (
+          {addedFood.length > 0 ? (
             <>
               <h3 className="font-sourceCode text-diaGray text-md">Meal's Food Added</h3>
               <div className="rounded-lg my-3 bg-diaDarkBlue">
@@ -410,13 +418,14 @@ export default function NewLogDialog() {
                   return (
                     <div key={i} className="flex items-center justify-between mx-2 border-t-2 border-gray-700">
                       <div className="mx-2 p-2">
-                        <h1 className="text-blue-500 font-poppins">{`${oneFood.name}`}</h1>
-                        <p className="text-gray-500 font-poppins">{`100g (${oneFood.carbs}g carbs)`} </p>
+                        <h1 className="text-blue-500 font-poppins">{`${oneFood.product_name}`}</h1>
+                        <p className="text-gray-500 font-poppins">{`100g (${oneFood.nutriments.carbohydrates_100g}g carbs)`} </p>
                       </div>
                       <Button
                         className="self-center"
                         onClick={() => {
-                          let filredAddedFood = addedFood.filter((item, j) => addedFood[j] !== addedFood[i]);
+                          let filredAddedFood = addedFood?.filter((item, j) => addedFood[j] !== addedFood[i]);
+                          localStorage.setItem("addedFood", JSON.stringify(filredAddedFood));
                           setAddedFood(filredAddedFood);
                         }}
                       >

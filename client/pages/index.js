@@ -9,7 +9,7 @@ import ResponsiveAppBar from "../components/ResponsiveAppBar";
 import Glucose from "../components/glucose";
 import ActiveInsulin from "../components/activeInsulin";
 import LogBookItem from "../components/logBookItem";
-import NewLogDialog from "../components/newLogDialog";
+import NewLogDialog from "../components/logBookDialog/newLogDialog";
 import LoadingCircle from "../components/loadingCircle";
 import LineChartGraph from "../components/charts/lineChartGraph";
 import PiGraph from "../components/charts/piGraph";
@@ -78,13 +78,13 @@ export default function Home() {
   });
 
   useEffect(() => {
-    refetch();
-    if (!isUserLoading && user === undefined) {
+    if (!isUserLoading && !user && router.isReady) {
       router.push("/login");
     }
     if (!isUserLoading && router.isReady && user?.newUser) {
       router.push("/setup");
     }
+    refetch();
   }, [isUserLoading, router.isReady, date]);
 
   const userGreeting = useMemo(() => {
