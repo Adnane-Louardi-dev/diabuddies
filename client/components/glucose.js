@@ -3,6 +3,7 @@ import NewLogDialog from "./logBookDialog/newLogDialog";
 import { Icon } from "@iconify/react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "next-i18next";
+import {Button} from "@mui/material";
 
 const Glucose = ({ props, setGlucose }) => {
   const [localGlucose, setLocalGlucoseLog] = useState(undefined);
@@ -50,7 +51,9 @@ const Glucose = ({ props, setGlucose }) => {
             {/* <Image src={"/nologs_illustrator.svg"} width={48} height={48} /> */}
             <div className="my-3">
               <div className="mx-2 flex justify-center">
-                <NewLogDialog />
+                <Button>
+                  New log
+                </Button>
               </div>
             </div>
           </div>
@@ -60,3 +63,4 @@ const Glucose = ({ props, setGlucose }) => {
   );
 };
 export default Glucose;
+

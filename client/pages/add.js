@@ -23,6 +23,10 @@ import { useTranslation } from "next-i18next";
 import SearchForFood from "../components/logBookDialog/searchForFood";
 import Image from "next/image";
 import Link from "next/link";
+import {serverSideTranslations} from "next-i18next/serverSideTranslations";
+import {addNewLogBook, useAddFood, useAddNewLogBook} from "../customeHooks/useAddFood";
+import {kcalCalculate} from "../utils/utils";
+import {useRouter} from "next/router";
 
 const Android12Switch = styled(Switch)(({ theme }) => ({
   padding: 8,
@@ -55,14 +59,14 @@ const Android12Switch = styled(Switch)(({ theme }) => ({
 
 export default function NewLogDialog() {
   const [InsulinType, setInsulinType] = useState("bolus");
-
+  const router = useRouter()
   const [dateOpen, setDateOpen] = useState(false);
   const [mealModalOpen, setMealModalOpen] = useState(false);
   //won't forget this model to use it later
   const [savedMealsModalOpen, setSavedMealsModalOpen] = useState(false);
   const [isSearchForAMealOpen, setIsSearchForAMealOpen] = useState(false);
-  const [addedFood, setAddedFood] = useState([]);
-  const [data, setData] = useState({ ...nullLogBook, time: moment()._d, food: addedFood });
+  const {foods,clearAll,removeFood} = useAddFood()
+  const [data, setData] = useState({ ...nullLogBook, time: moment()._d, food: foods});
   const queryClient = useQueryClient();
   const [notificationOpen, setNotificationOpen] = useState(false);
   const { t } = useTranslation("index");
@@ -71,66 +75,54 @@ export default function NewLogDialog() {
     mutate: addNewLogBook,
     isLoading,
     isError,
-  } = useMutation({
-    mutationKey: ["addNewLogBook"],
-    mutationFn: (data) => {
-      return axios.post("/api/logbook", data, {
-        headers: {
-          "Content-Type": "application/json",
-          "Access-Control-Allow-Origin": "*",
-        },
-      });
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries(["indexChart"]);
-      queryClient.invalidateQueries(["gamify"]);
-    },
-    onError: (e) => {
-      console.error(e);
-    },
-    onSettled: () => {
-      setNotificationOpen(true);
-    },
-  });
+    notification
+  } = useAddNewLogBook()
+
+    useEffect(() => {
+        setData({...data, kcal: kcalCalculate(data)})
+    }, [data]);
 
   useEffect(() => {
-    setAddedFood(JSON.parse(localStorage.getItem("addedFood")) || []);
     setInsulinType(data.basal !== 0 ? "basal" : "bolus");
-    let newMacrosBasedOnFoodChange = addedFood?.reduce(
+    let newMacrosBasedOnFoodChange = foods?.reduce(
       (accum, item) => {
-        accum.carbs += parseFloat(item?.nutriments.carbohydrates_100g);
-        accum.protein += parseFloat(item?.nutriments.proteins_100g);
-        accum.fat += parseFloat(item?.nutriments.fat_100g);
+        accum.carbs += parseFloat(item?.nutriments.carbohydrates_100g)*item.qty/100;
+        accum.protein += parseFloat(item?.nutriments.proteins_100g)*item.qty/100;
+        accum.fat += parseFloat(item?.nutriments.fat_100g)*item.qty/100;
         return accum;
       },
       { ...nullLogBook }
-    );
+    ) ?? nullLogBook
+    newMacrosBasedOnFoodChange.kcal = kcalCalculate(newMacrosBasedOnFoodChange)
     setData({ ...data, ...newMacrosBasedOnFoodChange });
-    console.log("halooo");
-  }, [data.bolus, data.basal, isSearchForAMealOpen]);
+  }, [foods]);
 
   const handlePOSTNewLog = async () => {
     setDateOpen(false);
     await addNewLogBook(data);
+    clearAll()
     setData({ ...nullLogBook, time: moment()._d });
   };
 
   const handleClose = () => {
     setNotificationOpen(false);
   };
+
+  const handleOnChange = (event, key) => {
+      if (event.target.value) {
+          setData({ ...data, [key]: parseInt(event.target.value*100)/100});
+      } else {
+          setData({ ...data, [key]: 0});
+      }
+  }
   return (
     <section className="p-5">
       <AddMealNameModal mealModalOpen={mealModalOpen} setMealModalOpen={setMealModalOpen} data={data} onSave={handlePOSTNewLog} />
       <GetSavedMealsModal savedMealsModalOpen={savedMealsModalOpen} setSavedMealsModalOpen={setSavedMealsModalOpen} setData={setData} />
-
+      {notification}
       <Box sx={{ display: "flex" }}>
         <CircularProgress hidden={!isLoading} />
       </Box>
-      <Snackbar open={notificationOpen} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity={isError ? "error" : "success"} sx={{ width: "100%" }}>
-          {isError ? "There was an error while saving log book" : "Log book was added successfully"}
-        </Alert>
-      </Snackbar>
 
       {/* date pickers */}
       <MobileDateTimePicker
@@ -239,11 +231,7 @@ export default function NewLogDialog() {
           inputAdornmentLabel={"g"}
           value={data.carbs.toFixed(1)}
           onChange={(event) => {
-            if (event.target.value) {
-              setData({ ...data, carbs: parseFloat(event.target.value), kcal: data.protein * 4 + data.fat * 9 + parseFloat(event.target.value) * 4 });
-            } else {
-              setData({ ...data, carbs: 0, kcal: data.kcal - data.carbs * 4 });
-            }
+              handleOnChange(event, "carbs")
           }}
         />
         <div className={`p-2.5 bg-diaDarkBlue rounded-xl shadow-md col-span-2`}>
@@ -321,6 +309,7 @@ export default function NewLogDialog() {
               } else {
                 setData({ ...data, bolus: 0, basal: value ? parseFloat(value) : 0 });
               }
+              console.log("data",data)
             }}
           />
           <div className="flex items-center justify-center mb-3">
@@ -368,11 +357,7 @@ export default function NewLogDialog() {
           inputAdornmentLabel={"g"}
           value={data.protein.toFixed(1)}
           onChange={(event) => {
-            if (event.target.value) {
-              setData({ ...data, protein: parseFloat(event.target.value), kcal: data.carbs * 4 + data.fat * 9 + parseFloat(event.target.value) * 4 });
-            } else {
-              setData({ ...data, protein: 0, kcal: data.kcal - data.protein * 4 });
-            }
+              handleOnChange(event, "protein")
           }}
         />
         <NutrationLogInput
@@ -383,31 +368,25 @@ export default function NewLogDialog() {
           inputAdornmentLabel={"g"}
           value={data.fat.toFixed(1)}
           onChange={(event) => {
-            if (event.target.value) {
-              setData({ ...data, fat: parseFloat(event.target.value), kcal: data.carbs * 4 + data.protein * 4 + parseFloat(event.target.value) * 9 });
-            } else {
-              setData({ ...data, fat: 0, kcal: data.kcal - data.fat * 9 });
-            }
+              handleOnChange(event, "fat")
           }}
         />
       </div>
-      {addedFood.length > 0 ? (
+      {foods?.length> 0 ? (
         <>
           <h3 className="font-sourceCode text-diaGray text-md">Meal's Food Added</h3>
           <div className="rounded-lg my-3 bg-diaDarkBlue">
-            {addedFood.map((oneFood, i) => {
+            {foods.map((food, i) => {
               return (
                 <div key={i} className="flex items-center justify-between mx-2 border-t-2 border-gray-700">
                   <div className="mx-2 p-2">
-                    <h1 className="text-blue-500 font-poppins">{`${oneFood.product_name}`}</h1>
-                    <p className="text-gray-500 font-poppins">{`100g (${oneFood.nutriments.carbohydrates_100g}g carbs)`} </p>
+                    <h1 className="text-blue-500 font-poppins">{`${food.product_name}`}</h1>
+                    <p className="text-gray-500 font-poppins">{`100g (${food.nutriments.carbohydrates_100g}g carbs)`} </p>
                   </div>
                   <Button
                     className="self-center"
                     onClick={() => {
-                      let filredAddedFood = addedFood?.filter((item, j) => addedFood[j] !== addedFood[i]);
-                      localStorage.setItem("addedFood", JSON.stringify(filredAddedFood));
-                      setAddedFood(filredAddedFood);
+                        removeFood(food.id)
                     }}
                   >
                     <Icon icon="ic:outline-delete" className="text-diaGray h-7 w-7" />
@@ -435,15 +414,13 @@ export default function NewLogDialog() {
         </div>
       )}
 
+
       <DialogActions sx={{ display: "grid", gap: 1, gridTemplateColumns: "repeat(3, minmax(0, 1fr))", width: "full" }}>
-        <Button
-          onClick={() => {
-            setDateOpen(false);
-          }}
-          className="w-full p-3 rounded-full shadow-md text-gray-800 font-codeSource font-xl"
-        >
-          {tc("cancel")}
-        </Button>
+        <Link href={"/"}>
+          <Button className="w-full p-3 rounded-full shadow-md text-gray-800 font-codeSource font-xl">
+            {tc("cancel")}
+          </Button>
+        </Link>
         <Button disabled={isLoading} onClick={handlePOSTNewLog} variant="filled" className="w-full p-3 rounded-full shadow-md bg-gray-800 text-white  font-codeSource font-xl">
           {tc("save")}
         </Button>
@@ -454,3 +431,8 @@ export default function NewLogDialog() {
     </section>
   );
 }
+export const getServerSideProps = async ({ locale }) => ({
+    props: {
+        ...(await serverSideTranslations(locale, ["common", "index"])),
+    },
+});
