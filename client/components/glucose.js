@@ -2,6 +2,7 @@ import moment from "moment";
 import { Icon } from "@iconify/react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "next-i18next";
+import { Button } from "@mui/material";
 
 const Glucose = ({ props, setGlucose }) => {
   const [localGlucose, setLocalGlucoseLog] = useState(undefined);
@@ -40,7 +41,21 @@ const Glucose = ({ props, setGlucose }) => {
             </div>
           </div>
         </div>
-      ) : null}
+      ) : (
+        <div className="py-2 w-1/2 mx-1">
+          <div className="rounded-3xl shadow-md bg-green-300 p-3">
+            <div className="w-full items-center text-center">
+              <h3 className="font-poppins text-md text-white">{t("logNotFound")}</h3>
+            </div>
+            {/* <Image src={"/nologs_illustrator.svg"} width={48} height={48} /> */}
+            <div className="my-3">
+              <div className="mx-2 flex justify-center">
+                <Button>New log</Button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </>
   );
 };
