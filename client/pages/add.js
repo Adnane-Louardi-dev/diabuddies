@@ -23,6 +23,7 @@ import { useTranslation } from "next-i18next";
 import SearchForFood from "../components/logBookDialog/searchForFood";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 
 const Android12Switch = styled(Switch)(({ theme }) => ({
   padding: 8,
@@ -54,14 +55,13 @@ const Android12Switch = styled(Switch)(({ theme }) => ({
 }));
 
 export default function NewLogDialog() {
+  const router = useRouter();
   const [InsulinType, setInsulinType] = useState("bolus");
-
-  const [dateOpen, setDateOpen] = useState(false);
   const [mealModalOpen, setMealModalOpen] = useState(false);
   //won't forget this model to use it later
   const [savedMealsModalOpen, setSavedMealsModalOpen] = useState(false);
-  const [isSearchForAMealOpen, setIsSearchForAMealOpen] = useState(false);
-  const [addedFood, setAddedFood] = useState([]);
+  const [isSearchForAMealOpen, setIsSearchForAMealOpen] = useState("closed");
+  const [addedFood, setAddedFood] = useState(JSON.parse(localStorage.getItem("addedFood")) || []);
   const [data, setData] = useState({ ...nullLogBook, time: moment()._d, food: addedFood });
   const queryClient = useQueryClient();
   const [notificationOpen, setNotificationOpen] = useState(false);
@@ -94,10 +94,10 @@ export default function NewLogDialog() {
   });
 
   useEffect(() => {
-    setAddedFood(JSON.parse(localStorage.getItem("addedFood")) || []);
     setInsulinType(data.basal !== 0 ? "basal" : "bolus");
     let newMacrosBasedOnFoodChange = addedFood?.reduce(
       (accum, item) => {
+        console.log(item);
         accum.carbs += parseFloat(item?.nutriments.carbohydrates_100g);
         accum.protein += parseFloat(item?.nutriments.proteins_100g);
         accum.fat += parseFloat(item?.nutriments.fat_100g);
@@ -107,12 +107,13 @@ export default function NewLogDialog() {
     );
     setData({ ...data, ...newMacrosBasedOnFoodChange });
     console.log("halooo");
-  }, [data.bolus, data.basal, isSearchForAMealOpen]);
+    console.log(isSearchForAMealOpen);
+  }, [data.bolus, data.basal, addedFood, isSearchForAMealOpen]);
 
   const handlePOSTNewLog = async () => {
-    setDateOpen(false);
     await addNewLogBook(data);
     setData({ ...nullLogBook, time: moment()._d });
+    router.push("/");
   };
 
   const handleClose = () => {
@@ -407,7 +408,7 @@ export default function NewLogDialog() {
                     onClick={() => {
                       let filredAddedFood = addedFood?.filter((item, j) => addedFood[j] !== addedFood[i]);
                       localStorage.setItem("addedFood", JSON.stringify(filredAddedFood));
-                      setAddedFood(filredAddedFood);
+                      setData({ ...data, food: filredAddedFood });
                     }}
                   >
                     <Icon icon="ic:outline-delete" className="text-diaGray h-7 w-7" />
@@ -438,7 +439,7 @@ export default function NewLogDialog() {
       <DialogActions sx={{ display: "grid", gap: 1, gridTemplateColumns: "repeat(3, minmax(0, 1fr))", width: "full" }}>
         <Button
           onClick={() => {
-            setDateOpen(false);
+            router.push("/");
           }}
           className="w-full p-3 rounded-full shadow-md text-gray-800 font-codeSource font-xl"
         >

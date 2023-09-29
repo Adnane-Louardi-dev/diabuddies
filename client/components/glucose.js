@@ -1,5 +1,4 @@
 import moment from "moment";
-import NewLogDialog from "./logBookDialog/newLogDialog";
 import { Icon } from "@iconify/react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "next-i18next";
@@ -41,21 +40,7 @@ const Glucose = ({ props, setGlucose }) => {
             </div>
           </div>
         </div>
-      ) : (
-        <div className="py-2 w-1/2 mx-1">
-          <div className="rounded-3xl shadow-md bg-green-300 p-3">
-            <div className="w-full items-center text-center">
-              <h3 className="font-poppins text-md text-white">{t("logNotFound")}</h3>
-            </div>
-            {/* <Image src={"/nologs_illustrator.svg"} width={48} height={48} /> */}
-            <div className="my-3">
-              <div className="mx-2 flex justify-center">
-                <NewLogDialog />
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      ) : null}
     </>
   );
 };

@@ -45,11 +45,11 @@ export default function SearchForFood({ isSearchForAMealOpen, setIsSearchForAMea
     },
   });
   const handleClickOpen = () => {
-    setIsSearchForAMealOpen(true);
+    setIsSearchForAMealOpen("open");
   };
 
   const handleClose = () => {
-    setIsSearchForAMealOpen(false);
+    setIsSearchForAMealOpen("closed");
   };
 
   useEffect(() => {
@@ -62,7 +62,7 @@ export default function SearchForFood({ isSearchForAMealOpen, setIsSearchForAMea
         <h2 className="font-rubik text-sm text-diaDarkBlue my-2">Search for a meal</h2>
         <Icon icon="tabler:search" className="h-10 w-10 text-diaDarkBlue" />
       </button>
-      <Dialog fullScreen open={isSearchForAMealOpen} onClose={handleClose} TransitionComponent={Transition}>
+      <Dialog fullScreen open={isSearchForAMealOpen === "open" ? true : false} onClose={handleClose} TransitionComponent={Transition}>
         <div className="p-2">
           <AppBar sx={{ position: "relative", borderRadius: "10px" }} className="bg-diaDarkBlue">
             <Toolbar>
