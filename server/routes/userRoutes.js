@@ -5,6 +5,7 @@ const validation = require("../models/validationSchemas");
 const router = express.Router();
 const { isLoggedIn } = require("../middlewares/isLoggedIn");
 const moment = require("moment");
+const mealSchema = require("../models/mealSchema");
 
 router.get("/", isLoggedIn, async (req, res) => {
   try {
@@ -15,10 +16,10 @@ router.get("/", isLoggedIn, async (req, res) => {
     const todayMin = moment(today, "MM/DD/YYYY").startOf("day");
 
     //get the logs of specific day
-    const logs = await logBookItemsSchema
+    const logs = await mealSchema
       .find({
         userId: req.user._id,
-        time: { $gte: todayMin.toString(), $lt: todayMax.toString() },
+        whenEated: { $gte: todayMin.toString(), $lt: todayMax.toString() },
       })
       // descending sorting
       .sort({ time: -1 });

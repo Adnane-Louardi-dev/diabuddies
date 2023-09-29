@@ -51,6 +51,7 @@ function Home() {
       router.push("/setup");
     }
     refetch();
+    console.log(Data);
   }, [isUserLoading, router.isReady, date]);
 
   const userGreeting = useMemo(() => {

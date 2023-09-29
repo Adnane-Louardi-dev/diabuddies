@@ -1,25 +1,24 @@
 const mongoose = require("mongoose");
-const {Mongoose, Schema} = require("mongoose");
+const { Schema } = require("mongoose");
 
-module.exports = {
-    mealSchema: mongoose.model("mealSchema", mongoose.Schema({
-        userId: {
-            type: Schema.Types.ObjectId,
-            required: true
-        },
-        mealName: {
-            type: String,
-            required: true
-        },
-        whenEated: String,
-        unit: String,
-        glucose: Number,
-        meal: String,
-        bolus: Number,
-        basal: Number,
-        carbs: Number,
-        protein: Number,
-        fat: Number,
-        kcal: Number,
-    }))
-};
+const mealSchema = mongoose.Schema({
+  userId: {
+    type: Schema.Types.ObjectId,
+    required: true,
+  },
+  mealName: {
+    type: String,
+    required: true,
+  },
+  whenEated: Date,
+  unit: String,
+  glucose: Number,
+  meal: String,
+  bolus: Number,
+  basal: Number,
+  carbs: Number,
+  protein: Number,
+  fat: Number,
+  kcal: Number,
+});
+module.exports = mongoose.model("mealSchema", mealSchema);

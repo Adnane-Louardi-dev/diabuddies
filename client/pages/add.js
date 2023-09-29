@@ -60,7 +60,6 @@ const Android12Switch = styled(Switch)(({ theme }) => ({
 export default function NewLogDialog() {
   const router = useRouter();
   const [InsulinType, setInsulinType] = useState("bolus");
-  const router = useRouter();
   const [dateOpen, setDateOpen] = useState(false);
   const [mealModalOpen, setMealModalOpen] = useState(false);
   //won't forget this model to use it later
@@ -226,7 +225,7 @@ export default function NewLogDialog() {
           bgColor={"bg-gray-400"}
           icon={"fluent:food-grains-20-regular"}
           inputAdornmentLabel={"g"}
-          value={data.carbs.toFixed(1)}
+          value={data.carbs}
           onChange={(event) => {
             handleOnChange(event, "carbs");
           }}
@@ -244,7 +243,7 @@ export default function NewLogDialog() {
           </div>
           <TextField
             id="outlined-number"
-            type="tel"
+            type="number"
             variant="standard"
             placeholder="0"
             sx={{
@@ -352,7 +351,7 @@ export default function NewLogDialog() {
           bgColor={"text-amber-300"}
           icon={"fluent-emoji-high-contrast:cut-of-meat"}
           inputAdornmentLabel={"g"}
-          value={data.protein.toFixed(1)}
+          value={data.protein}
           onChange={(event) => {
             handleOnChange(event, "protein");
           }}
@@ -363,7 +362,7 @@ export default function NewLogDialog() {
           bgColor={"bg-red-400"}
           icon={"circum:pizza"}
           inputAdornmentLabel={"g"}
-          value={data.fat.toFixed(1)}
+          value={data.fat}
           onChange={(event) => {
             handleOnChange(event, "fat");
           }}
