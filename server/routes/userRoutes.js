@@ -16,10 +16,10 @@ router.get("/", isLoggedIn, async (req, res) => {
     const todayMin = moment(today, "MM/DD/YYYY").startOf("day");
 
     //get the logs of specific day
-    const logs = await mealSchema
+    const logs = await logBookItemsSchema
       .find({
         userId: req.user._id,
-        whenEated: { $gte: todayMin.toString(), $lt: todayMax.toString() },
+        time: { $gte: todayMin.toString(), $lt: todayMax.toString() },
       })
       // descending sorting
       .sort({ time: -1 });
