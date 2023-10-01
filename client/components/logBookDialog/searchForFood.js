@@ -82,7 +82,7 @@ export default function SearchForFood({ isSearchForAMealOpen, setIsSearchForAMea
         </div>
 
         <div className="flex px-5 py-3">
-          <TextField fullWidth sx={{ "& fieldset": { borderRadius: "25px" }, "& input": { padding: "10px" }, "& label": { marginY: "-5px" } }} label="Search" id="fullWidth" value={searchQuery} onChange={(newSearchQuery) => setsearchQuery(newSearchQuery.target.value)} />
+          <TextField fullWidth sx={{ "& fieldset": { borderRadius: "25px" }, "& input": { padding: "10px" }, "& label": { marginY: "-5px" } }} label="Search" id="fullWidth" value={searchQuery} defaultValue={""} onChange={(newSearchQuery) => setsearchQuery(newSearchQuery.target.value)} />
           <Button
             onClick={() => {
               setIsSearching(true);

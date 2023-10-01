@@ -27,6 +27,7 @@ const FoodModal = ({ props }) => {
           type="number"
           variant="standard"
           placeholder="100"
+          defaultValue={100}
           value={qty}
           sx={{
             marginTop: "4px",
