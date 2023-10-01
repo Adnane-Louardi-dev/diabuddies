@@ -82,15 +82,16 @@ export default function NewLogDialog() {
     let newMacrosBasedOnFoodChange =
       foods?.reduce(
         (accum, item) => {
-          accum.carbs += (parseFloat(item?.nutriments.carbohydrates_100g) * item.qty) / 100;
-          accum.protein += (parseFloat(item?.nutriments.proteins_100g) * item.qty) / 100;
-          accum.fat += (parseFloat(item?.nutriments.fat_100g) * item.qty) / 100;
+          accum.carbs += (parseInt(item?.nutriments.carbohydrates_100g) * item.qty) / 100;
+          accum.protein += (parseInt(item?.nutriments.proteins_100g) * item.qty) / 100;
+          accum.fat += (parseInt(item?.nutriments.fat_100g) * item.qty) / 100;
           return accum;
         },
         { ...nullLogBook }
       ) ?? nullLogBook;
     newMacrosBasedOnFoodChange.kcal = kcalCalculate(newMacrosBasedOnFoodChange);
     setData({ ...data, ...newMacrosBasedOnFoodChange });
+    console.log(foods);
   }, [foods]);
 
   const handlePOSTNewLog = async () => {
@@ -192,9 +193,9 @@ export default function NewLogDialog() {
           </ToggleButton>
         </ToggleButtonGroup>
       </section>
-      <section className="grid grid-cols-2 gap-4 items-center justify-around my-3 py-1">
+      <section className="grid grid-cols-2 gap-6 justify-items-center items-center my-3 py-1">
         {/* <Barecode /> */}
-        <Link href={"/barecode"} passHref>
+        <Link href={"/barecode"} passHref className="w-full">
           <button variant="outlined" className="grid col-span-1 w-full justify-items-center mx-2 py-2 px-3 rounded-lg ring-2 ring-diaDarkBlue bg-slate-300">
             <h2 className="font-rubik text-sm text-diaDarkBlue my-2">{t("scan_barcode")}</h2>
             <Icon icon="material-symbols:barcode" className="h-10 w-10 text-diaDarkBlue" />
@@ -377,7 +378,7 @@ export default function NewLogDialog() {
                 <div key={i} className="flex items-center justify-between mx-2 border-t-2 border-gray-700">
                   <div className="mx-2 p-2">
                     <h1 className="text-blue-500 font-poppins">{`${food.product_name}`}</h1>
-                    <p className="text-gray-500 font-poppins">{`100g (${food.nutriments.carbohydrates_100g}g carbs)`} </p>
+                    <p className="text-gray-500 font-poppins">{`${food.qty}${food.quantity?.match(/[a-zA-Z]+/g) || ""} (${(food.nutriments.carbohydrates_100g * food.qty) / 100}g carbs)`} </p>
                   </div>
                   <Button
                     className="self-center"
