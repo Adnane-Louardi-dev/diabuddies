@@ -82,9 +82,9 @@ export default function NewLogDialog() {
     let newMacrosBasedOnFoodChange =
       foods?.reduce(
         (accum, item) => {
-          accum.carbs += (parseInt(item?.nutriments.carbohydrates_100g) * item.qty) / 100;
-          accum.protein += (parseInt(item?.nutriments.proteins_100g) * item.qty) / 100;
-          accum.fat += (parseInt(item?.nutriments.fat_100g) * item.qty) / 100;
+          accum.carbs += Math.round((parseInt(item?.nutriments.carbohydrates_100g) * item.qty) / 100);
+          accum.protein += Math.round((parseInt(item?.nutriments.proteins_100g) * item.qty) / 100);
+          accum.fat += Math.round((parseInt(item?.nutriments.fat_100g) * item.qty) / 100);
           return accum;
         },
         { ...nullLogBook }
