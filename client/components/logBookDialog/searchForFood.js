@@ -29,14 +29,17 @@ export default function SearchForFood({ isSearchForAMealOpen, setIsSearchForAMea
   } = useQuery({
     queryKey: ["food", searchQuery],
     queryFn: async () => {
-      const result = await axios.get(`/food/api/search?categories_tags=${searchQuery}&fields=product_name,nutriments,image_url,quantity&page_size=5&json=true`, { withCredentials: true });
-      console.log(result);
-      return result.data;
+      if (searchQuery) {
+        const result = await axios.get(`/food/api/search?categories_tags=${searchQuery}&fields=product_name,nutriments,image_url,quantity&page_size=5&json=true`, { withCredentials: true });
+        console.log(result);
+        return result.data;
+      } else {
+        const recentFood = JSON.parse(localStorage.getItem("recentFood"));
+        return recentFood;
+      }
     },
     enabled: IsSearching,
     onSuccess: (data) => {
-      //if we want to cache it later
-      navigator.serviceWorker?.controller?.postMessage({ action: "food", data: data });
       setIsSearching(false);
     },
     onError: (e) => {
@@ -53,8 +56,10 @@ export default function SearchForFood({ isSearchForAMealOpen, setIsSearchForAMea
   };
 
   useEffect(() => {
-    console.log(IsSearching);
-  }, [Data, IsSearching]);
+    if (!searchQuery) {
+      refetch();
+    }
+  }, [searchQuery]);
 
   return (
     <>

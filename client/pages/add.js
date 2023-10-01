@@ -247,6 +247,7 @@ export default function NewLogDialog() {
             type="number"
             variant="standard"
             placeholder="0"
+            defaultValue={0}
             sx={{
               marginY: 2,
               marginX: 1,
@@ -306,7 +307,6 @@ export default function NewLogDialog() {
               } else {
                 setData({ ...data, bolus: 0, basal: value ? parseFloat(value) : 0 });
               }
-              console.log("data", data);
             }}
           />
           <div className="flex items-center justify-center mb-3">

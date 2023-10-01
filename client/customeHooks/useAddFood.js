@@ -12,10 +12,10 @@ export const useAddFood = () => {
   });
   const { mutate: addFood } = useMutation(
     (food) => {
-      // let recentFood = localStorage.getItem("recentFood") || "[]";
-      // console.log(recentFood);
+      let recentFood = JSON.parse(localStorage.getItem("recentFood")) || { products: [] };
+      console.log(recentFood);
       localStorage.setItem("my-food", JSON.stringify([...foods, food]));
-      // localStorage.setItem("recentFood", JSON.stringify([...recentFood, food]));
+      localStorage.setItem("recentFood", JSON.stringify({ ...recentFood, products: [...recentFood.products, food] }));
     },
     {
       onSuccess: refetch,
