@@ -116,11 +116,6 @@ export default function NewLogDialog() {
     <section className="p-5">
       <AddMealNameModal mealModalOpen={mealModalOpen} setMealModalOpen={setMealModalOpen} data={data} onSave={handlePOSTNewLog} />
       <GetSavedMealsModal savedMealsModalOpen={savedMealsModalOpen} setSavedMealsModalOpen={setSavedMealsModalOpen} setData={setData} />
-      {notification}
-      <Box sx={{ display: "flex" }}>
-        <CircularProgress hidden={!isLoading} />
-      </Box>
-
       {/* date pickers */}
       <MobileDateTimePicker
         className="w-full my-5"
@@ -246,6 +241,15 @@ export default function NewLogDialog() {
             id="outlined-number"
             type="number"
             variant="standard"
+            value={data.bolus !== 0 ? data.bolus : data.basal}
+            onChange={(event) => {
+              const value = event.target.value;
+              if (InsulinType === "bolus") {
+                return setData({ ...data, basal: 0, bolus: value ? parseFloat(value) : 0 });
+              } else {
+                return setData({ ...data, bolus: 0, basal: value ? parseFloat(value) : 0 });
+              }
+            }}
             placeholder="0"
             defaultValue={0}
             sx={{
@@ -298,15 +302,6 @@ export default function NewLogDialog() {
               style: {
                 color: "white",
               },
-            }}
-            value={data.bolus !== 0 ? data.bolus : data.basal}
-            onChange={(event) => {
-              const value = event.target.value;
-              if (InsulinType === "bolus") {
-                setData({ ...data, basal: 0, bolus: value ? parseFloat(value) : 0 });
-              } else {
-                setData({ ...data, bolus: 0, basal: value ? parseFloat(value) : 0 });
-              }
             }}
           />
           <div className="flex items-center justify-center mb-3">

@@ -25,10 +25,10 @@ actionLogSchema.post("validate", async function (_, next) {
   const actionLogs = {
     dailyLogIn: 5,
     addedNewLogBook: 1,
-    readABlog: 1,
+    readABlog: 2,
     makeOrder: 15,
-    postAComment: 2,
-    share: 7,
+    postAComment: 1,
+    share: 5,
     setupProfile: 10,
     submitSurvey: 15,
   };
@@ -47,7 +47,7 @@ actionLogSchema.post("validate", async function (_, next) {
     )
     .populate("level");
   // console.log("points: ",newGamify.points, " level ",newGamify.level.maxPoints, "next level", newGamify.level.nextLevel)
-  if (newGamify.points >= newGamify.level.maxPoints) {
+  if (newGamify && newGamify.points >= newGamify.level.maxPoints) {
     await gamificationSchema.findByIdAndUpdate(newGamify._id, {
       level: newGamify.level.nextLevel,
     });

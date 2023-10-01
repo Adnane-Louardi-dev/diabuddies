@@ -69,7 +69,7 @@ export const useAddNewLogBook = () => {
           return reject("all values are null");
         }
         return axios
-          .post("/api/logbook", {
+          .post("/api/logbook", data, {
             headers: {
               "Content-Type": "application/json",
               "Access-Control-Allow-Origin": "*",
