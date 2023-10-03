@@ -1,0 +1,10 @@
+{
+  "name": "diabuddies-tests",
+  "version": "1.0.0",
+  "scripts": {
+    "local": "npx cypress open"
+  },
+  "devDependencies": {
+    "cypress": "^13.3.0"
+  }
+}
