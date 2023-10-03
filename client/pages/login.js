@@ -1,3 +1,4 @@
+'use client'
 import {useForm} from "react-hook-form";
 import {Button, TextField} from "@mui/material";
 import Link from "next/link";
@@ -26,7 +27,7 @@ export default function Login() {
       .then((res) => {
         console.log(res.data);
         if (res.data) {
-          router.push("/");
+          router.push("/app");
         }
       })
       .catch((err) => {
@@ -64,7 +65,7 @@ export default function Login() {
                   {t("googleSignUp")}
                 </Button>
               </Link>
-              <Link href="/api/login/auth/facebook" to={`${process.env.BACKEND_URL}:3000/login/auth/facebook`} as="/login" passHref>
+              <Link href="/api/login/auth/facebook" passHref>
                 <Button fullWidth variant="outlined" className="mb-7 p-2 text-diaGray text-md rounded-full border-2 border-diaGray">
                   <FacebookIcon className="text-md mx-5" />
                   {t("facebookSignUp")}
