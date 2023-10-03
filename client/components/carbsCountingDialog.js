@@ -15,25 +15,7 @@ import Link from "next/link";
 import InputAdornment from "@mui/material/InputAdornment";
 import { useTranslation } from "next-i18next";
 import { getDir } from "../utils/getDir";
-
-function CalculatingBolus(carbs, ratio, InsulinSensitivity, IOBcarb, glucose) {
-  let IOBcorr = 0,
-    IOB = IOBcarb + IOBcorr,
-    target = 120,
-    Glucose = glucose,
-    localCarbs = carbs || 0,
-    correction = (Glucose - target) / InsulinSensitivity;
-  if (Glucose > target && correction <= IOBcarb) {
-    correction = -IOBcorr;
-  }
-  if (Glucose > target && correction > IOBcarb) {
-    correction -= IOB;
-  }
-  if (Glucose <= target) {
-    correction -= IOBcorr;
-  }
-  return localCarbs / ratio + correction;
-}
+import CalculatingBolus from "../utils/calculateBolus";
 
 const CarbsCountingDialog = ({ activeInsulinProp, glucose, lastInjectionTime }) => {
   const { user } = useGetCurrentUserDetailed();

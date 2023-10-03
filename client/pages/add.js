@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-import axios from "axios";
 import moment from "moment";
 import Button from "@mui/material/Button";
 import DialogActions from "@mui/material/DialogActions";
@@ -9,10 +8,7 @@ import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker";
 import InputAdornment from "@mui/material/InputAdornment";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
-import { Alert, Snackbar } from "@mui/material";
-import Box from "@mui/material/Box";
-import CircularProgress from "@mui/material/CircularProgress";
+import { useQueryClient } from "@tanstack/react-query";
 import { NutrationLogInput } from "../components/NutrationLogInput";
 import { styled } from "@mui/material/styles";
 import Switch from "@mui/material/Switch";
@@ -24,9 +20,11 @@ import SearchForFood from "../components/logBookDialog/searchForFood";
 import Image from "next/image";
 import Link from "next/link";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { addNewLogBook, useAddFood, useAddNewLogBook } from "../customeHooks/useAddFood";
+import { useAddFood, useAddNewLogBook } from "../customeHooks/useAddFood";
 import { kcalCalculate } from "../utils/utils";
 import { useRouter } from "next/router";
+import CalculatingBolus from "../utils/calculateBolus";
+import { useGetCurrentUserDetailed } from "../customeHooks/useGetCurrentUser";
 
 const Android12Switch = styled(Switch)(({ theme }) => ({
   padding: 8,
@@ -59,6 +57,7 @@ const Android12Switch = styled(Switch)(({ theme }) => ({
 
 export default function NewLogDialog() {
   const router = useRouter();
+  const { user } = useGetCurrentUserDetailed();
   const [InsulinType, setInsulinType] = useState("bolus");
   const [dateOpen, setDateOpen] = useState(false);
   const [mealModalOpen, setMealModalOpen] = useState(false);
@@ -72,6 +71,11 @@ export default function NewLogDialog() {
   const { t } = useTranslation("index");
   const { t: tc } = useTranslation("common");
   const { mutate: addNewLogBook, isLoading, isError, notification } = useAddNewLogBook();
+
+  const handleClickCalculateBolus = () => {
+    let bolusDose = CalculatingBolus(data.carbs, user.diabetecDetails.carbsRatio, user.diabetecDetails.insulinSensitivity.value, 0, data.glucose);
+    return setData({ ...data, bolus: bolusDose.toFixed(1) });
+  };
 
   useEffect(() => {
     setData({ ...data, kcal: kcalCalculate(data) });
@@ -237,73 +241,79 @@ export default function NewLogDialog() {
               <Icon icon="ri:notification-line" className="bg-diaOrange text-white rounded-full h-7 w-7 p-1" />
             </div>
           </div>
-          <TextField
-            id="outlined-number"
-            type="number"
-            variant="standard"
-            value={data.bolus !== 0 ? data.bolus : data.basal}
-            onChange={(event) => {
-              const value = event.target.value;
-              if (InsulinType === "bolus") {
-                return setData({ ...data, basal: 0, bolus: value ? parseFloat(value) : 0 });
-              } else {
-                return setData({ ...data, bolus: 0, basal: value ? parseFloat(value) : 0 });
-              }
-            }}
-            placeholder="0"
-            defaultValue={0}
-            sx={{
-              marginY: 2,
-              marginX: 1,
-              paddingX: "10px",
-              textAlign: "center",
-              borderRadius: "15px",
-              backgroundColor: "#334155",
-              width: "full",
-              "& .MuiInputBase-root::after, .MuiInputBase-root::before": {
-                display: "none",
-              },
-              "& .MuiInputBase-input": {
-                fontSize: 25,
-                fontStyle: "bold",
+          <div className="flex justify-between items-center">
+            <TextField
+              id="outlined-number"
+              type="number"
+              variant="standard"
+              value={data.bolus !== 0 ? data.bolus : data.basal}
+              onChange={(event) => {
+                const value = event.target.value;
+                if (InsulinType === "bolus") {
+                  return setData({ ...data, basal: 0, bolus: value ? parseFloat(value) : 0 });
+                } else {
+                  return setData({ ...data, bolus: 0, basal: value ? parseFloat(value) : 0 });
+                }
+              }}
+              placeholder="0"
+              defaultValue={0}
+              sx={{
+                marginY: 2,
+                marginX: 1,
+                paddingX: "10px",
+                textAlign: "center",
+                borderRadius: "15px",
+                backgroundColor: "#334155",
                 width: "full",
-              },
-            }}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment
-                  position="start"
-                  sx={{
-                    "& .MuiTypography-root": {
-                      display: "flex",
-                    },
-                    marginRight: 3,
-                    fontSize: 12,
-                    color: "white",
-                  }}
-                >
-                  <Icon icon="ph:drop-light" className="text-white mx-1 h-5 w-5" />
-                  {t("dose")}
-                </InputAdornment>
-              ),
-              endAdornment: (
-                <InputAdornment
-                  position="end"
-                  sx={{
-                    "& .MuiTypography-root": {
+                "& .MuiInputBase-root::after, .MuiInputBase-root::before": {
+                  display: "none",
+                },
+                "& .MuiInputBase-input": {
+                  fontSize: 25,
+                  fontStyle: "bold",
+                  width: "full",
+                },
+              }}
+              InputProps={{
+                startAdornment: (
+                  <InputAdornment
+                    position="start"
+                    sx={{
+                      "& .MuiTypography-root": {
+                        display: "flex",
+                      },
+                      marginRight: 3,
+                      fontSize: 12,
                       color: "white",
-                      fontSize: 14,
-                    },
-                  }}
-                >
-                  UI
-                </InputAdornment>
-              ),
-              style: {
-                color: "white",
-              },
-            }}
-          />
+                    }}
+                  >
+                    <Icon icon="ph:drop-light" className="text-white mx-1 h-5 w-5" />
+                    {t("dose")}
+                  </InputAdornment>
+                ),
+                endAdornment: (
+                  <InputAdornment
+                    position="end"
+                    sx={{
+                      "& .MuiTypography-root": {
+                        color: "white",
+                        fontSize: 14,
+                      },
+                    }}
+                  >
+                    UI
+                  </InputAdornment>
+                ),
+                style: {
+                  color: "white",
+                },
+              }}
+            />
+            <Button onClick={handleClickCalculateBolus} className="flex-none bg-[#334155] p-3 rounded-xl">
+              <Icon icon="pajamas:retry" className="h-5 w-5 text-white self-center" />
+            </Button>
+          </div>
+
           <div className="flex items-center justify-center mb-3">
             <ToggleButtonGroup
               color="primary"
