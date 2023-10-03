@@ -1,12 +1,12 @@
 import React, {useEffect, useState} from "react";
 import {Box, Button, LinearProgress} from "@mui/material";
 import {Icon} from "@iconify/react";
-import Gender from "../components/stepper/gender";
-import BirthDate from "../components/stepper/birthDate";
-import Tall from "../components/stepper/tall";
-import Weight from "../components/stepper/weight";
-import InsulinSensitivity from "../components/stepper/insulinSensitivity";
-import Hb1ac from "../components/stepper/hb1ac";
+import Gender from "../../components/stepper/gender";
+import BirthDate from "../../components/stepper/birthDate";
+import Tall from "../../components/stepper/tall";
+import Weight from "../../components/stepper/weight";
+import InsulinSensitivity from "../../components/stepper/insulinSensitivity";
+import Hb1ac from "../../components/stepper/hb1ac";
 import axios from "axios";
 import {useRouter} from "next/router";
 import Image from "next/image";
@@ -14,8 +14,8 @@ import moment from "moment";
 import {useQueryClient} from "@tanstack/react-query";
 import {useTranslation} from "next-i18next";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
-import {getDir} from "../utils/getDir";
-import withAuth from "../components/withAuth";
+import {getDir} from "../../utils/getDir";
+import withAuth from "../../components/layout/withAuth";
 
 const steps = [<Gender />, <BirthDate />, <Tall />, <Weight />, <InsulinSensitivity />, <Hb1ac />];
 
@@ -51,11 +51,11 @@ const Setup = () => {
         queryClient.invalidateQueries(["getCurrentUser"])
       })
       .catch((err) => console.log(err));
-    router.push("/");
+    router.push("/app");
   };
 
   const handleSetupAbortion = () => {
-    router.push("/");
+    router.push("/app");
   };
   const isStepSkipped = (step) => {
     return skipped.has(step);

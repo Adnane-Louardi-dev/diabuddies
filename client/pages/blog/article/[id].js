@@ -2,7 +2,7 @@ import {useRouter} from "next/router";
 import {useQuery} from "@tanstack/react-query";
 import LoadingCircle from "../../../components/loadingCircle";
 import Container from "@mui/material/Container";
-import ResponsiveAppBar from "../../../components/ResponsiveAppBar";
+import ResponsiveAppBar from "../../../components/layout/ResponsiveAppBar";
 import {Article} from "../../../components/blog/article";
 import axios from "axios";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";

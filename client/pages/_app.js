@@ -19,6 +19,11 @@ const queryClient = new QueryClient({
 import { appWithTranslation, useTranslation } from "next-i18next";
 import Snackbar from "@mui/material/Snackbar";
 import { initSW } from "../utils/initSW";
+import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import ToggleButton from "@mui/material/ToggleButton";
+import Link from "next/link";
+import {Icon} from "@iconify/react";
+import * as React from "react";
 function MyApp({ Component, pageProps }) {
   const [devices, setDevices] = useState([]);
   const [SnackbarMessage, setSnackbarMessage] = useState("");
@@ -87,7 +92,9 @@ function MyApp({ Component, pageProps }) {
       </Head>
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} message={SnackbarMessage} />
       <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale={i18n.language}>
-        <Component {...pageProps} />
+        <div className={"mb-16"}>
+          <Component {...pageProps} />
+        </div>
       </LocalizationProvider>
       <ReactQueryDevtools />
     </QueryClientProvider>

@@ -58,7 +58,7 @@ export const SettingsMenu = () => {
         onClose={handleCloseUserMenu}
       >
         {appBarItems.map((appBarItem, i) => (
-          <Link key={i} href={appBarItem.link} passHref>
+          <Link key={i} href={"/app"+appBarItem.link} passHref>
             <MenuItem key={appBarItem.link} onClick={handleCloseUserMenu} className="flex">
               <Icon icon={appBarItem.icon} className={`h-6 w-6 text-diaGray ${i18n.language === "ar" ? "ml-2" : "mr-2"}`} />
               <Typography textAlign="center">{!!appBarItem.localLabel ? t(appBarItem.localLabel) : appBarItem.label}</Typography>

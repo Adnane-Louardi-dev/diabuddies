@@ -1,5 +1,5 @@
 import Container from "@mui/material/Container";
-import ResponsiveAppBar from "../components/ResponsiveAppBar";
+import ResponsiveAppBar from "../../components/layout/ResponsiveAppBar";
 import Typography from "@mui/material/Typography";
 import React from "react";
 import axios from "axios";
@@ -9,7 +9,7 @@ import {t} from "i18next";
 import {useTranslation} from "next-i18next";
 import {useRouter} from "next/router";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
-import {MyActionSkeletonComponent} from "../components/gamifiy/MyActionSkeletonComponent";
+import {MyActionSkeletonComponent} from "../../components/gamifiy/MyActionSkeletonComponent";
 
 
 export default function Leaderboard() {

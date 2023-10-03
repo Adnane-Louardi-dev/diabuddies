@@ -1,6 +1,6 @@
 import React from "react";
 import Link from "next/link";
-import {Logo} from "../Logo";
+import {Logo} from "../layout/Logo";
 import IconButton from "@mui/material/IconButton";
 import Menu from "@mui/material/Menu";
 import {Button} from "@mui/material";

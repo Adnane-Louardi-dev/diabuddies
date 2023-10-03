@@ -3,7 +3,7 @@ import {useQuery} from "@tanstack/react-query";
 import axios from "axios";
 import LoadingCircle from "../../components/loadingCircle";
 import Container from "@mui/material/Container";
-import {Logo} from "../../components/Logo";
+import {Logo} from "../../components/layout/Logo";
 import Avatar from "@mui/material/Avatar";
 import * as React from "react";
 import Glucose from "../../components/glucose";

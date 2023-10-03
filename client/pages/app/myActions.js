@@ -1,19 +1,19 @@
-import ResponsiveAppBar from "../components/ResponsiveAppBar";
+import ResponsiveAppBar from "../../components/layout/ResponsiveAppBar";
 import {useInfiniteQuery} from "@tanstack/react-query";
 import axios from "axios";
 import React, {useEffect, useMemo} from "react";
 import {Icon} from "@iconify/react";
 import {useRouter} from "next/router";
-import LoadingCircle from "../components/loadingCircle";
+import LoadingCircle from "../../components/loadingCircle";
 import Container from "@mui/material/Container";
 import Typography from "@mui/material/Typography";
-import {actionsLogbook} from "../utils/actionLogbook";
+import {actionsLogbook} from "../../utils/actionLogbook";
 import {useTranslation} from "next-i18next";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
-import withAuth from "../components/withAuth";
-import {useElementOnScreen} from "../customeHooks/useElementOnScreen";
-import {MyActionComponent} from "../components/gamifiy/MyActionComponent";
-import {MyActionSkeletonComponent} from "../components/gamifiy/MyActionSkeletonComponent";
+import withAuth from "../../components/layout/withAuth";
+import {useElementOnScreen} from "../../customeHooks/useElementOnScreen";
+import {MyActionComponent} from "../../components/gamifiy/MyActionComponent";
+import {MyActionSkeletonComponent} from "../../components/gamifiy/MyActionSkeletonComponent";
 
 const PAGE_SIZE = 10
 

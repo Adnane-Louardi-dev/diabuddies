@@ -9,22 +9,23 @@ import InputAdornment from "@mui/material/InputAdornment";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { useQueryClient } from "@tanstack/react-query";
-import { NutrationLogInput } from "../components/NutrationLogInput";
+import { NutrationLogInput } from "../../components/NutrationLogInput";
 import { styled } from "@mui/material/styles";
 import Switch from "@mui/material/Switch";
-import { AddMealNameModal } from "../components/addMealNameModal";
-import { GetSavedMealsModal } from "../components/getSavedMealsModal";
-import { nullLogBook } from "../utils/nulls";
+import { AddMealNameModal } from "../../components/addMealNameModal";
+import { GetSavedMealsModal } from "../../components/getSavedMealsModal";
+import { nullLogBook } from "../../utils/nulls";
 import { useTranslation } from "next-i18next";
-import SearchForFood from "../components/logBookDialog/searchForFood";
+import SearchForFood from "../../components/logBookDialog/searchForFood";
 import Image from "next/image";
 import Link from "next/link";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
-import { useAddFood, useAddNewLogBook } from "../customeHooks/useAddFood";
-import { kcalCalculate } from "../utils/utils";
+import { useAddFood, useAddNewLogBook } from "../../customeHooks/useAddFood";
+import { kcalCalculate } from "../../utils/utils";
 import { useRouter } from "next/router";
-import CalculatingBolus from "../utils/calculateBolus";
-import { useGetCurrentUserDetailed } from "../customeHooks/useGetCurrentUser";
+import CalculatingBolus from "../../utils/calculateBolus";
+import { useGetCurrentUserDetailed } from "../../customeHooks/useGetCurrentUser";
+import Box from "@mui/material/Box";
 
 const Android12Switch = styled(Switch)(({ theme }) => ({
   padding: 8,
@@ -102,7 +103,7 @@ export default function NewLogDialog() {
     await addNewLogBook(data);
     clearAll();
     setData({ ...nullLogBook, time: moment()._d });
-    router.push("/");
+    router.push("/app");
   };
 
   const handleClose = () => {
@@ -421,14 +422,17 @@ export default function NewLogDialog() {
         </div>
       )}
 
-      <DialogActions sx={{ display: "grid", gap: 1, gridTemplateColumns: "repeat(2, minmax(0, 1fr))", width: "full" }}>
-        <Link href={"/"}>
-          <Button className="w-full p-3 rounded-full shadow-md text-gray-800 font-codeSource font-xl">{tc("cancel")}</Button>
-        </Link>
+      <Box sx={{ display: "grid", gap: 1, gridTemplateColumns: "repeat(2, minmax(0, 1fr))", width: "full" }}>
+          <Button className="w-full p-3 rounded-full shadow-md text-gray-800 font-codeSource font-xl">
+            <Link href={"/app/"} passHref>
+            {tc("cancel")}
+            </Link>
+            </Button>
+
         <Button disabled={isLoading} onClick={handlePOSTNewLog} variant="filled" className="w-full p-3 rounded-full shadow-md bg-gray-800 text-white  font-codeSource font-xl">
           {tc("save")}
         </Button>
-      </DialogActions>
+      </Box>
     </section>
   );
 }

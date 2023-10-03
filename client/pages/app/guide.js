@@ -1,12 +1,12 @@
 import Container from "@mui/material/Container";
-import ResponsiveAppBar from "../components/ResponsiveAppBar";
+import ResponsiveAppBar from "../../components/layout/ResponsiveAppBar";
 import Typography from "@mui/material/Typography";
 import React from "react";
 import {Icon} from "@iconify/react";
-import {actionsLogbook} from "../utils/actionLogbook";
+import {actionsLogbook} from "../../utils/actionLogbook";
 import {useTranslation} from "next-i18next";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
-import {getDir} from "../utils/getDir";
+import {getDir} from "../../utils/getDir";
 
 
 export default function Guide() {

@@ -1,34 +1,34 @@
 import React, {useEffect, useMemo, useState} from "react";
 import {Alert, Button, Grid, Input, InputAdornment, Snackbar} from "@mui/material";
 import TextField from "@mui/material/TextField";
-import {SettingsCard} from "../components/SettingsCard";
+import {SettingsCard} from "../../components/SettingsCard";
 import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
 import {Controller, useForm} from "react-hook-form";
-import {SettingMedication} from "../components/SettingMedication";
+import {SettingMedication} from "../../components/SettingMedication";
 import {Icon} from "@iconify/react";
 import axios from "axios";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import MenuItem from "@mui/material/MenuItem";
-import {heightUnits, insulinUnits, weightUnits} from "../utils/units";
-import {AddMedicamentModal} from "../components/AddMedicamentModal";
+import {heightUnits, insulinUnits, weightUnits} from "../../utils/units";
+import {AddMedicamentModal} from "../../components/AddMedicamentModal";
 import Image from "next/image";
-import LoadingCircle from "../components/loadingCircle";
-import {useGetCurrentUserDetailed} from "../customeHooks/useGetCurrentUser";
+import LoadingCircle from "../../components/loadingCircle";
+import {useGetCurrentUserDetailed} from "../../customeHooks/useGetCurrentUser";
 import {useMutation, useQueryClient} from "@tanstack/react-query";
-import {Logo} from "../components/Logo";
+import {Logo} from "../../components/layout/Logo";
 import Container from "@mui/material/Container";
-import AvatarDialog from "../components/avatarDialog";
+import AvatarDialog from "../../components/layout/avatarDialog";
 import {useTranslation} from "next-i18next";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
-import ResponsiveAppBar from "../components/ResponsiveAppBar";
+import ResponsiveAppBar from "../../components/layout/ResponsiveAppBar";
 import QRcode from "qrcode"
-import {useProfile} from "../customeHooks/useProfile";
-import getURL from "../utils/getURL";
+import {useProfile} from "../../customeHooks/useProfile";
+import getURL from "../../utils/getURL";
 import IconButton from "@mui/material/IconButton";
-import withAuth from "../components/withAuth";
-import {nullMedication} from "../utils/nulls";
+import withAuth from "../../components/layout/withAuth";
+import {nullMedication} from "../../utils/nulls";
 const Settings = ({medications}) => {
   const { register, control, handleSubmit, reset } = useForm();
   const [modalMedication, setModalMedication] = useState(undefined)

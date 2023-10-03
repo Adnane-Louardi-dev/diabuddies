@@ -1,4 +1,4 @@
-import ResponsiveAppBar from "../../../components/ResponsiveAppBar";
+import ResponsiveAppBar from "../../../components/layout/ResponsiveAppBar";
 import {useInfiniteQuery, useQuery} from "@tanstack/react-query";
 import LoadingCircle from "../../../components/loadingCircle";
 import {useRouter} from "next/router";

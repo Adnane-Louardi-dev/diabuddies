@@ -13,7 +13,7 @@ import {useRouter} from "next/router";
 import {useQuery} from "@tanstack/react-query";
 import axios from "axios";
 import Container from "@mui/material/Container";
-import ResponsiveAppBar from "../../../components/ResponsiveAppBar";
+import ResponsiveAppBar from "../../../components/layout/ResponsiveAppBar";
 import ArticlesList from "../../../components/blog/articlesList";
 
 

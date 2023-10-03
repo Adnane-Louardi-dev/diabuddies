@@ -1,7 +1,7 @@
 {
     "theme_color": "#3AB0FF",
     "background_color": "#F0FFFF",
-    "start_url": "/",
+    "start_url": "/app",
     "orientation": "portrait",
     "display": "fullscreen",
     "name": "Diabuddies",

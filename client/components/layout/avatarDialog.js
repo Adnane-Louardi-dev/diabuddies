@@ -5,7 +5,7 @@ import DialogActions from "@mui/material/DialogActions";
 import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
-import { avatars } from "../utils/avatars";
+import { avatars } from "../../utils/avatars";
 import { Avatar } from "@mui/material";
 import { Icon } from "@iconify/react";
 import ToggleButton from "@mui/material/ToggleButton";

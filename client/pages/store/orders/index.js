@@ -11,7 +11,7 @@ import {orderStatusEnum} from "../../../utils/enums";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import {useTranslation} from "next-i18next";
 import {getDir} from "../../../utils/getDir";
-import withAuth from "../../../components/withAuth";
+import withAuth from "../../../components/layout/withAuth";
 
 
 function Orders() {

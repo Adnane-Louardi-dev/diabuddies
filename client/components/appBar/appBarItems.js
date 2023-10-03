@@ -1,25 +1,10 @@
 
 export const appBarItems = [
     {
-        link: "/store",
-        label: "E-Diabuddies",
-        icon: "iconamoon:store-light",
-    },
-    {
-        link: "/blog/articles",
-        label: "Diablog",
-        icon: "majesticons:article-line",
-    },
-    {
         link: "/store/wish_list",
         label: "My WishList",
         icon: "mdi:heart-outline",
         localLabel: "my_wishlist"
-    },
-    {
-        link: "/pdf",
-        label: "Generate PDF",
-        icon: "teenyicons:pdf-outline",
     },
     {
         link: "/guide",

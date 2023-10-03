@@ -58,7 +58,7 @@ export const AIAssistant = () => {
   return (
     <Box>
       <Tooltip title="Chat with your AI assistant">
-        <IconButton className={"fixed bottom-10 right-10 bg-diaDarkBlue text-white p-2"} onClick={(event) => setAnchorElChatBot(event.currentTarget)} sx={{ p: 0, zIndex: 1000 }}>
+        <IconButton className={"fixed bottom-20 right-10 bg-diaDarkBlue text-white p-2"} onClick={(event) => setAnchorElChatBot(event.currentTarget)} sx={{ p: 0, zIndex: 1000 }}>
           <Icon icon={"healthicons:doctor-outline"} className="h-10 w-10" />
         </IconButton>
       </Tooltip>
