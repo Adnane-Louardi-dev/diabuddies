@@ -3,6 +3,7 @@ import { Icon } from "@iconify/react";
 import { useEffect, useState } from "react";
 import { useTranslation } from "next-i18next";
 import { Button } from "@mui/material";
+import Tooltip from "@mui/material/Tooltip";
 
 const Glucose = ({ props, setGlucose }) => {
   const [localGlucose, setLocalGlucoseLog] = useState(undefined);
@@ -26,7 +27,10 @@ const Glucose = ({ props, setGlucose }) => {
         <div className="py-2 w-1/2 mx-1">
           <div className={`rounded-3xl shadow-md bg-${bgColor} text-white p-3`}>
             <div className="flex justify-between w-full items-center mb-3">
-              <h3 className="font-inter text-md text-semibold truncate">{t("glucose")}</h3> <Icon icon="ph:info" />
+              <h3 className="font-inter text-md text-semibold truncate">{t("glucose")}</h3>
+              <Tooltip title="Last glucose checked for today">
+                <Icon icon="ph:info" />
+              </Tooltip>
             </div>
 
             <div className="my-3">
@@ -41,21 +45,7 @@ const Glucose = ({ props, setGlucose }) => {
             </div>
           </div>
         </div>
-      ) : (
-        <div className="py-2 w-1/2 mx-1">
-          <div className="rounded-3xl shadow-md bg-green-300 p-3">
-            <div className="w-full items-center text-center">
-              <h3 className="font-poppins text-md text-white">{t("logNotFound")}</h3>
-            </div>
-            {/* <Image src={"/nologs_illustrator.svg"} width={48} height={48} /> */}
-            <div className="my-3">
-              <div className="mx-2 flex justify-center">
-                <Button>New log</Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      )}
+      ) : null}
     </>
   );
 };

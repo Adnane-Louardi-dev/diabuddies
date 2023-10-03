@@ -365,8 +365,13 @@ export default function NewLogDialog() {
         />
       </div>
       {foods?.length > 0 ? (
-        <>
-          <h3 className="font-sourceCode text-diaGray text-md">Meal's Food Added</h3>
+        <section className="my-5">
+          <div className="flex justify-between items-center">
+            <h3 className="font-sourceCode text-diaGray text-md">Meal's Food Added</h3>
+            <Button disabled={isLoading} onClick={() => setMealModalOpen(true)} variant="filled" className="rounded-full shadow-md bg-diaDarkBlue text-white">
+              <Icon icon="mingcute:bookmark-line" className="h-5 w-5" />
+            </Button>
+          </div>
           <div className="rounded-lg my-3 bg-diaDarkBlue">
             {foods.map((food, i) => {
               return (
@@ -387,7 +392,7 @@ export default function NewLogDialog() {
               );
             })}
           </div>
-        </>
+        </section>
       ) : (
         <div className="grid items-center text-center justify-center my-3 py-5 bg-diaDarkBlue rounded-xl">
           <Image
@@ -406,15 +411,12 @@ export default function NewLogDialog() {
         </div>
       )}
 
-      <DialogActions sx={{ display: "grid", gap: 1, gridTemplateColumns: "repeat(3, minmax(0, 1fr))", width: "full" }}>
+      <DialogActions sx={{ display: "grid", gap: 1, gridTemplateColumns: "repeat(2, minmax(0, 1fr))", width: "full" }}>
         <Link href={"/"}>
           <Button className="w-full p-3 rounded-full shadow-md text-gray-800 font-codeSource font-xl">{tc("cancel")}</Button>
         </Link>
         <Button disabled={isLoading} onClick={handlePOSTNewLog} variant="filled" className="w-full p-3 rounded-full shadow-md bg-gray-800 text-white  font-codeSource font-xl">
           {tc("save")}
-        </Button>
-        <Button disabled={isLoading} onClick={() => setMealModalOpen(true)} variant="filled" className="w-full p-3 rounded-full shadow-md bg-gray-800 text-white  font-codeSource font-xl">
-          {t("save_as_meal")}
         </Button>
       </DialogActions>
     </section>

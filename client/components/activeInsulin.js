@@ -1,11 +1,12 @@
 import moment from "moment";
 import { Icon } from "@iconify/react";
 import { useState, useEffect } from "react";
-import {useTranslation} from "next-i18next";
+import { useTranslation } from "next-i18next";
+import { Tooltip } from "@mui/material";
 
 const ActiveInsulin = ({ props, setActiveInsulin, activeInsulin, lastInjectionTime, setlastInjectionTime }) => {
   const [Data] = useState(props);
-  const {t} = useTranslation("index")
+  const { t } = useTranslation("index");
   const userInsulinDurationInSystem = 3 * 60 * 60 * 1000;
   const [LocalActiveInsulin, setLocalActiveInsulin] = useState(activeInsulin);
   useEffect(() => {
@@ -31,7 +32,10 @@ const ActiveInsulin = ({ props, setActiveInsulin, activeInsulin, lastInjectionTi
         <div className="py-2 w-1/2 mx-1">
           <div className="rounded-3xl shadow-md bg-diaOrange text-white p-3">
             <div className="flex justify-between w-full items-center mb-3">
-              <h3 className="font-inter text-md text-semibold truncate">{t("active_insuling")} </h3> <Icon icon="ph:info" />
+              <h3 className="font-inter text-md text-semibold truncate">{t("active_insuling")} </h3>
+              <Tooltip title="Active insulin in your blood stream">
+                <Icon icon="ph:info" />
+              </Tooltip>
             </div>
 
             <div className="my-3">
