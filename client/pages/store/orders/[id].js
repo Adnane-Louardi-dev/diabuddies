@@ -11,7 +11,7 @@ import TextField from "@mui/material/TextField";
 import React from "react";
 import {useForm} from "react-hook-form";
 import useLocalStorage from "../../../customeHooks/useLocalStorage";
-import withAuth from "../../../components/withAuth";
+import withAuth from "../../../components/layout/withAuth";
 
 
 function Checkout() {

@@ -1,5 +1,5 @@
 import Container from "@mui/material/Container";
-import ResponsiveAppBar from "../ResponsiveAppBar";
+import ResponsiveAppBar from "../layout/ResponsiveAppBar";
 
 
 export const BlogLayout = ({children}) => {

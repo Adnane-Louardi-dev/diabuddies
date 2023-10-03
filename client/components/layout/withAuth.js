@@ -1,10 +1,10 @@
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import {useGetCurrentUser} from "../customeHooks/useGetCurrentUser";
-import LoadingCircle from "./loadingCircle";
+import {useGetCurrentUser} from "../../customeHooks/useGetCurrentUser";
+import LoadingCircle from "../loadingCircle";
 import Container from "@mui/material/Container";
 import {Logo} from "./Logo";
-import {HomePageSkeleton} from "./skeleton/homePageSkeleton";
+import {HomePageSkeleton} from "../skeleton/homePageSkeleton";
 
 export default function withAuth(Component) {
     return function ProtectedRoute({ ...props }) {

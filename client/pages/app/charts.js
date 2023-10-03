@@ -1,24 +1,24 @@
 import React, { useEffect, useState } from "react";
-import DateToggleBtn from "../components/dateToggleBtn";
+import DateToggleBtn from "../../components/dateToggleBtn";
 import axios from "axios";
 import moment from "moment";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import { Button, Grid } from "@mui/material";
 import { Icon } from "@iconify/react";
-import LineChartGraph from "../components/charts/lineChartGraph";
-import PiGraph from "../components/charts/piGraph";
-import BarGraph from "../components/charts/barGraph";
-import LoadingCircle from "../components/loadingCircle";
-import ResponsiveAppBar from "../components/ResponsiveAppBar";
+import LineChartGraph from "../../components/charts/lineChartGraph";
+import PiGraph from "../../components/charts/piGraph";
+import BarGraph from "../../components/charts/barGraph";
+import LoadingCircle from "../../components/loadingCircle";
+import ResponsiveAppBar from "../../components/layout/ResponsiveAppBar";
 import { useQuery } from "@tanstack/react-query";
-import { useGetCurrentUser } from "../customeHooks/useGetCurrentUser";
-import InsulinDailyTotalsChart from "../components/charts/insulinDailyTotalsChart";
-import MacrosAndKcalChart from "../components/charts/macrosAndKcalChart";
+import { useGetCurrentUser } from "../../customeHooks/useGetCurrentUser";
+import InsulinDailyTotalsChart from "../../components/charts/insulinDailyTotalsChart";
+import MacrosAndKcalChart from "../../components/charts/macrosAndKcalChart";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
 import {useTranslation} from "next-i18next";
-import withAuth from "../components/withAuth";
-import {GraphSkeleton} from "../components/skeleton/graphSkeleton";
+import withAuth from "../../components/layout/withAuth";
+import {GraphSkeleton} from "../../components/skeleton/graphSkeleton";
 
 function Charts() {
   const router = useRouter();
@@ -34,7 +34,7 @@ function Charts() {
       return result.data;
     },
     onSuccess: () => {
-      router.push({ href: "/charts", query: { from: fromDate, to: toDate } });
+      router.push({ href: "/app/charts", query: { from: fromDate, to: toDate } });
     }
   });
   useEffect(() => {
@@ -50,7 +50,7 @@ function Charts() {
           <ResponsiveAppBar />
           <div className="py-2 mb-4">
             <div className="flex justify-between items-center">
-              <Link href="/?date=" passHref>
+              <Link href="/app/?date=" passHref>
                 <Icon icon="ep:arrow-left-bold" className="h-7 w-7 text-gray-500 mx-4" />
               </Link>
               <div className="w-full flex justify-end">

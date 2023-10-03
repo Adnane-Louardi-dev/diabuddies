@@ -29,6 +29,12 @@ const nextConfig = {
         pathname: "/**",
       },
       {
+        protocol: "http",
+        hostname: process.env.NEXT_PUBLIC_STRAPI_URL.replace("http://",""),
+        port: "",
+        pathname: "/**",
+      },
+      {
         protocol: "https",
         hostname: "cdn.chec.io",
         port: "",

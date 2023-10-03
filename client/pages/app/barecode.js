@@ -5,8 +5,8 @@ import { Icon } from "@iconify/react";
 import { useRouter } from "next/router";
 import {useQuery} from "@tanstack/react-query";
 import axios from "axios";
-import LoadingCircle from "../components/loadingCircle";
-import FoodModal from "../components/foodModal";
+import LoadingCircle from "../../components/loadingCircle";
+import FoodModal from "../../components/foodModal";
 
 export default function Barecode() {
   const router = useRouter();
@@ -39,7 +39,7 @@ export default function Barecode() {
     }
   });
   const handleClose = () => {
-    router.push("/add");
+    router.push("/app/add");
   };
 
   return (

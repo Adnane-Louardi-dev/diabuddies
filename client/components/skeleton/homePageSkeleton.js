@@ -1,6 +1,6 @@
-import {Logo} from "../Logo";
+import {Logo} from "../layout/Logo";
 import Container from "@mui/material/Container";
-import {LogoLoading} from "../LogoLoading";
+import {LogoLoading} from "../layout/LogoLoading";
 
 
 export const HomePageSkeleton = () => <Container maxWidth={"xl"} className={"relative w-screen h-screen"}>

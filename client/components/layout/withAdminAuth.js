@@ -1,6 +1,6 @@
 import { useRouter } from 'next/router';
 import { useEffect } from 'react';
-import {useGetCurrentUser} from "../customeHooks/useGetCurrentUser";
+import {useGetCurrentUser} from "../../customeHooks/useGetCurrentUser";
 
 export default function withAdminAuth(Component) {
     return function ProtectedRoute({ ...props }) {
