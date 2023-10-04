@@ -4,9 +4,9 @@ const userSchema = require("../models/userSchema");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const LocalStrategy = require("passport-local").Strategy;
 var crypto = require("crypto");
-const {diabetecDetailsSchema} = require("../models/diabetecDetailsSchema");
-const {gamificationSchema} = require("../models/gamificationSchema");
-const {levelsSchema} = require("../models/levelsSchema");
+const { diabeticDetailsSchema } = require("../models/diabeticDetailsSchema");
+const { gamificationSchema } = require("../models/gamificationSchema");
+const { levelsSchema } = require("../models/levelsSchema");
 
 const router = express.Router();
 //local strategy
@@ -47,16 +47,16 @@ passport.use(
             familyName: profile.name.familyName,
             email: profile.emails[0].value,
             photo: profile.photos[0].value,
-          })
-          await diabetecDetailsSchema.create({
-              userId: createdUser._id
-          })
-          const level = await levelsSchema.findOne({level:1})
+          });
+          await diabeticDetailsSchema.create({
+            userId: createdUser._id,
+          });
+          const level = await levelsSchema.findOne({ level: 1 });
           await gamificationSchema.create({
-              user: createdUser._id,
-              level: level._id
-          })
-          createdUser.save((err,newUser)=> cb(err,newUser))
+            user: createdUser._id,
+            level: level._id,
+          });
+          createdUser.save((err, newUser) => cb(err, newUser));
         } else {
           return cb(err, user);
         }
@@ -70,10 +70,7 @@ router.get(
     scope: ["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email"],
   })
 );
-router.get(
-  "/auth/google/callback",
-  passport.authenticate("google", { successRedirect: process.env.FRONTEND_URL, failureRedirect: `${process.env.FRONTEND_URL}/login` })
-);
+router.get("/auth/google/callback", passport.authenticate("google", { successRedirect: process.env.FRONTEND_URL, failureRedirect: `${process.env.FRONTEND_URL}/login` }));
 
 passport.serializeUser((user, done) => {
   done(null, user);

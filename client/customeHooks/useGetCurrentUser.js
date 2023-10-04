@@ -15,7 +15,7 @@ export const useGetCurrentUserDetailed = () => {
   const result = useQuery({
     queryKey: ["detail-user"],
     queryFn: async () => {
-      const { data } = await axios.get(`/api/user/diabetecDetails`, { withCredentials: true });
+      const { data } = await axios.get(`/api/user/diabeticDetails`, { withCredentials: true });
       console.log(data);
       return data;
     },

@@ -1,44 +1,44 @@
-import React, {useEffect, useMemo, useState} from "react";
-import {Alert, Button, Grid, Input, InputAdornment, Snackbar} from "@mui/material";
+import React, { useEffect, useMemo, useState } from "react";
+import { Alert, Button, Grid, Input, InputAdornment, Snackbar } from "@mui/material";
 import TextField from "@mui/material/TextField";
-import {SettingsCard} from "../../components/SettingsCard";
+import { SettingsCard } from "../../components/SettingsCard";
 import Select from "@mui/material/Select";
 import InputLabel from "@mui/material/InputLabel";
-import {Controller, useForm} from "react-hook-form";
-import {SettingMedication} from "../../components/SettingMedication";
-import {Icon} from "@iconify/react";
+import { Controller, useForm } from "react-hook-form";
+import { SettingMedication } from "../../components/SettingMedication";
+import { Icon } from "@iconify/react";
 import axios from "axios";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import MenuItem from "@mui/material/MenuItem";
-import {heightUnits, insulinUnits, weightUnits} from "../../utils/units";
-import {AddMedicamentModal} from "../../components/AddMedicamentModal";
+import { heightUnits, insulinUnits, weightUnits } from "../../utils/units";
+import { AddMedicamentModal } from "../../components/AddMedicamentModal";
 import Image from "next/image";
 import LoadingCircle from "../../components/loadingCircle";
-import {useGetCurrentUserDetailed} from "../../customeHooks/useGetCurrentUser";
-import {useMutation, useQueryClient} from "@tanstack/react-query";
-import {Logo} from "../../components/layout/Logo";
+import { useGetCurrentUserDetailed } from "../../customeHooks/useGetCurrentUser";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { Logo } from "../../components/layout/Logo";
 import Container from "@mui/material/Container";
 import AvatarDialog from "../../components/layout/avatarDialog";
-import {useTranslation} from "next-i18next";
-import {serverSideTranslations} from "next-i18next/serverSideTranslations";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import ResponsiveAppBar from "../../components/layout/ResponsiveAppBar";
-import QRcode from "qrcode"
-import {useProfile} from "../../customeHooks/useProfile";
+import QRcode from "qrcode";
+import { useProfile } from "../../customeHooks/useProfile";
 import getURL from "../../utils/getURL";
 import IconButton from "@mui/material/IconButton";
 import withAuth from "../../components/layout/withAuth";
-import {nullMedication} from "../../utils/nulls";
-const Settings = ({medications}) => {
+import { nullMedication } from "../../utils/nulls";
+const Settings = ({ medications }) => {
   const { register, control, handleSubmit, reset } = useForm();
-  const [modalMedication, setModalMedication] = useState(undefined)
-  const [qrSrc, setQrSrc] = useState(undefined)
-  const { user, isLoading,refetch } = useGetCurrentUserDetailed()
-  const [token, setToken] = useState(undefined)
+  const [modalMedication, setModalMedication] = useState(undefined);
+  const [qrSrc, setQrSrc] = useState(undefined);
+  const { user, isLoading, refetch } = useGetCurrentUserDetailed();
+  const [token, setToken] = useState(undefined);
   const [notificationOpen, setNotificationOpen] = useState(false);
-  const {t} = useTranslation("settings")
-  const {t:tc,i18n} = useTranslation("common")
-  const {mutate: updateUser, isError, isLoading: updateUserLoading} = useProfile(setNotificationOpen);
+  const { t } = useTranslation("settings");
+  const { t: tc, i18n } = useTranslation("common");
+  const { mutate: updateUser, isError, isLoading: updateUserLoading } = useProfile(setNotificationOpen);
 
   const handleClose = () => {
     setNotificationOpen(false);
@@ -56,34 +56,26 @@ const Settings = ({medications}) => {
       alert("passwords must match");
       return;
     }
-    await updateUser({...data,profileId: {token}});
+    await updateUser({ ...data, profileId: { token } });
   };
 
   const generateToken = () => {
     const token = crypto.randomUUID();
-    setToken(token)
-    QRcode.toDataURL(getURL(`/profile/${token}`)).then(setQrSrc)
-  }
+    setToken(token);
+    QRcode.toDataURL(getURL(`/profile/${token}`)).then(setQrSrc);
+  };
   useEffect(() => {
-    if(user?.detailedUser.profileId){
-      setToken(user.detailedUser.profileId.token)
-      QRcode.toDataURL(getURL(`/profile/${user.detailedUser.profileId.token}`)).then(setQrSrc)
+    if (user?.detailedUser.profileId) {
+      setToken(user.detailedUser.profileId.token);
+      QRcode.toDataURL(getURL(`/profile/${user.detailedUser.profileId.token}`)).then(setQrSrc);
     }
   }, [user]);
 
-
-  console.log(" fdsafdsagdsags ", modalMedication)
+  console.log(" fdsafdsagdsags ", modalMedication);
   const UserInput = React.useCallback(({ fieldName, label, ...props }) => {
     return (
       <div className={"flex justify-between align-middle"} dir={"ltr"}>
-        <TextField
-          variant="outlined"
-          label={label}
-          className="rounded-2xl w-full font-inter"
-          {...register(fieldName)}
-          {...props}
-          defaultValue={props.defaultValue || ""}
-        />
+        <TextField variant="outlined" label={label} className="rounded-2xl w-full font-inter" {...register(fieldName)} {...props} defaultValue={props.defaultValue || ""} />
       </div>
     );
   }, []);
@@ -92,7 +84,7 @@ const Settings = ({medications}) => {
     return <LoadingCircle />;
   }
   return (
-    <Container maxWidth={"xl"} dir={i18n.language === 'ar' ? "rtl" : "ltr"}>
+    <Container maxWidth={"xl"} dir={i18n.language === "ar" ? "rtl" : "ltr"}>
       <form onSubmit={handleSubmit(updateUserSettings)}>
         <ResponsiveAppBar />
         <section className={"flex justify-end"} dir={"ltr"}>
@@ -139,7 +131,7 @@ const Settings = ({medications}) => {
                   <Controller
                     name={tc("gender")}
                     control={control}
-                    defaultValue={user.diabetecDetails.gender || "gender"}
+                    defaultValue={user.diabeticDetails.gender || "gender"}
                     render={({ field }) => (
                       <Select {...field} className="w-full">
                         {["gender", "male", "female"].map((gender) => (
@@ -163,7 +155,7 @@ const Settings = ({medications}) => {
                   <Controller
                     name={"diabetesType"}
                     control={control}
-                    defaultValue={user.diabetecDetails.diabetesType || "diabetecType"}
+                    defaultValue={user.diabeticDetails.diabetesType || "diabetecType"}
                     render={({ field }) => (
                       <Select {...field} className="w-full">
                         {["diabetecType", "typeOne", "typeTwo", "other"].map((type) => (
@@ -178,7 +170,7 @@ const Settings = ({medications}) => {
                 {/* Height */}
                 <Grid item xs={6}>
                   <UserInput
-                    defaultValue={user.diabetecDetails.height?.value ? user.diabetecDetails.height.value : ""}
+                    defaultValue={user.diabeticDetails.height?.value ? user.diabeticDetails.height.value : ""}
                     fieldName={"height.value"}
                     label={tc("height")}
                     type={"number"}
@@ -193,7 +185,7 @@ const Settings = ({medications}) => {
                           <Controller
                             name={"height.unit"}
                             control={control}
-                            defaultValue={user.diabetecDetails.height?.unit || heightUnits.default}
+                            defaultValue={user.diabeticDetails.height?.unit || heightUnits.default}
                             render={({ field }) => (
                               <Select {...field} className={"w-full"}>
                                 {heightUnits.options.map((unit) => (
@@ -212,7 +204,7 @@ const Settings = ({medications}) => {
                 {/* weight */}
                 <Grid item xs={6}>
                   <UserInput
-                    defaultValue={user.diabetecDetails.weight?.value ? user.diabetecDetails.weight.value : ""}
+                    defaultValue={user.diabeticDetails.weight?.value ? user.diabeticDetails.weight.value : ""}
                     fieldName={"weight.value"}
                     label={tc("weight")}
                     type={"number"}
@@ -227,7 +219,7 @@ const Settings = ({medications}) => {
                           <Controller
                             name={"weight.unit"}
                             control={control}
-                            defaultValue={user.diabetecDetails.weight?.unit || weightUnits.default}
+                            defaultValue={user.diabeticDetails.weight?.unit || weightUnits.default}
                             render={({ field }) => (
                               <Select {...field} className={"w-full"}>
                                 {weightUnits.options.map((unit) => (
@@ -246,7 +238,7 @@ const Settings = ({medications}) => {
                 {/* carbs ratio */}
                 <Grid item xs={6}>
                   <UserInput
-                    defaultValue={parseFloat(user.diabetecDetails.carbsRatio)}
+                    defaultValue={parseFloat(user.diabeticDetails.carbsRatio)}
                     fieldName={"carbsRatio"}
                     label={t("carbsRatio")}
                     type={"number"}
@@ -262,7 +254,7 @@ const Settings = ({medications}) => {
                 {/* body fat */}
                 <Grid item xs={6}>
                   <UserInput
-                    defaultValue={parseFloat(user.diabetecDetails.bodyFatPercentage)}
+                    defaultValue={parseFloat(user.diabeticDetails.bodyFatPercentage)}
                     fieldName={"bodyFatPercentage"}
                     label={t("bodyFatPercentage")}
                     type={"number"}
@@ -278,7 +270,7 @@ const Settings = ({medications}) => {
                 {/* insulin Sensitivity */}
                 <Grid item xs={6}>
                   <UserInput
-                    defaultValue={parseFloat(user.diabetecDetails.insulinSensitivity?.value)}
+                    defaultValue={parseFloat(user.diabeticDetails.insulinSensitivity?.value)}
                     fieldName={"insulinSensitivity.value"}
                     label={t("insulinSensitivity")}
                     type={"number"}
@@ -293,7 +285,7 @@ const Settings = ({medications}) => {
                           <Controller
                             name={"insulinSensitivity.unit"}
                             control={control}
-                            defaultValue={user.diabetecDetails.insulinSensitivity?.unit || insulinUnits.default}
+                            defaultValue={user.diabeticDetails.insulinSensitivity?.unit || insulinUnits.default}
                             render={({ field }) => (
                               <Select {...field} className={"w-full"}>
                                 {insulinUnits.options.map((unit) => (
@@ -312,7 +304,7 @@ const Settings = ({medications}) => {
                 {/* hb1ac */}
                 <Grid item xs={6}>
                   <UserInput
-                    defaultValue={user.diabetecDetails.hb1ac}
+                    defaultValue={user.diabeticDetails.hb1ac}
                     fieldName={"hb1ac"}
                     label={"HB1AC"}
                     type={"number"}
@@ -328,7 +320,7 @@ const Settings = ({medications}) => {
                 {/* dailyCaloriesNeeds */}
                 <Grid item xs={12}>
                   <UserInput
-                    defaultValue={user.diabetecDetails.dailyCaloriesNeeds}
+                    defaultValue={user.diabeticDetails.dailyCaloriesNeeds}
                     fieldName={"dailyCaloriesNeeds"}
                     label={t("dailyCaloriesNeeds")}
                     type={"number"}
@@ -352,10 +344,10 @@ const Settings = ({medications}) => {
                 </Grid>
                 <Grid item xs={12} className={"grid grid-cols-2"}>
                   <div>
-                    {tc("min")} <Input defaultValue={user.diabetecDetails.hyperglycemia?.min} type={"number"} placeholder={"181"} {...register("hyperglycemia.min")} />
+                    {tc("min")} <Input defaultValue={user.diabeticDetails.hyperglycemia?.min} type={"number"} placeholder={"181"} {...register("hyperglycemia.min")} />
                   </div>
                   <div>
-                    {tc("max")} <Input defaultValue={user.diabetecDetails.hyperglycemia?.max} type={"number"} placeholder={"600"} {...register("hyperglycemia.max")} />
+                    {tc("max")} <Input defaultValue={user.diabeticDetails.hyperglycemia?.max} type={"number"} placeholder={"600"} {...register("hyperglycemia.max")} />
                   </div>
                 </Grid>
                 <Grid item xs={12}>
@@ -363,10 +355,10 @@ const Settings = ({medications}) => {
                 </Grid>
                 <Grid item xs={12} className={"grid grid-cols-2"}>
                   <div>
-                    {tc("min")} <Input defaultValue={user.diabetecDetails.normalBloodGlucose?.min} type={"number"} placeholder={"70"} {...register("normalBloodGlucose.min")} />
+                    {tc("min")} <Input defaultValue={user.diabeticDetails.normalBloodGlucose?.min} type={"number"} placeholder={"70"} {...register("normalBloodGlucose.min")} />
                   </div>
                   <div>
-                    {tc("max")}  <Input defaultValue={user.diabetecDetails.normalBloodGlucose?.max} type={"number"} placeholder={"180"} {...register("normalBloodGlucose.max")} />
+                    {tc("max")} <Input defaultValue={user.diabeticDetails.normalBloodGlucose?.max} type={"number"} placeholder={"180"} {...register("normalBloodGlucose.max")} />
                   </div>
                 </Grid>
                 <Grid item xs={12}>
@@ -374,10 +366,10 @@ const Settings = ({medications}) => {
                 </Grid>
                 <Grid item xs={12} className={"grid grid-cols-2"}>
                   <div>
-                    {tc("min")} <Input defaultValue={user.diabetecDetails.hypoglycemia?.min} type={"number"} placeholder={"20"} {...register("hypoglycemia.min")} />
+                    {tc("min")} <Input defaultValue={user.diabeticDetails.hypoglycemia?.min} type={"number"} placeholder={"20"} {...register("hypoglycemia.min")} />
                   </div>
                   <div>
-                    {tc("max")} <Input defaultValue={user.diabetecDetails.hypoglycemia?.max} type={"number"} placeholder={"69"} {...register("hypoglycemia.max")} />
+                    {tc("max")} <Input defaultValue={user.diabeticDetails.hypoglycemia?.max} type={"number"} placeholder={"69"} {...register("hypoglycemia.max")} />
                   </div>
                 </Grid>
               </Grid>
@@ -393,26 +385,25 @@ const Settings = ({medications}) => {
               }
             >
               <div className={"[&>section(:last-child)]:border-b-transparent"}>
-              {user?.diabetecDetails.medications.map((medication) => (
-                  <SettingMedication key={medication._id} refetch={refetch} medication={medication} setMedicament={setModalMedication}/>
-              ))}
+                {user?.diabeticDetails.medications.map((medication) => (
+                  <SettingMedication key={medication._id} refetch={refetch} medication={medication} setMedicament={setModalMedication} />
+                ))}
               </div>
             </SettingsCard>
           </Grid>
           <div className={"text-center w-full mt-5"}>
-            <div dangerouslySetInnerHTML={{__html: t("qrCodeText")}} />
-            {qrSrc && <img src={qrSrc}
-                           alt={`${user.detailedUser.userName} Qr code`}
-                           className={"w-[250px] mt-5 mx-auto"}
-            />}
+            <div dangerouslySetInnerHTML={{ __html: t("qrCodeText") }} />
+            {qrSrc && <img src={qrSrc} alt={`${user.detailedUser.userName} Qr code`} className={"w-[250px] mt-5 mx-auto"} />}
             <div className={"flex justify-center gap-2"}>
               <Button className={"bg-diaDarkBlue text-white mt-4"} onClick={generateToken}>
                 {user.detailedUser.profileId ? "Regenerate Token" : "Generate Token"}
               </Button>
-              <IconButton className={"w-12 h-12 mt-4"}
-                  onClick={()=>{
-                    navigator.clipboard.writeText(getURL(`/profile/${token}`))
-                }}>
+              <IconButton
+                className={"w-12 h-12 mt-4"}
+                onClick={() => {
+                  navigator.clipboard.writeText(getURL(`/profile/${token}`));
+                }}
+              >
                 <Icon icon="ph:copy-bold" />
               </IconButton>
             </div>
@@ -434,7 +425,7 @@ const Settings = ({medications}) => {
                     <InputLabel className={"text-xs"}>{t("confirmPassword")}</InputLabel>
                     <Input className={"w-full mt-2"} placeholder={t("confirmPassword")} type={"password"} {...register("confirmPassword")} />
                   </div>
-                  <Button className={"bg-diaBlue text-white w-[100%]"}>{t('changePassword')}</Button>
+                  <Button className={"bg-diaBlue text-white w-[100%]"}>{t("changePassword")}</Button>
                 </Grid>
                 <Grid item xs={12} className={"text-gray-500 mt-5"}>
                   <h5>{t("deleteAccount")}</h5>
@@ -471,13 +462,12 @@ const Settings = ({medications}) => {
 
 export default withAuth(Settings);
 
-
 export const getServerSideProps = async ({ locale }) => {
-  const {data:medications} = await axios.get(`${process.env.BACKEND_URL}/user/medicaments`);
+  const { data: medications } = await axios.get(`${process.env.BACKEND_URL}/user/medicaments`);
   return {
     props: {
       medications,
-      ...(await serverSideTranslations(locale, ['common', 'settings']))
-    }
-  }
+      ...(await serverSideTranslations(locale, ["common", "settings"])),
+    },
+  };
 };

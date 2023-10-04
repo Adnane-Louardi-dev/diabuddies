@@ -24,9 +24,9 @@ const userSchema = mongoose.Schema(
     },
     photo: String,
     bio: String,
-    diabetecDetails: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "diabetecDetailsSchema"
+    diabeticDetails: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "diabeticDetailsSchema",
     },
     password: String,
     darkMode: {
@@ -43,9 +43,9 @@ const userSchema = mongoose.Schema(
     },
     customerId: String,
     profileId: {
-        token: String,
-        regenerate: Date
-    }
+      token: String,
+      regenerate: Date,
+    },
   },
   { timestamps: true }
 );

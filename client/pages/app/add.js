@@ -74,7 +74,7 @@ export default function NewLogDialog() {
   const { mutate: addNewLogBook, isLoading, isError, notification } = useAddNewLogBook();
 
   const handleClickCalculateBolus = () => {
-    let bolusDose = CalculatingBolus(data.carbs, user.diabetecDetails.carbsRatio, user.diabetecDetails.insulinSensitivity.value, 0, data.glucose);
+    let bolusDose = CalculatingBolus(data.carbs, user.diabeticDetails.carbsRatio, user.diabeticDetails.insulinSensitivity.value, 0, data.glucose);
     return setData({ ...data, bolus: bolusDose.toFixed(1) });
   };
 
@@ -118,7 +118,7 @@ export default function NewLogDialog() {
     }
   };
   return (
-    <section className="p-5">
+    <section className="px-5">
       <AddMealNameModal mealModalOpen={mealModalOpen} setMealModalOpen={setMealModalOpen} data={data} onSave={handlePOSTNewLog} />
       <GetSavedMealsModal savedMealsModalOpen={savedMealsModalOpen} setSavedMealsModalOpen={setSavedMealsModalOpen} setData={setData} />
       {/* date pickers */}
@@ -195,7 +195,7 @@ export default function NewLogDialog() {
       </section>
       <section className="grid grid-cols-2 gap-6 justify-items-center items-center my-3 py-1">
         {/* <Barecode /> */}
-        <Link href={"/barecode"} passHref className="w-full">
+        <Link href={"/app/barecode"} passHref className="w-full">
           <button variant="outlined" className="grid col-span-1 w-full justify-items-center mx-2 py-2 px-3 rounded-lg ring-2 ring-diaDarkBlue bg-slate-300">
             <h2 className="font-rubik text-sm text-diaDarkBlue my-2">{t("scan_barcode")}</h2>
             <Icon icon="material-symbols:barcode" className="h-10 w-10 text-diaDarkBlue" />
@@ -406,28 +406,17 @@ export default function NewLogDialog() {
         </section>
       ) : (
         <div className="grid items-center text-center justify-center my-3 py-5 bg-diaDarkBlue rounded-xl">
-          <Image
-            src={"/No-data-cuate.webp"}
-            priority
-            style={{
-              width: "auto",
-              height: "auto",
-            }}
-            height={300}
-            width={200}
-            alt="no data in blue folder"
-          />
           <h2 className={"text-xl font-poppins text-gray-500 font-semibold"}>Oops!</h2>
           <p className={"font-poppins text-sm text-gray-500"}>You didn't add food yet</p>
         </div>
       )}
 
-      <Box sx={{ display: "grid", gap: 1, gridTemplateColumns: "repeat(2, minmax(0, 1fr))", width: "full" }}>
-          <Button className="w-full p-3 rounded-full shadow-md text-gray-800 font-codeSource font-xl">
-            <Link href={"/app/"} passHref>
+      <Box sx={{ display: "grid", gap: 2, gridTemplateColumns: "repeat(2, minmax(0, 1fr))", width: "full" }}>
+        <Button className="w-full p-3 rounded-full shadow-md text-gray-800 font-codeSource font-xl">
+          <Link href={"/app/"} passHref>
             {tc("cancel")}
-            </Link>
-            </Button>
+          </Link>
+        </Button>
 
         <Button disabled={isLoading} onClick={handlePOSTNewLog} variant="filled" className="w-full p-3 rounded-full shadow-md bg-gray-800 text-white  font-codeSource font-xl">
           {tc("save")}

@@ -1,6 +1,6 @@
-import React, {useEffect, useState} from "react";
-import {Box, Button, LinearProgress} from "@mui/material";
-import {Icon} from "@iconify/react";
+import React, { useEffect, useState } from "react";
+import { Box, Button, LinearProgress } from "@mui/material";
+import { Icon } from "@iconify/react";
 import Gender from "../../components/stepper/gender";
 import BirthDate from "../../components/stepper/birthDate";
 import Tall from "../../components/stepper/tall";
@@ -8,20 +8,20 @@ import Weight from "../../components/stepper/weight";
 import InsulinSensitivity from "../../components/stepper/insulinSensitivity";
 import Hb1ac from "../../components/stepper/hb1ac";
 import axios from "axios";
-import {useRouter} from "next/router";
+import { useRouter } from "next/router";
 import Image from "next/image";
 import moment from "moment";
-import {useQueryClient} from "@tanstack/react-query";
-import {useTranslation} from "next-i18next";
-import {serverSideTranslations} from "next-i18next/serverSideTranslations";
-import {getDir} from "../../utils/getDir";
+import { useQueryClient } from "@tanstack/react-query";
+import { useTranslation } from "next-i18next";
+import { serverSideTranslations } from "next-i18next/serverSideTranslations";
+import { getDir } from "../../utils/getDir";
 import withAuth from "../../components/layout/withAuth";
 
 const steps = [<Gender />, <BirthDate />, <Tall />, <Weight />, <InsulinSensitivity />, <Hb1ac />];
 
 const Setup = () => {
-  const router = useRouter()
-  const queryClient = useQueryClient()
+  const router = useRouter();
+  const queryClient = useQueryClient();
   const [data, setData] = useState({
     height: { value: null, unit: "cm" },
     weight: { value: null, unit: "kg" },
@@ -33,13 +33,13 @@ const Setup = () => {
 
   const [activeStep, setActiveStep] = useState(0);
   const [skipped, setSkipped] = useState(new Set());
-  const {i18n,t} = useTranslation()
+  const { i18n, t } = useTranslation();
 
   const handlePOSTSetupUser = async () => {
     axios
       .post(
-        "/api/user/diabetecDetails",
-        {...data},
+        "/api/user/diabeticDetails",
+        { ...data },
         {
           headers: {
             "Content-Type": "application/json",
@@ -48,7 +48,7 @@ const Setup = () => {
         }
       )
       .then(() => {
-        queryClient.invalidateQueries(["getCurrentUser"])
+        queryClient.invalidateQueries(["getCurrentUser"]);
       })
       .catch((err) => console.log(err));
     router.push("/app");
@@ -93,16 +93,12 @@ const Setup = () => {
         value={(activeStep / steps.length) * 100}
       />
       <div className="flex justify-between" dir={getDir(i18n.language)}>
-        <Button
-          onClick={handleBack}
-          disabled={activeStep === 0}
-          className={`grid items-center m-3 p-5 bg-diaLightOrange   ${activeStep === 0 ? "text-diaLightGray" : "text-diaGray"}  rounded-2xl`}
-        >
+        <Button onClick={handleBack} disabled={activeStep === 0} className={`grid items-center m-3 p-5 bg-diaLightOrange   ${activeStep === 0 ? "text-diaLightGray" : "text-diaGray"}  rounded-2xl`}>
           <Icon icon={t("backIcon") === "backIcon" ? "material-symbols:arrow-forward-ios-rounded" : t("backIcon")} className="h-5 w-5" />
         </Button>
         {activeStep !== steps.length && (
           <Button onClick={handleNext} className="m-3 p-5  rounded-2xl font-poppins font-semibold bg-diaLightOrange text-diaGray">
-            {i18n.language === "ar"? "تجاوز هذا السؤال" : "Skip"}
+            {i18n.language === "ar" ? "تجاوز هذا السؤال" : "Skip"}
           </Button>
         )}
       </div>
@@ -130,7 +126,7 @@ const Setup = () => {
         </>
       ) : (
         <>
-          <div>{React.isValidElement(steps[activeStep]) ? React.cloneElement(steps[activeStep], { data: data, setData: setData}) : steps[activeStep]}</div>
+          <div>{React.isValidElement(steps[activeStep]) ? React.cloneElement(steps[activeStep], { data: data, setData: setData }) : steps[activeStep]}</div>
           <div className="absolute bottom-10 left-[50%] translate-x-[-50%] grid items-center justify-center">
             <Button
               onClick={() => {
@@ -149,7 +145,7 @@ const Setup = () => {
 
 export const getServerSideProps = async ({ locale }) => ({
   props: {
-    ...(await serverSideTranslations(locale, ['common']))
-  }
+    ...(await serverSideTranslations(locale, ["common"])),
+  },
 });
 export default withAuth(Setup);
