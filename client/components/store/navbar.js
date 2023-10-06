@@ -8,10 +8,12 @@ import {ProductImage} from "./ProductImage";
 import {useGetCart} from "../../customeHooks/useCart";
 import {SettingsMenu} from "../appBar/SettingsMenu";
 import {useTranslation} from "next-i18next";
+import {useGetCurrentUser} from "../../customeHooks/useGetCurrentUser";
 
 const Navbar = () => {
     const [anchorElCart, setAnchorElCart] = React.useState(null);
     const {data: cart} = useGetCart()
+    const {user} = useGetCurrentUser()
     const {t} = useTranslation("blogStore")
     const handleOpenCartMenu = (event) => {
         setAnchorElCart(event.currentTarget);
@@ -104,7 +106,7 @@ const Navbar = () => {
                           </div>
                       </Menu>
                   </div>
-                   <SettingsMenu />
+                   {user && <SettingsMenu/>}
                </div>
             </div>
          </nav>

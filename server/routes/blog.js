@@ -11,7 +11,7 @@ const {getArticles,
 const router = express.Router();
 
 router.get("/article/:articleId",getArticle)
-router.get("/article/like/:articleId",isLoggedIn,isArticleLiked)
+router.get("/article/like/:articleId",isArticleLiked)
 router.post("/article/like/:articleId",isLoggedIn,toggleLikeAnArticle)
 router.post("/article/read/:articleId",isLoggedIn,readArticle)
 router.get("/articles/:limit", (req,res) =>{

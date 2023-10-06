@@ -35,11 +35,5 @@ export const appBarItems = [
         label: "Settings",
         icon: "solar:settings-linear",
         localLabel: "settings"
-    },
-    {
-        link: "/logout",
-        label: "Logout",
-        icon: "solar:logout-2-linear",
-        localLabel: "logout"
-    },
+    }
 ];

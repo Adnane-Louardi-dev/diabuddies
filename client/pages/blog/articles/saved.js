@@ -15,6 +15,8 @@ import ArticlesList from "../../../components/blog/articlesList";
 
 export default function Saved({categories}){
     const {wishedItems, isLoading} = useGetWishListItems("blog")
+
+    console.log("wishedItems", wishedItems)
     const {t} = useTranslation("blogStore")
     if(isLoading){
         return <LoadingCircle />

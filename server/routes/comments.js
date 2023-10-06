@@ -6,17 +6,20 @@ const {newActionLog} = require("../controllers/gamifyControllers");
 
 router.get("/:articleId",async (req,res)=>{
     const {articleId} = req.params
-    const comments = await commentSchema.find({user: req.user._id, article: articleId, isDeleted:false, isReply: false}).sort({createdAt: 1}).lean().then((res)=>{
-        return res.map(comment => {
-            const {givenName, familyName, photo, createdAt, _id} = comment.user
-            return {...comment, user:{
-                    name: `${givenName} ${familyName}`,
-                    photo, createdAt, _id
-                }}
-        })
-    }).catch(()=>{
-        return []
-    })
+    const comments = await commentSchema.find({article: articleId, isDeleted:false, isReply: false})
+        .sort({createdAt: 1})
+        .lean()
+        .then((res)=>{
+            return res.map(comment => {
+                const {givenName, familyName, photo, createdAt, _id} = comment.user
+                return {...comment, user:{
+                        name: `${givenName} ${familyName}`,
+                        photo, createdAt, _id
+                    }}
+            })
+            }).catch(()=>{
+                return []
+            })
     return res.status(200).json(comments)
 })
 router.post("/:articleId",isLoggedIn,async (req,res)=>{

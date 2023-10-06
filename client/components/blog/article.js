@@ -16,8 +16,10 @@ import Typography from "@mui/material/Typography";
 import {useElementOnScreen} from "../../customeHooks/useElementOnScreen";
 import {useTranslation} from "next-i18next";
 import {getDir} from "../../utils/getDir";
+import Image from "next/image"
 import {useAxios} from "../../customeHooks/useAxios";
-
+import {useGetCurrentUser} from "../../customeHooks/useGetCurrentUser";
+import ReactMarkdown from "react-markdown"
 
 export const Article = ({id,title,content, image,createdAt, relatedArticles,isLiked, likeCount, author:writer}) => {
     const [ref,haveReadArticle] = useElementOnScreen({
@@ -31,6 +33,7 @@ export const Article = ({id,title,content, image,createdAt, relatedArticles,isLi
     const [liked, setLiked] = useState(isLiked)
     const [likesCount, setLikesCount] = useState(likeCount)
     const {mutate:addComment, component:addCommentNotification} = useAddComment(id)
+    const {user:me} = useGetCurrentUser()
     const {mutate:likePost} = useMutation(["likePost"],
   ()=>{
                 return axios.post(`/api/blog/article/like/${id}`)
@@ -51,7 +54,7 @@ export const Article = ({id,title,content, image,createdAt, relatedArticles,isLi
                 }
             })
     useEffect(() => {
-        if(haveReadArticle){
+        if(me && haveReadArticle){
             axios.post(`/api/blog/article/read/${id}`).then((res)=>{
                 if(res.data.message === "read successfully"){
                     queryClient.invalidateQueries(["gamify"])
@@ -80,14 +83,15 @@ export const Article = ({id,title,content, image,createdAt, relatedArticles,isLi
             <div className="flex justify-between px-4 mx-auto max-w-screen-xl ">
                 <article
                     className="mx-auto w-full max-w-2xl format format-sm sm:format-base lg:format-lg format-blue">
-                    <header className="mb-4 lg:mb-6 not-format">
+                    <header dir={"rtl"} className="mb-4 lg:mb-6 not-format">
                         <address className="flex justify-between mb-6 not-italic">
                             <div className="inline-flex items-center mr-3 text-sm text-gray-900">
-                                {avatar?.data && <img className="mr-4 w-16 h-16 rounded-full"
+                                {avatar?.data && <div className="ml-4 w-16 h-16l">
+                                    <Image className={"relative rounded-full"}
                                       src={`${process.env.NEXT_PUBLIC_STRAPI_URL}${avatar.data.attributes.url}`}
-                                      width={avatar.size}
-                                      height={avatar.size}
-                                      alt={name}/>}
+                                      layout="fill" objectFit="cover"
+                                      alt={name}/>
+                                </div>}
                                     <div>
                                         <span rel="author"
                                            className="text-xl font-bold text-gray-900">{name}</span>
@@ -103,12 +107,13 @@ export const Article = ({id,title,content, image,createdAt, relatedArticles,isLi
                                 <WishedIcon itemId={id} type={"blog"} />
                             </div>
                         </address>
-                        <h1 className="mb-4 text-3xl font-extrabold leading-tight text-gray-900 lg:mb-6 lg:text-4xl">
+                        <h1 dir={"rtl"} className="mb-4 text-3xl font-extrabold leading-tight text-gray-900 lg:mb-6 lg:text-4xl">
                             {title}
                         </h1>
                     </header>
-                    <div className={"max-w-full break-words"} dangerouslySetInnerHTML={{__html: html}} />
-
+                    <div className={"max-w-full break-words [&>p]:pb-4 [&_ul]:pb-4 [&_ul]:list-disc [&_li]:mr-4 [&_a]:text-diaBlue [&_h4]:pb-2 [&_h4]:text-xl"}
+                         dir={"rtl"}
+                         dangerouslySetInnerHTML={{__html: html}} />
                     {!isLoading && isSuccess && <section className="not-format">
                         <div ref={ref} className="flex justify-between items-center my-6">
                             <h2 className="text-lg lg:text-2xl font-bold text-gray-900">{t("discussion")} ({data.data.length})</h2>
@@ -119,7 +124,7 @@ export const Article = ({id,title,content, image,createdAt, relatedArticles,isLi
                                     }}} variant="span" color="text.secondary">
                                     {likesCount}
                                 </Typography>
-                                <IconButton onClick={debounce(likePost)}>
+                                <IconButton disabled={!me} onClick={debounce(likePost)}>
                                     <Icon icon={"mdi:like"} color={liked ? "#3AB0FF": undefined} />
                                 </IconButton>
                                 <ShareBlog title={title} />
@@ -140,7 +145,7 @@ export const Article = ({id,title,content, image,createdAt, relatedArticles,isLi
                                           placeholder={t("commentInput")} required/>
                             </div>
                             <Button
-                                disabled={comment.length === 0}
+                                disabled={comment.length === 0 || !me}
                                 onClick={(e) => {
                                     e.stopPropagation()
                                     e.preventDefault()
