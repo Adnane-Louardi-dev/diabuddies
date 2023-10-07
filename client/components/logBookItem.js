@@ -5,7 +5,7 @@ import { Breakfast, Dinner, Glucose, Lunch, Snack } from "./mealIcons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import Box from "@mui/material/Box";
 import CircularProgress from "@mui/material/CircularProgress";
-import { Alert, Snackbar } from "@mui/material";
+import { Button, Typography, Alert, Snackbar, Menu, MenuItem } from "@mui/material";
 import { Icon } from "@iconify/react";
 import { useTranslation } from "next-i18next";
 
@@ -15,6 +15,14 @@ const LogBookItem = ({ props }) => {
   const [notificationOpen, setNotificationOpen] = useState(false);
   const { t } = useTranslation("index");
   const { t: tc } = useTranslation();
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const openMenu = Boolean(anchorEl);
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
   const {
     mutate: deleteLog,
     isLoading,
@@ -40,7 +48,7 @@ const LogBookItem = ({ props }) => {
     },
   });
 
-  const handleClose = () => {
+  const handleNotificationClose = () => {
     setNotificationOpen(false);
   };
 
@@ -64,8 +72,8 @@ const LogBookItem = ({ props }) => {
           <CircularProgress />
         </Box>
       )}
-      <Snackbar open={notificationOpen} autoHideDuration={6000} onClose={handleClose}>
-        <Alert onClose={handleClose} severity={isError ? "danger" : "warning"} sx={{ width: "100%" }}>
+      <Snackbar open={notificationOpen} autoHideDuration={6000} onClose={handleNotificationClose}>
+        <Alert onClose={handleNotificationClose} severity={isError ? "danger" : "warning"} sx={{ width: "100%" }}>
           {isError ? "There was an error while deleting log book" : "Log book was deleted successfully"}
         </Alert>
       </Snackbar>
@@ -75,35 +83,68 @@ const LogBookItem = ({ props }) => {
         <div className="grid gap-2 col-span-5">
           <div className="flex justify-between items-center">
             <h4 className="font-sourceCode font-bold text-diaDarkBlue text-lg">{t(data.meal + "_meal")}</h4>
-            <div className="flex items-center justify-center">
-              <span className="mr-1 p-0.5 h-6 w-6 rounded-lg">
-                <Icon icon="tabler:clock" className="h-5 w-5 text-diaDarkBlue" />
+            <div className="flex items-center">
+              <span className="grid items-center mr-1 rounded-lg">
+                <Icon icon="tabler:clock" className="h-4 w-4 text-diaGray" />
               </span>
               <span className="font-rubik text-sm">{`${moment(data.time).format("HH:mm")}`}</span>
+              <button onClick={handleClick} className="flex justify-end">
+                <Icon icon="pepicons-pencil:dots-y" className="h-7 w-7 text-diaDarkBlue" />
+              </button>
+              <Menu
+                id="demo-positioned-menu"
+                sx={{
+                  mt: "45px",
+                  "& .MuiPaper-root.MuiMenu-paper": {
+                    borderRadius: "15px",
+                  },
+                }}
+                aria-labelledby="demo-positioned-button"
+                anchorEl={anchorEl}
+                open={openMenu}
+                onClose={handleMenuClose}
+                anchorOrigin={{
+                  vertical: "top",
+                  horizontal: "left",
+                }}
+                transformOrigin={{
+                  vertical: "top",
+                  horizontal: "left",
+                }}
+              >
+                <MenuItem className="flex">
+                  <Icon icon="tabler:edit" className={`h-6 w-6 text-diaGray mr-2}`} />
+                  <Typography textAlign="center">Edit</Typography>
+                </MenuItem>
+                <MenuItem className="flex">
+                  <Icon icon="mdi:delete-outline" className={`h-6 w-6 text-diaGray mr-2}`} />
+                  <Typography textAlign="center">Delete</Typography>
+                </MenuItem>
+              </Menu>
             </div>
           </div>
-          {data.glucose && (
-            <div className="flex items-center justify-between">
-              <div className={`flex items-center justify-center mr-3 p-1 text-white rounded-lg ${data.glucose >= 180 ? "bg-diaRed" : data.glucose <= 70 ? "bg-diaBlue" : "bg-diaGreen"}`}>
+          {data.glucose ? (
+            <div className="grid grid-cols-5 items-center justify-between gap-3">
+              <div className={`col-span-3 flex items-center justify-center mr-3 p-1 text-white rounded-lg ${data.glucose >= 180 ? "bg-diaRed" : data.glucose <= 70 ? "bg-diaBlue" : "bg-diaGreen"}`}>
                 <Icon icon="ph:drop" className="mx-1" />
-                <span className="font-sourceCode">{`${data.glucose} ${tc("mg/dL")}`}</span>
+                <span className="font-sourceCode truncate">{`${data.glucose} ${tc("mg/dL")}`}</span>
               </div>
-              <span className="text-diaGray font-rubik font-semibold text-xs">{tc("range")}: 70-180 mg/dL</span>
+              <span className="col-span-2 text-diaGray font-rubik font-semibold text-xs truncate">{tc("range")}: 70-180 mg/dL</span>
             </div>
-          )}
-          <div className="flex items-center justify-between">
+          ) : null}
+          <div className="grid grid-cols-2 items-center justify-between gap-3">
             {data.carbs !== 0 && (
               <div className="flex items-center justify-center p-1 text-white rounded-lg bg-diaDarkBlue">
                 <Icon icon="fluent:food-grains-20-regular" className="mx-1" />
                 <span className="font-sourceCode text-xs">{tc("carbs")}</span>
-                <span className="font-sourceCode font-bold mx-2">{`${data.carbs} ${tc("g")}`}</span>
+                <span className="font-sourceCode font-bold mx-2 truncate">{`${data.carbs} ${tc("g")}`}</span>
               </div>
             )}
             {data.bolus && (
               <div className="flex items-center justify-center p-1 text-white rounded-lg bg-diaOrange">
                 <Icon icon="fluent:food-grains-20-regular" className="mx-1" />
                 <span className="font-sourceCode text-xs">{tc("bolus")}</span>
-                <span className="font-sourceCode font-bold mx-2">{`${data.bolus} UI`}</span>
+                <span className="font-sourceCode font-bold mx-2 truncate">{`${data.bolus} UI`}</span>
               </div>
             )}
           </div>

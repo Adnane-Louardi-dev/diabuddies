@@ -12,6 +12,7 @@ import InputBase from "@mui/material/InputBase";
 import Divider from "@mui/material/Divider";
 import MenuIcon from "@mui/icons-material/Menu";
 import SearchIcon from "@mui/icons-material/Search";
+import Link from "next/link";
 
 export default function Barecode() {
   const router = useRouter();
@@ -77,11 +78,9 @@ export default function Barecode() {
             sx={{ ml: 1, flex: 1 }}
             placeholder="Search By Barecode Number"
             inputProps={{ "aria-label": "search google maps" }}
-            disabled={barecode === ""}
           />
           <Divider sx={{ height: 28, m: 0.5 }} orientation="vertical" />
           <IconButton
-            disabled={barecode === ""}
             type="button"
             sx={{ p: "10px" }}
             aria-label="search"
@@ -109,9 +108,9 @@ export default function Barecode() {
         </section>
       </section>
 
-      <Button onClick={handleClose} className="w-full p-3 my-3 shadow-md bg-blue-600 text-white font-poppins font-xl">
-        Accept
-      </Button>
+      <Link href={"/app/add"} passHref>
+        <Button className="w-full p-3 my-3 shadow-md bg-blue-600 text-white font-poppins font-xl">Accept</Button>
+      </Link>
       {/* <p>
           <span>Last result:</span>
           <span>{result}</span>

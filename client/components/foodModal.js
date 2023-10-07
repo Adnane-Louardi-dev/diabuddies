@@ -14,12 +14,12 @@ const FoodModal = ({ props }) => {
   return (
     <div className="flex items-center gap-1 m-2 px-2 py-2 rounded-xl bg-diaDarkBlue">
       <div className="relative col-span-2 flex-none rounded-lg bg-slate-200 h-16 w-16">
-        <Image src={props.image_url || "/diabuddies_logo_D_placeholder.png"} alt={props.product_name} style={{ objectFit: "cover" }} fill sizes="(max-width: 20px), (max-width: 30px)" className="rounded-lg" />
+        <Image src={props.image_url || "/diabuddies_logo_D_placeholder.png"} alt={props.product_name || "product"} style={{ objectFit: "cover" }} fill sizes="(max-width: 20px), (max-width: 30px)" className="rounded-lg" />
       </div>
       <div className="grid col-span-5 flex-1">
         <h2 className="font-sourceCode text-lg font-semibold text-white truncate">{props.product_name}</h2>
         <p className="font-rubik text-diaBlue font-semibold text-sm truncate">{`${props.nutriments.energy_100g}Kcal, ${props.nutriments.carbohydrates_100g}g carbs per 100${props.quantity?.match(/[a-zA-Z]+/g) || "g"}`}</p>
-        {props.quantity && <p className="font-poppins text-gray-400 text-sm truncate">{`${props.quantity}`}</p>}{" "}
+        {props.quantity && <p className="font-poppins text-gray-400 text-sm truncate">{`${props.quantity}`}</p>}
       </div>
       <div className="flex w-28 flex-none text-white rounded-2xl bg-diaBlue">
         <TextField
@@ -27,8 +27,7 @@ const FoodModal = ({ props }) => {
           type="number"
           variant="standard"
           placeholder="100"
-          defaultValue={100}
-          value={qty}
+          value={qty || ""}
           sx={{
             marginTop: "4px",
             marginX: "2px",

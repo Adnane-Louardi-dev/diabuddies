@@ -12,17 +12,25 @@ export const useAddFood = () => {
   });
   const { mutate: addFood } = useMutation(
     (food) => {
-      function removeDuplicates(arr, comparer) {
-        return arr.filter((item, index, self) => {
-          return index === self.findIndex((i) => comparer(i, item));
-        });
+      function removeDuplicates(array, key) {
+        const uniqueArray = [];
+        const seen = new Set();
+
+        for (const item of array) {
+          const itemKey = item[key];
+
+          if (!seen.has(itemKey)) {
+            seen.add(itemKey);
+            uniqueArray.push(item);
+          }
+        }
+
+        return uniqueArray;
       }
-      let recentFood = JSON.parse(localStorage.getItem("recentFood")) || { products: [] };
-      const comparer = (a, b) => a.product_name === b.product_name;
-      const uniqueArray = removeDuplicates(recentFood.products, comparer);
-      console.log(uniqueArray);
+      const recentFood = JSON.parse(localStorage.getItem("recentFood")) || { products: [] };
+      const uniqueArray = removeDuplicates([food, ...recentFood.products], "product_name");
       localStorage.setItem("my-food", JSON.stringify([...foods, food]));
-      localStorage.setItem("recentFood", JSON.stringify({ ...recentFood, products: uniqueArray }));
+      localStorage.setItem("recentFood", JSON.stringify({ products: uniqueArray }));
     },
     {
       onSuccess: refetch,

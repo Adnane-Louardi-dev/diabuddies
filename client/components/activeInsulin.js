@@ -50,26 +50,7 @@ const ActiveInsulin = ({ props, setActiveInsulin, activeInsulin, lastInjectionTi
             </div>
           </div>
         </div>
-      ) : (
-        <div className="py-2 w-1/2 mx-1">
-          <div className="rounded-3xl shadow-md bg-orange-200 text-white p-3">
-            <div className="flex justify-between w-full items-center mb-3">
-              <h3 className="font-inter text-md text-semibold truncate">{t("active_insuling")} </h3> <Icon icon="ph:info" />
-            </div>
-
-            <div className="my-2">
-              <div className="mx-2">
-                <p className="font-inter text-bold text-4xl truncate">
-                  00.00 <span className="text-sm text-semibold">UI</span>
-                </p>
-              </div>
-            </div>
-            <div className="py-1 bg-white truncate rounded-full font-poppins text-semibold text-sm text-center text-orange-200">
-              <span>{t("no_active_insulin")}</span>
-            </div>
-          </div>
-        </div>
-      )}
+      ) : null}
     </>
   );
 };

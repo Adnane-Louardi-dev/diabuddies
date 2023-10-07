@@ -1,11 +1,11 @@
-import {Icon} from "@iconify/react";
+import { Icon } from "@iconify/react";
 import TextField from "@mui/material/TextField";
 import InputAdornment from "@mui/material/InputAdornment";
 import * as React from "react";
-import {useTranslation} from "next-i18next";
+import { useTranslation } from "next-i18next";
 
-export const NutrationLogInput = ({ onChange, label, bgColor,value, textColor, icon, inputAdornmentLabel }) => {
-  const {t} = useTranslation()
+export const NutrationLogInput = ({ onChange, label, bgColor, value, textColor, icon, inputAdornmentLabel }) => {
+  const { t } = useTranslation();
   return (
     <div className={`p-2.5 bg-diaDarkBlue rounded-xl shadow-md`}>
       <div className="flex justify-between items-center">
@@ -21,10 +21,10 @@ export const NutrationLogInput = ({ onChange, label, bgColor,value, textColor, i
       </div>
       <TextField
         id="outlined-number"
-        type="tel"
+        type="number"
         variant="standard"
-        placeholder="0"
-        value={value}
+        placeholder={"0"}
+        value={value || ""}
         sx={{
           marginTop: 1,
           marginX: 1,

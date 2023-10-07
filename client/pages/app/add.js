@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useLayoutEffect } from "react";
 import moment from "moment";
 import Button from "@mui/material/Button";
 import DialogActions from "@mui/material/DialogActions";
@@ -79,11 +79,6 @@ export default function NewLogDialog() {
   };
 
   useEffect(() => {
-    setData({ ...data, kcal: kcalCalculate(data) });
-  }, [data]);
-
-  useEffect(() => {
-    setInsulinType(data.basal !== 0 ? "basal" : "bolus");
     let newMacrosBasedOnFoodChange =
       foods?.reduce(
         (accum, item) => {
@@ -94,20 +89,21 @@ export default function NewLogDialog() {
         },
         { ...nullLogBook }
       ) ?? nullLogBook;
-    newMacrosBasedOnFoodChange.kcal = kcalCalculate(newMacrosBasedOnFoodChange);
     setData({ ...data, ...newMacrosBasedOnFoodChange });
+    setInsulinType(data.basal !== 0 ? "basal" : "bolus");
     console.log(foods);
+    return () => setData({ ...nullLogBook, time: moment()._d });
   }, [foods]);
 
-  const handlePOSTNewLog = async () => {
-    await addNewLogBook(data);
+  useLayoutEffect(() => {
+    setData({ ...data, kcal: kcalCalculate(data) });
+  }, [data.carbs, data.protein, data.fat]);
+
+  const handlePOSTNewLog = () => {
+    addNewLogBook(data);
     clearAll();
     setData({ ...nullLogBook, time: moment()._d });
     router.push("/app");
-  };
-
-  const handleClose = () => {
-    setNotificationOpen(false);
   };
 
   const handleOnChange = (event, key) => {
@@ -247,7 +243,7 @@ export default function NewLogDialog() {
               id="outlined-number"
               type="number"
               variant="standard"
-              value={data.bolus !== 0 ? data.bolus : data.basal}
+              value={(data.bolus !== 0 ? data.bolus : data.basal) || ""}
               onChange={(event) => {
                 const value = event.target.value;
                 if (InsulinType === "bolus") {
@@ -257,7 +253,6 @@ export default function NewLogDialog() {
                 }
               }}
               placeholder="0"
-              defaultValue={0}
               sx={{
                 marginY: 2,
                 marginX: 1,
@@ -412,12 +407,9 @@ export default function NewLogDialog() {
       )}
 
       <Box sx={{ display: "grid", gap: 2, gridTemplateColumns: "repeat(2, minmax(0, 1fr))", width: "full" }}>
-        <Button className="w-full p-3 rounded-full shadow-md text-gray-800 font-codeSource font-xl">
-          <Link href={"/app/"} passHref>
-            {tc("cancel")}
-          </Link>
-        </Button>
-
+        <Link href={"/app"} passHref>
+          <Button className="w-full p-3 rounded-full shadow-md text-gray-800 font-codeSource font-xl">{tc("cancel")}</Button>
+        </Link>
         <Button disabled={isLoading} onClick={handlePOSTNewLog} variant="filled" className="w-full p-3 rounded-full shadow-md bg-gray-800 text-white  font-codeSource font-xl">
           {tc("save")}
         </Button>
