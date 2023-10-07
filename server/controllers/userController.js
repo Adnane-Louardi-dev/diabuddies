@@ -24,6 +24,9 @@ module.exports = {
   },
   getMe: async (req, res) => {
     try {
+      if(!req.user){
+        return res.status(201).json(undefined);
+      }
       const user = await userSchema.findById(req.user._id);
       return res.status(201).json(user);
     } catch (e) {
@@ -31,6 +34,9 @@ module.exports = {
     }
   },
   getMeDetailed: async (req, res) => {
+    if(!req.user){
+      res.status(200).json(undefined)
+    }
     const detailedUser = await userSchema.findById(req.user._id);
     const diabeticDetails = await diabeticDetailsSchema
       .findOne({

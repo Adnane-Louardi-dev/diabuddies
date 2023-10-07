@@ -65,6 +65,12 @@ export const SettingsMenu = () => {
             </MenuItem>
           </Link>
         ))}
+          <Link href={"/logout"} passHref>
+              <MenuItem onClick={handleCloseUserMenu} className="flex">
+                  <Icon icon={"solar:logout-2-linear"} className={`h-6 w-6 text-diaGray ${i18n.language === "ar" ? "ml-2" : "mr-2"}`} />
+                  <Typography textAlign="center">{t("logout")}</Typography>
+              </MenuItem>
+          </Link>
         <MenuItem className={"flex justify-between"} dir={"ltr"}>
           <IconButton
             onClick={() => {

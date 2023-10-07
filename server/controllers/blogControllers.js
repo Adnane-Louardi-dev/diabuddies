@@ -21,10 +21,13 @@ const toggleLikeAnArticle = async (req,res) => {
     return res.status(200).json({message: "like the article succefully"})
 }
 const isArticleLiked = async (req,res) => {
-    const isLiked =  await likeSchema.exists({
-        userId: req.user._id,
-        articleId: req.params.articleId
-    })
+    let isLiked = false;
+    if(req.user){
+        isLiked = await likeSchema.exists({
+            userId: req.user._id,
+            articleId: req.params.articleId
+        })
+    }
     const likesCount = await likeSchema.countDocuments({
         articleId: req.params.articleId
     })
@@ -36,7 +39,7 @@ const readArticle = async (req,res) => {
         itemId: req.params.articleId,
         actionType: "readABlog"
     })
-    if(haveReadArticle){
+    if(!!haveReadArticle){
         return res.status(200).json({message: "already read"})
     }
     await actionLogSchema.create({

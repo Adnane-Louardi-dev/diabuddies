@@ -4,8 +4,13 @@ import axios from "axios";
 export const useGetCurrentUser = () => {
   const result = useQuery({
     queryKey: ["getCurrentUser"],
-    queryFn: async () => await axios.get(`/api/user/me`, { withCredentials: true }),
-    onError: (e) => console.log(e),
+    queryFn: async () => await axios
+        .get(`/api/user/me`, { withCredentials: true }),
+    onError: (err) => {
+      if(err.status === 401){
+        return {data: undefined}
+      }
+    },
     refetchOnMount: false,
     cacheTime: "Infinity",
   });

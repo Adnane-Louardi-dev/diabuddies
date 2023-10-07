@@ -84,7 +84,7 @@ const Cart = ({cities}) => {
                   <div className={"w-full mt-5 lg:w-[400px]"}>
                      <Typography typography={"h6"} textAlign={"center"}>{t("shippingInfo")}</Typography>
                      <div className={"mt-3 mx-10"}>
-                        <TextField variant="outlined" className={"mt-2 w-full"} {...register("customerName")} label={t("name")} defaultValue={user.givenName + " " + user.familyName} required type={"text"} />
+                        <TextField variant="outlined" className={"mt-2 w-full"} {...register("customerName")} label={t("name")} defaultValue={user ? user.givenName + " " + user.familyName : ""} required type={"text"} />
                      </div>
                      <div className={"mx-10"}>
                         <TextField variant="outlined" className={"mt-2 w-full"} {...register("shippingAddress")} label={t("shippingAddress")} defaultValue={user.homeAddress} required type={"text"} />

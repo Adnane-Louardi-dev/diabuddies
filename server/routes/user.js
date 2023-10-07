@@ -5,7 +5,7 @@ const { updateUser, addMedicament, getMe, updatediabeticDetails, setupProfile, g
 const { isLoggedIn } = require("../middlewares/isLoggedIn");
 
 //get user data
-router.get("/me", isLoggedIn, getMe);
+router.get("/me", getMe);
 router.get("/profile/:token", getProfile);
 router.get("/diabeticDetails", isLoggedIn, getMeDetailed);
 router.post("/diabeticDetails", isLoggedIn, setupProfile);

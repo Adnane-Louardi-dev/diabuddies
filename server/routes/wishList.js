@@ -5,10 +5,12 @@ const {isLoggedIn} = require("../middlewares/isLoggedIn");
 const {strapiInstance} = require("../middlewares/blogAxios");
 const {productQuery, articleQuery} = require("../util/baseQueries");
 
-router.get("/:slug", isLoggedIn,async (req, res) => {
+router.get("/:slug",async (req, res) => {
     try {
         const slug= req.params.slug.trim().toLowerCase()
-        console.log("slug",slug)
+        if(!req.user){
+            return res.status(200).json([])
+        }
         const wishList = await wishListSchema.find({
             userId: req.user._id,
             isProduct: slug === "product",
