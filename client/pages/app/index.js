@@ -96,7 +96,27 @@ function Home() {
                 </section>
               </>
             )}
-            <BolusAdvisor activeInsulin={activeInsulin} glucose={glucose} lastInjectionTime={lastInjectionTime} />
+            <div className="flex snap-x snap-mandatory px-3 w-full overflow-x-scroll no-scrollbar">
+              <div className="snap-center mr-1 w-full shrink-0">
+                <BolusAdvisor activeInsulin={activeInsulin} glucose={glucose} lastInjectionTime={lastInjectionTime} />
+              </div>
+              <div className="snap-center mr-1 w-full shrink-0">
+                <div className="flex content-end justify-center p-5 h-full w-full">
+                  <div className="flex relative w-full p-5">
+                    <Image src={"/buy_our_products.png"} alt={"image_diabuddies"} layout="fill" objectFit="cover" />
+                    <div className="self-end">
+                      <Button variant="filled" className="flex mt-3 text-diaBlue text-xl font-poppins bg-white pt-2 rounded-full shadow-md">
+                        Buy our products
+                      </Button>
+                    </div>
+                  </div>
+                  {/* <h2 className="font-sourceCode text-2xl font-semibold text-white">{t("hero_text")}</h2> */}
+                </div>{" "}
+              </div>
+              <div className="snap-center mr-1 w-full shrink-0">
+                <BolusAdvisor activeInsulin={activeInsulin} glucose={glucose} lastInjectionTime={lastInjectionTime} />
+              </div>
+            </div>
             <div className="flex justify-between items-center my-5">
               <div className="flex items-center">
                 <div className="ring-1 ring-gray-300 p-1 rounded-md mx-3">

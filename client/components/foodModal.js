@@ -9,12 +9,12 @@ import InputAdornment from "@mui/material/InputAdornment";
 
 const FoodModal = ({ props }) => {
   const { addFood } = useAddFood();
-  const [qty, setQty] = useState(formatQty(props.quantity));
+  const [qty, setQty] = useState(formatQty(props.quantity || "100 g"));
   //
   return (
     <div className="flex items-center gap-1 m-2 px-2 py-2 rounded-xl bg-diaDarkBlue">
-      <div className="relative col-span-2 flex-none rounded-lg bg-slate-200 h-16 w-16">
-        <Image src={props.image_url || "/diabuddies_logo_D_placeholder.png"} alt={props.product_name || "product"} style={{ objectFit: "cover" }} fill sizes="(max-width: 20px), (max-width: 30px)" className="rounded-lg" />
+      <div className="relative col-span-2 flex-none rounded-lg bg-white h-16 w-16">
+        <Image src={props.image_url || "/diabuddies_logo_D_placeholder.png"} alt={props.product_name || "product"} objectFit="contain" layout="fill" className="absolute inset-0 p-1" />
       </div>
       <div className="grid col-span-5 flex-1">
         <h2 className="font-sourceCode text-lg font-semibold text-white truncate">{props.product_name}</h2>
@@ -26,8 +26,8 @@ const FoodModal = ({ props }) => {
           id="outlined-number"
           type="number"
           variant="standard"
-          placeholder="100"
-          value={qty || ""}
+          placeholder="0"
+          value={qty || "100"}
           sx={{
             marginTop: "4px",
             marginX: "2px",

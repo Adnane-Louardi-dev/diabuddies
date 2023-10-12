@@ -5,7 +5,7 @@ import Image from "next/image";
 const BolusAdvisor = ({ activeInsulin, glucose, lastInjectionTime }) => {
   const { t } = useTranslation("index");
   return (
-    <div className="flex content-end justify-center my-5 h-48 w-full shadow-xl rounded-3xl">
+    <div className="flex content-end justify-center my-5 h-48 w-full rounded-3xl">
       <div className="flex relative w-full p-5">
         <Image src={"/carbs_counting.png"} alt={"image_diabuddies"} layout="fill" objectFit="cover" className="absolute top-0 left-0 bottom-0 right-0 rounded-3xl" />
         <div className="self-end">

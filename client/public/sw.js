@@ -37,8 +37,8 @@ self.addEventListener("message", (event) => {
 let mealsTime = {
   breakfast: { min: 5, max: 11 },
   lunch: { min: 11, max: 15 },
-  snack: { min: 17, max: 19 },
-  dinner: { min: 20, max: 23 },
+  snack: { min: 15, max: 19 },
+  dinner: { min: 19, max: 23 },
 };
 
 //get propre meal for this time
@@ -53,7 +53,7 @@ function checkMealValidity(mealHour) {
     case mealHour >= mealsTime.dinner.min:
       return "dinner";
     default:
-      return "other";
+      return "meals";
   }
 }
 function checkRecentLogsAndDisplayNotification() {

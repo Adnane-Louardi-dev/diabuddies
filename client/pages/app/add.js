@@ -201,7 +201,7 @@ export default function NewLogDialog() {
       </section>
       <div className="flex justify-between items-center">
         <h3 className="font-sourceCode text-diaGray text-md">{t("mealInfo")}</h3>
-        <h3 className="font-sourceCode text-diaGreen text-sm">{`${data.kcal} Kcal`}</h3>
+        <h3 className="font-sourceCode text-diaGreen text-sm">{`${data.kcal || 0} Kcal`}</h3>
       </div>
       <div className="grid grid-cols-2 gap-2 my-3">
         <NutrationLogInput

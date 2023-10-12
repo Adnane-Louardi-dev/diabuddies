@@ -12,8 +12,7 @@ import FoodModal from "../foodModal";
 import { useState, useEffect } from "react";
 import axios from "axios";
 import { useQuery } from "@tanstack/react-query";
-import LoadingCircle from "../loadingCircle";
-
+import Image from "next/image";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -30,9 +29,15 @@ export default function SearchForFood({ isSearchForAMealOpen, setIsSearchForAMea
     queryKey: ["food", searchQuery],
     queryFn: async () => {
       if (searchQuery) {
-        const result = await axios.get(`/food/api/search?categories_tags=${searchQuery}&fields=product_name,nutriments,image_url,quantity&page_size=5&json=true`, { withCredentials: true });
+        const result = await axios.get(`/food/api/search?categories_tags=${searchQuery}&fields=product_name,nutriments,image_url,quantity&page_size=20&json=true`, { withCredentials: true });
         console.log(result);
-        return result.data;
+        let filtredData = result?.data.products.filter((value) => {
+          if (value.product_name && value.nutriments.carbohydrates_100g && value.nutriments.fat_100g && value.nutriments.proteins_100g) {
+            return value;
+          }
+        });
+
+        return { products: filtredData };
       } else {
         const recentFood = JSON.parse(localStorage.getItem("recentFood"));
         return recentFood;
@@ -41,13 +46,34 @@ export default function SearchForFood({ isSearchForAMealOpen, setIsSearchForAMea
     enabled: IsSearching,
     onSuccess: (data) => {
       setIsSearching(false);
-      return data?.products.filter((value) => value.nutriments.carbohydrates_100g && value.nutriments.fat_100g && value.nutriments.proteins_100g);
     },
     onError: (e) => {
       setSearchError(true);
       console.error(e);
     },
   });
+  useEffect(() => {
+    const keyDownHandler = (event) => {
+      if (event.key === "Enter") {
+        event.preventDefault();
+        setIsSearching(true);
+        refetch();
+      }
+    };
+
+    document.addEventListener("keydown", keyDownHandler);
+
+    return () => {
+      document.removeEventListener("keydown", keyDownHandler);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!searchQuery) {
+      refetch();
+    }
+  }, [searchQuery]);
+
   const handleClickOpen = () => {
     setIsSearchForAMealOpen("open");
   };
@@ -55,12 +81,6 @@ export default function SearchForFood({ isSearchForAMealOpen, setIsSearchForAMea
   const handleClose = () => {
     setIsSearchForAMealOpen("closed");
   };
-
-  useEffect(() => {
-    if (!searchQuery) {
-      refetch();
-    }
-  }, [searchQuery]);
 
   return (
     <>
@@ -83,7 +103,7 @@ export default function SearchForFood({ isSearchForAMealOpen, setIsSearchForAMea
         </div>
 
         <div className="flex px-5 py-3">
-          <TextField fullWidth sx={{ "& fieldset": { borderRadius: "25px" }, "& input": { padding: "10px" }, "& label": { marginY: "-5px" } }} label="Search" id="fullWidth" value={searchQuery || ""} onChange={(newSearchQuery) => setsearchQuery(newSearchQuery.target.value || "")} />
+          <TextField fullWidth sx={{ "& fieldset": { borderRadius: "25px" }, "& input": { padding: "1rem" } }} label="Search" id="fullWidth" value={searchQuery || ""} onChange={(newSearchQuery) => setsearchQuery(newSearchQuery.target.value || "")} />
           <Button
             onClick={() => {
               setIsSearching(true);
@@ -102,8 +122,13 @@ export default function SearchForFood({ isSearchForAMealOpen, setIsSearchForAMea
           </div>
         )}
         {IsSearching ? (
-          <div className="grid h-screen justify-center content-center">
-            <LoadingCircle />
+          <div className="grid h-screen justify-center content-center pb-32">
+            <div className="flex items-start">
+              <Image src={"/loading_skelton_searchForFood.png"} alt={"loading_skelton_searchForFood"} height={300} width={300} className="" />
+            </div>
+            <div className="text-center my-2">
+              <h2 className="text-3xl font-poppins font-semibold text-diaDarkBlue">Fetching Food . . .</h2>
+            </div>
           </div>
         ) : (
           <section className="p-3">
