@@ -1,6 +1,6 @@
 {
-    "theme_color": "#3AB0FF",
-    "background_color": "#F0FFFF",
+    "theme_color": "#f0ffff",
+    "background_color": "#f0ffff",
     "start_url": "/app",
     "orientation": "portrait",
     "display": "fullscreen",

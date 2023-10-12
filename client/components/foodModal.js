@@ -14,7 +14,7 @@ const FoodModal = ({ props }) => {
   return (
     <div className="flex items-center gap-1 m-2 px-2 py-2 rounded-xl bg-diaDarkBlue">
       <div className="relative col-span-2 flex-none rounded-lg bg-white h-16 w-16">
-        <Image src={props.image_url || "/diabuddies_logo_D_placeholder.png"} alt={props.product_name || "product"} objectFit="contain" layout="fill" className="absolute inset-0 p-1" />
+        <Image src={props.image_url ?? "/diabuddies_logo_D_placeholder.png"} alt={props.product_name || "product"} objectFit="contain" layout="fill" className="absolute inset-0 p-1" />
       </div>
       <div className="grid col-span-5 flex-1">
         <h2 className="font-sourceCode text-lg font-semibold text-white truncate">{props.product_name}</h2>
@@ -73,6 +73,7 @@ const FoodModal = ({ props }) => {
           sx={{ minWidth: "30px" }}
           onClick={() => {
             addFood({ ...props, id: crypto.randomUUID(), qty });
+            console.log("added");
           }}
         >
           <Icon icon="material-symbols:add-circle-rounded" className="self-center h-7 w-7 text-white" />
