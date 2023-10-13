@@ -45,7 +45,10 @@ const checkoutOrder = async (req,res) => {
               }
           })
           return strapiInstance.post("/api/vente-entries",JSON.parse(entryCreation))
-              .then((res)=>res.data.data)
+              .then((res)=> res.data.data)
+              .catch((err)=>{
+                  console.error(err.data)
+              })
       }))
 
 
@@ -61,7 +64,7 @@ const checkoutOrder = async (req,res) => {
       console.log(orderUpdating)
       return res.status(200).json(updatedOrder)
   } catch (e) {
-      console.error(e.message)
+      console.error(e)
       return res.status(404).json({message: "There was an error creating the order"})
   }
 }

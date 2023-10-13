@@ -21,24 +21,34 @@ export default function CategoryArticles({categories,articles}){
 
     const {t} = useTranslation("blogStore")
 
-
+    return <BlogLayout articles={<ArticlesList articles={articles} />}>
+        <Link href={"/blog/articles/saved"} className={"w-full"}>
+            <Button className={`bg-diaDarkBlue w-full text-white opacity-60 hover:opacity-100`}>
+                {t("favoritArticles")}
+            </Button>
+        </Link>
+        <Link href={"/blog/articles"}>
+            <Button className={"bg-diaDarkBlue text-white opacity-60 hover:opacity-100"}>
+                {t("articles")}
+            </Button>
+        </Link>
+        <Categories categories={categories} />
+    </BlogLayout>
     return <Container maxWidth={"xl"}>
         <ResponsiveAppBar />
-        <div className={"flex gap-2 flex-wrap justify-center mb-5"}>
-            <Link href={"/blog/articles"}>
-                <Button className={"bg-diaDarkBlue text-white opacity-60 hover:opacity-100 mx-5"}>
-                    {t("articles")}
-                </Button>
-            </Link>
-            <Categories categories={categories} />
-            <Link href={"/blog/articles/saved"}>
-                <Button className={`bg-diaDarkBlue text-white opacity-60 hover:opacity-100 mx-5`}>
-                    {t("favoritArticles")}
-                </Button>
-            </Link>
-        </div>
-        <ArticlesList articles={articles} />
+        <div className={"grid grid-cols-12 gap-4"}>
+            <div className={"order-2 sm:order-1 col-span-12 sm:col-span-8 md:col-span-9"}>
+            </div>
+            <div className={"order-1 sm:order-2 col-span-12 sm:col-span-4 md:col-span-3"}>
+                <div className={"bg-diaBlue rounded-md p-5 mt-5 sm:mt-0 sm:min-h-[400px]"}>
+                    <Typography align={"start"} variant={"h5"} sx={{color: "#fff"}}>Blog Categories</Typography>
+                    <hr className={"mb-3"}/>
+                    <div className={"flex gap-1 gap-y-1 flex-wrap justify-start mb-5"}>
 
+                    </div>
+                </div>
+            </div>
+        </div>
     </Container>
 }
 

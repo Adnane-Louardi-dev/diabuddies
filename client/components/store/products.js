@@ -32,7 +32,7 @@ export default function Product({id, ...product}) {
    const {t} = useTranslation("blogStore")
    return (
       <>
-         <div className="h-screen relative">
+         <div className="min-h-screen relative">
             {/*---- top navbar ----*/}
             <div className="flex justify-between m-5 px-5 py-4 h-16 rounded-2xl bg-gray-200 shadow-lg">
                <Link href="/store">
@@ -76,7 +76,7 @@ export default function Product({id, ...product}) {
             </div>
             {/*----  ----*/}
             {/*---- subbar ----*/}
-            <div className="fixed bottom-0 left-0 right-0 m-5 px-5 py-4 h-16 rounded-2xl bg-gray-200 shadow-lg font-nunito">
+            <div className="fixed bottom-20 left-0 right-0 m-5 px-5 py-4 h-16 rounded-2xl bg-gray-200 shadow-lg font-nunito">
                <div className="flex justify-between sm:justify-between">
                   <button type="submit" className=" hidden sm:inline-flex h-10 w-24 text-white bg-gray-500 hover:bg-gray-400 px-3 py-2 rounded-md">
                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 my-0.5 mr-1" viewBox="0 0 20 20" fill="currentColor">
