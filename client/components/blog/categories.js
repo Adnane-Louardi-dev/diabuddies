@@ -15,7 +15,7 @@ export const Categories = ({categories}) => {
   return <>
       {categories.map(({attributes})=>(
           <Link href={`/blog/articles/${attributes.slug}`} key={attributes.slug}>
-              <Button className={`bg-diaDarkBlue text-white hover:opacity-100 ${currentSlug === attributes.slug ? "opacity-100" : "opacity-60"} mx-5`}>
+              <Button className={`bg-diaDarkBlue text-white hover:opacity-100 ${currentSlug === attributes.slug ? "opacity-100" : "opacity-60"}`}>
                   {attributes.name}
               </Button>
           </Link>

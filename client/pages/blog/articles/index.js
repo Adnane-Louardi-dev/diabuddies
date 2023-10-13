@@ -5,7 +5,7 @@ import {useRouter} from "next/router";
 import React, {useEffect} from "react";
 import {SmallArticle} from "../../../components/blog/smallArticle";
 import Container from "@mui/material/Container";
-import {Button} from "@mui/material";
+import {Button, Typography} from "@mui/material";
 import Link from "next/link";
 import axios from "axios";
 import {serverSideTranslations} from "next-i18next/serverSideTranslations";
@@ -15,6 +15,7 @@ import qs from "qs";
 import {articleQuery} from "../../../utils/baseQueries";
 import {useElementOnScreen} from "../../../customeHooks/useElementOnScreen";
 import ArticlesList from "../../../components/blog/articlesList";
+import {BlogLayout} from "../../../components/store/blogLayout";
 
 const PAGE_SIZE = 3
 export default function Posts({articles:initialArticles,categories}) {
@@ -50,25 +51,19 @@ export default function Posts({articles:initialArticles,categories}) {
             fetchNextPage()
         }
     }, [isVisible]);
-    return <Container maxWidth={"xl"}>
-        <ResponsiveAppBar />
-        <div className={"flex gap-2 flex-wrap justify-center mb-5"}>
+    return <BlogLayout articles={<ArticlesList articles={articles} ref={ref} />}>
+            <Link href={"/blog/articles/saved"} className={"w-full"}>
+                <Button className={`bg-diaDarkBlue w-full text-white opacity-60 hover:opacity-100`}>
+                    {t("favoritArticles")}
+                </Button>
+            </Link>
             <Link href={"/blog/articles"}>
-                <Button className={"bg-diaDarkBlue text-white opacity-100 hover:opacity-100 mx-5"}>
+                <Button className={"bg-diaDarkBlue text-white opacity-100 hover:opacity-100"}>
                     {t("articles")}
                 </Button>
             </Link>
             <Categories categories={categories} />
-            <Link href={"/blog/articles/saved"}>
-                <Button className={`bg-diaDarkBlue text-white opacity-60 hover:opacity-100 mx-5`}>
-                    {t("favoritArticles")}
-                </Button>
-            </Link>
-        </div>
-
-        <ArticlesList articles={articles} ref={ref} />
-
-    </Container>
+    </BlogLayout>
 }
 
 export async function getStaticProps({locale}) {

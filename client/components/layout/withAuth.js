@@ -9,11 +9,14 @@ export default function withAuth(Component) {
     const { user, isLoading } = useGetCurrentUser();
 
     useEffect(() => {
-      setTimeout(() => {
+      const timeout = setTimeout(() => {
         if (!isLoading && !user) {
           router.push("/login");
         }
       }, 1000);
+      return () => {
+        clearTimeout(timeout)
+      }
     }, [router, isLoading]);
 
     if (isLoading) {

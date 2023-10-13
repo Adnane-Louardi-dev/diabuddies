@@ -22,22 +22,18 @@ export default function Saved({categories}){
         return <LoadingCircle />
     }
 
-    return <BlogLayout>
-        <div className={"flex gap-2 flex-wrap justify-center mb-5"}>
-            <Link href={"/blog/articles"}>
-                <Button className={"bg-diaDarkBlue text-white opacity-60 hover:opacity-100 mx-5"}>
-                    {t("articles")}
-                </Button>
-            </Link>
-            <Categories categories={categories} />
-            <Link href={"/blog/articles/saved"}>
-                <Button className={`bg-diaDarkBlue text-white opacity-100 hover:opacity-100 mx-5`}>
-                    {t("favoritArticles")}
-                </Button>
-            </Link>
-        </div>
-        <ArticlesList articles={wishedItems}  />
-
+    return <BlogLayout articles={<ArticlesList articles={wishedItems} />}>
+        <Link href={"/blog/articles/saved"} className={"w-full"}>
+            <Button className={`bg-diaDarkBlue w-full text-white opacity-100 hover:opacity-100`}>
+                {t("favoritArticles")}
+            </Button>
+        </Link>
+        <Link href={"/blog/articles"}>
+            <Button className={"bg-diaDarkBlue text-white opacity-60 hover:opacity-100"}>
+                {t("articles")}
+            </Button>
+        </Link>
+        <Categories categories={categories} />
     </BlogLayout>
 }
 
