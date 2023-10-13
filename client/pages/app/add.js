@@ -1,7 +1,6 @@
 import { useEffect, useState, useLayoutEffect } from "react";
 import moment from "moment";
 import Button from "@mui/material/Button";
-import DialogActions from "@mui/material/DialogActions";
 import { Icon } from "@iconify/react";
 import TextField from "@mui/material/TextField";
 import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker";
@@ -17,7 +16,6 @@ import { GetSavedMealsModal } from "../../components/getSavedMealsModal";
 import { nullLogBook } from "../../utils/nulls";
 import { useTranslation } from "next-i18next";
 import SearchForFood from "../../components/logBookDialog/searchForFood";
-import Image from "next/image";
 import Link from "next/link";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useAddFood, useAddNewLogBook } from "../../customeHooks/useAddFood";

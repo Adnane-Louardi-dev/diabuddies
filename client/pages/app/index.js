@@ -1,6 +1,5 @@
 import * as React from "react";
 import { useEffect, useMemo, useState } from "react";
-import axios from "axios";
 import Image from "next/image";
 import Link from "next/link";
 import moment from "moment";
@@ -30,8 +29,6 @@ import Container from "@mui/material/Container";
 import withAuth from "../../components/layout/withAuth";
 import { useHomeArticles, useHomeProducts, useIndexCharts } from "../../customeHooks/useHomePage";
 import { HomePageSkeleton } from "../../components/skeleton/homePageSkeleton";
-import ToggleButton from "@mui/material/ToggleButton";
-import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
 function Home() {
   const router = useRouter();
@@ -97,24 +94,22 @@ function Home() {
               </>
             )}
             <div className="flex snap-x snap-mandatory px-3 w-full overflow-x-scroll no-scrollbar">
-              <div className="snap-center mr-1 w-full shrink-0">
+              <div className="snap-center mr-0.5 w-full shrink-0">
                 <BolusAdvisor activeInsulin={activeInsulin} glucose={glucose} lastInjectionTime={lastInjectionTime} />
               </div>
-              <div className="snap-center mr-1 w-full shrink-0">
-                <div className="flex content-end justify-center p-5 h-full w-full">
-                  <div className="flex relative w-full p-5">
-                    <Image src={"/buy_our_products.png"} alt={"image_diabuddies"} layout="fill" objectFit="cover" />
+              <div className="snap-center mr-0.5 w-full shrink-0">
+                <div className="flex content-end justify-center my-5 h-48 w-full rounded-3xl">
+                  <div className="relative flex content-end justify-start p-5 h-full w-full">
+                    <Image src={"/buy_our_products.png"} alt={"image_diabuddies"} layout="fill" objectFit="contain" className="absolute top-0 left-0 bottom-0 right-0 rounded-3xl" />
                     <div className="self-end">
-                      <Button variant="filled" className="flex mt-3 text-diaBlue text-xl font-poppins bg-white pt-2 rounded-full shadow-md">
-                        Buy our products
-                      </Button>
+                      <Link href={"/store"}>
+                        <Button variant="filled" className="flex mb-1 text-diaBlue text-md font-rubik bg-white pt-2 rounded-2xl shadow-md">
+                          Buy our products
+                        </Button>
+                      </Link>
                     </div>
                   </div>
-                  {/* <h2 className="font-sourceCode text-2xl font-semibold text-white">{t("hero_text")}</h2> */}
-                </div>{" "}
-              </div>
-              <div className="snap-center mr-1 w-full shrink-0">
-                <BolusAdvisor activeInsulin={activeInsulin} glucose={glucose} lastInjectionTime={lastInjectionTime} />
+                </div>
               </div>
             </div>
             <div className="flex justify-between items-center my-5">
@@ -164,7 +159,7 @@ function Home() {
             <Advice />
             {Data.graphData ? (
               <>
-                <div className="flex justify-between items-center my-5">
+                <div className="flex justify-between items-center mt-8 mb-5">
                   <div className="flex items-center">
                     <div className="ring-1 ring-gray-300 p-1 rounded-md mx-3">
                       <Icon icon="ic:round-bar-chart" className="h-5 w-5 text-diaGray" />
@@ -177,7 +172,7 @@ function Home() {
                 </div>
                 <section className="shadow-2xl p-4 bg-white rounded-2xl mb-8">
                   <section className="w-full rounded-xl mb-10 ring-1 ring-gray-300 p-2">
-                    <div className="flex justify-between text-diaGray items-center">
+                    <div className="flex justify-between p-1 text-diaGray items-center">
                       <h3 className="text-lg font-semibold font-rubik">{tc("glucose")}</h3>
                       <Icon icon="ph:info" className="mx-3" />
                     </div>
@@ -187,7 +182,7 @@ function Home() {
                     </div>
                   </section>
                   <section className="w-full rounded-xl mb-10 ring-1 ring-gray-300 p-2">
-                    <div className="flex justify-between text-diaGray items-center">
+                    <div className="flex justify-between p-1 text-diaGray items-center">
                       <h3 className="text-lg font-semibold font-rubik">{t("glucose_distibution")}</h3>
                       <Icon icon="ph:info" className="mx-3" />
                     </div>
@@ -196,7 +191,7 @@ function Home() {
                     </div>
                   </section>
                   <section className="w-full rounded-xl mb-10 ring-1 ring-gray-300 p-2">
-                    <div className="flex justify-between text-diaGray items-center">
+                    <div className="flex justify-between p-1 text-diaGray items-center">
                       <h3 className="text-lg font-semibold font-rubik truncate">{t("per_meal_chart")}</h3>
                       <Icon icon="ph:info" className="mx-3" />
                     </div>

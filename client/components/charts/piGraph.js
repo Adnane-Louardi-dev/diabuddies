@@ -1,6 +1,17 @@
 import { useState, useEffect } from "react";
 import { ResponsiveContainer, PieChart, Pie, Tooltip, Cell } from "recharts";
 
+const CustomTooltip = ({ active, payload }) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="rounded-lg p-3 bg-white font-rubik text-lg">
+        <p className="label">{`${payload[0].value} log${payload[0].value > 1 ? "s" : ""} ${payload[0].value > 1 ? "are" : "is"} ${payload[0].name}`}</p>
+      </div>
+    );
+  }
+
+  return null;
+};
 const PiGraph = ({ props }) => {
   const [Data, setData] = useState(props);
   const [fakeData, setFakeData] = useState([]);
@@ -22,7 +33,6 @@ const PiGraph = ({ props }) => {
     );
   };
   useEffect(() => {
-    // setData(result);
     setFakeData([
       { name: "low", value: props?.filter((item) => item.status === "low").length },
       { name: "normal", value: props?.filter((item) => item.status === "normal").length },
@@ -33,23 +43,12 @@ const PiGraph = ({ props }) => {
   return (
     <ResponsiveContainer width="100%" height={250}>
       <PieChart>
-        <Pie
-          data={fakeData}
-          dataKey="value"
-          nameKey="name"
-          cx="50%"
-          cy="50%"
-          labelLine={false}
-          label={renderCustomizedLabel}
-          outerRadius={90}
-          innerRadius={45}
-          fill="#44D29F"
-        >
+        <Pie data={fakeData} labelLine={false} paddingAngle={3} dataKey="value" nameKey="name" cx="50%" cy="50%" label={renderCustomizedLabel} outerRadius={120} innerRadius={60} fill="#44D29F">
           {fakeData.map((entry, index) => (
             <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
           ))}
         </Pie>
-        <Tooltip />
+        <Tooltip contentStyle={{ color: "#323D34", borderRadius: 15 }} content={<CustomTooltip />} />
       </PieChart>
     </ResponsiveContainer>
   );

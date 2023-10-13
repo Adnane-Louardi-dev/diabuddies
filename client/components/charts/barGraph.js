@@ -1,10 +1,23 @@
 import { useEffect, useState } from "react";
-import { BarChart, Bar, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts";
+import { BarChart, Bar, Cell, XAxis, YAxis, Tooltip, Legend, ResponsiveContainer } from "recharts";
 import moment from "moment";
-import {useTranslation} from "next-i18next";
+import { useTranslation } from "next-i18next";
+const CustomTooltip = ({ active, payload }) => {
+  if (active && payload && payload.length) {
+    return (
+      <div className="rounded-lg p-3 bg-white font-rubik text-lg">
+        <p className="text-center text-diaDarkBlue font-semibold">{`The ${payload[0].payload.meal} meal`}</p>
+        <p className="label text-center">{`Avg. Insulin is ${payload[0].payload?.bolus}UI`}</p>
+        <p className="label text-center">{`Avg. Carbs is ${payload[0].payload?.carbs}g`}</p>
+      </div>
+    );
+  }
+
+  return null;
+};
 const BarGraph = ({ props }) => {
   const [data, setData] = useState(undefined);
-  const {t} = useTranslation()
+  const { t } = useTranslation();
   //group and calculate the avg
   function getGroupedData(data, whitelist) {
     // Calculate the sums and group data (while tracking count)
@@ -28,8 +41,8 @@ const BarGraph = ({ props }) => {
         return m;
       }, {});
       return {
-        ...item, // Preserve any non white-listed keys
-        ...itemAverage, // Add computed averege for whitelisted keys
+        ...item,
+        ...itemAverage,
       };
     });
   }
@@ -39,29 +52,28 @@ const BarGraph = ({ props }) => {
     setData(groupedData);
   }, [props]);
   return (
-    <ResponsiveContainer width="100%" height={300}>
+    <ResponsiveContainer width="100%" height={400}>
       <BarChart
         data={data}
         margin={{
           top: 20,
-          right: 0,
-          left: 0,
+          right: -30,
+          left: -30,
           bottom: 5,
         }}
       >
-        <CartesianGrid strokeDasharray="3 3" />
         <XAxis
           dataKey="meal"
           style={{
             fontSize: "1rem",
           }}
         />
-        <YAxis yAxisId="left" orientation="left" stroke="#8884d8" />
-        <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" />
-        <Tooltip contentStyle={{ color: "#323D34", borderRadius: 15 }} />
+        <YAxis yAxisId="left" tickCount={1} orientation="left" stroke="#3AB0FF" hide axisLine={false} tickLine={false} />
+        <YAxis yAxisId="right" tickCount={1} orientation="right" stroke="#FFB562" hide axisLine={false} tickLine={false} />
+        <Tooltip contentStyle={{ color: "#323D34", borderRadius: 15 }} content={<CustomTooltip />} />
         <Legend />
-        <Bar yAxisId="left" dataKey="carbs" name={t("carbs")} fill="#8884d8" />
-        <Bar yAxisId="right" dataKey="bolus" name={t("bolus")} fill="#82ca9d" />
+        <Bar yAxisId="left" dataKey="carbs" name={t("carbs")} fill="#3AB0FF" />
+        <Bar yAxisId="right" dataKey="bolus" name={t("bolus")} fill="#FFB562" />
       </BarChart>
     </ResponsiveContainer>
   );
