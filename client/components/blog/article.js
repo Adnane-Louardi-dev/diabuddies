@@ -17,9 +17,7 @@ import {useElementOnScreen} from "../../customeHooks/useElementOnScreen";
 import {useTranslation} from "next-i18next";
 import {getDir} from "../../utils/getDir";
 import Image from "next/image"
-import {useAxios} from "../../customeHooks/useAxios";
 import {useGetCurrentUser} from "../../customeHooks/useGetCurrentUser";
-import ReactMarkdown from "react-markdown"
 
 export const Article = ({id,title,content, image,createdAt, relatedArticles,isLiked, likeCount, author:writer}) => {
     const [ref,haveReadArticle] = useElementOnScreen({
