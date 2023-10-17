@@ -6,21 +6,15 @@ import { HomePageSkeleton } from "../skeleton/homePageSkeleton";
 export default function withAuth(Component) {
   return function ProtectedRoute({ ...props }) {
     const router = useRouter();
-    const { user, isLoading } = useGetCurrentUser();
+    const { user, isLoading, isError } = useGetCurrentUser();
 
     useEffect(() => {
-      const timeout = setTimeout(() => {
-        if (!isLoading && !user) {
+        if (!isLoading && !user || isError) {
           router.push("/login");
         }
-      }, 1000);
-      return () => {
-        clearTimeout(timeout)
-      }
     }, [router, isLoading]);
-
-    if (isLoading) {
-      return <HomePageSkeleton />;
+    if(!user){
+      return null
     }
     return <Component {...props} />;
   };
