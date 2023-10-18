@@ -18,9 +18,9 @@ export default function Document() {
         <meta name="robots" content="index, follow" />
         <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="language" content="English" />
-        <meta name="author" content="Adnane Louardi" />
+        <meta name="author" content="Adnane Louardi, Ahmed BenAhmed" />
 
-        <link rel="apple-touch-icon" href="/icons/icon-192x192.png" />
+        <link rel="apple-touch-icon" href="/icons/icon-512x512.png" />
         <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-192x192.png" />
         <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-192x192.png" />
         <link rel="apple-touch-icon" sizes="167x167" href="/icons/icon-192x192.png" />
@@ -28,7 +28,7 @@ export default function Document() {
         <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico" />
         <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico" />
         <link rel="manifest" href="/manifest.json" />
-        <link rel="mask-icon" href="/icons/icon-192x192.png" color="azure" />
+        <link rel="mask-icon" href="/icons/icon-512.png" color="azure" />
         <link rel="shortcut icon" href="/favicon.ico" />
 
         {/* <meta name="twitter:card" content="summary" />
@@ -47,17 +47,17 @@ export default function Document() {
 
         {/* <!-- apple splash screen images --> */}
 
-        <link rel="apple-touch-startup-image" href="/icons/icon-512x512.png" sizes="2048x2732" />
+        {/* <link rel="apple-touch-startup-image" href="/icons/icon-512x512.png" sizes="2048x2732" />
         <link rel="apple-touch-startup-image" href="/icons/icon-512x512.png" sizes="1668x2224" />
         <link rel="apple-touch-startup-image" href="/icons/icon-512x512.png" sizes="1536x2048" />
         <link rel="apple-touch-startup-image" href="/icons/icon-512x512.png" sizes="1125x2436" />
         <link rel="apple-touch-startup-image" href="/icons/icon-512x512.png" sizes="1242x2208" />
         <link rel="apple-touch-startup-image" href="/icons/icon-512x512.png" sizes="750x1334" />
-        <link rel="apple-touch-startup-image" href="/icons/icon-512x512.png" sizes="640x1136" />
+        <link rel="apple-touch-startup-image" href="/icons/icon-512x512.png" sizes="640x1136" /> */}
 
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
-        <link href="https://fonts.googleapis.com/css2?family=Inter&family=Poppins&family=Roboto:wght@300;400;500;700&family=Rubik&family=Source+Code+Pro&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Inter&family=Poppins&family=Roboto:wght@300;400;500;700&family=Rubik&family=Tajawal&family=Source+Code+Pro&display=swap" rel="stylesheet" />
       </Head>
       <body>
         <Main />

@@ -10,6 +10,7 @@ module.exports = {
         roboto: ["Roboto", "sans-serif"],
         rubik: ["Rubik", "sans-serif"],
         sourceCode: ["Source Code Pro", "monospace"],
+        tajawal: ["Tajawal", "sans-serif"],
       },
       colors: {
         diaDarkBlue: "#1e293b",
