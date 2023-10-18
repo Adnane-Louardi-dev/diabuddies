@@ -70,7 +70,7 @@ router.get(
     scope: ["https://www.googleapis.com/auth/userinfo.profile", "https://www.googleapis.com/auth/userinfo.email"],
   })
 );
-router.get("/auth/google/callback", passport.authenticate("google", { successRedirect: process.env.FRONTEND_URL, failureRedirect: `${process.env.FRONTEND_URL}/login` }));
+router.get("/auth/google/callback", passport.authenticate("google", { successRedirect: `${process.env.FRONTEND_URL}/app`, failureRedirect: `${process.env.FRONTEND_URL}/login` }));
 
 passport.serializeUser((user, done) => {
   done(null, user);
