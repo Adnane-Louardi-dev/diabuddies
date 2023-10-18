@@ -31,7 +31,7 @@ export const Footer = () => (
         </Link>
       </ToggleButton>
       <ToggleButton className={"relative h-full border-none w-full"}>
-        <Link href={"/app/barecodes"} className={"absolute mb-12 bg-diaBlue rounded-full h-16 w-16 flex justify-center"}>
+        <Link href={"/app/barecode"} className={"absolute mb-12 bg-diaBlue rounded-full h-16 w-16 flex justify-center"}>
           <Icon icon="gg:qr" className={`h-9 w-9 m-auto text-white`} />
         </Link>
       </ToggleButton>

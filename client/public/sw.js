@@ -8,7 +8,7 @@ function showNotification(title, body, tag) {
 }
 self.addEventListener("notificationclick", function (event) {
   event.notification.close();
-  clients.openWindow("localhost:3001/");
+  clients.openWindow("https://diabuddies.app/app/add");
 });
 // on periodic error
 self.addEventListener("periodicsyncerror", (event) => {
