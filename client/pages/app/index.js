@@ -131,7 +131,7 @@ function Home() {
               </Button>
               {/* <NewLogDialog /> */}
             </div>
-            <section className="w-full h-96 overflow-scroll no-scrollbar mb-8 shadow-lg bg-white rounded-2xl px-2 py-6">
+            <section className="w-full max-h-72 overflow-y-scroll no-scrollbar mb-8 shadow-lg bg-white rounded-2xl px-2 py-6">
               {Data.logBook[0] ? (
                 <>
                   {Data.logBook.map((log) => {
@@ -140,17 +140,7 @@ function Home() {
                 </>
               ) : (
                 <div className="grid items-center text-center justify-center m-3 py-5 bg-white rounded-xl">
-                  <Image
-                    src={"/No-data-cuate.webp"}
-                    priority
-                    style={{
-                      width: "auto",
-                      height: "auto",
-                    }}
-                    height={300}
-                    width={200}
-                    alt="no data in blue folder"
-                  />
+                  <Image src={"/No-data-cuate.webp"} priority height={400} width={200} alt="no data in blue folder" />
                   <h2 className={"text-xl font-poppins text-gray-900 font-semibold"}>Oops!</h2>
                   <p className={"font-poppins text-sm text-gray-900"}>{t("logNotFound")}</p>
                 </div>
