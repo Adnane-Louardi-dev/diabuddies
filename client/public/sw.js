@@ -1,9 +1,10 @@
 function showNotification(title, body, tag) {
   self.registration.showNotification(`${title}`, {
     body: body,
-    icon: "/icons/icon-192x192.png",
-    vibrate: [200, 100, 200, 100, 200, 100, 200],
+    icon: "/icons/icon-512x512.png",
+    vibrate: [200, 100, 400],
     tag: tag,
+    badge: "/diabuddies_logo_D_badge.png",
   });
 }
 self.addEventListener("notificationclick", function (event) {
