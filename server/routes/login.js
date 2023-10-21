@@ -1,9 +1,10 @@
 const express = require("express");
+const crypto = require("crypto");
 const passport = require("passport");
 const userSchema = require("../models/userSchema");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
 const LocalStrategy = require("passport-local").Strategy;
-var crypto = require("crypto");
+const FacebookStrategy = require("passport-facebook").Strategy;
 const { diabeticDetailsSchema } = require("../models/diabeticDetailsSchema");
 const { gamificationSchema } = require("../models/gamificationSchema");
 const { levelsSchema } = require("../models/levelsSchema");
@@ -64,6 +65,40 @@ passport.use(
     }
   )
 );
+//facebook strategy
+passport.use(
+  new FacebookStrategy(
+    {
+      clientID: "702785861413449",
+      clientSecret: "9ecbccb72428e18b5f2cda6db9147a05",
+      callbackURL: `${process.env.BACKEND_URL}/login/oauth2/redirect/facebook`,
+    },
+    async (accessToken, refreshToken, profile, cb) => {
+      userSchema.findOne({ googleId: profile.id }, async function (err, user) {
+        console.log(profile, cb);
+        //create a new user if the user doesn't exist in the DB
+        if (!user) {
+          const createdUser = new userSchema({
+            facebookId: profile.id,
+            givenName: profile.displayName.split(" ")[0],
+            familyName: profile.displayName.split(" ")[1],
+          });
+          await diabeticDetailsSchema.create({
+            userId: createdUser._id,
+          });
+          const level = await levelsSchema.findOne({ level: 1 });
+          await gamificationSchema.create({
+            user: createdUser._id,
+            level: level._id,
+          });
+          createdUser.save((err, newUser) => cb(err, newUser));
+        } else {
+          return cb(err, user);
+        }
+      });
+    }
+  )
+);
 router.get(
   "/auth/google",
   passport.authenticate("google", {
@@ -71,7 +106,15 @@ router.get(
   })
 );
 router.get("/auth/google/callback", passport.authenticate("google", { successRedirect: `${process.env.FRONTEND_URL}/app`, failureRedirect: `${process.env.FRONTEND_URL}/login` }));
-
+router.get(
+  "/facebook",
+  passport.authenticate("facebook", {
+    scope: ["public_profile", "email"],
+  })
+);
+router.get("/oauth2/redirect/facebook", passport.authenticate("facebook", { failureRedirect: "/login", failureMessage: true }), function (req, res) {
+  res.redirect(`${process.env.FRONTEND_URL}/app`);
+});
 passport.serializeUser((user, done) => {
   done(null, user);
 });

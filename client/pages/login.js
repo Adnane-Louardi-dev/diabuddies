@@ -90,7 +90,7 @@ export default function Login() {
                 <span className="truncate mx-3">{t("googleSignUp")}</span>
               </Button>
             </Link>
-            <Link href="/api/login/auth/facebook" passHref>
+            <Link href="/api/login/facebook" passHref>
               <Button fullWidth variant="outlined" className="mb-7 p-3 text-diaDarkBlue bg-white text-md rounded-xl border-none shadow-md">
                 <Image src={"/icons/facebook.png"} height={25} width={25} alt="google icon" />
                 <span className="truncate mx-3">{t("facebookSignUp")}</span>
