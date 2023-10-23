@@ -24,6 +24,7 @@ import { useRouter } from "next/router";
 import CalculatingBolus from "../../utils/calculateBolus";
 import { useGetCurrentUserDetailed } from "../../customeHooks/useGetCurrentUser";
 import Box from "@mui/material/Box";
+import {useSearchParams} from "next/navigation";
 
 const Android12Switch = styled(Switch)(({ theme }) => ({
   padding: 8,
@@ -56,6 +57,7 @@ const Android12Switch = styled(Switch)(({ theme }) => ({
 
 export default function NewLogDialog() {
   const router = useRouter();
+  const searchParams = useSearchParams()
   const { user } = useGetCurrentUserDetailed();
   const [InsulinType, setInsulinType] = useState("bolus");
   const [dateOpen, setDateOpen] = useState(false);
@@ -65,6 +67,7 @@ export default function NewLogDialog() {
   const [isSearchForAMealOpen, setIsSearchForAMealOpen] = useState(false);
   const { foods, clearAll, removeFood } = useAddFood();
   const [data, setData] = useState({ ...nullLogBook, time: moment()._d, food: foods });
+
   const queryClient = useQueryClient();
   const [notificationOpen, setNotificationOpen] = useState(false);
   const { t } = useTranslation("index");
@@ -96,6 +99,13 @@ export default function NewLogDialog() {
   useLayoutEffect(() => {
     setData({ ...data, kcal: kcalCalculate(data) });
   }, [data.carbs, data.protein, data.fat]);
+
+  useEffect(() => {
+    const editLog = searchParams.get("log")
+    if(editLog){
+      setData(JSON.parse(editLog))
+    }
+  }, [searchParams.get("log")]);
 
   const handlePOSTNewLog = () => {
     addNewLogBook(data);

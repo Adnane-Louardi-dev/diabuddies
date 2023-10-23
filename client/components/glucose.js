@@ -5,21 +5,14 @@ import { useTranslation } from "next-i18next";
 import { Button } from "@mui/material";
 import Tooltip from "@mui/material/Tooltip";
 
-const Glucose = ({ props, setGlucose }) => {
+const Glucose = ({ logs, setGlucose }) => {
   const [localGlucose, setLocalGlucoseLog] = useState(undefined);
   const { t } = useTranslation();
-  const calculateLocalGlucose = () => {
-    props.forEach((element) => {
-      if (element.glucose) {
-        setLocalGlucoseLog(element);
-        setGlucose(element.glucose);
-      }
-      return null;
-    });
-  };
   useEffect(() => {
-    calculateLocalGlucose();
-  }, []);
+    const glucoseLog = logs.find((log) => log.glucose !== 0)
+    setLocalGlucoseLog(glucoseLog)
+    setGlucose(glucoseLog)
+  }, [logs]);
   let bgColor = localGlucose?.glucose >= 180 ? "#F87474" : localGlucose?.glucose <= 70 ? "#3AB0FF" : "#44D29F";
   return (
     <>

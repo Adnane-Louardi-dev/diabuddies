@@ -91,6 +91,15 @@ export const useAddNewLogBook = () => {
           });
       });
     },
+    onMutate: async (data) => {
+      await queryClient.cancelQueries(["indexChart"])
+      const prevIndexChart = queryClient.getQueryData(["indexChart"])
+      const logBooks = data._id ?
+          [...prevIndexChart.logBooks.filter(log => log._id !== data._id), data] :
+          [...prevIndexChart.logBooks, data]
+      const newIndexChart = { logBooks }
+      queryClient.setQueryData(["indexChart"], newIndexChart)
+    },
     onSuccess: () => {
       queryClient.invalidateQueries(["indexChart"]);
       queryClient.invalidateQueries(["gamify"]);
@@ -107,3 +116,5 @@ export const useAddNewLogBook = () => {
 
   return { ...result, notification: component };
 };
+
+

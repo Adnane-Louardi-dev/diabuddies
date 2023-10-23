@@ -4,13 +4,13 @@ import { useState, useEffect } from "react";
 import { useTranslation } from "next-i18next";
 import { Tooltip } from "@mui/material";
 
-const ActiveInsulin = ({ props, setActiveInsulin, activeInsulin, lastInjectionTime, setlastInjectionTime }) => {
-  const [Data] = useState(props);
+const ActiveInsulin = ({ logs, setActiveInsulin, activeInsulin, lastInjectionTime, setlastInjectionTime }) => {
+  const [Data] = useState(logs);
   const { t } = useTranslation("index");
   const userInsulinDurationInSystem = 3 * 60 * 60 * 1000;
   const [LocalActiveInsulin, setLocalActiveInsulin] = useState(activeInsulin);
   useEffect(() => {
-    [...props].reverse().forEach((element) => {
+    [...logs].reverse().forEach((element) => {
       if (element.bolus) {
         setlastInjectionTime(moment(element.time));
       }
@@ -25,10 +25,10 @@ const ActiveInsulin = ({ props, setActiveInsulin, activeInsulin, lastInjectionTi
     }, 0);
     setActiveInsulin(calculateActiveInsulin);
     setLocalActiveInsulin(calculateActiveInsulin);
-  }, [props]);
+  }, [logs]);
   return (
     <>
-      {props ? (
+      {logs ? (
         <div className="py-2 w-1/2 mx-1">
           <div className="rounded-3xl bg-diaOrange text-white p-3" style={{ WebkitBoxShadow: "10px 0px 30px 0px rgba(255,181,98,1)", MozBoxShadow: "10px 0px 30px 0px rgba(255,181,98,1)", boxShadow: "10px 0px 30px 0px rgba(255,181,98,1)" }}>
             <div className="flex justify-between w-full items-center mb-3">
