@@ -24,16 +24,8 @@ router.get("/", isLoggedIn, async (req, res) => {
       // descending sorting
       .sort({ time: -1 });
 
-    const someGlucoseVal = logs.reduce((accumulator, curOBJ) => {
-      return accumulator + curOBJ.glucose;
-    }, 0);
-
     res.status(200).json({
-      logBook: logs,
-      graphData: {
-        avgEgvs: someGlucoseVal / logs.length,
-        egvs: logs,
-      },
+      logBooks: logs
     });
   } catch (e) {
     console.error(e);

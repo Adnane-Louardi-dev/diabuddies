@@ -43,14 +43,13 @@ function Home() {
   const { user, isLoading: isUserLoading } = useGetCurrentUser();
   const { data: articles, isLoading: isArticlesLoading } = useHomeArticles();
   const { data: products, isLoading: isProductsLoading } = useHomeProducts();
-  const { data: Data, isLoading, refetch } = useIndexCharts(date);
+  const { data: chartData, isLoading, refetch } = useIndexCharts(date);
 
   useEffect(() => {
     if (!isUserLoading && router.isReady && user?.newUser) {
       router.push("/app/setup");
     }
     refetch();
-    console.log(Data);
   }, [isUserLoading, router.isReady, date]);
 
   const userGreeting = useMemo(() => {
@@ -70,6 +69,7 @@ function Home() {
     return `${i18n.language !== "ar" ? "Good morning" : "صباح الخير"}`;
   }, [isUserLoading, i18n.language]);
 
+  console.log("charts", chartData)
   return (
     <>
       <Head lang={i18n.language}>
@@ -85,11 +85,11 @@ function Home() {
             {user.newUser ? <CompleteYourProfile /> : null}
             <DayPicker setDate={setDate} date={date} />
             <GamifyProgressBar />
-            {Data?.logBook[0] && (
+            {chartData?.logBooks.length > 0 && (
               <>
                 <section className="flex justify-around my-5">
-                  <Glucose props={[...Data?.logBook].reverse()} setGlucose={setGlucose} />
-                  <ActiveInsulin props={Data?.logBook} activeInsulin={activeInsulin} setActiveInsulin={setActiveInsulin} lastInjectionTime={lastInjectionTime} setlastInjectionTime={setLastInjectionTime} />
+                  <Glucose logs={chartData.logBooks} setGlucose={setGlucose} />
+                  <ActiveInsulin logs={chartData.logBooks} activeInsulin={activeInsulin} setActiveInsulin={setActiveInsulin} lastInjectionTime={lastInjectionTime} setlastInjectionTime={setLastInjectionTime} />
                 </section>
               </>
             )}
@@ -132,10 +132,10 @@ function Home() {
               {/* <NewLogDialog /> */}
             </div>
             <section className="w-full max-h-72 overflow-y-scroll no-scrollbar mb-8 shadow-lg bg-white rounded-2xl px-2 py-6">
-              {Data.logBook[0] ? (
+              {chartData.logBooks.length > 0 ? (
                 <>
-                  {Data.logBook.map((log) => {
-                    return <LogBookItem props={log} key={log._id} />;
+                  {chartData.logBooks.map((log) => {
+                    return <LogBookItem log={log} key={log._id} />;
                   })}
                 </>
               ) : (
@@ -143,11 +143,11 @@ function Home() {
                   <Image src={"/No-data-cuate.webp"} priority height={400} width={200} alt="no data in blue folder" />
                   <h2 className={"text-xl font-poppins text-gray-900 font-semibold"}>Oops!</h2>
                   <p className={"font-poppins text-sm text-gray-900"}>{t("logNotFound")}</p>
+                  <Link href={"/app/add"} className={"text-diaBlue"}>Add Your First One Today</Link>
                 </div>
               )}
             </section>
             <Advice />
-            {Data.graphData ? (
               <>
                 <div className="flex justify-between items-center mt-8 mb-5">
                   <div className="flex items-center">
@@ -168,7 +168,7 @@ function Home() {
                     </div>
                     <div className="my-3 bg-white rounded-xl pr-3">
                       {/* //reverse the graph to show the recent egvs from RTL */}
-                      <LineChartGraph props={[...Data.graphData.egvs].reverse()} />
+                      <LineChartGraph props={[...chartData.logBooks].reverse()} />
                     </div>
                   </section>
                   <section className="w-full rounded-xl mb-10 ring-1 ring-gray-300 p-2">
@@ -177,7 +177,7 @@ function Home() {
                       <Icon icon="ph:info" className="mx-3" />
                     </div>
                     <div className="my-3 bg-white rounded-xl">
-                      <PiGraph props={Data.graphData.egvs} />
+                      <PiGraph props={chartData.logBooks} />
                     </div>
                   </section>
                   <section className="w-full rounded-xl mb-10 ring-1 ring-gray-300 p-2">
@@ -186,7 +186,7 @@ function Home() {
                       <Icon icon="ph:info" className="mx-3" />
                     </div>
                     <div className="flex items-center justify-center bg-white rounded-xl w-full">
-                      <BarGraph props={[...Data.logBook].reverse()} />
+                      <BarGraph props={chartData.logBooks.reverse()} />
                     </div>
                   </section>
                 </section>
@@ -239,7 +239,6 @@ function Home() {
                   </section>
                 )}
               </>
-            ) : null}
           </main>
         </>
       ) : (
