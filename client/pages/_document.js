@@ -25,11 +25,11 @@ export default function Document() {
         <link rel="apple-touch-icon" sizes="180x180" href="/icons/icon-192x192.png" />
         <link rel="apple-touch-icon" sizes="167x167" href="/icons/icon-192x192.png" />
 
-        <link rel="icon" type="image/png" sizes="32x32" href="/favicon.ico" />
-        <link rel="icon" type="image/png" sizes="16x16" href="/favicon.ico" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/icons/icon-192x192.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/icons/icon-192x192.png" />
         <link rel="manifest" href="/manifest.json" />
-        <link rel="mask-icon" href="/icons/icon-512.png" color="azure" />
-        <link rel="shortcut icon" href="/favicon.ico" />
+        <link rel="mask-icon" href="/icons/icon-512x512.png" color="azure" />
+        <link rel="shortcut icon" href="/icons/icon-192x192.png" />
 
         {/* <meta name="twitter:card" content="summary" />
         <meta name="twitter:url" content="https://yourdomain.com" />

@@ -10,7 +10,7 @@ const getLogBook = async (req, res) => {
   //get logbooks that are less than query cursor
   const logBooks = await logBookItemsSchema
     .find({ _id: { $lt: req.query.previousCursor } })
-    .sort({ _id: -1 })
+    .sort({ time: -1 })
     .limit(limit);
 
   if (logBooks.length) {

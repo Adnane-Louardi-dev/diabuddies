@@ -36,7 +36,12 @@ const Setup = () => {
   const { i18n, t } = useTranslation();
 
   const handlePOSTSetupUser = async () => {
-    axios
+    await queryClient.cancelQueries(["getCurrentUser"])
+    const oldUser=queryClient.getQueryData(["getCurrentUser"])
+    console.log("oldUser",oldUser)
+    oldUser.data.newUser=false
+    queryClient.setQueryData(["getCurrentUser"], oldUser)
+    await axios
       .post(
         "/api/user/diabeticDetails",
         { ...data },
@@ -47,7 +52,7 @@ const Setup = () => {
           },
         }
       )
-      .then(() => {
+      .then( () => {
         queryClient.invalidateQueries(["getCurrentUser"]);
       })
       .catch((err) => console.log(err));

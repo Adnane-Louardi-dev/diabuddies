@@ -112,9 +112,9 @@ router.get(
     scope: ["public_profile", "email"],
   })
 );
-router.get("/oauth2/redirect/facebook", passport.authenticate("facebook", { failureRedirect: "/login", failureMessage: true }), function (req, res) {
-  res.redirect(`${process.env.FRONTEND_URL}/app`);
-});
+router.get("/oauth2/redirect/facebook", passport.authenticate("facebook", { successRedirect: `${process.env.FRONTEND_URL}/app`, failureRedirect: `${process.env.FRONTEND_URL}/login` }));
+
+
 passport.serializeUser((user, done) => {
   done(null, user);
 });
