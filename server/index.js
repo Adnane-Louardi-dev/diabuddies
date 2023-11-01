@@ -1,4 +1,4 @@
-require("dotenv").config();
+require("dotenv").config({ path: `./.env.${process.env.NODE_ENV || "development"}` })
 const express = require("express");
 const app = express();
 const mongoose = require("mongoose");
@@ -67,7 +67,7 @@ proxy.on('proxyReq', function(proxyReq, req, res, options) {
 });
 app.use('/service-api', function(req, res, next) {
     proxy.web(req, res, {
-        target: 'http://localhost:1337/api'
+        target: `http://localhost:1337/api`
     }, next);
 });
 
