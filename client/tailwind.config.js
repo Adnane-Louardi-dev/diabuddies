@@ -21,7 +21,8 @@ module.exports = {
         diaLightOrange: "#FFD7AA",
         diaRed: "#F87474",
         diaGreen: "#44D29F",
-        diaLightGreen: "#B0EAD5",
+        diaMediumGreen: "#01A66A",
+        diaLightGreen: "#93FFD8",
       },
       blur: {
         xs: "2px",

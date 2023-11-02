@@ -24,8 +24,30 @@ import { useRouter } from "next/router";
 import CalculatingBolus from "../../utils/calculateBolus";
 import { useGetCurrentUserDetailed } from "../../customeHooks/useGetCurrentUser";
 import Box from "@mui/material/Box";
-import {useSearchParams} from "next/navigation";
+import { useSearchParams } from "next/navigation";
+import Image from "next/image";
+let mealsTime = {
+  breakfast: { min: 5, max: 11 },
+  lunch: { min: 11, max: 15 },
+  snack: { min: 15, max: 19 },
+  dinner: { min: 19, max: 23 },
+};
 
+//get propre meal for this time
+function checkMealValidity(mealHour) {
+  switch (true) {
+    case mealHour >= mealsTime.breakfast.min && mealHour < mealsTime.breakfast.max:
+      return "breakfast";
+    case mealHour >= mealsTime.lunch.min && mealHour < mealsTime.lunch.max:
+      return "lunch";
+    case mealHour >= mealsTime.snack.min && mealHour < mealsTime.snack.max:
+      return "snack";
+    case mealHour >= mealsTime.dinner.min:
+      return "dinner";
+    default:
+      return "meals";
+  }
+}
 const Android12Switch = styled(Switch)(({ theme }) => ({
   padding: 8,
   "& .MuiSwitch-track": {
@@ -57,7 +79,7 @@ const Android12Switch = styled(Switch)(({ theme }) => ({
 
 export default function NewLogDialog() {
   const router = useRouter();
-  const searchParams = useSearchParams()
+  const searchParams = useSearchParams();
   const { user } = useGetCurrentUserDetailed();
   const [InsulinType, setInsulinType] = useState("bolus");
   const [dateOpen, setDateOpen] = useState(false);
@@ -88,7 +110,7 @@ export default function NewLogDialog() {
           accum.fat += Math.round((parseInt(item?.nutriments.fat_100g) * item.qty) / 100);
           return accum;
         },
-        { ...nullLogBook }
+        { ...nullLogBook, meal: checkMealValidity(moment().hours()) }
       ) ?? nullLogBook;
     setData({ ...data, ...newMacrosBasedOnFoodChange });
     setInsulinType(data.basal !== 0 ? "basal" : "bolus");
@@ -101,9 +123,9 @@ export default function NewLogDialog() {
   }, [data.carbs, data.protein, data.fat]);
 
   useEffect(() => {
-    const editLog = searchParams.get("log")
-    if(editLog){
-      setData(JSON.parse(editLog))
+    const editLog = searchParams.get("log");
+    if (editLog) {
+      setData(JSON.parse(editLog));
     }
   }, [searchParams.get("log")]);
 
@@ -151,53 +173,54 @@ export default function NewLogDialog() {
         )}
         value={data.time}
         onChange={(newValue) => {
-          setData({ ...data, time: newValue._d });
+          console.log(moment(newValue._d).hours());
+          setData({ ...data, time: newValue._d, meal: checkMealValidity(moment(newValue._d).hours()) });
         }}
         openTo="hours"
       />
-      <section>
-        <ToggleButtonGroup
-          className="w-full overflow-scroll no-scrollbar"
-          sx={{
-            "& .MuiButtonBase-root-MuiToggleButton-root": {
-              backgroundColor: "#F3FAFF",
-            },
-            "& .MuiButtonBase-root-MuiToggleButton-root.Mui-selected:hover": {
-              color: "#3AB0FF",
-            },
-            "& .MuiButtonBase-root[aria-pressed='true']": {
-              backgroundColor: "#1e293b",
-              color: "white",
-            },
-          }}
-          value={data.meal}
-          exclusive
-          onChange={(event, newAlignment) => {
-            setData({ ...data, meal: newAlignment });
-          }}
-          aria-label="Platform"
-        >
-          <ToggleButton value="other" className="rounded-full border-none mr-3 mb-5 shadow-md">
-            {t("other_meal")}
-          </ToggleButton>
-          <ToggleButton value="breakfast" className="rounded-full border-none mr-3 mb-5 shadow-md">
-            {t("breakfast_meal")}
-          </ToggleButton>
-          <ToggleButton value="lunch" className="rounded-full border-none mr-3 mb-5 shadow-md">
-            {t("lunch_meal")}
-          </ToggleButton>
-          <ToggleButton value="snack" className="rounded-full border-none mr-3 mb-5 shadow-md">
-            {t("snack_meal")}
-          </ToggleButton>
-          <ToggleButton value="dinner" className="rounded-full border-none mr-3 mb-5 shadow-md">
-            {t("dinner_meal")}
-          </ToggleButton>
-          <ToggleButton value="sport" className="rounded-full border-none mr-3 mb-5 shadow-md">
-            {t("other_meal")}
-          </ToggleButton>
-        </ToggleButtonGroup>
-      </section>
-      <section className="grid grid-cols-2 gap-6 justify-items-center items-center my-3 py-1">
+      <ToggleButtonGroup
+        className="w-full overflow-scroll no-scrollbar"
+        sx={{
+          paddingY: ".5rem",
+          "& .MuiButtonBase-root": {
+            backgroundColor: "white",
+          },
+          "& .MuiButtonBase-root-MuiToggleButton-root.Mui-selected:hover": {
+            color: "#666666",
+            backgroundColor: "white",
+          },
+          "& .MuiButtonBase-root[aria-pressed='true'].Mui-selected": {
+            backgroundColor: "#1e293b",
+            color: "white",
+          },
+        }}
+        value={data.meal}
+        exclusive
+        onChange={(event, newAlignment) => {
+          setData({ ...data, meal: newAlignment });
+        }}
+        aria-label="Platform"
+      >
+        <ToggleButton value="other" className="flex items-center justify-center rounded-2xl border-none mr-3 h-10 shadow-md">
+          {t("other_meal")}
+        </ToggleButton>
+        <ToggleButton value="breakfast" className="flex items-center justify-center rounded-2xl border-none mr-3 h-10 shadow-md">
+          {t("breakfast_meal")}
+        </ToggleButton>
+        <ToggleButton value="lunch" className="flex items-center justify-center rounded-2xl border-none mr-3 h-10 shadow-md">
+          {t("lunch_meal")}
+        </ToggleButton>
+        <ToggleButton value="snack" className="flex items-center justify-center rounded-2xl border-none mr-3 h-10 shadow-md">
+          {t("snack_meal")}
+        </ToggleButton>
+        <ToggleButton value="dinner" className="flex items-center justify-center rounded-2xl border-none mr-3 h-10 shadow-md">
+          {t("dinner_meal")}
+        </ToggleButton>
+        <ToggleButton value="sport" className="flex items-center justify-center rounded-2xl border-none mr-3 h-10 shadow-md">
+          {t("other_meal")}
+        </ToggleButton>
+      </ToggleButtonGroup>
+      <section className="grid grid-cols-2 gap-6 justify-items-center items-center my-4 py-1">
         {/* <Barecode /> */}
         <Link href={"/app/barecode"} passHref className="w-full">
           <button variant="outlined" className="grid col-span-1 w-full justify-items-center mx-2 py-2 px-3 rounded-lg ring-2 ring-diaDarkBlue bg-slate-300">
@@ -381,7 +404,7 @@ export default function NewLogDialog() {
       {foods?.length > 0 ? (
         <section className="my-5">
           <div className="flex justify-between items-center">
-            <h3 className="font-sourceCode text-diaGray text-md">Meal's Food Added</h3>
+            <h3 className="font-sourceCode text-diaGray text-md">Food Added</h3>
             <Button disabled={isLoading} onClick={() => setMealModalOpen(true)} variant="filled" className="rounded-full shadow-md bg-diaDarkBlue text-white">
               <Icon icon="mingcute:bookmark-line" className="h-5 w-5" />
             </Button>
@@ -408,11 +431,58 @@ export default function NewLogDialog() {
           </div>
         </section>
       ) : (
-        <div className="grid items-center text-center justify-center my-3 py-5 bg-diaDarkBlue rounded-xl">
-          <h2 className={"text-xl font-poppins text-gray-500 font-semibold"}>Oops!</h2>
-          <p className={"font-poppins text-sm text-gray-500"}>You didn't add food yet</p>
-        </div>
+        <>
+          <h3 className="font-sourceCode text-diaGray text-md">Food Added</h3>
+          <div className="grid items-center text-center justify-center my-3 py-5 bg-diaDarkBlue rounded-xl">
+            <h2 className={"text-xl font-poppins text-gray-500 font-semibold"}>Oops!</h2>
+            <p className={"font-poppins text-sm text-gray-500"}>You didn't add food yet</p>
+          </div>
+        </>
       )}
+      <section className="my-5">
+        <h3 className="font-sourceCode text-diaGray text-md">Some Recipes</h3>
+        <section className="flex snap-x snap-mandatory p-3 gap-5 w-full overflow-x-scroll no-scrollbar">
+          <div className="p-3 h-62 w-52 shrink-0 border-2 rounded-2xl shadow-md">
+            <div className="relative h-32 border-2 rounded-xl">
+              <div className="absolute right-0 m-2 rounded-md bg-white h-7 w-7">
+                <Icon icon="ic:round-add" className={`h-6 w-6 m-auto text-black`} />
+              </div>
+              <Image src={"/diabuddies_logo_D_placeholder.png"} objectFit="contain" fill alt="recipe 1" />
+            </div>
+            <h3 className="flex justify-between font-semibold font-inter">Greek salad with tomato and onions</h3>
+            <div className="flex mt-2">
+              <div className="bg-diaLightGreen rounded-xl font-poppins text-xs py-1 px-3 mx-1 text-diaMediumGreen shadow-lg shadow-diaLightGreen/50">Low Carb</div>
+              <div className="bg-diaLightOrange rounded-xl font-poppins text-xs py-1 px-3 mx-1 text-diaOrange shadow-lg shadow-diaLightOrange/50">High Fat</div>
+            </div>
+          </div>
+          <div className="p-3 h-62 w-52 shrink-0 border-2 rounded-2xl shadow-md">
+            <div className="relative h-32 border-2 rounded-lg">
+              <div className="absolute right-0 m-2 rounded-md bg-white h-7 w-7">
+                <Icon icon="ic:round-add" className={`h-6 w-6 m-auto text-black`} />
+              </div>
+              <Image src={"/diabuddies_logo_D_placeholder.png"} objectFit="contain" fill alt="recipe 1" />
+            </div>
+            <h3 className="flex justify-between font-semibold font-inter">Greek salad with tomato and onions</h3>
+            <div className="flex mt-2">
+              <div className="bg-diaLightGreen rounded-xl font-poppins text-xs py-1 px-3 mx-1 text-diaMediumGreen shadow-lg shadow-diaLightGreen/50">Low Carb</div>
+              <div className="bg-diaLightOrange rounded-xl font-poppins text-xs py-1 px-3 mx-1 text-diaOrange shadow-lg shadow-diaLightOrange/50">High Fat</div>
+            </div>
+          </div>
+          <div className="p-3 h-62 w-52 shrink-0 border-2 rounded-2xl shadow-md">
+            <div className="relative h-32 border-2 rounded-lg">
+              <div className="absolute right-0 m-2 rounded-md bg-white h-7 w-7">
+                <Icon icon="ic:round-add" className={`h-6 w-6 m-auto text-black`} />
+              </div>
+              <Image src={"/diabuddies_logo_D_placeholder.png"} objectFit="contain" fill alt="recipe 1" />
+            </div>
+            <h3 className="flex justify-between font-semibold font-inter">Greek salad with tomato and onions</h3>
+            <div className="flex mt-2">
+              <div className="bg-diaLightGreen rounded-xl font-poppins text-xs py-1 px-3 mx-1 text-diaMediumGreen shadow-lg shadow-diaLightGreen/50">Low Carb</div>
+              <div className="bg-diaLightOrange rounded-xl font-poppins text-xs py-1 px-3 mx-1 text-diaOrange shadow-lg shadow-diaLightOrange/50">High Fat</div>
+            </div>
+          </div>
+        </section>
+      </section>
 
       <Box sx={{ display: "grid", gap: 2, gridTemplateColumns: "repeat(2, minmax(0, 1fr))", width: "full" }}>
         <Link href={"/app"} passHref>

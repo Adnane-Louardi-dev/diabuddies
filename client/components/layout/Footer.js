@@ -31,8 +31,9 @@ export const Footer = () => (
         </Link>
       </ToggleButton>
       <ToggleButton className={"relative h-full border-none w-full"}>
-        <Link href={"/app/barecode"} className={"absolute mb-12 bg-diaBlue rounded-full h-16 w-16 flex justify-center"}>
-          <Icon icon="gg:qr" className={`h-9 w-9 m-auto text-white`} />
+        <div className="w-14 h-14 blur-lg bg-diaBlue absolute bottom-0"></div>
+        <Link href={"/app/add"} className={"absolute mb-12 bg-diaBlue rounded-full h-16 w-16 flex justify-center"}>
+          <Icon icon="ic:round-add" className={`h-10 w-10 m-auto text-white`} />
         </Link>
       </ToggleButton>
       <ToggleButton className={"h-full w-full border-none py-2 rounded-xl"}>

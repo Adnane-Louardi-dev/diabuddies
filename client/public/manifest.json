@@ -30,12 +30,29 @@
         }
     ],
     "screenshots": [
-    {
-        "src": "source/image1.gif",
-        "sizes": "640x320",
-        "type": "image/gif",
-        "form_factor": "wide",
-        "label": "Wonder Widgets"
-    }
-]
+        {
+            "src": "source/image1.gif",
+            "sizes": "640x320",
+            "type": "image/gif",
+            "form_factor": "wide",
+            "label": "Wonder Widgets"
+        }
+    ],
+    "shortcuts": [
+        {
+            "name": "add new log",
+            "short_name": "Add",
+            "start_url": "/app/add"
+        },
+        {
+            "name": "Scan a barecode",
+            "short_name": "Scan",
+            "start_url": "/app/barecode"
+        },
+        {
+            "name": "Diabuddies Blog",
+            "short_name": "DiaBlog",
+            "start_url": "/blog"
+        }
+    ]
 }

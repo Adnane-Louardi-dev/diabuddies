@@ -1,32 +1,39 @@
 import Box from "@mui/material/Box";
-import {LinearProgress} from "@mui/material";
+import { LinearProgress } from "@mui/material";
 import Typography from "@mui/material/Typography";
-import {Icon} from "@iconify/react";
+import { Icon } from "@iconify/react";
 import * as React from "react";
-import {useQuery, useQueryClient} from "@tanstack/react-query";
+import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import ScienceIcon from "@mui/icons-material/Science";
 import IconButton from "@mui/material/IconButton";
-import Link from "next/link";
-import {useTranslation} from "next-i18next";
+import Badge from "@mui/material/Badge";
+import { useTranslation } from "next-i18next";
+import Image from "next/image";
 
 export const GamifyProgressBar = () => {
   const { data: gamify, isLoading: isLoadingGamification } = useQuery(["gamify"], async () => {
     const { data } = await axios.get("/api/gamify/");
+    console.log(data);
     return data;
   });
-  const {i18n} = useTranslation()
+  const { i18n } = useTranslation();
   const queryClient = useQueryClient();
   return (
     <>
       {!isLoadingGamification && gamify && (
-        <Box sx={{ display: "grid", gridTemplateColumns: "repeat(10,minmax(0,1fr))" }} className={"border-2 border-diaBlue bg-sky-200 rounded-lg p-2 my-5"}>
+        <Box sx={{ position: "relative", overflow: "hidden", display: "grid", gridTemplateColumns: "repeat(10,minmax(0,1fr))", alignItems: "center" }} className={"bg-white rounded-3xl shadow-md my-5"}>
+          <div className="w-14 blur-2xl bg-diaOrange absolute left-3 bottom-0 top-0"></div>
           <Box sx={{ gridColumn: "span 2 / span 2" }}>
-            <Typography variant="body2" color="text.secondary" className="grid gap-1 justify-items-center text-center">
-              {gamify.dailyLogInClaimed ? (
-                <Icon icon="carbon:chemistry" className={"self-center h-10 w-10 text-diaDarkBlue"} />
+            <Typography variant="body2" className="grid gap-1 justify-items-center items-center text-center">
+              {gamify?.dailyLogInClaimed ? (
+                <div className="relative flex justify-center items-center w-20 h-20">
+                  <Image src={"/reward_badges/lvl1.png"} objectFit="contain" layout="fill" />
+                </div>
               ) : (
-                <IconButton
+                <Badge
+                  color="secondary"
+                  variant="dot"
                   onClick={() => {
                     axios.post("/api/daily_log_in").then((res) => {
                       if (res.data.message === "claimed") {
@@ -34,41 +41,52 @@ export const GamifyProgressBar = () => {
                       }
                     });
                   }}
+                  sx={{
+                    "& span": {
+                      top: "15px",
+                      marginRight: "20px",
+                      height: "15px",
+                      width: "15px",
+                      borderRadius: "100px",
+                      backgroundColor: "#3AB0FF",
+                    },
+                  }}
                 >
-                  <ScienceIcon />
-                </IconButton>
+                  <div className="relative flex justify-center items-center w-20 h-20">
+                    <Image src={"/reward_badges/lvl1.png"} objectFit="contain" layout="fill" />
+                  </div>
+                </Badge>
               )}
             </Typography>
           </Box>
-          <Box sx={{ display: "grid", width: "full", gridColumn: "span 7 / span 7" }}>
-            <Typography variant="body2" color="text.secondary" className="font-sourceCode font-semibold">
-              {gamify.level.levelName}
-            </Typography>
-
-            <Box sx={{ display: "flex", alignItems: "center" }}>
+          <Box sx={{ display: "grid", width: "100%", gridColumn: "span 8 / span 8", alignItems: "center", position: "relative" }}>
+            <div className="flex items-center py-2">
+              <Typography className="font-inter font-semibold text-lg text-diaDarkBlue w-full items-center">{gamify?.level.level}th level, you're off to a great journey!</Typography>
+            </div>
+            <Box sx={{ display: "grid", alignItems: "center", width: "full", paddingRight: "1rem" }}>
               <Box sx={{ width: "100%", mr: 1 }}>
                 <LinearProgress
                   sx={{
-                    height: "10px",
-                    width: "calc(100% - 60px)",
-                    borderRadius: "10px",
-                    "&.MuiLinearProgress-bar1Determinate": {
-                      backgroundColor: "#1e293b",
+                    height: "8px",
+                    width: "calc(100%)",
+                    borderRadius: "15px",
+                    "& .MuiLinearProgress-barColorPrimary": {
+                      backgroundColor: "#3AB0FF",
+                    },
+                    "&.MuiLinearProgress-root": {
+                      backgroundColor: "#D9D9D9",
                     },
                   }}
                   variant="determinate"
-                  value={(gamify.points / gamify.level.maxPoints) * 100}
-                />{" "}
+                  value={(gamify?.points / gamify?.level.maxPoints) * 100}
+                />
               </Box>
-              <Box sx={{ minWidth: 60 }}>
-                <Typography variant="body2" color="text.secondary">{gamify.points} / {gamify.level.maxPoints}</Typography>
+              <Box sx={{ minWidth: 60, textAlign: "start" }}>
+                <Typography color="text.secondary" className="font-inter text-diaDarkBlue text-2xs m-2">
+                  {gamify?.points} point of {gamify?.level.maxPoints}
+                </Typography>
               </Box>
             </Box>
-          </Box>
-          <Box sx={{ display: "grid", gridColumn: "span 1 / span 1" }} className="items-center justify-items-center">
-            <Link href={"/app/myActions"} aria-label="Charts page" passHref>
-              <Icon icon="ep:arrow-right-bold" className={`self-center h-6 w-6 text-diaDarkBlue ${i18n.language === "ar" ? "rotate-180" : ""}`} />
-            </Link>
           </Box>
         </Box>
       )}

@@ -19,6 +19,7 @@ export default function Document() {
         <meta httpEquiv="Content-Type" content="text/html; charset=utf-8" />
         <meta name="language" content="English" />
         <meta name="author" content="Adnane Louardi, Ahmed BenAhmed" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
 
         <link rel="apple-touch-icon" href="/icons/icon-512x512.png" />
         <link rel="apple-touch-icon" sizes="152x152" href="/icons/icon-192x192.png" />
@@ -29,7 +30,7 @@ export default function Document() {
         <link rel="icon" type="image/png" sizes="16x16" href="/icons/icon-192x192.png" />
         <link rel="manifest" href="/manifest.json" />
         <link rel="mask-icon" href="/icons/icon-512x512.png" color="azure" />
-        <link rel="shortcut icon" href="/icons/icon-192x192.png" />
+        <link rel="shortcut icon" href="/diabuddies_logo_D_white_background.png" />
 
         {/* <meta name="twitter:card" content="summary" />
         <meta name="twitter:url" content="https://yourdomain.com" />
@@ -45,15 +46,18 @@ export default function Document() {
         <meta property="og:image" content="https://yourdomain.com/icons/apple-touch-icon.png" />
         <meta name="msapplication-config" content="/icons/browserconfig.xml" /> */}
 
-        {/* <!-- apple splash screen images --> */}
-
-        {/* <link rel="apple-touch-startup-image" href="/icons/icon-512x512.png" sizes="2048x2732" />
-        <link rel="apple-touch-startup-image" href="/icons/icon-512x512.png" sizes="1668x2224" />
-        <link rel="apple-touch-startup-image" href="/icons/icon-512x512.png" sizes="1536x2048" />
-        <link rel="apple-touch-startup-image" href="/icons/icon-512x512.png" sizes="1125x2436" />
-        <link rel="apple-touch-startup-image" href="/icons/icon-512x512.png" sizes="1242x2208" />
-        <link rel="apple-touch-startup-image" href="/icons/icon-512x512.png" sizes="750x1334" />
-        <link rel="apple-touch-startup-image" href="/icons/icon-512x512.png" sizes="640x1136" /> */}
+        {/* <!-- apple splash screen image --> */}
+        <link rel="apple-touch-startup-image" href="/icons/icon-256x256.png" />
+        <link href="/splashscreens/iphone5_splash.png" media="(device-width: 320px) and (device-height: 568px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
+        <link href="/splashscreens/iphone6_splash.png" media="(device-width: 375px) and (device-height: 667px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
+        <link href="/splashscreens/iphoneplus_splash.png" media="(device-width: 621px) and (device-height: 1104px) and (-webkit-device-pixel-ratio: 3)" rel="apple-touch-startup-image" />
+        <link href="/splashscreens/iphonex_splash.png" media="(device-width: 375px) and (device-height: 812px) and (-webkit-device-pixel-ratio: 3)" rel="apple-touch-startup-image" />
+        <link href="/splashscreens/iphonexr_splash.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
+        <link href="/splashscreens/iphonexsmax_splash.png" media="(device-width: 414px) and (device-height: 896px) and (-webkit-device-pixel-ratio: 3)" rel="apple-touch-startup-image" />
+        <link href="/splashscreens/ipad_splash.png" media="(device-width: 768px) and (device-height: 1024px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
+        <link href="/splashscreens/ipadpro1_splash.png" media="(device-width: 834px) and (device-height: 1112px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
+        <link href="/splashscreens/ipadpro3_splash.png" media="(device-width: 834px) and (device-height: 1194px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
+        <link href="/splashscreens/ipadpro2_splash.png" media="(device-width: 1024px) and (device-height: 1366px) and (-webkit-device-pixel-ratio: 2)" rel="apple-touch-startup-image" />
 
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
