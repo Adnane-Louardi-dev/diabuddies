@@ -5,8 +5,8 @@ const { validate } = require("../middlewares/validationMiddleware");
 const validation = require("../models/validationSchemas");
 const moment = require("moment");
 const { isLoggedIn } = require("../middlewares/isLoggedIn");
-const {getLogBook, addNewLog, deleteLog} = require("../controllers/logbookController");
-const {getUserMeals, addNewMeal} = require("../controllers/mealController");
+const { getLogBook, addNewLog, deleteLog } = require("../controllers/logbookController");
+const { getUserMeals, addNewMeal } = require("../controllers/mealController");
 
 router.get("/meals", isLoggedIn, getUserMeals);
 router.post("/meal", isLoggedIn, addNewMeal);

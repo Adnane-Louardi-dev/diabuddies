@@ -56,7 +56,7 @@ const CarbsCountingDialog = ({ activeInsulinProp, glucose, lastInjectionTime }) 
 
   return (
     <div>
-      <Button onClick={handleClickOpen} variant="filled" className="flex mb-1 text-diaOrange text-md font-rubik bg-white pt-2 rounded-2xl shadow-md">
+      <Button onClick={handleClickOpen} variant="filled" className="flex mb-1 text-diaOrange text-md font-rubik bg-white pt-2 rounded-xl shadow-md">
         {t("calculate_now")}
       </Button>
       <Dialog open={open} onClose={handleClose} fullScreen sx={{ direction: getDir(i18n.language) }}>

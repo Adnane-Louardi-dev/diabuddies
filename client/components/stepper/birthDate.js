@@ -1,28 +1,39 @@
-import {MobileDatePicker} from "@mui/x-date-pickers";
-import {InputAdornment, TextField} from "@mui/material";
-import {Icon} from "@iconify/react";
-import {useTranslation} from "next-i18next";
+import { MobileDatePicker } from "@mui/x-date-pickers";
+import { InputAdornment, TextField } from "@mui/material";
+import { Icon } from "@iconify/react";
+import { useTranslation } from "next-i18next";
+import moment from "moment";
 
-const BirthDate = ({data, setData}) => {
-    const {i18n,t} = useTranslation()
-    const handleBirthDateChange = (newBirthDateValue) => {
-        setData(oldData => ({...oldData, birthDate: newBirthDateValue._d}))
-    };
-    return (
-        <section>
-            <div className="mt-24 grid items-center justify-center text-center">
-                <h1 className="font-semibold font-poppins text-xl">
-                    {i18n.language !== "ar" && <>Your <span className="decoration-none font-bold text-diaBlue">date of birth</span> ?</>}
-                    {i18n.language === "ar" && <>ماهو <span className="decoration-none font-bold text-diaBlue">تاريخ ميلادك</span> ؟</>}
-                </h1>
-                {i18n.language !== "ar" && <p className="my-3 font-rubik text-gray-400">
-                    we will use this data for a better <br/>
-                    management for you
-                </p>}
-                {i18n.language === "ar" && <p className="my-3 font-rubik text-gray-400">
-                    سنستعمل هذه المعلومات من اجل <br/>
-                    إدارة أفضل لداء السكري
-                </p>}
+const BirthDate = ({ data, setData }) => {
+  const { i18n, t } = useTranslation();
+  const handleBirthDateChange = (newBirthDateValue) => {
+    setData((oldData) => ({ ...oldData, birthDate: newBirthDateValue._d }));
+  };
+  return (
+    <section>
+      <div className="mt-24 grid items-center justify-center text-center">
+        {i18n.language !== "ar" && (
+          <h1 className="font-semibold font-poppins text-xl">
+            Your <span className="decoration-none font-bold text-diaBlue">date of birth</span> ?
+          </h1>
+        )}
+        {i18n.language === "ar" && (
+          <h1 className="font-tajawal font-semibold text-xl">
+            ماهو <span className="decoration-none font-bold text-diaBlue">تاريخ ميلادك</span> ؟
+          </h1>
+        )}
+        {i18n.language !== "ar" && (
+          <p className="my-3 font-rubik text-gray-400">
+            we will use this data for a better <br />
+            management for you
+          </p>
+        )}
+        {i18n.language === "ar" && (
+          <p className="my-3 font-tajawal font-semibold text-gray-400">
+            سنستعمل هذه المعلومات من اجل <br />
+            إدارة أفضل لداء السكري
+          </p>
+        )}
       </div>
       <div className="grid grid-cols-1 py-5 my-19">
         <MobileDatePicker
@@ -38,13 +49,13 @@ const BirthDate = ({data, setData}) => {
                 ),
               }}
               sx={{
-                  backgroundColor: "white",
-                  borderRadius: 7,
-                  "& fieldset": {borderRadius: 7, boxShadow: "0px 0px 20px -10px"},
-                  "& .MuiInputBase-input": {
-                      textAlign: "center",
-                      fontFamily: "poppins",
-                  },
+                backgroundColor: "white",
+                borderRadius: 7,
+                "& fieldset": { borderRadius: 7, boxShadow: "0px 0px 20px -10px" },
+                "& .MuiInputBase-input": {
+                  textAlign: "center",
+                  fontFamily: "poppins",
+                },
               }}
             />
           )}

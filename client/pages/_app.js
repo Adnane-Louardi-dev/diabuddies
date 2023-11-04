@@ -22,7 +22,7 @@ import { initSW } from "../utils/initSW";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import ToggleButton from "@mui/material/ToggleButton";
 import Link from "next/link";
-import {Icon} from "@iconify/react";
+import { Icon } from "@iconify/react";
 import * as React from "react";
 function MyApp({ Component, pageProps }) {
   const [devices, setDevices] = useState([]);
@@ -92,7 +92,7 @@ function MyApp({ Component, pageProps }) {
       </Head>
       <Snackbar open={open} autoHideDuration={6000} onClose={handleClose} message={SnackbarMessage} />
       <LocalizationProvider dateAdapter={AdapterMoment} adapterLocale={i18n.language}>
-        <div className={"mb-16"}>
+        <div>
           <Component {...pageProps} />
         </div>
       </LocalizationProvider>

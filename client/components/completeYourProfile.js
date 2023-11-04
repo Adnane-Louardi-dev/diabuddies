@@ -2,35 +2,21 @@ import React from "react";
 import { Icon } from "@iconify/react";
 import Image from "next/image";
 import Link from "next/link";
-import {useTranslation} from "next-i18next";
+import { useTranslation } from "next-i18next";
+import { Button } from "@mui/material";
 const CompleteYourProfile = () => {
-  const {t,i18n} = useTranslation("index")
+  const { t, i18n } = useTranslation("index");
   return (
     <>
-      <div className="grid grid-cols-5 gap-4 p-4 my-4 bg-white rounded-xl shadow-md">
-        <div className="relative grid col-span-2 bg-diaLightBlue h-full rounded-lg items-center justify-center">
-          <Link href="/app/setup" passHref>
-            <Image src={"/profile_illustration.png"} style={{ objectFit: "cover" }} fill sizes="(max-width: 200px), (max-width: 130px)" alt="profile illustration" />
+      <div className="relative p-4 my-4 bg-white rounded-xl shadow-lg">
+        <Image src={"/complete_profile.png"} alt="complete your profile" layout="fill" objectFit="cover" className="absolute top-0 left-0 bottom-0 right-0 rounded-2xl ring-1 ring-diaGray" />
+        <div className="flex justify-between items-center">
+          <h3 className="relative font-inter font-bold text-xl text-diaDarkBlue">Complete your profile</h3>
+          <Link href={"/app/setup"}>
+            <Button variant="filled" className="flex text-white text-lg font-rubik bg-diaDarkBlue px-8 py-2 rounded-3xl shadow-md">
+              Go
+            </Button>
           </Link>
-        </div>
-        <div className="col-span-3">
-          <div className="flex justify-between">
-            <div>
-              <h4 className="text-2xl font-medium font-poppins">{t("complete_profile")}</h4>
-            </div>
-            <div className="pt-1 self-start">
-              <Link href="/app/setup" passHref>
-                <Icon icon={"material-symbols:arrow-forward-ios-rounded"} className={`text-diaGray bg-gray-200 rounded-full p-1.5 h-7 w-7 ${i18n.language === "ar" ? "rotate-180" : ""}`} />
-              </Link>
-            </div>
-          </div>
-          <p className="text-md p-1">{t("complete_profile_detail")}</p>
-          {/* <div>
-            <LinearProgress variant="determinate" value={30} />
-          </div> */}
-          {/* <div className="flex justify-end">
-            <Button className="bg-diaBlue text-white rounded-md">Do it</Button>
-          </div> */}
         </div>
       </div>
     </>

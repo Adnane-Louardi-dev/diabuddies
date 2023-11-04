@@ -83,6 +83,10 @@ server/.env
 .env.test.local
 .env.production.local
 .env.local
+.env.development
+.env.production
+.env.staging
+.env
 
 # parcel-bundler cache (https://parceljs.org/)
 .parcel-cache

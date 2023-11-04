@@ -484,9 +484,9 @@ export default function NewLogDialog() {
         </section>
       </section>
 
-      <Box sx={{ display: "grid", gap: 2, gridTemplateColumns: "repeat(2, minmax(0, 1fr))", width: "full" }}>
+      <Box sx={{ display: "grid", gap: 2, gridTemplateColumns: "repeat(2, minmax(0, 1fr))", width: "full", marginY: "1rem" }}>
         <Link href={"/app"} passHref>
-          <Button className="w-full p-3 rounded-full shadow-md text-gray-800 font-codeSource font-xl">{tc("cancel")}</Button>
+          <Button className="w-full p-3 rounded-full shadow-md bg-white text-gray-800 font-codeSource font-xl">{tc("cancel")}</Button>
         </Link>
         <Button disabled={isLoading} onClick={handlePOSTNewLog} variant="filled" className="w-full p-3 rounded-full shadow-md bg-gray-800 text-white  font-codeSource font-xl">
           {tc("save")}

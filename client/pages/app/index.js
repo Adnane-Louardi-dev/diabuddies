@@ -69,7 +69,7 @@ function Home() {
     return `${i18n.language !== "ar" ? "Good morning" : "صباح الخير"}`;
   }, [isUserLoading, i18n.language]);
 
-  console.log("charts", chartData)
+  console.log("charts", chartData);
   return (
     <>
       <Head lang={i18n.language}>
@@ -94,16 +94,16 @@ function Home() {
               </>
             )}
             <div className="flex snap-x snap-mandatory px-3 w-full overflow-x-scroll no-scrollbar">
-              <div className="snap-center mr-0.5 w-full shrink-0">
+              <div className="snap-center mr-2 w-full shrink-0">
                 <BolusAdvisor activeInsulin={activeInsulin} glucose={glucose} lastInjectionTime={lastInjectionTime} />
               </div>
-              <div className="snap-center mr-0.5 w-full shrink-0">
+              <div className="snap-center mr-2 w-full shrink-0">
                 <div className="flex content-end justify-center my-5 h-48 w-full rounded-3xl">
                   <div className="relative flex content-end justify-start p-5 h-full w-full">
-                    <Image src={"/buy_our_products.png"} alt={"image_diabuddies"} layout="fill" objectFit="contain" className="absolute top-0 left-0 bottom-0 right-0 rounded-3xl" />
+                    <Image src={"/buy_our_products.png"} alt={"image_diabuddies"} layout="fill" objectFit="cover" className="absolute top-0 left-0 bottom-0 right-0 rounded-3xl ring-2 ring-diaBlue" />
                     <div className="self-end">
                       <Link href={"/store"}>
-                        <Button variant="filled" className="flex mb-1 text-diaBlue text-md font-rubik bg-white pt-2 rounded-2xl shadow-md">
+                        <Button variant="filled" className="flex mb-1 text-diaBlue text-md font-rubik bg-white pt-2 rounded-xl shadow-md">
                           Buy our products
                         </Button>
                       </Link>
@@ -112,7 +112,7 @@ function Home() {
                 </div>
               </div>
             </div>
-            <div className="flex justify-between items-center my-5">
+            <div className="flex justify-between items-center my-3">
               <div className="flex items-center">
                 <div className="ring-1 ring-gray-300 p-1 rounded-md mx-3">
                   <Icon icon="bi:book" className={`h-5 w-5 text-diaGray`} />
@@ -143,23 +143,26 @@ function Home() {
                   <Image src={"/No-data-cuate.webp"} priority height={400} width={200} alt="no data in blue folder" />
                   <h2 className={"text-xl font-poppins text-gray-900 font-semibold"}>Oops!</h2>
                   <p className={"font-poppins text-sm text-gray-900"}>{t("logNotFound")}</p>
-                  <Link href={"/app/add"} className={"text-diaBlue"}>Add Your First One Today</Link>
+                  <Link href={"/app/add"} className={"text-diaBlue"}>
+                    Add Your First One Today
+                  </Link>
                 </div>
               )}
             </section>
             <Advice />
-              <>
-                <div className="flex justify-between items-center mt-8 mb-5">
-                  <div className="flex items-center">
-                    <div className="ring-1 ring-gray-300 p-1 rounded-md mx-3">
-                      <Icon icon="ic:round-bar-chart" className="h-5 w-5 text-diaGray" />
-                    </div>
-                    <h3 className="text-lg text-diaGray font-semibold font-rubik">{tc("charts")}</h3>
+            <>
+              <div className="flex justify-between items-center mt-8 mb-5">
+                <div className="flex items-center">
+                  <div className="ring-1 ring-gray-300 p-1 rounded-md mx-3">
+                    <Icon icon="ic:round-bar-chart" className="h-5 w-5 text-diaGray" />
                   </div>
-                  <Link href={"/app/charts"} aria-label="Charts page" passHref>
-                    <Icon icon="ep:arrow-right-bold" className={`h-6 w-6 text-diaGray ${i18n.language === "ar" ? "rotate-180" : ""}`} />
-                  </Link>
+                  <h3 className="text-lg text-diaGray font-semibold font-rubik">{tc("charts")}</h3>
                 </div>
+                <Link href={"/app/charts"} aria-label="Charts page" passHref>
+                  <Icon icon="ep:arrow-right-bold" className={`h-6 w-6 text-diaGray ${i18n.language === "ar" ? "rotate-180" : ""}`} />
+                </Link>
+              </div>
+              {chartData.logBooks[0] ? (
                 <section className="shadow-2xl p-4 bg-white rounded-2xl mb-8">
                   <section className="w-full rounded-xl mb-10 ring-1 ring-gray-300 p-2">
                     <div className="flex justify-between p-1 text-diaGray items-center">
@@ -190,55 +193,67 @@ function Home() {
                     </div>
                   </section>
                 </section>
-                {!isArticlesLoading && (
-                  <section>
-                    <div className={"flex justify-between items-center my-5"}>
-                      <div className="flex items-center">
-                        <div className="ring-1 ring-gray-300 p-1 rounded-md mx-3">
-                          <Icon icon="majesticons:article-line" className={`h-7 w-7 text-diaGray`} />
-                        </div>
-                        <h3 className="text-lg text-diaGray font-semibold font-rubik">Dia-Blog</h3>
+              ) : (
+                <div className="grid items-center justify-center shadow-2xl px-4 py-10 bg-white rounded-2xl mb-8 text-center">
+                  <Image src={"/no_graph_found.png"} height={150} width={150} alt="no diabuddies graph data found" />
+                  <h3 className="font-rubik font-semibold text-xl text-diaDarkBlue mt-5">No Graph Data Yet</h3>
+                  <p className="font-rubik font-sm text-diaGray">
+                    Try to{" "}
+                    <Link passHref href={"/app/add"} className="text-diaBlue">
+                      add a log
+                    </Link>{" "}
+                  </p>
+                </div>
+              )}
+              {!isArticlesLoading && (
+                <section>
+                  <div className={"flex justify-between items-center my-5"}>
+                    <div className="flex items-center">
+                      <div className="ring-1 ring-gray-300 p-1 rounded-md mx-3">
+                        <Icon icon="majesticons:article-line" className={`h-7 w-7 text-diaGray`} />
                       </div>
-                      <Link href={"/blog/articles"} className={"flex text-diaGray"} aria-label="Charts page" passHref>
-                        <h4>{t("read_more_articles")}</h4>
-                        <Icon icon="ep:arrow-right-bold" className={`h-6 w-6 ${i18n.language === "ar" ? "rotate-180" : ""}`} />
-                      </Link>
+                      <h3 className="text-lg text-diaGray font-semibold font-rubik">Dia-Blog</h3>
                     </div>
-                    <div className={"shadow-2xl p-4 bg-white rounded-2xl mb-8 pb-8"}>
-                      <Container maxWidth={"xl"}>
-                        <div className="gap-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-                          {articles?.data?.map(({ id, attributes }) => (
-                            <SmallArticle {...attributes} id={id} key={id} horizental={false} />
-                          ))}
-                        </div>
-                      </Container>
-                    </div>
-                  </section>
-                )}
-                {!isProductsLoading && (
-                  <section>
-                    <div className={"flex justify-between items-center my-5"}>
-                      <div className="flex items-center">
-                        <div className="ring-1 ring-gray-300 p-1 rounded-md mx-3">
-                          <Icon icon="iconamoon:store-light" className={`h-7 w-7 text-diaGray`} />
-                        </div>
-                        <h3 className="text-lg text-diaGray font-semibold font-rubik ">E-Diabuddies</h3>
-                      </div>
-                      <Link href={"/store"} className={"flex text-diaGray"} aria-label="Charts page" passHref>
-                        <h4>{t("explore_products")}</h4>
-                        <Icon icon="ep:arrow-right-bold" className={`h-6 w-6 ${i18n.language === "ar" ? "rotate-180" : ""}`} />
-                      </Link>
-                    </div>
-                    <div className={"shadow-2xl p-4 bg-white rounded-2xl mb-8 pb-8"}>
-                      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-                        {products?.map((product) => (
-                          <Card product={product} key={product.id} />
+                    <Link href={"/blog/articles"} className={"flex text-diaGray"} aria-label="Charts page" passHref>
+                      <h4>{t("read_more_articles")}</h4>
+                      <Icon icon="ep:arrow-right-bold" className={`h-6 w-6 ${i18n.language === "ar" ? "rotate-180" : ""}`} />
+                    </Link>
+                  </div>
+                  <div className={"shadow-2xl p-4 bg-white rounded-2xl mb-8 pb-8"}>
+                    <Container maxWidth={"xl"}>
+                      <div className="gap-12 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
+                        {articles?.data?.map(({ id, attributes }) => (
+                          <SmallArticle {...attributes} id={id} key={id} horizental={false} />
                         ))}
                       </div>
+                    </Container>
+                  </div>
+                </section>
+              )}
+              {!isProductsLoading && (
+                <section className="relative mb-20">
+                  <div className={"flex justify-between items-center my-5"}>
+                    <div className="flex items-center">
+                      <div className="ring-1 ring-gray-300 p-1 rounded-md mx-3">
+                        <Icon icon="iconamoon:store-light" className={`h-7 w-7 text-diaGray`} />
+                      </div>
+                      <h3 className="text-lg text-diaGray font-semibold font-rubik ">E-Diabuddies</h3>
                     </div>
-                  </section>
-                )}
-              </>
+                    <Link href={"/store"} className={"flex text-diaGray"} aria-label="Charts page" passHref>
+                      <h4>{t("explore_products")}</h4>
+                      <Icon icon="ep:arrow-right-bold" className={`h-6 w-6 ${i18n.language === "ar" ? "rotate-180" : ""}`} />
+                    </Link>
+                  </div>
+                  <div className={"shadow-2xl p-4 bg-white rounded-2xl mb-8 pb-8"}>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                      {products?.map((product) => (
+                        <Card product={product} key={product.id} />
+                      ))}
+                    </div>
+                  </div>
+                </section>
+              )}
+            </>
           </main>
         </>
       ) : (
