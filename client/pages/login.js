@@ -101,6 +101,7 @@ export default function Login() {
           <form onSubmit={handleSubmit(onSubmit, onErrors)}>
             <TextField
               required
+              disabled
               sx={{
                 "& ::after, & ::before": {
                   display: "none",
@@ -117,10 +118,11 @@ export default function Login() {
               autoComplete="current-email"
               variant="filled"
               margin="normal"
-              className="ring-2 ring-gray-400 rounded-xl shadow-lg"
+              className="ring-2 ring-gray-400 rounded-xl shadow-lg opacity-75"
             />
             <TextField
               required
+              disabled
               sx={{
                 "& ::after, & ::before": {
                   display: "none",
@@ -138,12 +140,28 @@ export default function Login() {
               autoComplete="current-password"
               variant="filled"
               margin="normal"
-              className="ring-2 ring-gray-400 rounded-xl shadow-lg"
+              className="ring-2 ring-gray-400 rounded-xl shadow-lg opacity-75"
             />
-            <Button fullWidth className="mt-14 shadow-md p-3 text-white bg-diaDarkBlue text-md rounded-full" variant="outlined" type="submit" margin="normal">
+            <Button disabled fullWidth className="mt-14 shadow-md p-3 text-white bg-diaDarkBlue text-md rounded-full opacity-75" variant="outlined" type="submit" margin="normal">
               {t("signIn")}
             </Button>
           </form>
+          <h3 className="absolute bottom-5 left-0 right-0 px-3 font-sourceCode font-semibold text-diaGray text-xs mt-5 text-center">
+            By siging in you're agreeing The
+            <Link href={"https://www.iubenda.com/terms-and-conditions/31841318"} className="text-diaBlue">
+              {" "}
+              Terms and Conditions
+            </Link>
+            ,{" "}
+            <Link href={"https://www.iubenda.com/privacy-policy/31841318"} className="text-diaBlue">
+              Privacy Policy{" "}
+            </Link>
+            And{" "}
+            <Link href={"https://www.iubenda.com/privacy-policy/31841318/cookie-policy"} className="text-diaBlue">
+              Cookie Policy
+            </Link>
+            .
+          </h3>
         </div>
       </div>
     </div>
