@@ -1,6 +1,8 @@
 import {useQuery} from "@tanstack/react-query";
 import axios from "axios";
 import {useRouter} from "next/router";
+import qs from "qs";
+import {recipeQuery} from "../utils/baseQueries";
 
 
 export const useHomeArticles = () => useQuery({
@@ -10,6 +12,12 @@ export const useHomeArticles = () => useQuery({
         return data;
     },
 });
+
+export const useHomeRecipes = (pageSize) => useQuery(["home-recipes"],async () => {
+    const query = recipeQuery(pageSize)
+    const { data } = await axios.get(`/api/service-api/recipes?${query}`);
+    return data;
+})
 
 export const useHomeProducts = () => useQuery({
     queryKey: ["products", 3],

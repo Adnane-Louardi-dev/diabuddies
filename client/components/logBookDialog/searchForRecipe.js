@@ -1,0 +1,56 @@
+import {TextField} from "@mui/material";
+import Button from "@mui/material/Button";
+import {Icon} from "@iconify/react";
+import * as React from "react";
+import {useGetWishListItems} from "../../customeHooks/wishListHooks";
+import Image from "next/image";
+import {RecipeComponent} from "../dia-kitchen/recipeComponent";
+import RecipeLessDetailed from "./RecipeLessDetailed";
+
+
+export const SearchForRecipe = () => {
+    const {data:recipes, isLoading, isError} = useGetWishListItems("recipe")
+
+    return <>
+        {/*Make a Filter to filter recipes based on (meal time - carbs - meal category)*/}
+        <div className="flex px-5 py-3">
+            <TextField fullWidth sx={{ "& fieldset": { borderRadius: "25px" }, "& input": { padding: "1rem" } }} label="Search" id="fullWidth"
+                       // value={searchQuery || ""}
+                       // onChange={(newSearchQuery) => setsearchQuery(newSearchQuery.target.value || "")}
+            />
+            <Button
+                onClick={() => {
+                    setIsSearching(true);
+                    refetch();
+                }}
+                className="flex items-center rounded-full bg-diaDarkBlue ml-4"
+            >
+                <Icon icon="tabler:search" className="self-center text-white h-7 w-7" />
+            </Button>
+        </div>
+        {(isError || recipes?.length === 0) && (
+            <div className="p-5">
+                <div className="flex p-3 items-center justify-center rounded-lg bg-diaRed">
+                    <h1 className="font-rubik text-lg text-white">No Food found</h1>
+                </div>
+            </div>
+        )}
+        {isLoading && !isError ? <section className="grid h-screen justify-center content-center pb-32">
+            <div className="flex items-start">
+                <Image src={"/loading_skelton_searchForFood.png"} alt={"loading_skelton_searchForFood"} height={300} width={300} className="" />
+            </div>
+            <div className="text-center my-2">
+                <h2 className="text-3xl font-poppins font-semibold text-diaDarkBlue">Fetching Food . . .</h2>
+            </div>
+        </section> : <section>
+            <h2 className="my-3 text-2xl font-poppins text-diaDarkBlue">Your Favorite Recipes</h2>
+            {recipes.map((recipe) => (
+                <RecipeLessDetailed recipe={recipe} key={recipe.id} />
+            ))}
+            <h2 className="my-3 text-2xl font-poppins text-diaDarkBlue">Last Recipes</h2>
+            {recipes.map((recipe) => (
+                <RecipeLessDetailed recipe={recipe} key={recipe.id} />
+            ))}
+        </section>}
+    </>
+}

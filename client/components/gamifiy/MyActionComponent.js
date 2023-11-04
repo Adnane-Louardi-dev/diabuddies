@@ -1,4 +1,4 @@
-import { Icon } from "@iconify/react";
+import {Icon} from "@iconify/react";
 import React from "react";
 
 export const MyActionComponent = ({ pointsEarned, label, labelAr, icon, lang }) => (

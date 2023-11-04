@@ -6,47 +6,57 @@ import { isAllEntriesAreNull } from "../utils/utils";
 import { useState } from "react";
 
 export const useAddFood = () => {
-  const { data: foods, refetch } = useQuery(["my-food"], () => {
-    const food = localStorage.getItem("my-food");
-    return food ? JSON.parse(food) : [];
+  const { data: foods, refetch } = useQuery(["recent-food"], () => {
+    const products = JSON.parse(localStorage.getItem("recent-products")) || [];
+    const recipes = JSON.parse(localStorage.getItem("recent-recipes")) || [];
+    return {products, recipes};
   });
   const { mutate: addFood } = useMutation(
-    (food) => {
-      function removeDuplicates(array, key) {
-        const uniqueArray = [];
-        const seen = new Set();
+    ({newItem, itemType, primaryKey}) => {
+      function removeDuplicates(foods,key) {
+        const uniqueFood = [];
+        const seenFood = new Set();
 
-        for (const item of array) {
-          const itemKey = item[key];
+        for (const food of foods) {
+          const foodKey = food[key];
 
-          if (!seen.has(itemKey)) {
-            seen.add(itemKey);
-            uniqueArray.push(item);
+          if (!seenFood.has(foodKey)) {
+            seenFood.add(foodKey);
+            uniqueFood.push(food);
           }
         }
 
-        return uniqueArray;
+        return uniqueFood;
       }
-      const recentFood = JSON.parse(localStorage.getItem("recentFood")) || { products: [] };
-      const uniqueArray = removeDuplicates([food, ...recentFood.products], "product_name");
-      localStorage.setItem("my-food", JSON.stringify([...foods, food]));
-      localStorage.setItem("recentFood", JSON.stringify({ products: uniqueArray }));
+      const recentKey = "recent-"+itemType;
+      const allKey = "all-"+itemType;
+      const recentItems = JSON.parse(localStorage.getItem(recentKey)) ||  [];
+      const allItems = JSON.parse(localStorage.getItem(allKey)) ||  {[itemType]: []};
+      const addedItemExists = recentItems.find((item) => item[primaryKey] === newItem[primaryKey]);
+      if (addedItemExists) {
+          addedItemExists.units += 1;
+          localStorage.setItem(recentKey, JSON.stringify([...foods[itemType].filter((food) => food[primaryKey] !== newItem[primaryKey]), addedItemExists]));
+      } else {
+          localStorage.setItem(recentKey, JSON.stringify([...foods[itemType], {...newItem, units: 1}]));
+      }
+      localStorage.setItem(allKey, JSON.stringify({ [itemType]: removeDuplicates([...allItems[itemType], newItem], primaryKey) }));
     },
     {
       onSuccess: refetch,
     }
   );
   const { mutate: removeFood } = useMutation(
-    (id) => {
-      localStorage.setItem("my-food", JSON.stringify(foods.filter((food) => food.id !== id)));
+    ({primaryKey, itemType, primaryKeyValue}) => {
+      localStorage.setItem(`recent-${itemType}`, JSON.stringify(foods[itemType].filter((food) => food[primaryKey] !== primaryKeyValue)));
     },
     {
       onSuccess: refetch,
     }
   );
   const { mutate: clearAll } = useMutation(
-    (id) => {
-      localStorage.setItem("my-food", JSON.stringify([]));
+    () => {
+      localStorage.setItem("recent-products", JSON.stringify([]));
+      localStorage.setItem("recent-recipes", JSON.stringify([]));
     },
     {
       onSuccess: refetch,
@@ -118,3 +128,10 @@ export const useAddNewLogBook = () => {
 };
 
 
+
+export const addRecipeAsLog = async (router, log) => {
+  await router.push("/app/add")
+  await router.push({query: {
+      log: JSON.stringify(log)
+    }})
+}

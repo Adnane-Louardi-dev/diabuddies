@@ -3,7 +3,7 @@ const router = express.Router();
 const wishListSchema = require("../models/wishListSchema")
 const {isLoggedIn} = require("../middlewares/isLoggedIn");
 const {strapiInstance} = require("../middlewares/blogAxios");
-const {productQuery, articleQuery} = require("../util/baseQueries");
+const {productQuery, articleQuery, recipeQuery} = require("../util/baseQueries");
 
 router.get("/:slug",async (req, res) => {
     try {
@@ -13,15 +13,18 @@ router.get("/:slug",async (req, res) => {
         }
         const wishList = await wishListSchema.find({
             userId: req.user._id,
-            isProduct: slug === "product",
-            isBlog: slug === "blog"
+            itemType: slug
         })
         let wishedItems;
         if(slug === "blog") {
             wishedItems = await Promise.all(wishList ?
                 wishList.map((wishItem) => strapiInstance.get(`/api/articles/${wishItem.itemId}?${articleQuery}`).then(res => res.data?.data)) :
                 [])
-        } else {
+        } else if(slug === "recipe"){
+            wishedItems = await Promise.all(wishList ?
+                wishList.map((wishItem) => strapiInstance.get(`/api/recipes/${wishItem.itemId}?${recipeQuery}`).then(res => res.data?.data)) :
+                [])
+        }else if(slug === "product") {
             wishedItems = await Promise.all(
                 wishList ? wishList.map(item => strapiInstance
                     .get(`/api/products/${item.itemId}?${productQuery}`)
@@ -43,8 +46,7 @@ router.post("/:slug", isLoggedIn, async (req,res) => {
         const wishedItem = await wishListSchema.findOne({
             userId: req.user._id,
             itemId: req.query.id,
-            isProduct: slug === "product",
-            isBlog: slug === "blog"
+            itemType: slug
         })
         let wishItem;
         if(wishedItem){
@@ -53,8 +55,7 @@ router.post("/:slug", isLoggedIn, async (req,res) => {
             wishItem = await wishListSchema.create({
                 userId: req.user._id,
                 itemId: req.query.id,
-                isProduct: slug === "product",
-                isBlog: slug === "blog"
+                itemType: slug
             })
             await wishItem.save()
         }

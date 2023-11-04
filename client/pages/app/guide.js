@@ -30,10 +30,11 @@ export default function Guide() {
                             <p className="font-sourceCode text-diaDarkBlue text-md">{descriptionAr}</p>
                         </div>}
                         <div className="flex items-center justify-center">
-                            <div className="flex items-center justify-center p-1 w-[200px] text-white rounded-lg bg-diaDarkBlue">
+                            <div className="flex items-center justify-center p-1 w-[80px] md:w-[200px] text-white rounded-lg bg-diaDarkBlue">
                                 <Icon icon="carbon:chemistry" className={"mx-1"} />
-                                {i18n.language !== "ar" && <span className="font-sourceCode text-xs">Sugar molecules</span>}
-                                {i18n.language === "ar" && <span className="font-sourceCode text-xs">جزيء سكر</span>}
+                                <span className="font-sourceCode text-xs hidden md:block">
+                                   {i18n.language !== "ar"  ? "Sugar molecules" : "جزيء سكر"}
+                                </span>
                                 <span className="font-sourceCode font-bold mx-2">
                                     {pointsEarned}
                                 </span>

@@ -16,6 +16,7 @@ const { newActionLog } = require("./controllers/gamifyControllers");
 const { levelsSchema } = require("./models/levelsSchema");
 const initialize = require("./util/DBconnect");
 const {createLevels, initMedicament} = require("./util/initDB");
+const axios = require("axios");
 //DB connect
 const DBConnection = process.env.DB_CONNECTION || `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.dgq8q.mongodb.net/?retryWrites=true&w=majority&ssl=true`;
 mongoose.set("strictQuery", false);
@@ -59,18 +60,43 @@ app.use(passport.initialize());
 let proxy = httpProxy.createProxyServer({
     host: 'http://localhost',
     port: process.env.PORT,
+});
 
+let nutitionsProxy = httpProxy.createProxyServer({
+    host: 'http://localhost',
+    port: process.env.PORT,
 });
 
 proxy.on('proxyReq', function(proxyReq, req, res, options) {
     proxyReq.setHeader('Authorization', `Bearer ${process.env.STRAPI}`);
+});
+nutitionsProxy.on('proxyReq', function(proxyReq, req, res, options) {
+    proxyReq.setHeader("X-Api-Key", process.env.FOOD_API);
 });
 app.use('/service-api', function(req, res, next) {
     proxy.web(req, res, {
         target: `http://localhost:1337/api`
     }, next);
 });
+// app.use('/food-api', function(req, res, next) {
+//     nutitionsProxy.web(req, res, {
+//         target: `https://api.api-ninjas.com/v1/`
+//     }, next);
+// });
 
+app.get("/food-api/:query", async (req,res) =>{
+    try {
+        const {data} = await axios.get(`https://api.api-ninjas.com/v1/nutrition?query=${req.query.query}`, {
+            headers: {
+                "X-Api-Key": "X5l/m/FVLqY81ji7+LzOqQ==8d6SMjR72cUy3ma5"
+            }
+        });
+        return res.status(201).json(data)
+    } catch (e) {
+        console.log("error", e)
+        return res.status(404).json(e.data)
+    }
+})
 app.use("/", userRoutes);
 app.use("/login", login);
 app.use("/logbook", logbook);

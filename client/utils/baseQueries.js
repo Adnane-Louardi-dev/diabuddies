@@ -1,6 +1,12 @@
-import {stringify} from "qs"
+import qs, {stringify} from "qs"
 
 module.exports =  {
+    recipeQuery: qs.stringify({
+        populate: {
+            image: true,
+            recipe_categories: true
+        }
+    }),
     productQuery: stringify({
         populate: {
             pictures:true,

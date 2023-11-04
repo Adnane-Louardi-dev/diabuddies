@@ -72,7 +72,11 @@ const FoodModal = ({ props }) => {
           className="grid mx-1"
           sx={{ minWidth: "30px" }}
           onClick={() => {
-            addFood({ ...props, id: crypto.randomUUID(), qty });
+            addFood({
+              newItem: { ...props, qty},
+              itemType: "products",
+              primaryKey: "product_name"
+          });
             console.log("added");
           }}
         >

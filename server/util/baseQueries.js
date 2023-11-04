@@ -46,4 +46,11 @@ module.exports = {
                 populate: ["avatar"]
             }
         }
-    })}
+    }),
+    recipeQuery: qs.stringify({
+        populate: {
+            image: true,
+            recipe_categories: true
+        }
+    })
+}

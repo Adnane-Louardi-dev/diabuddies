@@ -49,3 +49,7 @@ export const kcalCalculate = (data) => {
 export const isAllEntriesAreNull = (object) => {
   return Object.entries(object).find(([_, val]) => typeof val !== "undefined" && val !== null && val !== 0) === undefined;
 };
+
+export const renderNumber = (num) => {
+  return Math.round(100*num) / 100
+}

@@ -19,7 +19,7 @@ import SearchForFood from "../../components/logBookDialog/searchForFood";
 import Link from "next/link";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useAddFood, useAddNewLogBook } from "../../customeHooks/useAddFood";
-import { kcalCalculate } from "../../utils/utils";
+import {kcalCalculate, renderNumber} from "../../utils/utils";
 import { useRouter } from "next/router";
 import CalculatingBolus from "../../utils/calculateBolus";
 import { useGetCurrentUserDetailed } from "../../customeHooks/useGetCurrentUser";
@@ -79,7 +79,7 @@ const Android12Switch = styled(Switch)(({ theme }) => ({
 
 export default function NewLogDialog() {
   const router = useRouter();
-  const searchParams = useSearchParams();
+  const searchParams = useSearchParams()
   const { user } = useGetCurrentUserDetailed();
   const [InsulinType, setInsulinType] = useState("bolus");
   const [dateOpen, setDateOpen] = useState(false);
@@ -89,8 +89,6 @@ export default function NewLogDialog() {
   const [isSearchForAMealOpen, setIsSearchForAMealOpen] = useState(false);
   const { foods, clearAll, removeFood } = useAddFood();
   const [data, setData] = useState({ ...nullLogBook, time: moment()._d, food: foods });
-
-  const queryClient = useQueryClient();
   const [notificationOpen, setNotificationOpen] = useState(false);
   const { t } = useTranslation("index");
   const { t: tc } = useTranslation("common");
@@ -103,15 +101,21 @@ export default function NewLogDialog() {
 
   useEffect(() => {
     let newMacrosBasedOnFoodChange =
-      foods?.reduce(
+      foods?.products.reduce(
         (accum, item) => {
-          accum.carbs += Math.round((parseInt(item?.nutriments.carbohydrates_100g) * item.qty) / 100);
-          accum.protein += Math.round((parseInt(item?.nutriments.proteins_100g) * item.qty) / 100);
-          accum.fat += Math.round((parseInt(item?.nutriments.fat_100g) * item.qty) / 100);
+          accum.carbs += renderNumber(parseInt(item?.nutriments.carbohydrates_100g) * item.qty * item.units) ;
+          accum.protein += renderNumber(parseInt(item?.nutriments.proteins_100g) * item.qty * item.units) ;
+          accum.fat += renderNumber(parseInt(item?.nutriments.fat_100g) * item.qty * item.units);
           return accum;
         },
         { ...nullLogBook, meal: checkMealValidity(moment().hours()) }
       ) ?? nullLogBook;
+    newMacrosBasedOnFoodChange = foods?.recipes.reduce((accum, recipe)=>{
+      accum.carbs += renderNumber(recipe.attributes.carbs * recipe.units)
+      accum.protein += renderNumber(recipe.attributes.protein * recipe.units)
+      accum.fat += renderNumber(recipe.attributes.fat * recipe.units)
+      return accum
+    },newMacrosBasedOnFoodChange)
     setData({ ...data, ...newMacrosBasedOnFoodChange });
     setInsulinType(data.basal !== 0 ? "basal" : "bolus");
     console.log(foods);
@@ -173,7 +177,6 @@ export default function NewLogDialog() {
         )}
         value={data.time}
         onChange={(newValue) => {
-          console.log(moment(newValue._d).hours());
           setData({ ...data, time: newValue._d, meal: checkMealValidity(moment(newValue._d).hours()) });
         }}
         openTo="hours"
@@ -401,90 +404,77 @@ export default function NewLogDialog() {
           }}
         />
       </div>
-      {foods?.length > 0 ? (
-        <section className="my-5">
-          <div className="flex justify-between items-center">
-            <h3 className="font-sourceCode text-diaGray text-md">Food Added</h3>
-            <Button disabled={isLoading} onClick={() => setMealModalOpen(true)} variant="filled" className="rounded-full shadow-md bg-diaDarkBlue text-white">
-              <Icon icon="mingcute:bookmark-line" className="h-5 w-5" />
-            </Button>
-          </div>
-          <div className="rounded-lg my-3 bg-diaDarkBlue">
-            {foods.map((food, i) => {
-              return (
-                <div key={i} className="flex items-center justify-between mx-2 border-t-2 border-gray-700">
-                  <div className="mx-2 p-2">
-                    <h1 className="text-blue-500 font-poppins">{`${food.product_name}`}</h1>
-                    <p className="text-gray-500 font-poppins">{`${food.qty}${food.quantity?.match(/[a-zA-Z]+/g) || ""} (${(food.nutriments.carbohydrates_100g * food.qty) / 100}g carbs)`} </p>
-                  </div>
-                  <Button
-                    className="self-center"
-                    onClick={() => {
-                      removeFood(food.id);
-                    }}
-                  >
-                    <Icon icon="ic:outline-delete" className="text-diaGray h-7 w-7" />
-                  </Button>
-                </div>
-              );
-            })}
-          </div>
-        </section>
-      ) : (
-        <>
-          <h3 className="font-sourceCode text-diaGray text-md">Food Added</h3>
-          <div className="grid items-center text-center justify-center my-3 py-5 bg-diaDarkBlue rounded-xl">
-            <h2 className={"text-xl font-poppins text-gray-500 font-semibold"}>Oops!</h2>
-            <p className={"font-poppins text-sm text-gray-500"}>You didn't add food yet</p>
-          </div>
-        </>
-      )}
       <section className="my-5">
-        <h3 className="font-sourceCode text-diaGray text-md">Some Recipes</h3>
-        <section className="flex snap-x snap-mandatory p-3 gap-5 w-full overflow-x-scroll no-scrollbar">
-          <div className="p-3 h-62 w-52 shrink-0 border-2 rounded-2xl shadow-md">
-            <div className="relative h-32 border-2 rounded-xl">
-              <div className="absolute right-0 m-2 rounded-md bg-white h-7 w-7">
-                <Icon icon="ic:round-add" className={`h-6 w-6 m-auto text-black`} />
-              </div>
-              <Image src={"/diabuddies_logo_D_placeholder.png"} objectFit="contain" fill alt="recipe 1" />
+        <div className="flex justify-between items-center">
+          <h3 className="font-sourceCode text-diaGray text-md">Meal's Food Added</h3>
+          <Button disabled={isLoading} onClick={() => setMealModalOpen(true)} variant="filled" className="rounded-full shadow-md bg-diaDarkBlue text-white">
+            <Icon icon="mingcute:bookmark-line" className="h-5 w-5" />
+          </Button>
+        </div>
+        {foods?.products.length === 0 && foods?.recipes.length === 0 && <div className="grid items-center text-center justify-center my-3 py-5 bg-diaDarkBlue rounded-xl">
+          <h2 className={"text-xl font-poppins text-gray-500 font-semibold"}>Oops!</h2>
+          <p className={"font-poppins text-sm text-gray-500"}>You didn't add food yet</p>
+        </div>}
+        {foods?.products.length > 0 && (
+            <div className="rounded-lg my-3 bg-diaDarkBlue">
+              {foods.products.map((product) => {
+                const carbsPerUnit = product.nutriments.carbohydrates_100g * product.qty / 100;
+                return (
+                  <div key={product.product_name} className="relative flex items-center justify-between mx-2 px-2 border-t-2 border-gray-700">
+                    <div className="mx-2 p-2">
+                      <h1 className="text-blue-500 font-poppins">{`${product.product_name}`}</h1>
+                      <p className="text-gray-500 font-poppins">
+                        {`${product.qty}${product.quantity?.match(/[a-zA-Z]+/g) || ""}
+                         (${carbsPerUnit}g * ${product.units} = ${renderNumber(carbsPerUnit * product.units)}g carbs)`}
+                      </p>
+                    </div>
+                    <Button
+                      className="self-center"
+                      onClick={() => {
+                        removeFood({
+                          primaryKey:"product_name",
+                          itemType: "products",
+                          primaryKeyValue: product.product_name});
+                      }}
+                    >
+                      <Icon icon="ic:outline-delete" className="text-diaGray h-7 w-7" />
+                    </Button>
+                  </div>
+                );
+              })}
             </div>
-            <h3 className="flex justify-between font-semibold font-inter">Greek salad with tomato and onions</h3>
-            <div className="flex mt-2">
-              <div className="bg-diaLightGreen rounded-xl font-poppins text-xs py-1 px-3 mx-1 text-diaMediumGreen shadow-lg shadow-diaLightGreen/50">Low Carb</div>
-              <div className="bg-diaLightOrange rounded-xl font-poppins text-xs py-1 px-3 mx-1 text-diaOrange shadow-lg shadow-diaLightOrange/50">High Fat</div>
+        )}
+        {foods?.recipes.length > 0 && (
+            <div className="rounded-lg my-3 bg-diaDarkBlue">
+              {foods.recipes.map((recipe) => {
+                const {id, units} = recipe
+                recipe = recipe.attributes;
+                return (
+                  <div key={recipe.name} className="relative flex items-center justify-between mx-2 px-2 border-t-2 border-gray-700">
+                    <div className="mx-2 p-2">
+                      <h1 className="text-blue-500 font-poppins">{recipe.name}</h1>
+                      <p className="text-gray-500 font-poppins">
+                        {recipe.carbs}g * {units} = {renderNumber(recipe.carbs * units)}g carbs
+                      </p>
+                    </div>
+                    <Button
+                      className="self-center"
+                      onClick={() => {
+                        removeFood({
+                          primaryKey:"id",
+                          itemType: "recipes",
+                          primaryKeyValue: id});
+                      }}
+                    >
+                      <Icon icon="ic:outline-delete" className="text-diaGray h-7 w-7" />
+                    </Button>
+                  </div>
+                );
+              })}
             </div>
-          </div>
-          <div className="p-3 h-62 w-52 shrink-0 border-2 rounded-2xl shadow-md">
-            <div className="relative h-32 border-2 rounded-lg">
-              <div className="absolute right-0 m-2 rounded-md bg-white h-7 w-7">
-                <Icon icon="ic:round-add" className={`h-6 w-6 m-auto text-black`} />
-              </div>
-              <Image src={"/diabuddies_logo_D_placeholder.png"} objectFit="contain" fill alt="recipe 1" />
-            </div>
-            <h3 className="flex justify-between font-semibold font-inter">Greek salad with tomato and onions</h3>
-            <div className="flex mt-2">
-              <div className="bg-diaLightGreen rounded-xl font-poppins text-xs py-1 px-3 mx-1 text-diaMediumGreen shadow-lg shadow-diaLightGreen/50">Low Carb</div>
-              <div className="bg-diaLightOrange rounded-xl font-poppins text-xs py-1 px-3 mx-1 text-diaOrange shadow-lg shadow-diaLightOrange/50">High Fat</div>
-            </div>
-          </div>
-          <div className="p-3 h-62 w-52 shrink-0 border-2 rounded-2xl shadow-md">
-            <div className="relative h-32 border-2 rounded-lg">
-              <div className="absolute right-0 m-2 rounded-md bg-white h-7 w-7">
-                <Icon icon="ic:round-add" className={`h-6 w-6 m-auto text-black`} />
-              </div>
-              <Image src={"/diabuddies_logo_D_placeholder.png"} objectFit="contain" fill alt="recipe 1" />
-            </div>
-            <h3 className="flex justify-between font-semibold font-inter">Greek salad with tomato and onions</h3>
-            <div className="flex mt-2">
-              <div className="bg-diaLightGreen rounded-xl font-poppins text-xs py-1 px-3 mx-1 text-diaMediumGreen shadow-lg shadow-diaLightGreen/50">Low Carb</div>
-              <div className="bg-diaLightOrange rounded-xl font-poppins text-xs py-1 px-3 mx-1 text-diaOrange shadow-lg shadow-diaLightOrange/50">High Fat</div>
-            </div>
-          </div>
-        </section>
+        )}
       </section>
-
-      <Box sx={{ display: "grid", gap: 2, gridTemplateColumns: "repeat(2, minmax(0, 1fr))", width: "full", marginY: "1rem" }}>
+      <Box sx={{ display: "grid", gap: 2, gridTemplateColumns: "repeat(2, minmax(0, 1fr))", width: "full" }}>
         <Link href={"/app"} passHref>
           <Button className="w-full p-3 rounded-full shadow-md bg-white text-gray-800 font-codeSource font-xl">{tc("cancel")}</Button>
         </Link>
