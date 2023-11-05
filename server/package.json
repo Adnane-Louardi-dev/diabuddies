@@ -4,9 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "NODE_ENV=production node ./index.js",
-    "start-dev": "NODE_ENV=development node ./index.js",
-    "start-staging": "NODE_ENV=staging node ./index.js",
+    "start-win": "SET NODE_ENV=production & node ./index.js",
+    "start-dev-win": "SET NODE_ENV=development & node ./index.js",
+    "start-staging-win": "SET NODE_ENV=staging & node ./index.js",
+    "start-lin": "NODE_ENV=production node ./index.js",
+    "start-dev-lin": "NODE_ENV=development node ./index.js",
+    "start-staging-lin": "NODE_ENV=staging node ./index.js",
     "devStart": "nodemon ./index.js"
   },
   "keywords": [],
