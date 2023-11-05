@@ -78,6 +78,13 @@ function calculateMacros(foods){
 }
 
 function mapFood(foods){
+  if(!foods){
+    return {
+      products: [],
+      recipes: [],
+      nutritions: []
+    }
+  }
   return {
     products: foods.products.map(product => product.product_name),
     recipes: foods.recipes.map(recipe => recipe.id),
@@ -173,7 +180,11 @@ export default function NewLogDialog() {
   };
   return (
     <section className="px-5">
-      <AddMealNameModal mealModalOpen={mealModalOpen} setMealModalOpen={setMealModalOpen} data={data} onSave={handlePOSTNewLog} />
+      <AddMealNameModal
+          mealModalOpen={mealModalOpen}
+          setMealModalOpen={setMealModalOpen}
+          data={{...data, foods: mapFood(foods)}}
+          onSave={handlePOSTNewLog} />
       {/* date pickers */}
       <MobileDateTimePicker
         className="w-full my-5"

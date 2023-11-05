@@ -31,8 +31,8 @@ export const SearchForProducts = () => {
 
                 return { products: filtredData };
             } else {
-                const recentFood = JSON.parse(localStorage.getItem("recent-food")) ?? [];
-                return {products: recentFood};
+                const allProducts = JSON.parse(localStorage.getItem("all-products")) ?? {products: []};
+                return allProducts;
             }
         },
         enabled: IsSearching,
