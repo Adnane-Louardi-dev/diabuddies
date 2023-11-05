@@ -84,13 +84,15 @@ app.use('/service-api', function(req, res, next) {
 //     }, next);
 // });
 
-app.get("/food-api/:query", async (req,res) =>{
+app.get("/food-api/:foodQuery", async (req,res) =>{
     try {
+        console.log(`https://api.api-ninjas.com/v1/nutrition?query=${req.params.foodQuery}`)
         const {data} = await axios.get(`https://api.api-ninjas.com/v1/nutrition?query=${req.query.query}`, {
             headers: {
                 "X-Api-Key": "X5l/m/FVLqY81ji7+LzOqQ==8d6SMjR72cUy3ma5"
             }
         });
+        console.log("data", data)
         return res.status(201).json(data)
     } catch (e) {
         console.log("error", e)
