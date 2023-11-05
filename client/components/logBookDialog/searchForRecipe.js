@@ -42,7 +42,15 @@ export const SearchForRecipe = () => {
             <div className="text-center my-2">
                 <h2 className="text-3xl font-poppins font-semibold text-diaDarkBlue">Fetching Food . . .</h2>
             </div>
-        </section> : <section>
+        </section> : <section className="my-5">
+            <section>
+                <h3 className="font-sourceCode text-diaGray text-md">Some Recipes</h3>
+                <section className="flex snap-x snap-mandatory p-3 gap-5 w-full overflow-x-scroll no-scrollbar">
+                    {recipes.map((recipe) => (
+                        <RecipeLessDetailed recipe={recipe} key={recipe.id} />
+                    ))}
+                </section>
+            </section>
             <h2 className="my-3 text-2xl font-poppins text-diaDarkBlue">Your Favorite Recipes</h2>
             {recipes.map((recipe) => (
                 <RecipeLessDetailed recipe={recipe} key={recipe.id} />

@@ -11,7 +11,8 @@ import { Icon } from "@iconify/react";
 import Box from "@mui/material/Box";
 import {SearchForProducts} from "./searchForProducts";
 import {SearchForRecipe} from "./searchForRecipe";
-import {SearchForVegetables} from "./searchForVegetables";
+import {SearchForNutritions} from "./searchForNutritions";
+import {SearchSavedMeals} from "./searchSavedMeals";
 const Transition = React.forwardRef(function Transition(props, ref) {
   return <Slide direction="up" ref={ref} {...props} />;
 });
@@ -94,10 +95,10 @@ export default function SearchForFood({ isSearchForAMealOpen, setIsSearchForAMea
             <SearchForRecipe />
           </CustomTabPanel>
           <CustomTabPanel value={value} index={2}>
-            <SearchForVegetables />
+            <SearchForNutritions />
           </CustomTabPanel>
           <CustomTabPanel value={value} index={3}>
-            Saved Meals
+            <SearchSavedMeals />
           </CustomTabPanel>
         </Box>
       </Dialog>

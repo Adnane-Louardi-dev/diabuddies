@@ -5,29 +5,43 @@ import { useNotificatoin } from "./useNotificatoin";
 import { isAllEntriesAreNull } from "../utils/utils";
 import { useState } from "react";
 
+function removeDuplicates(foods,key) {
+    const uniqueFood = [];
+    const seenFood = new Set();
+
+    for (const food of foods) {
+        const foodKey = food[key];
+
+        if (!seenFood.has(foodKey)) {
+            seenFood.add(foodKey);
+            uniqueFood.push(food);
+        }
+    }
+
+    return uniqueFood;
+}
+function getItemName(item, itemType){
+    if(itemType === "recipes"){
+        return item.attributes.name
+    }else if(itemType === "products"){
+        return item.product_name
+    }else if(itemType === "nutritions"){
+        return item.name
+    }
+    return "this item "
+}
 export const useAddFood = () => {
+  const [successMessage, setSuccessMessage] = useState("was Added Successfully")
+  const [errorMessage, setErrorMessage] = useState("error occured, try to add it again")
+
   const { data: foods, refetch } = useQuery(["recent-food"], () => {
     const products = JSON.parse(localStorage.getItem("recent-products")) || [];
     const recipes = JSON.parse(localStorage.getItem("recent-recipes")) || [];
-    return {products, recipes};
+    const nutritions = JSON.parse(localStorage.getItem("recent-nutritions")) || [];
+    return {products, recipes, nutritions};
   });
-  const { mutate: addFood } = useMutation(
+  const { mutate: addFood, isError } = useMutation(
     ({newItem, itemType, primaryKey}) => {
-      function removeDuplicates(foods,key) {
-        const uniqueFood = [];
-        const seenFood = new Set();
-
-        for (const food of foods) {
-          const foodKey = food[key];
-
-          if (!seenFood.has(foodKey)) {
-            seenFood.add(foodKey);
-            uniqueFood.push(food);
-          }
-        }
-
-        return uniqueFood;
-      }
       const recentKey = "recent-"+itemType;
       const allKey = "all-"+itemType;
       const recentItems = JSON.parse(localStorage.getItem(recentKey)) ||  [];
@@ -42,7 +56,15 @@ export const useAddFood = () => {
       localStorage.setItem(allKey, JSON.stringify({ [itemType]: removeDuplicates([...allItems[itemType], newItem], primaryKey) }));
     },
     {
-      onSuccess: refetch,
+      onSuccess: (_, variables) => {
+          setSuccessMessage(getItemName(variables.newItem, variables.itemType) + " was added successfully")
+          handleOpen()
+          refetch()
+      },
+      onError: (_, variables) => {
+          setErrorMessage("error occured adding, "+ getItemName(variables.newItem, variables.itemType) + ", try to add it again")
+          handleOpen()
+      }
     }
   );
   const { mutate: removeFood } = useMutation(
@@ -57,12 +79,18 @@ export const useAddFood = () => {
     () => {
       localStorage.setItem("recent-products", JSON.stringify([]));
       localStorage.setItem("recent-recipes", JSON.stringify([]));
+      localStorage.setItem("recent-nutritions", JSON.stringify([]));
     },
     {
       onSuccess: refetch,
     }
   );
-  return { foods, addFood, removeFood, clearAll };
+  const {component:notification, handleOpen} = useNotificatoin({
+    successMessage,
+    errorMessage,
+    isError
+  })
+  return { foods, addFood, removeFood, clearAll, notification };
 };
 
 export const useAddNewLogBook = () => {
@@ -86,6 +114,7 @@ export const useAddNewLogBook = () => {
           setErrorMessage("please fill at least one of the inputs");
           return reject("all values are null");
         }
+        console.log("log book data", data)
         return axios
           .post("/api/logbook", data, {
             headers: {

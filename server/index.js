@@ -78,16 +78,10 @@ app.use('/service-api', function(req, res, next) {
         target: `http://localhost:1337/api`
     }, next);
 });
-// app.use('/food-api', function(req, res, next) {
-//     nutitionsProxy.web(req, res, {
-//         target: `https://api.api-ninjas.com/v1/`
-//     }, next);
-// });
 
 app.get("/food-api/:foodQuery", async (req,res) =>{
     try {
-        console.log(`https://api.api-ninjas.com/v1/nutrition?query=${req.params.foodQuery}`)
-        const {data} = await axios.get(`https://api.api-ninjas.com/v1/nutrition?query=${req.query.query}`, {
+        const {data} = await axios.get(`https://api.api-ninjas.com/v1/nutrition?query=${req.params.foodQuery}`, {
             headers: {
                 "X-Api-Key": "X5l/m/FVLqY81ji7+LzOqQ==8d6SMjR72cUy3ma5"
             }

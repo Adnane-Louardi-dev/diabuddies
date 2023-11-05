@@ -8,11 +8,12 @@ import { formatQty } from "../utils/utils";
 import InputAdornment from "@mui/material/InputAdornment";
 
 const FoodModal = ({ props }) => {
-  const { addFood } = useAddFood();
+  const { addFood, notification } = useAddFood();
   const [qty, setQty] = useState(formatQty(props.quantity || "100 g"));
   //
   return (
     <div className="flex items-center gap-1 m-2 px-2 py-2 rounded-xl bg-diaDarkBlue">
+        {notification}
       <div className="relative col-span-2 flex-none rounded-lg bg-white h-16 w-16">
         <Image src={props.image_url ?? "/diabuddies_logo_D_placeholder.png"} alt={props.product_name || "product"} objectFit="contain" layout="fill" className="absolute inset-0 p-1" />
       </div>

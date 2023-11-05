@@ -8,11 +8,12 @@ import { formatQty } from "../utils/utils";
 import InputAdornment from "@mui/material/InputAdornment";
 
 const NutritionModal = ({ nutrition }) => {
-  const { addFood } = useAddFood();
+  const { addFood, notification } = useAddFood();
   const [qty, setQty] = useState(nutrition.serving_size_g);
   //
   return (
     <div className="flex items-center gap-1 m-2 px-2 py-2 rounded-xl bg-diaDarkBlue">
+        {notification}
       <div className="grid col-span-5 flex-1">
         <h2 className="font-sourceCode text-lg font-semibold text-white truncate">{nutrition.name}</h2>
         <p className="font-rubik text-diaBlue font-semibold text-sm truncate">{`${nutrition.calories}Kcal, ${nutrition.carbohydrates_total_g}g carbs per ${nutrition.serving_size_g}g`}</p>
@@ -72,7 +73,7 @@ const NutritionModal = ({ nutrition }) => {
           onClick={() => {
             addFood({
               newItem: { ...nutrition, qty},
-              itemType: "nutrition",
+              itemType: "nutritions",
               primaryKey: "name"
           });
             console.log("added");

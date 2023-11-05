@@ -20,5 +20,10 @@ const mealSchema = mongoose.Schema({
   protein: Number,
   fat: Number,
   kcal: Number,
+  foods: {
+    products: Array,
+    recipes: Array,
+    nutritions: Array
+  }
 });
 module.exports = mongoose.model("mealSchema", mealSchema);

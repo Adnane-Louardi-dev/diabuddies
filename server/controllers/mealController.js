@@ -2,7 +2,7 @@ const { mealSchema } = require("../models/mealSchema");
 
 const addNewMeal = async (req, res) => {
   try {
-    const { mealName, unit, glucose, time: whenEated, bolus, basal, carbs, protein, fat, kcal } = req.body;
+    const { mealName, unit, glucose, time: whenEated, bolus, basal, carbs, protein, fat, kcal, foods } = req.body;
     const meal = await mealSchema.create({
       userId: req.user._id,
       mealName,
@@ -15,6 +15,7 @@ const addNewMeal = async (req, res) => {
       protein,
       fat,
       kcal,
+      foods
     });
     await meal.save();
     return res.status(200).json(meal);

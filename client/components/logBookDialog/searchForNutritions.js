@@ -10,7 +10,7 @@ import {useEffect, useState} from "react";
 import NutritionModal from "../nutritionModal";
 
 
-export const SearchForVegetables = () => {
+export const SearchForNutritions = () => {
     const [searchQuery, setsearchQuery] = useState(undefined);
     const [IsSearching, setIsSearching] = useState(false);
     const [SearchError, setSearchError] = useState(false);

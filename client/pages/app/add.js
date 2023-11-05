@@ -7,12 +7,10 @@ import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker";
 import InputAdornment from "@mui/material/InputAdornment";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-import { useQueryClient } from "@tanstack/react-query";
 import { NutrationLogInput } from "../../components/NutrationLogInput";
 import { styled } from "@mui/material/styles";
 import Switch from "@mui/material/Switch";
 import { AddMealNameModal } from "../../components/addMealNameModal";
-import { GetSavedMealsModal } from "../../components/getSavedMealsModal";
 import { nullLogBook } from "../../utils/nulls";
 import { useTranslation } from "next-i18next";
 import SearchForFood from "../../components/logBookDialog/searchForFood";
@@ -26,6 +24,7 @@ import { useGetCurrentUserDetailed } from "../../customeHooks/useGetCurrentUser"
 import Box from "@mui/material/Box";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
+import {ShowAddedFood} from "../../components/showAddedFood";
 let mealsTime = {
   breakfast: { min: 5, max: 11 },
   lunch: { min: 11, max: 15 },
@@ -48,6 +47,44 @@ function checkMealValidity(mealHour) {
       return "meals";
   }
 }
+function calculateMacros(foods){
+  let macros = foods.products.reduce(
+      (accum, item) => {
+        accum.carbs += item?.nutriments.carbohydrates_100g/100 * item.qty * item.units;
+        accum.protein += item?.nutriments.proteins_100g/100 * item.qty * item.units;
+        accum.fat += item?.nutriments.fat_100g/100 * item.qty * item.units;
+        return accum;
+      },
+      { ...nullLogBook }
+  );
+  macros = foods.recipes.reduce((accum, recipe)=>{
+    accum.carbs += recipe.attributes.carbs * recipe.units
+    accum.protein += recipe.attributes.protein * recipe.units
+    accum.fat += recipe.attributes.fat * recipe.units
+    return accum
+  },macros)
+  macros = foods.nutritions.reduce((accum, nutrition)=>{
+    accum.carbs +=nutrition.carbohydrates_total_g * nutrition.units
+    accum.protein +=nutrition.protein_g * nutrition.units
+    accum.fat +=nutrition.fat_total_g * nutrition.units
+    return accum
+  },macros)
+  return {
+    ...macros,
+    carbs: renderNumber(macros.carbs),
+    protein: renderNumber(macros.protein),
+    fat: renderNumber(macros.fat)
+  }
+}
+
+function mapFood(foods){
+  return {
+    products: foods.products.map(product => product.product_name),
+    recipes: foods.recipes.map(recipe => recipe.id),
+    nutritions: foods.nutritions.map(nutrition => nutrition.name)
+  }
+}
+
 const Android12Switch = styled(Switch)(({ theme }) => ({
   padding: 8,
   "& .MuiSwitch-track": {
@@ -88,7 +125,7 @@ export default function NewLogDialog() {
   const [savedMealsModalOpen, setSavedMealsModalOpen] = useState(false);
   const [isSearchForAMealOpen, setIsSearchForAMealOpen] = useState(false);
   const { foods, clearAll, removeFood } = useAddFood();
-  const [data, setData] = useState({ ...nullLogBook, time: moment()._d, food: foods });
+  const [data, setData] = useState({ ...nullLogBook, time: moment()._d});
   const [notificationOpen, setNotificationOpen] = useState(false);
   const { t } = useTranslation("index");
   const { t: tc } = useTranslation("common");
@@ -100,25 +137,12 @@ export default function NewLogDialog() {
   };
 
   useEffect(() => {
-    let newMacrosBasedOnFoodChange =
-      foods?.products.reduce(
-        (accum, item) => {
-          accum.carbs += renderNumber(parseInt(item?.nutriments.carbohydrates_100g) * item.qty * item.units) ;
-          accum.protein += renderNumber(parseInt(item?.nutriments.proteins_100g) * item.qty * item.units) ;
-          accum.fat += renderNumber(parseInt(item?.nutriments.fat_100g) * item.qty * item.units);
-          return accum;
-        },
-        { ...nullLogBook, meal: checkMealValidity(moment().hours()) }
-      ) ?? nullLogBook;
-    newMacrosBasedOnFoodChange = foods?.recipes.reduce((accum, recipe)=>{
-      accum.carbs += renderNumber(recipe.attributes.carbs * recipe.units)
-      accum.protein += renderNumber(recipe.attributes.protein * recipe.units)
-      accum.fat += renderNumber(recipe.attributes.fat * recipe.units)
-      return accum
-    },newMacrosBasedOnFoodChange)
-    setData({ ...data, ...newMacrosBasedOnFoodChange });
+    let newMacrosBasedOnFoodChange = foods ? calculateMacros(foods) : nullLogBook
+    setData({ ...data,
+      ...newMacrosBasedOnFoodChange,
+      meal: checkMealValidity(moment().hours()),
+    });
     setInsulinType(data.basal !== 0 ? "basal" : "bolus");
-    console.log(foods);
     return () => setData({ ...nullLogBook, time: moment()._d });
   }, [foods]);
 
@@ -134,7 +158,7 @@ export default function NewLogDialog() {
   }, [searchParams.get("log")]);
 
   const handlePOSTNewLog = () => {
-    addNewLogBook(data);
+    addNewLogBook({...data, foods: mapFood(foods)});
     clearAll();
     setData({ ...nullLogBook, time: moment()._d });
     router.push("/app");
@@ -150,7 +174,6 @@ export default function NewLogDialog() {
   return (
     <section className="px-5">
       <AddMealNameModal mealModalOpen={mealModalOpen} setMealModalOpen={setMealModalOpen} data={data} onSave={handlePOSTNewLog} />
-      <GetSavedMealsModal savedMealsModalOpen={savedMealsModalOpen} setSavedMealsModalOpen={setSavedMealsModalOpen} setData={setData} />
       {/* date pickers */}
       <MobileDateTimePicker
         className="w-full my-5"
@@ -411,68 +434,7 @@ export default function NewLogDialog() {
             <Icon icon="mingcute:bookmark-line" className="h-5 w-5" />
           </Button>
         </div>
-        {foods?.products.length === 0 && foods?.recipes.length === 0 && <div className="grid items-center text-center justify-center my-3 py-5 bg-diaDarkBlue rounded-xl">
-          <h2 className={"text-xl font-poppins text-gray-500 font-semibold"}>Oops!</h2>
-          <p className={"font-poppins text-sm text-gray-500"}>You didn't add food yet</p>
-        </div>}
-        {foods?.products.length > 0 && (
-            <div className="rounded-lg my-3 bg-diaDarkBlue">
-              {foods.products.map((product) => {
-                const carbsPerUnit = product.nutriments.carbohydrates_100g * product.qty / 100;
-                return (
-                  <div key={product.product_name} className="relative flex items-center justify-between mx-2 px-2 border-t-2 border-gray-700">
-                    <div className="mx-2 p-2">
-                      <h1 className="text-blue-500 font-poppins">{`${product.product_name}`}</h1>
-                      <p className="text-gray-500 font-poppins">
-                        {`${product.qty}${product.quantity?.match(/[a-zA-Z]+/g) || ""}
-                         (${carbsPerUnit}g * ${product.units} = ${renderNumber(carbsPerUnit * product.units)}g carbs)`}
-                      </p>
-                    </div>
-                    <Button
-                      className="self-center"
-                      onClick={() => {
-                        removeFood({
-                          primaryKey:"product_name",
-                          itemType: "products",
-                          primaryKeyValue: product.product_name});
-                      }}
-                    >
-                      <Icon icon="ic:outline-delete" className="text-diaGray h-7 w-7" />
-                    </Button>
-                  </div>
-                );
-              })}
-            </div>
-        )}
-        {foods?.recipes.length > 0 && (
-            <div className="rounded-lg my-3 bg-diaDarkBlue">
-              {foods.recipes.map((recipe) => {
-                const {id, units} = recipe
-                recipe = recipe.attributes;
-                return (
-                  <div key={recipe.name} className="relative flex items-center justify-between mx-2 px-2 border-t-2 border-gray-700">
-                    <div className="mx-2 p-2">
-                      <h1 className="text-blue-500 font-poppins">{recipe.name}</h1>
-                      <p className="text-gray-500 font-poppins">
-                        {recipe.carbs}g * {units} = {renderNumber(recipe.carbs * units)}g carbs
-                      </p>
-                    </div>
-                    <Button
-                      className="self-center"
-                      onClick={() => {
-                        removeFood({
-                          primaryKey:"id",
-                          itemType: "recipes",
-                          primaryKeyValue: id});
-                      }}
-                    >
-                      <Icon icon="ic:outline-delete" className="text-diaGray h-7 w-7" />
-                    </Button>
-                  </div>
-                );
-              })}
-            </div>
-        )}
+        {foods && <ShowAddedFood foods={foods}/>}
       </section>
       <Box sx={{ display: "grid", gap: 2, gridTemplateColumns: "repeat(2, minmax(0, 1fr))", width: "full" }}>
         <Link href={"/app"} passHref>
