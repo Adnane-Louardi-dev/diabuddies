@@ -67,7 +67,7 @@ proxy.on('proxyReq', function(proxyReq, req, res, options) {
 });
 app.use('/service-api', function(req, res, next) {
     proxy.web(req, res, {
-        target: `http://${process.env.STRAPI}/api`
+        target: `http://${process.env.STRAPI_URL}/api`
     }, next);
 });
 
