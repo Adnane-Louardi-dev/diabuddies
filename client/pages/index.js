@@ -8,6 +8,7 @@ import { getDir } from "../utils/getDir";
 import Image from "next/image";
 import { Icon } from "@iconify/react";
 import assets from "../components/layout/importLandingPageAssets"
+import Link from "next/link";
 const {vector1, vector2, vector3, vector4,vector5,ahmed, adnane, appstore, googleplay, glass, logo, Rectangle6}= assets
 function DiabuddiesProsComp({ prosName, prosDescriptions, icon, color }) {
   return (
@@ -68,10 +69,18 @@ export default function LandingPage() {
         <nav className={"flex justify-between items-center bg-white my-5 rounded-3xl px-5 shadow-lg"}>
           <Logo />
           <div className={"self-center"}>
-            <Button className={"text-diaDarkBlue capitalize mx-1 px-6 py-2 hidden md:inline"}>About us</Button>
-            <Button className={"text-diaDarkBlue capitalize mx-1 px-6 py-2 hidden md:inline"}>Team</Button>
-            <Button className={"text-diaDarkBlue capitalize mx-1 px-6 py-2 hidden md:inline"}>Contact</Button>
-            <Button className={"bg-diaDarkBlue text-white rounded-3xl capitalize mx-1 px-6 py-2 font-tajawal"}>{t("logIn")}</Button>
+            <Link href={"#why-us"}>
+              <Button className={"text-diaDarkBlue capitalize mx-1 px-6 py-2 hidden md:inline"}>About us</Button>
+            </Link>
+            <Link href={"#team"}>
+              <Button className={"text-diaDarkBlue capitalize mx-1 px-6 py-2 hidden md:inline"}>Team</Button>
+            </Link>
+            <Link href={"#contact"}>
+              <Button className={"text-diaDarkBlue capitalize mx-1 px-6 py-2 hidden md:inline"}>Contact</Button>
+            </Link>
+            <Link href={"/login"}>
+              <Button className={"bg-diaDarkBlue text-white rounded-3xl capitalize mx-1 px-6 py-2 font-tajawal"}>{t("logIn")}</Button>
+            </Link>
           </div>
         </nav>
       </header>
@@ -101,7 +110,7 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
-        <section className="px-5">
+        <section className="px-5 pt-[130px] -mt-[100px]" id={"why-us"}>
           <div className="relative rounded-2xl bg-white shadow-md p-5">
             <div className="text-center font-tajawal font-bold text-3xl mb-5">
               <span className="text-diaBlue">Diabuddies</span> علاش
@@ -115,7 +124,7 @@ export default function LandingPage() {
             </div>
           </div>
         </section>
-        <section className="p-5">
+        <section className="p-5 pt-[130px] -mt-[100px]" id={"contact"}>
           <div className="grid grid-cols-1 md:grid-cols-2 justify-between relative rounded-2xl bg-white shadow-md p-5 h-full" dir={getDir(i18n.language)}>
             <div className=" my-5">
               <h3 className="font-tajawal text-2xl font-bold text-diaDarkBlue my-3">تسجل معانا باش يوصلك الجديد</h3>
@@ -123,11 +132,13 @@ export default function LandingPage() {
             </div>
             <div className=" grid items-center justify-center">
               <Image src={vector5} height={200} width={200} className="absolute left-[25%] top-32" />
-              <Button className={"bg-diaDarkBlue w-40 text-white rounded-xl capitalize mx-6 px-7 py-3 font-tajawal shadow-lg"}>{t("logIn")}</Button>
+              <Link href={"/login"}>
+                <Button className={"bg-diaDarkBlue w-40 text-white rounded-xl capitalize mx-6 px-7 py-3 font-tajawal shadow-lg"}>{t("logIn")}</Button>
+              </Link>
             </div>
           </div>
         </section>
-        <section className="p-5">
+        <section className="p-5 pt-[130px] -mt-[100px]" id={"team"}>
           <div className="rounded-2xl bg-white shadow-md p-5 h-full" dir={getDir(i18n.language)}>
             <div className="text-center font-tajawal font-bold text-3xl mb-5">
               <span className="text-diaBlue">Diabuddies's</span> Team
@@ -135,19 +146,27 @@ export default function LandingPage() {
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 justify-around">
               <div className="grid gap-3 justify-items-center items-center">
                 <Image src={adnane} height={150} width={150} alt="adnane louardi picture" />
-                <h4 className="font-bold font-poppins text-xl text-diaDarkBlue">Adnane Louardi</h4>
-                <Button className={"flex justify-around bg-diaDarkBlue w-40 text-white rounded-xl capitalize mx-6 p-1 font-rubik shadow-lg"}>
-                  <span className="mt-0.5">Github Account</span>
-                  <Icon icon="mdi:github" className="h-7 w-7 text-white" />
-                </Button>
+                <Link href={"https://github.com/Adnane-Louardi-dev"} target={"_blank"}>
+                  <h4 className="font-bold font-poppins text-xl text-diaDarkBlue">Adnane Louardi</h4>
+                </Link>
+                <Link href={"https://github.com/Adnane-Louardi-dev"} target={"_blank"}>
+                  <Button className={"flex justify-around bg-diaDarkBlue w-40 text-white rounded-xl capitalize mx-6 p-1 font-rubik shadow-lg"}>
+                    <span className="mt-0.5">Github Account</span>
+                    <Icon icon="mdi:github" className="h-7 w-7 text-white" />
+                  </Button>
+                </Link>
               </div>
               <div className="grid gap-3 justify-items-center items-center">
                 <Image src={ahmed} height={150} width={150} alt="ahmed benahmed picture" />
-                <h4 className="font-bold font-poppins text-xl text-diaDarkBlue">Ahmed Benahmed</h4>
-                <Button className={"flex justify-around bg-diaDarkBlue w-40 text-white rounded-xl capitalize mx-6 p-1 font-rubik shadow-lg"}>
-                  <span className="mt-0.5">Github Account</span>
-                  <Icon icon="mdi:github" className="h-7 w-7 text-white" />
-                </Button>
+                <Link href={"https://github.com/Ahmed-BenAhmed"} target={"_blank"}>
+                 <h4 className="font-bold font-poppins text-xl text-diaDarkBlue">Ahmed Ben Ahmed</h4>
+                </Link>
+                <Link href={"https://github.com/Ahmed-BenAhmed"} target={"_blank"}>
+                  <Button className={"flex justify-around bg-diaDarkBlue w-40 text-white rounded-xl capitalize mx-6 p-1 font-rubik shadow-lg"}>
+                    <span className="mt-0.5">Github Account</span>
+                    <Icon icon="mdi:github" className="h-7 w-7 text-white" />
+                  </Button>
+                </Link>
               </div>
             </div>
           </div>
