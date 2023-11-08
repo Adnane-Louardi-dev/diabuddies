@@ -62,20 +62,12 @@ let proxy = httpProxy.createProxyServer({
     port: process.env.PORT,
 });
 
-let nutitionsProxy = httpProxy.createProxyServer({
-    host: 'http://localhost',
-    port: process.env.PORT,
-});
-
 proxy.on('proxyReq', function(proxyReq, req, res, options) {
     proxyReq.setHeader('Authorization', `Bearer ${process.env.STRAPI}`);
 });
-nutitionsProxy.on('proxyReq', function(proxyReq, req, res, options) {
-    proxyReq.setHeader("X-Api-Key", process.env.FOOD_API);
-});
 app.use('/service-api', function(req, res, next) {
     proxy.web(req, res, {
-        target: `http://localhost:1337/api`
+        target: `http://${process.env.STRAPI}/api`
     }, next);
 });
 
@@ -83,7 +75,7 @@ app.get("/food-api/:foodQuery", async (req,res) =>{
     try {
         const {data} = await axios.get(`https://api.api-ninjas.com/v1/nutrition?query=${req.params.foodQuery}`, {
             headers: {
-                "X-Api-Key": "X5l/m/FVLqY81ji7+LzOqQ==8d6SMjR72cUy3ma5"
+                "X-Api-Key": process.env.FOOD_API
             }
         });
         console.log("data", data)
