@@ -131,7 +131,7 @@ export default function NewLogDialog() {
   //won't forget this model to use it later
   const [savedMealsModalOpen, setSavedMealsModalOpen] = useState(false);
   const [isSearchForAMealOpen, setIsSearchForAMealOpen] = useState(false);
-  const { foods, clearAll, removeFood } = useAddFood();
+  const { foods, clearAll } = useAddFood();
   const [data, setData] = useState({ ...nullLogBook, time: moment()._d});
   const [notificationOpen, setNotificationOpen] = useState(false);
   const { t } = useTranslation("index");
@@ -445,7 +445,7 @@ export default function NewLogDialog() {
             <Icon icon="mingcute:bookmark-line" className="h-5 w-5" />
           </Button>
         </div>
-        {foods && <ShowAddedFood foods={foods}/>}
+        {foods && <ShowAddedFood />}
       </section>
       <Box sx={{ display: "grid", gap: 2, gridTemplateColumns: "repeat(2, minmax(0, 1fr))", width: "full" }}>
         <Link href={"/app"} passHref>
