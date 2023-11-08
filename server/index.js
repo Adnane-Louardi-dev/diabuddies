@@ -67,10 +67,10 @@ proxy.on('proxyReq', function(proxyReq, req, res, options) {
 });
 app.use('/service-api', function(req, res, next) {
     proxy.web(req, res, {
-        target: `http://${process.env.STRAPI_URL}/api`
+        target: `${process.env.STRAPI_URL}/api`
     }, next);
+    console.log("req",req)
 });
-
 app.get("/food-api/:foodQuery", async (req,res) =>{
     try {
         const {data} = await axios.get(`https://api.api-ninjas.com/v1/nutrition?query=${req.params.foodQuery}`, {

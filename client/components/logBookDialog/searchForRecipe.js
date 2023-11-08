@@ -6,10 +6,18 @@ import {useGetWishListItems} from "../../customeHooks/wishListHooks";
 import Image from "next/image";
 import {RecipeComponent} from "../dia-kitchen/recipeComponent";
 import RecipeLessDetailed from "./RecipeLessDetailed";
+import {useGetRecipes} from "../../customeHooks/useKitchen";
+import qs from "qs";
 
 
 export const SearchForRecipe = () => {
-    const {data:recipes, isLoading, isError} = useGetWishListItems("recipe")
+    const {data:favRecipes, isLoading, isError} = useGetWishListItems("recipe")
+    const {data:recipes} = useGetRecipes(qs.stringify({
+        pagination: {
+            page: 0,
+            pageSize: 3
+        }
+    }))
 
     return <>
         {/*Make a Filter to filter recipes based on (meal time - carbs - meal category)*/}
@@ -28,7 +36,7 @@ export const SearchForRecipe = () => {
                 <Icon icon="tabler:search" className="self-center text-white h-7 w-7" />
             </Button>
         </div>
-        {(isError || recipes?.length === 0) && (
+        {(isError || favRecipes?.length === 0) && (
             <div className="p-5">
                 <div className="flex p-3 items-center justify-center rounded-lg bg-diaRed">
                     <h1 className="font-rubik text-lg text-white">No Food found</h1>
@@ -44,21 +52,21 @@ export const SearchForRecipe = () => {
             </div>
         </section> : <section className="my-5">
             <section>
-                <h3 className="font-sourceCode text-diaGray text-md">Some Recipes</h3>
+                <h3 className="font-sourceCode text-diaGray text-md">Your Favorite Recipes</h3>
+                <section className="flex snap-x snap-mandatory p-3 gap-5 w-full overflow-x-scroll no-scrollbar">
+                    {favRecipes.map((recipe) => (
+                        <RecipeLessDetailed recipe={recipe} key={recipe.id} />
+                    ))}
+                </section>
+            </section>
+            <section className="my-5">
+                <h3 className="font-sourceCode text-diaGray text-md">Some Suggested Recipes</h3>
                 <section className="flex snap-x snap-mandatory p-3 gap-5 w-full overflow-x-scroll no-scrollbar">
                     {recipes.map((recipe) => (
                         <RecipeLessDetailed recipe={recipe} key={recipe.id} />
                     ))}
                 </section>
             </section>
-            <h2 className="my-3 text-2xl font-poppins text-diaDarkBlue">Your Favorite Recipes</h2>
-            {recipes.map((recipe) => (
-                <RecipeLessDetailed recipe={recipe} key={recipe.id} />
-            ))}
-            <h2 className="my-3 text-2xl font-poppins text-diaDarkBlue">Last Recipes</h2>
-            {recipes.map((recipe) => (
-                <RecipeLessDetailed recipe={recipe} key={recipe.id} />
-            ))}
         </section>}
     </>
 }
