@@ -7,6 +7,8 @@ import LanguageSwitcher from "../components/appBar/LanguageSwitcher";
 import { getDir } from "../utils/getDir";
 import Image from "next/image";
 import { Icon } from "@iconify/react";
+import assets from "../components/layout/importLandingPageAssets"
+const {vector1, vector2, vector3, vector4,vector5,ahmed, adnane, appstore, googleplay, glass, logo, Rectangle6}= assets
 function DiabuddiesProsComp({ prosName, prosDescriptions, icon, color }) {
   return (
     <div className={`relative snap-center mr-4 shrink-0 grid justify-items-center bg-white rounded-2xl p-3 border-2 text-center w-52`} style={{ borderColor: color }}>
@@ -75,13 +77,13 @@ export default function LandingPage() {
       </header>
       <main className="my-28">
         <section className={"flex gap-4 justify-between items-center h-[calc(100vh-150px)]"}>
-          <Image src={"/landing_page_assets/vector2.png"} height={300} width={200} className="absolute right-0 bottom-0" />
-          <Image src={"/landing_page_assets/vector3.png"} height={300} width={200} className="absolute left-0 top-20" />
-          <Image src={"/landing_page_assets/vector1.png"} height={300} width={200} className="absolute top-[45%] md:top-[55%] translate-x-5 md:translate-x-[300%]" />
-          <Image src={"/landing_page_assets/vector4.png"} height={300} width={200} className="absolute top-[5%] md:top-[15%] translate-x-44 md:translate-x-[500%]" />
+          <Image src={vector2} height={300} width={200} className="absolute right-0 bottom-0" />
+          <Image src={vector3} height={300} width={200} className="absolute left-0 top-20" />
+          <Image src={vector1} height={300} width={200} className="absolute top-[45%] md:top-[55%] translate-x-5 md:translate-x-[300%]" />
+          <Image src={vector4} height={300} width={200} className="absolute top-[5%] md:top-[15%] translate-x-44 md:translate-x-[500%]" />
           <div className="grid grid-cols-1 md:grid-cols-2">
             <div className={"relative w-full"}>
-              <Image src={`${i18n.language !== "ar" ? "." : ".."}/landing_page_assets/glass.png`} height={500} width={500} alt={"hero section image"} className="" />
+              <Image src={glass} height={500} width={500} alt={"hero section image"} className="" />
             </div>
             <div className={"w-full h-full px-16 relative"} dir={"rtl"}>
               <div className={"absolute w-full grid items-center -translate-y-[300%] md:translate-y-20 translate-x-[20%] md:translate-x-[35%]"}>
@@ -92,8 +94,8 @@ export default function LandingPage() {
                   مع <span className="text-diaDarkBlue">Diabuddies</span> كلشي تيولي ساهل.
                 </div>
                 <div className="hidden md:flex justify-start gap-3 mt-10 mr-4">
-                  <Image src={"/landing_page_assets/appstore.png"} height={150} width={150} />
-                  <Image src={"/landing_page_assets/googleplay.png"} height={150} width={150} />
+                  <Image src={appstore} height={150} width={150} />
+                  <Image src={googleplay} height={150} width={150} />
                 </div>
               </div>
             </div>
@@ -104,8 +106,8 @@ export default function LandingPage() {
             <div className="text-center font-tajawal font-bold text-3xl mb-5">
               <span className="text-diaBlue">Diabuddies</span> علاش
             </div>
-            <Image src={"/landing_page_assets/vector5.png"} height={200} width={300} className="absolute left-3 bottom-28" />
-            <Image src={"/landing_page_assets/Rectangle6.png"} height={50} width={150} className="absolute right-3 top-0" />
+            <Image src={vector5} height={200} width={300} className="absolute left-3 bottom-28" />
+            <Image src={Rectangle6} height={50} width={150} className="absolute right-3 top-0" />
             <div className="flex snap-x snap-mandatory px-3 w-full overflow-x-scroll no-scrollbar">
               {pros.map((item, index) => {
                 return <DiabuddiesProsComp icon={item.icon} color={item.color} prosDescriptions={item.prosDescriptions} prosName={item.prosName} />;
@@ -120,7 +122,7 @@ export default function LandingPage() {
               <p className="font-tajawal text-lg font-semibold text-diaGray mr-2">Diabuddies غادي تصيفط ليك غاع داكشي لي متعلق بالسكري باش تعرف عليه كتر و تقدر تعايش معاه حسن</p>
             </div>
             <div className=" grid items-center justify-center">
-              <Image src={"/landing_page_assets/vector5.png"} height={200} width={200} className="absolute left-[25%] top-32" />
+              <Image src={vector5} height={200} width={200} className="absolute left-[25%] top-32" />
               <Button className={"bg-diaDarkBlue w-40 text-white rounded-xl capitalize mx-6 px-7 py-3 font-tajawal shadow-lg"}>{t("logIn")}</Button>
             </div>
           </div>
@@ -132,7 +134,7 @@ export default function LandingPage() {
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 gap-3 justify-around">
               <div className="grid gap-3 justify-items-center items-center">
-                <Image src={"/landing_page_assets/adnane.png"} height={150} width={150} alt="adnane louardi picture" />
+                <Image src={adnane} height={150} width={150} alt="adnane louardi picture" />
                 <h4 className="font-bold font-poppins text-xl text-diaDarkBlue">Adnane Louardi</h4>
                 <Button className={"flex justify-around bg-diaDarkBlue w-40 text-white rounded-xl capitalize mx-6 p-1 font-rubik shadow-lg"}>
                   <span className="mt-0.5">Github Account</span>
@@ -140,7 +142,7 @@ export default function LandingPage() {
                 </Button>
               </div>
               <div className="grid gap-3 justify-items-center items-center">
-                <Image src={"/landing_page_assets/ahmed.png"} height={150} width={150} alt="ahmed benahmed picture" />
+                <Image src={ahmed} height={150} width={150} alt="ahmed benahmed picture" />
                 <h4 className="font-bold font-poppins text-xl text-diaDarkBlue">Ahmed Benahmed</h4>
                 <Button className={"flex justify-around bg-diaDarkBlue w-40 text-white rounded-xl capitalize mx-6 p-1 font-rubik shadow-lg"}>
                   <span className="mt-0.5">Github Account</span>
@@ -170,7 +172,7 @@ export default function LandingPage() {
       <footer className="border-2 rounded-2xl bg-white p-2 shadow-lg">
         <section className="grid grid-cols-1 md:grid-cols-3 mt-3 p-2">
           <div className="grid gap-1 text-center justify-items-center md:justify-items-start">
-            <Image src={"/diabuddies_logo.png"} height={100} width={200} className="-mt-10 self-center md:self-start" />
+            <Image src={logo} height={100} width={200} className="-mt-10 self-center md:self-start" />
             <p className="font-rubik text-sm font-light text-diaGray ml-5 -mt-8">Diabuddies is the world's platform and community for diabetics people, that helps them to manage their illness.</p>
             <div className="flex justify-around items-center m-3 gap-5 md:gap-2">
               <Icon icon="mdi:github" className="h-10 w-10 text-diaGray" />

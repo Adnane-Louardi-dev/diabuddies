@@ -15,7 +15,6 @@ const nextConfig = {
   reactStrictMode: true,
   images: {
     domains: ["cdn.chec.io", "images.openfoodfacts.net", "localhost", process.env.NEXT_PUBLIC_STRAPI_URL.replace("http://", "")],
-    unoptimized: true,
     remotePatterns: [
       {
         protocol: "https",

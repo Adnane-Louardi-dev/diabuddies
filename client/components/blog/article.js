@@ -67,9 +67,6 @@ export const Article = ({id,title,content, image,createdAt, relatedArticles,isLi
             })
     }, []);
     const {data, isLoading, isSuccess} = useGetComment(id)
-    if(isHtmlLoading) {
-        return <LoadingCircle />
-    }
     const thumbnail = image ? image.data : ""
     const {name, biography, avatar} = writer.data?.attributes ?? {name: null, biography: null, avatar: {data: null}}
     const createdDate = moment(createdAt).format("DD/MM/YYYY")
@@ -94,7 +91,7 @@ export const Article = ({id,title,content, image,createdAt, relatedArticles,isLi
                                         <span rel="author"
                                            className="text-xl font-bold text-gray-900">{name}</span>
                                         <p className="text-base font-light text-gray-500">
-                                            <time pubdate dateTime={createdDate} title={createdDate}>
+                                            <time dateTime={createdDate} title={createdDate}>
                                                 {createdDate}
                                             </time>
                                         </p>
