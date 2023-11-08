@@ -1,30 +1,29 @@
-const { mealSchema } = require("../models/mealSchema");
+const mealModel = require("../models/mealSchema");
 
 const addNewMeal = async (req, res) => {
   try {
-    const { mealName, unit, glucose, time: whenEated, bolus, basal, carbs, protein, fat, kcal } = req.body;
-    const meal = await mealSchema.create({
+    const { mealName, glucose, meal, carbs, protein, fat, kcal, foods } = req.body;
+    const createdMeal = await mealModel.create({
       userId: req.user._id,
       mealName,
-      unit,
       glucose,
-      whenEated,
-      bolus,
-      basal,
       carbs,
       protein,
       fat,
       kcal,
+      meal,
+      foods
     });
-    await meal.save();
-    return res.status(200).json(meal);
+    await createdMeal.save();
+    return res.status(200).json(createdMeal);
   } catch (e) {
+    console.log('e',e)
     return res.status(404).json({ message: "Didn't create the meal", error: e });
   }
 };
 const getUserMeals = async (req, res) => {
   try {
-    const meals = await mealSchema.find({
+    const meals = await mealModel.find({
       userId: req.user._id,
     });
     return res.status(200).json(meals);

@@ -18,6 +18,7 @@ import {useTranslation} from "next-i18next";
 import {getDir} from "../../utils/getDir";
 import Image from "next/image"
 import {useGetCurrentUser} from "../../customeHooks/useGetCurrentUser";
+import {RenderMarkup} from "../layout/renderMarkup";
 
 export const Article = ({id,title,content, image,createdAt, relatedArticles,isLiked, likeCount, author:writer}) => {
     const [ref,haveReadArticle] = useElementOnScreen({
@@ -26,7 +27,6 @@ export const Article = ({id,title,content, image,createdAt, relatedArticles,isLi
     })
     const {t,i18n} = useTranslation("blogStore")
     const queryClient = useQueryClient()
-    const {data:html, isLoading:isHtmlLoading} = useGetHTML(content)
     const [comment, setComment] = useState("")
     const [liked, setLiked] = useState(isLiked)
     const [likesCount, setLikesCount] = useState(likeCount)
@@ -109,9 +109,7 @@ export const Article = ({id,title,content, image,createdAt, relatedArticles,isLi
                             {title}
                         </h1>
                     </header>
-                    <div className={"max-w-full break-words [&>p]:pb-4 [&_ul]:pb-4 [&_ul]:list-disc [&_li]:mr-4 [&_a]:text-diaBlue [&_h4]:pb-2 [&_h4]:text-xl"}
-                         dir={"rtl"}
-                         dangerouslySetInnerHTML={{__html: html}} />
+                    <RenderMarkup content={content} />
                     {!isLoading && isSuccess && <section className="not-format">
                         <div ref={ref} className="flex justify-between items-center my-6">
                             <h2 className="text-lg lg:text-2xl font-bold text-gray-900">{t("discussion")} ({data.data.length})</h2>

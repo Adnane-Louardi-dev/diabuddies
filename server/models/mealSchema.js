@@ -10,15 +10,16 @@ const mealSchema = mongoose.Schema({
     type: String,
     required: true,
   },
-  whenEated: Date,
-  unit: String,
   glucose: Number,
   meal: String,
-  bolus: Number,
-  basal: Number,
   carbs: Number,
   protein: Number,
   fat: Number,
   kcal: Number,
+  foods: {
+    products: Array,
+    recipes: Array,
+    nutritions: Array
+  }
 });
 module.exports = mongoose.model("mealSchema", mealSchema);

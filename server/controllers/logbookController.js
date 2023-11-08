@@ -36,7 +36,7 @@ const addEditLog = (req, res) => {
         protein: req.body.protein,
         fat: req.body.fat,
         kcal: req.body.kcal,
-        food: req.body.food,
+        foods: req.body.foods,
     }
     if(req.body._id){
         logBookItemsSchema.findByIdAndUpdate(req.body._id, payload)

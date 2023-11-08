@@ -7,25 +7,24 @@ import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker";
 import InputAdornment from "@mui/material/InputAdornment";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-import { useQueryClient } from "@tanstack/react-query";
 import { NutrationLogInput } from "../../components/NutrationLogInput";
 import { styled } from "@mui/material/styles";
 import Switch from "@mui/material/Switch";
 import { AddMealNameModal } from "../../components/addMealNameModal";
-import { GetSavedMealsModal } from "../../components/getSavedMealsModal";
 import { nullLogBook } from "../../utils/nulls";
 import { useTranslation } from "next-i18next";
 import SearchForFood from "../../components/logBookDialog/searchForFood";
 import Link from "next/link";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useAddFood, useAddNewLogBook } from "../../customeHooks/useAddFood";
-import { kcalCalculate } from "../../utils/utils";
+import {kcalCalculate, renderNumber} from "../../utils/utils";
 import { useRouter } from "next/router";
 import CalculatingBolus from "../../utils/calculateBolus";
 import { useGetCurrentUserDetailed } from "../../customeHooks/useGetCurrentUser";
 import Box from "@mui/material/Box";
 import { useSearchParams } from "next/navigation";
 import Image from "next/image";
+import {ShowAddedFood} from "../../components/showAddedFood";
 let mealsTime = {
   breakfast: { min: 5, max: 11 },
   lunch: { min: 11, max: 15 },
@@ -48,6 +47,51 @@ function checkMealValidity(mealHour) {
       return "meals";
   }
 }
+function calculateMacros(foods){
+  let macros = foods.products.reduce(
+      (accum, item) => {
+        accum.carbs += item?.nutriments.carbohydrates_100g/100 * item.qty * item.units;
+        accum.protein += item?.nutriments.proteins_100g/100 * item.qty * item.units;
+        accum.fat += item?.nutriments.fat_100g/100 * item.qty * item.units;
+        return accum;
+      },
+      { ...nullLogBook }
+  );
+  macros = foods.recipes.reduce((accum, recipe)=>{
+    accum.carbs += recipe.attributes.carbs * recipe.units
+    accum.protein += recipe.attributes.protein * recipe.units
+    accum.fat += recipe.attributes.fat * recipe.units
+    return accum
+  },macros)
+  macros = foods.nutritions.reduce((accum, nutrition)=>{
+    accum.carbs +=nutrition.carbohydrates_total_g * nutrition.units
+    accum.protein +=nutrition.protein_g * nutrition.units
+    accum.fat +=nutrition.fat_total_g * nutrition.units
+    return accum
+  },macros)
+  return {
+    ...macros,
+    carbs: renderNumber(macros.carbs),
+    protein: renderNumber(macros.protein),
+    fat: renderNumber(macros.fat)
+  }
+}
+
+function mapFood(foods){
+  if(!foods){
+    return {
+      products: [],
+      recipes: [],
+      nutritions: []
+    }
+  }
+  return {
+    products: foods.products.map(product => product.product_name),
+    recipes: foods.recipes.map(recipe => recipe.id),
+    nutritions: foods.nutritions.map(nutrition => nutrition.name)
+  }
+}
+
 const Android12Switch = styled(Switch)(({ theme }) => ({
   padding: 8,
   "& .MuiSwitch-track": {
@@ -79,7 +123,7 @@ const Android12Switch = styled(Switch)(({ theme }) => ({
 
 export default function NewLogDialog() {
   const router = useRouter();
-  const searchParams = useSearchParams();
+  const searchParams = useSearchParams()
   const { user } = useGetCurrentUserDetailed();
   const [InsulinType, setInsulinType] = useState("bolus");
   const [dateOpen, setDateOpen] = useState(false);
@@ -88,9 +132,7 @@ export default function NewLogDialog() {
   const [savedMealsModalOpen, setSavedMealsModalOpen] = useState(false);
   const [isSearchForAMealOpen, setIsSearchForAMealOpen] = useState(false);
   const { foods, clearAll, removeFood } = useAddFood();
-  const [data, setData] = useState({ ...nullLogBook, time: moment()._d, food: foods });
-
-  const queryClient = useQueryClient();
+  const [data, setData] = useState({ ...nullLogBook, time: moment()._d});
   const [notificationOpen, setNotificationOpen] = useState(false);
   const { t } = useTranslation("index");
   const { t: tc } = useTranslation("common");
@@ -102,19 +144,12 @@ export default function NewLogDialog() {
   };
 
   useEffect(() => {
-    let newMacrosBasedOnFoodChange =
-      foods?.reduce(
-        (accum, item) => {
-          accum.carbs += Math.round((parseInt(item?.nutriments.carbohydrates_100g) * item.qty) / 100);
-          accum.protein += Math.round((parseInt(item?.nutriments.proteins_100g) * item.qty) / 100);
-          accum.fat += Math.round((parseInt(item?.nutriments.fat_100g) * item.qty) / 100);
-          return accum;
-        },
-        { ...nullLogBook, meal: checkMealValidity(moment().hours()) }
-      ) ?? nullLogBook;
-    setData({ ...data, ...newMacrosBasedOnFoodChange });
+    let newMacrosBasedOnFoodChange = foods ? calculateMacros(foods) : nullLogBook
+    setData({ ...data,
+      ...newMacrosBasedOnFoodChange,
+      meal: checkMealValidity(moment().hours()),
+    });
     setInsulinType(data.basal !== 0 ? "basal" : "bolus");
-    console.log(foods);
     return () => setData({ ...nullLogBook, time: moment()._d });
   }, [foods]);
 
@@ -130,7 +165,7 @@ export default function NewLogDialog() {
   }, [searchParams.get("log")]);
 
   const handlePOSTNewLog = () => {
-    addNewLogBook(data);
+    addNewLogBook({...data, foods: mapFood(foods)});
     clearAll();
     setData({ ...nullLogBook, time: moment()._d });
     router.push("/app");
@@ -145,8 +180,11 @@ export default function NewLogDialog() {
   };
   return (
     <section className="px-5">
-      <AddMealNameModal mealModalOpen={mealModalOpen} setMealModalOpen={setMealModalOpen} data={data} onSave={handlePOSTNewLog} />
-      <GetSavedMealsModal savedMealsModalOpen={savedMealsModalOpen} setSavedMealsModalOpen={setSavedMealsModalOpen} setData={setData} />
+      <AddMealNameModal
+          mealModalOpen={mealModalOpen}
+          setMealModalOpen={setMealModalOpen}
+          data={{...data, foods: mapFood(foods)}}
+          onSave={handlePOSTNewLog} />
       {/* date pickers */}
       <MobileDateTimePicker
         className="w-full my-5"
@@ -173,7 +211,6 @@ export default function NewLogDialog() {
         )}
         value={data.time}
         onChange={(newValue) => {
-          console.log(moment(newValue._d).hours());
           setData({ ...data, time: newValue._d, meal: checkMealValidity(moment(newValue._d).hours()) });
         }}
         openTo="hours"
@@ -401,90 +438,16 @@ export default function NewLogDialog() {
           }}
         />
       </div>
-      {foods?.length > 0 ? (
-        <section className="my-5">
-          <div className="flex justify-between items-center">
-            <h3 className="font-sourceCode text-diaGray text-md">Food Added</h3>
-            <Button disabled={isLoading} onClick={() => setMealModalOpen(true)} variant="filled" className="rounded-full shadow-md bg-diaDarkBlue text-white">
-              <Icon icon="mingcute:bookmark-line" className="h-5 w-5" />
-            </Button>
-          </div>
-          <div className="rounded-lg my-3 bg-diaDarkBlue">
-            {foods.map((food, i) => {
-              return (
-                <div key={i} className="flex items-center justify-between mx-2 border-t-2 border-gray-700">
-                  <div className="mx-2 p-2">
-                    <h1 className="text-blue-500 font-poppins">{`${food.product_name}`}</h1>
-                    <p className="text-gray-500 font-poppins">{`${food.qty}${food.quantity?.match(/[a-zA-Z]+/g) || ""} (${(food.nutriments.carbohydrates_100g * food.qty) / 100}g carbs)`} </p>
-                  </div>
-                  <Button
-                    className="self-center"
-                    onClick={() => {
-                      removeFood(food.id);
-                    }}
-                  >
-                    <Icon icon="ic:outline-delete" className="text-diaGray h-7 w-7" />
-                  </Button>
-                </div>
-              );
-            })}
-          </div>
-        </section>
-      ) : (
-        <>
-          <h3 className="font-sourceCode text-diaGray text-md">Food Added</h3>
-          <div className="grid items-center text-center justify-center my-3 py-5 bg-diaDarkBlue rounded-xl">
-            <h2 className={"text-xl font-poppins text-gray-500 font-semibold"}>Oops!</h2>
-            <p className={"font-poppins text-sm text-gray-500"}>You didn't add food yet</p>
-          </div>
-        </>
-      )}
       <section className="my-5">
-        <h3 className="font-sourceCode text-diaGray text-md">Some Recipes</h3>
-        <section className="flex snap-x snap-mandatory p-3 gap-5 w-full overflow-x-scroll no-scrollbar">
-          <div className="p-3 h-62 w-52 shrink-0 border-2 rounded-2xl shadow-md">
-            <div className="relative h-32 border-2 rounded-xl">
-              <div className="absolute right-0 m-2 rounded-md bg-white h-7 w-7">
-                <Icon icon="ic:round-add" className={`h-6 w-6 m-auto text-black`} />
-              </div>
-              <Image src={"/diabuddies_logo_D_placeholder.png"} objectFit="contain" fill alt="recipe 1" />
-            </div>
-            <h3 className="flex justify-between font-semibold font-inter">Greek salad with tomato and onions</h3>
-            <div className="flex mt-2">
-              <div className="bg-diaLightGreen rounded-xl font-poppins text-xs py-1 px-3 mx-1 text-diaMediumGreen shadow-lg shadow-diaLightGreen/50">Low Carb</div>
-              <div className="bg-diaLightOrange rounded-xl font-poppins text-xs py-1 px-3 mx-1 text-diaOrange shadow-lg shadow-diaLightOrange/50">High Fat</div>
-            </div>
-          </div>
-          <div className="p-3 h-62 w-52 shrink-0 border-2 rounded-2xl shadow-md">
-            <div className="relative h-32 border-2 rounded-lg">
-              <div className="absolute right-0 m-2 rounded-md bg-white h-7 w-7">
-                <Icon icon="ic:round-add" className={`h-6 w-6 m-auto text-black`} />
-              </div>
-              <Image src={"/diabuddies_logo_D_placeholder.png"} objectFit="contain" fill alt="recipe 1" />
-            </div>
-            <h3 className="flex justify-between font-semibold font-inter">Greek salad with tomato and onions</h3>
-            <div className="flex mt-2">
-              <div className="bg-diaLightGreen rounded-xl font-poppins text-xs py-1 px-3 mx-1 text-diaMediumGreen shadow-lg shadow-diaLightGreen/50">Low Carb</div>
-              <div className="bg-diaLightOrange rounded-xl font-poppins text-xs py-1 px-3 mx-1 text-diaOrange shadow-lg shadow-diaLightOrange/50">High Fat</div>
-            </div>
-          </div>
-          <div className="p-3 h-62 w-52 shrink-0 border-2 rounded-2xl shadow-md">
-            <div className="relative h-32 border-2 rounded-lg">
-              <div className="absolute right-0 m-2 rounded-md bg-white h-7 w-7">
-                <Icon icon="ic:round-add" className={`h-6 w-6 m-auto text-black`} />
-              </div>
-              <Image src={"/diabuddies_logo_D_placeholder.png"} objectFit="contain" fill alt="recipe 1" />
-            </div>
-            <h3 className="flex justify-between font-semibold font-inter">Greek salad with tomato and onions</h3>
-            <div className="flex mt-2">
-              <div className="bg-diaLightGreen rounded-xl font-poppins text-xs py-1 px-3 mx-1 text-diaMediumGreen shadow-lg shadow-diaLightGreen/50">Low Carb</div>
-              <div className="bg-diaLightOrange rounded-xl font-poppins text-xs py-1 px-3 mx-1 text-diaOrange shadow-lg shadow-diaLightOrange/50">High Fat</div>
-            </div>
-          </div>
-        </section>
+        <div className="flex justify-between items-center">
+          <h3 className="font-sourceCode text-diaGray text-md">Meal's Food Added</h3>
+          <Button disabled={isLoading} onClick={() => setMealModalOpen(true)} variant="filled" className="rounded-full shadow-md bg-diaDarkBlue text-white">
+            <Icon icon="mingcute:bookmark-line" className="h-5 w-5" />
+          </Button>
+        </div>
+        {foods && <ShowAddedFood foods={foods}/>}
       </section>
-
-      <Box sx={{ display: "grid", gap: 2, gridTemplateColumns: "repeat(2, minmax(0, 1fr))", width: "full", marginY: "1rem" }}>
+      <Box sx={{ display: "grid", gap: 2, gridTemplateColumns: "repeat(2, minmax(0, 1fr))", width: "full" }}>
         <Link href={"/app"} passHref>
           <Button className="w-full p-3 rounded-full shadow-md bg-white text-gray-800 font-codeSource font-xl">{tc("cancel")}</Button>
         </Link>

@@ -9,16 +9,11 @@ const wishListSchema = Schema({
         type: String,
         required: true
     },
-    isProduct: {
-        type: Boolean,
+    itemType: {
+        type: String,
         required: true,
-        default: false
-    },
-    isBlog: {
-        type: Boolean,
-        required: true,
-        default: false
-    },
+        enum: ["blog","recipe","product"]
+    }
 })
 
 
