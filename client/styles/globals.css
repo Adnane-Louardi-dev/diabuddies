@@ -1,7 +1,8 @@
+@import "style.css";
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
-@import "style.css";
 
 html,
 body {
@@ -95,4 +96,10 @@ a {
 }
 .order-table-row-ar > .order-table-row > div {
   left: 0;
+}
+[dir=rtl] body {
+  font-family: "Tajawal", sans-serif;
+}
+[lang=ar] body {
+  font-family: "Tajawal", sans-serif;
 }

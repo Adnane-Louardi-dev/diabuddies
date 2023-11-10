@@ -64,18 +64,18 @@ function Home() {
   const userGreeting = useMemo(() => {
     if (!isUserLoading && user) {
       const timeNow = moment().format("LT");
-      if (timeNow >= moment("12:00 AM", "LT") && timeNow < moment("12:00 PM")) {
+      console.log(timeNow)
+      if (moment(timeNow,"LT") >= moment("12:00 AM", "LT") && moment(timeNow,"LT") < moment("12:00 PM","LT")) {
         return `${i18n.language !== "ar" ? "Good morning" : "صباح الخير"}, ${user.givenName}`;
       }
-      if (timeNow >= moment("12:00 PM", "LT") && timeNow < moment("05:00 PM")) {
+      if (moment(timeNow,"LT") >= moment("12:00 PM", "LT") && moment(timeNow,"LT") < ("05:00 PM")) {
         return `${i18n.language !== "ar" ? "Good afternoon" : "مساء الخير"}, ${user.givenName}`;
       }
-      if (timeNow >= moment("05:00 PM", "LT") && timeNow < moment("09:00 PM")) {
+      if (moment(timeNow,"LT") >= moment("05:00 PM", "LT") && moment(timeNow,"LT") < ("09:00 PM")) {
         return `${i18n.language !== "ar" ? "Good evening" : "مساء الخير"}, ${user.givenName}`;
       }
       return `${i18n.language !== "ar" ? "Good night" : "تصبح على خير"}, ${user.givenName}`;
     }
-    return `${i18n.language !== "ar" ? "Good morning" : "صباح الخير"}`;
   }, [isUserLoading, i18n.language]);
 
   return (
@@ -89,7 +89,7 @@ function Home() {
         <>
           <ResponsiveAppBar />
           <main className="p-4 relative overflow-y-hidden" dir={getDir(i18n.language)}>
-            <span className="font-inter text-2xl text-semibold">{userGreeting}</span>
+            <span className="font-tajawal text-diaDarkBlue text-3xl font-semibold">{userGreeting}</span>
             {user.newUser ? <CompleteYourProfile /> : null}
             <DayPicker setDate={setDate} date={date} />
             <GamifyProgressBar />

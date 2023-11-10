@@ -1,7 +1,6 @@
 import * as React from "react";
-import Button from "@mui/material/Button";
 import Dialog from "@mui/material/Dialog";
-import {Tab, Tabs, TextField} from "@mui/material";
+import {Tab, Tabs} from "@mui/material";
 import AppBar from "@mui/material/AppBar";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
@@ -14,7 +13,7 @@ import {SearchForRecipe} from "./searchForRecipe";
 import {SearchForNutritions} from "./searchForNutritions";
 import {SearchSavedMeals} from "./searchSavedMeals";
 const Transition = React.forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
+  return <Slide direction="up" ref={ref} {...props}/>;
 });
 
 function CustomTabPanel(props) {
@@ -29,8 +28,8 @@ function CustomTabPanel(props) {
           {...other}
       >
         {value === index && (
-            <Box sx={{ p: 3 }}>
-              <Typography>{children}</Typography>
+            <Box>
+              {children}
             </Box>
         )}
       </div>
@@ -65,7 +64,7 @@ export default function SearchForFood({ isSearchForAMealOpen, setIsSearchForAMea
         <h2 className="font-rubik text-sm text-diaDarkBlue my-2">Search for a meal</h2>
         <Icon icon="tabler:search" className="h-10 w-10 text-diaDarkBlue" />
       </button>
-      <Dialog fullScreen open={isSearchForAMealOpen === "open" ? true : false} onClose={handleClose} TransitionComponent={Transition}>
+      <Dialog fullScreen open={isSearchForAMealOpen === "open"} onClose={handleClose} TransitionComponent={Transition}>
         <div className="p-2">
           <AppBar sx={{ position: "relative", borderRadius: "10px" }} className="bg-diaDarkBlue">
             <Toolbar>
@@ -76,19 +75,18 @@ export default function SearchForFood({ isSearchForAMealOpen, setIsSearchForAMea
                 <Typography sx={{ ml: 2, flex: 1 }} variant="h6" alignSelf={"center"} marginX={"5px"} component="div" className="font-poppins">
                   Add
                 </Typography>
-                <Tabs value={value} variant={"scrollable"} onChange={handleChange} aria-label="basic tabs example">
-                  <Tab className={"text-white"} label="Products" {...a11yProps(0)} />
-                  <Tab className={"text-white"} label="Recipes" {...a11yProps(1)} />
-                  <Tab className={"text-white"} label="Fruits & Vegetables" {...a11yProps(2)} />
-                  <Tab className={"text-white"} label="Saved Meals" {...a11yProps(3)} />
-                </Tabs>
               </div>
             </Toolbar>
           </AppBar>
         </div>
-
+        <Tabs value={value} variant={"scrollable"} onChange={handleChange} aria-label="product tabs" className={"my-3"}>
+          <Tab className={"text-diaDarkBlue font-rubik font-semibold text-xl capitalize"} label="Products" {...a11yProps(0)} />
+          <Tab className={"text-diaDarkBlue font-rubik font-semibold text-xl capitalize"} label="Recipes" {...a11yProps(1)} />
+          <Tab className={"text-diaDarkBlue font-rubik font-semibold text-xl capitalize"} label="Fruits & Vegetables" {...a11yProps(2)} />
+          <Tab className={"text-diaDarkBlue font-rubik font-semibold text-xl capitalize"} label="Saved Meals" {...a11yProps(3)} />
+        </Tabs>
         <Box sx={{ width: '100%' }}>
-          <CustomTabPanel value={value} index={0}>
+          <CustomTabPanel value={value} index={0} className={""}>
             <SearchForProducts />
           </CustomTabPanel>
           <CustomTabPanel value={value} index={1}>

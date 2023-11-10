@@ -62,13 +62,13 @@ export const SearchForNutritions = () => {
 
     return <>
         <div className="flex px-5 py-3">
-            <TextField fullWidth sx={{ "& fieldset": { borderRadius: "25px" }, "& input": { padding: "1rem" } }} label="Search" id="fullWidth" value={searchQuery || ""} onChange={(newSearchQuery) => setsearchQuery(newSearchQuery.target.value || "")} />
+            <TextField fullWidth sx={{ "& fieldset": { borderRadius: "10px" }, "& input": { padding: "1rem" } }} label="Search" id="fullWidth" value={searchQuery || ""} onChange={(newSearchQuery) => setsearchQuery(newSearchQuery.target.value || "")} />
             <Button
                 onClick={() => {
                     setIsSearching(true);
                     refetch();
                 }}
-                className="flex items-center rounded-full bg-diaDarkBlue ml-4"
+                className="flex items-center rounded-lg bg-diaDarkBlue ml-4"
             >
                 <Icon icon="tabler:search" className="self-center text-white h-7 w-7" />
             </Button>

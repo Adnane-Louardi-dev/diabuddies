@@ -1,12 +1,9 @@
 import Box from "@mui/material/Box";
 import { LinearProgress } from "@mui/material";
 import Typography from "@mui/material/Typography";
-import { Icon } from "@iconify/react";
 import * as React from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import ScienceIcon from "@mui/icons-material/Science";
-import IconButton from "@mui/material/IconButton";
 import Badge from "@mui/material/Badge";
 import { useTranslation } from "next-i18next";
 import Image from "next/image";
@@ -61,9 +58,9 @@ export const GamifyProgressBar = () => {
           </Box>
           <Box sx={{ display: "grid", width: "100%", gridColumn: "span 8 / span 8", alignItems: "center", position: "relative" }}>
             <div className="flex items-center py-2">
-              <Typography className="font-inter font-semibold text-lg text-diaDarkBlue w-full items-center">{gamify?.level.level}th level, you're off to a great journey!</Typography>
+              <Typography className="font-inter font-semibold text-lg text-diaDarkBlue w-full items-center">{`${i18n.language !== "ar" ? `${gamify?.level.level}th level, you're off to a great journey!` : `المستوى ${gamify?.level.level}، أنت في رحلة رائعة!`}`}</Typography>
             </div>
-            <Box sx={{ display: "grid", alignItems: "center", width: "full", paddingRight: "1rem" }}>
+            <Box sx={{ display: "grid", alignItems: "center", width: "full", paddingInlineEnd: "1rem" }}>
               <Box sx={{ width: "100%", mr: 1 }}>
                 <LinearProgress
                   sx={{
@@ -83,7 +80,7 @@ export const GamifyProgressBar = () => {
               </Box>
               <Box sx={{ minWidth: 60, textAlign: "start" }}>
                 <Typography color="text.secondary" className="font-inter text-diaDarkBlue text-2xs m-2">
-                  {gamify?.points} point of {gamify?.level.maxPoints}
+                  {`${i18n.language !== "ar" ? `${gamify?.points} point of ${gamify?.level.maxPoints}` : `${gamify?.points} نقطة من ${gamify?.level.maxPoints}`}`}
                 </Typography>
               </Box>
             </Box>

@@ -9,8 +9,7 @@ const DayPicker = ({ date, setDate }) => {
   const [localDate, setlocalDate] = useState(moment(date, "MM/DD/YYYY").format("L"));
   return (
     <>
-      <div>
-        <div className="flex items-center mt-5 py-3 rounded-full shadow-md bg-white w-full">
+        <div dir={"ltr"} className="flex items-center mt-5 py-3 rounded-full shadow-md bg-white w-full">
           <DatePicker
             renderInput={(props) => (
               <>
@@ -59,7 +58,6 @@ const DayPicker = ({ date, setDate }) => {
             className="w-full"
           />
         </div>
-      </div>
     </>
   );
 };

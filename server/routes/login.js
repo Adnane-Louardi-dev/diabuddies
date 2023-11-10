@@ -1,5 +1,5 @@
+require('dotenv').config()
 const express = require("express");
-const crypto = require("crypto");
 const passport = require("passport");
 const userSchema = require("../models/userSchema");
 const GoogleStrategy = require("passport-google-oauth20").Strategy;
