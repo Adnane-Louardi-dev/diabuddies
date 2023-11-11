@@ -21,7 +21,6 @@ export const NutrationLogInput = ({ onChange, label, bgColor, value, textColor, 
       </div>
       <TextField
         id="outlined-number"
-        type="number"
         variant="standard"
         placeholder={"0"}
         value={value || ""}

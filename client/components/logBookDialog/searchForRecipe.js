@@ -4,7 +4,6 @@ import {Icon} from "@iconify/react";
 import * as React from "react";
 import {useGetWishListItems} from "../../customeHooks/wishListHooks";
 import Image from "next/image";
-import {RecipeComponent} from "../dia-kitchen/recipeComponent";
 import RecipeLessDetailed from "./RecipeLessDetailed";
 import {useGetRecipes} from "../../customeHooks/useKitchen";
 import qs from "qs";
@@ -12,7 +11,7 @@ import qs from "qs";
 
 export const SearchForRecipe = () => {
     const {data:favRecipes, isLoading, isError} = useGetWishListItems("recipe")
-    const {data:recipes} = useGetRecipes(qs.stringify({
+    const {data:recipes, isLoading:isRecipesLoading, isError: isRecipesError} = useGetRecipes(qs.stringify({
         pagination: {
             page: 0,
             pageSize: 3
@@ -36,7 +35,7 @@ export const SearchForRecipe = () => {
                 <Icon icon="tabler:search" className="self-center text-white h-7 w-7" />
             </Button>
         </div>
-        {(isError || favRecipes?.length === 0) && (
+        {(isRecipesError || recipes?.length === 0) && (
             <div className="p-5">
                 <div className="flex p-3 items-center justify-center rounded-lg bg-diaRed">
                     <h1 className="font-rubik text-lg text-white">No Food found</h1>
@@ -51,22 +50,22 @@ export const SearchForRecipe = () => {
                 <h2 className="text-3xl font-poppins font-semibold text-diaDarkBlue">Fetching Food . . .</h2>
             </div>
         </section> : <section className="my-5">
-            {favRecipes ?<section>
+            {favRecipes.length > 0 && <section>
                 <h3 className="font-sourceCode text-diaGray text-md">Your Favorite Recipes</h3>
                 <section className="flex snap-x snap-mandatory p-3 gap-5 w-full overflow-x-scroll no-scrollbar">
-                    {favRecipes?.map((recipe) => (
+                    {favRecipes.map((recipe) => (
                         <RecipeLessDetailed recipe={recipe} key={recipe.id}/>
                     ))}
                 </section>
-            </section>:null}
-            {recipes ?<section className="my-5">
-                <h3 className="font-sourceCode text-diaGray text-md">Some Suggested Recipes</h3>
-                <section className="flex snap-x snap-mandatory p-3 gap-5 w-full overflow-x-scroll no-scrollbar">
-                    {recipes?.map((recipe) => (
-                        <RecipeLessDetailed recipe={recipe} key={recipe.id}/>
-                    ))}
-                </section>
-            </section>:null}
+            </section>}
+        </section>}
+        {!isRecipesLoading && !isRecipesError && <section className="my-5">
+            <h3 className="font-sourceCode text-diaGray text-md">Some Suggested Recipes</h3>
+            <section className="flex snap-x snap-mandatory p-3 gap-5 w-full overflow-x-scroll no-scrollbar">
+                {recipes.map((recipe) => (
+                    <RecipeLessDetailed recipe={recipe} key={recipe.id}/>
+                ))}
+            </section>
         </section>}
     </>
 }
