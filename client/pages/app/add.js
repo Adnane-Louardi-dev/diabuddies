@@ -17,7 +17,7 @@ import SearchForFood from "../../components/logBookDialog/searchForFood";
 import Link from "next/link";
 import { serverSideTranslations } from "next-i18next/serverSideTranslations";
 import { useAddFood, useAddNewLogBook } from "../../customeHooks/useAddFood";
-import {kcalCalculate, renderNumber} from "../../utils/utils";
+import {getNumberFromTextInput, kcalCalculate, renderNumber} from "../../utils/utils";
 import { useRouter } from "next/router";
 import CalculatingBolus from "../../utils/calculateBolus";
 import { useGetCurrentUserDetailed } from "../../customeHooks/useGetCurrentUser";
@@ -172,11 +172,7 @@ export default function NewLogDialog() {
   };
 
   const handleOnChange = (event, key) => {
-    if (event.target.value) {
-      setData({ ...data, [key]: parseInt(event.target.value * 100) / 100 });
-    } else {
-      setData({ ...data, [key]: 0 });
-    }
+    setData({ ...data, [key]: getNumberFromTextInput(event.target.value)});
   };
   return (
     <section className="px-5">
@@ -315,9 +311,9 @@ export default function NewLogDialog() {
               onChange={(event) => {
                 const value = event.target.value;
                 if (InsulinType === "bolus") {
-                  return setData({ ...data, basal: 0, bolus: value ? parseFloat(value) : 0 });
+                  return setData({ ...data, basal: 0, bolus: getNumberFromTextInput(value) });
                 } else {
-                  return setData({ ...data, bolus: 0, basal: value ? parseFloat(value) : 0 });
+                  return setData({ ...data, bolus: 0, basal: getNumberFromTextInput(value) });
                 }
               }}
               placeholder="0"

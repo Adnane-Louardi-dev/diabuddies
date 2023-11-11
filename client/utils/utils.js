@@ -53,3 +53,14 @@ export const isAllEntriesAreNull = (object) => {
 export const renderNumber = (num) => {
   return Math.round(100*num) / 100
 }
+
+export const getNumberFromTextInput = (value) => {
+  value = value.trim();
+  if(value.at(-1) === ","){
+    value = value.slice(0,value.length-1) + "."
+  }
+  if(value.at(-1) !== ".") {
+    value = value ? parseFloat(value) : 0
+  }
+  return value
+}

@@ -1,6 +1,7 @@
 import { TextField, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { useTranslation } from "next-i18next";
 import React from "react";
+import {getNumberFromTextInput} from "../../utils/utils";
 
 const Tall = ({ data, setData }) => {
   const { i18n, t } = useTranslation();
@@ -8,7 +9,7 @@ const Tall = ({ data, setData }) => {
     setData((oldData) => ({ ...oldData, height: { ...oldData.height, unit: newHeightUnit } }));
   };
   const handleHeightValueChange = (event) => {
-    setData((oldData) => ({ ...oldData, height: { ...oldData.height, value: event.target.value } }));
+    setData((oldData) => ({ ...oldData, height: { ...oldData.height, value: getNumberFromTextInput(event.target.value)}}));
   };
 
   return (
@@ -66,6 +67,8 @@ const Tall = ({ data, setData }) => {
             variant="standard"
             placeholder="0"
             value={data.height.value}
+            // error={typeof data.height.value !== "number"}
+            // helperText={typeof data.height.value !== "number" ? "Please provide a valid number (use . instead of ,)" : ""}
             sx={{
               marginTop: 1,
               marginX: 1,

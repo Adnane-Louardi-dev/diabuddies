@@ -1,6 +1,7 @@
 import React from "react";
 import { TextField, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { useTranslation } from "next-i18next";
+import {getNumberFromTextInput} from "../../utils/utils";
 
 const Hb1ac = ({ data, setData }) => {
   const { i18n } = useTranslation();
@@ -8,7 +9,7 @@ const Hb1ac = ({ data, setData }) => {
     setData((oldData) => ({ ...oldData, hb1ac: { ...oldData.hb1ac, unit: newHb1acUnit } }));
   };
   const handleHb1acValueChange = (event) => {
-    setData((oldData) => ({ ...oldData, hb1ac: { ...oldData.hb1ac, value: event.target.value } }));
+    setData((oldData) => ({ ...oldData, hb1ac: { ...oldData.hb1ac, value: getNumberFromTextInput(event.target.value)}}));
   };
 
   return (

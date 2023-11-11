@@ -152,7 +152,6 @@ module.exports = {
     const { birthDate, gender, height, weight, insulinSensitivity, hb1ac } = req.body;
     const payload = JSON.parse(
       JSON.stringify({
-        userId: req.user._id,
         birthDate,
         gender,
         height,
@@ -161,7 +160,9 @@ module.exports = {
         hb1ac,
       })
     );
-    const diabeticDetails = await diabeticDetailsSchema.create(payload);
+    const diabeticDetails = await diabeticDetailsSchema.updateOne({
+        userId: req.user._id,
+    },payload);
     await userSchema.findByIdAndUpdate(req.user._id, { newUser: false });
     newActionLog("setupProfile", req.user._id);
     return res.status(201).json(diabeticDetails);

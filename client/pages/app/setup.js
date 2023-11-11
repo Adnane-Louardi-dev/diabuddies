@@ -38,7 +38,6 @@ const Setup = () => {
   const handlePOSTSetupUser = async () => {
     await queryClient.cancelQueries(["getCurrentUser"]);
     const oldUser = queryClient.getQueryData(["getCurrentUser"]);
-    console.log("oldUser", oldUser);
     oldUser.data.newUser = false;
     queryClient.setQueryData(["getCurrentUser"], oldUser);
     await axios
@@ -59,7 +58,18 @@ const Setup = () => {
     router.push("/app");
   };
 
-  const handleSetupAbortion = () => {
+  const handleSetupAbortion = async () => {
+    await queryClient.cancelQueries(["getCurrentUser"]);
+    const oldUser = queryClient.getQueryData(["getCurrentUser"]);
+    oldUser.data.newUser = false;
+    queryClient.setQueryData(["getCurrentUser"], oldUser);
+    await axios
+        .post("/api/user",
+            {newUser: false})
+        .then(() => {
+          queryClient.invalidateQueries(["getCurrentUser"]);
+        })
+        .catch((err) => console.log(err));
     router.push("/app");
   };
   const isStepSkipped = (step) => {

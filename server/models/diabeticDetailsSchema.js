@@ -27,7 +27,10 @@ module.exports = {
           default: "kg",
         },
       },
-      diabetesType: String,
+      diabetesType: {
+          type: String,
+          enum: ["typeOne", "typeTwo", "other"]
+      },
       carbsRatio: {
         type: Number,
       },

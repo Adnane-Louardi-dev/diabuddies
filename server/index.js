@@ -69,7 +69,6 @@ app.use('/service-api', function(req, res, next) {
     proxy.web(req, res, {
         target: `${process.env.STRAPI_URL}/api`
     }, next);
-    console.log("req",req)
 });
 app.get("/food-api/:foodQuery", async (req,res) =>{
     try {

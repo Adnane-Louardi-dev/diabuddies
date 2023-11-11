@@ -37,8 +37,8 @@ export const Footer = () => (
         </Link>
       </ToggleButton>
       <ToggleButton className={"h-full w-full border-none py-2 rounded-xl"}>
-        <Link href={"/store"} className={"w-full h-full flex justify-center"}>
-          <Icon icon={"iconamoon:store-light"} className={`h-7 w-7 m-auto text-white`} />
+        <Link href={"/dia-kitchen/recipes"} className={"w-full h-full flex justify-center"}>
+          <Icon icon={"game-icons:kitchen-scale"} className={`h-7 w-7 m-auto text-white`} />
         </Link>
       </ToggleButton>
       <ToggleButton className={"h-full w-full border-none py-2 rounded-xl"}>

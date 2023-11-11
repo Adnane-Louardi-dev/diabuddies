@@ -1,6 +1,7 @@
 import React from "react";
 import { TextField, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { useTranslation } from "next-i18next";
+import {getNumberFromTextInput} from "../../utils/utils";
 
 const InsulinSensitivity = ({ data, setData }) => {
   const { i18n, t } = useTranslation();
@@ -13,7 +14,7 @@ const InsulinSensitivity = ({ data, setData }) => {
   const handleInsulinSensitivityValueChange = (event) => {
     setData((oldData) => ({
       ...oldData,
-      insulinSensitivity: { ...oldData.insulinSensitivity, value: event.target.value },
+      insulinSensitivity: { ...oldData.insulinSensitivity, value: getNumberFromTextInput(event.target.value)},
     }));
   };
 

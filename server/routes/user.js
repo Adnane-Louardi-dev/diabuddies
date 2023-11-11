@@ -3,12 +3,14 @@ const router = express.Router();
 const userSchema = require("../models/userSchema");
 const { updateUser, addMedicament, getMe, updatediabeticDetails, setupProfile, getMeDetailed, getProfile, getMedicaments, editMedicament, deleteMedicament } = require("../controllers/userController");
 const { isLoggedIn } = require("../middlewares/isLoggedIn");
+const {validate} = require("../middlewares/validationMiddleware");
+const {diabetecDetailsValidation} = require("../models/validationSchemas");
 
 //get user data
 router.get("/me", getMe);
 router.get("/profile/:token", getProfile);
 router.get("/diabeticDetails", isLoggedIn, getMeDetailed);
-router.post("/diabeticDetails", isLoggedIn, setupProfile);
+router.post("/diabeticDetails",isLoggedIn, validate(diabetecDetailsValidation), setupProfile);
 router.put("/diabeticDetails", isLoggedIn, updatediabeticDetails);
 
 //update user settings and return the updated data

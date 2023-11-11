@@ -51,7 +51,7 @@ function Home() {
       pageSize: 3
     }
   }));
-  const { data: products, isLoading: isProductsLoading } = useHomeProducts();
+  // const { data: products, isLoading: isProductsLoading } = useHomeProducts();
   const { data: chartData, isLoading, refetch } = useIndexCharts(date);
 
   useEffect(() => {
@@ -263,7 +263,7 @@ function Home() {
                     </div>
                   </section>
                 )}
-                {!isProductsLoading && (
+                {false && (
                   <section>
                     <div className={"flex justify-between items-center my-5"}>
                       <div className="flex items-center">

@@ -1,6 +1,7 @@
 import React from "react";
 import { TextField, ToggleButton, ToggleButtonGroup } from "@mui/material";
 import { useTranslation } from "next-i18next";
+import {getNumberFromTextInput} from "../../utils/utils";
 
 const Weight = ({ data, setData }) => {
   const { i18n, t } = useTranslation();
@@ -8,7 +9,7 @@ const Weight = ({ data, setData }) => {
     setData((oldData) => ({ ...oldData, weight: { ...oldData.weight, unit: newWeightUnit } }));
   };
   const handleWeightValueChange = (event) => {
-    setData((oldData) => ({ ...oldData, weight: { ...oldData.weight, value: event.target.value } }));
+    setData((oldData) => ({ ...oldData, weight: { ...oldData.weight, value: getNumberFromTextInput(event.target.value)}}));
   };
 
   return (
