@@ -1,7 +1,8 @@
 import React from "react";
-import { TextField, ToggleButton, ToggleButtonGroup } from "@mui/material";
+import { TextField, ToggleButton, ToggleButtonGroup,Button } from "@mui/material";
 import { useTranslation } from "next-i18next";
 import {getNumberFromTextInput} from "../../utils/utils";
+import { Icon } from '@iconify/react';
 
 const InsulinSensitivity = ({ data, setData }) => {
   const { i18n, t } = useTranslation();
@@ -45,8 +46,14 @@ const InsulinSensitivity = ({ data, setData }) => {
             لا تخف ستتعلم عنه فيما بعد ويمكنك تغييره
           </p>
         )}
+          {i18n.language === "ar" && (
+              <Button className="flex my-3 justify-start items-center font-tajawal font-semibold text-white rounded-lg bg-diaDarkBlue shadow-md capitalize">
+                  <div className={"rounded-lg bg-white p-1"}> <Icon icon="icons8:idea" className={"h-7 w-7 text-diaDarkBlue"}/></div>
+                  <div className={"text-xs mx-2 tracking-wide"}>كيف يمكن حساب معامل حساسية الأنسولين؟</div>
+              </Button>
+          )}
       </div>
-      <div className="grid items-center justify-center text-center mx-16 my-15 py-8">
+      <div className="grid items-center justify-center text-center mx-16 -mt-10 py-8">
         <ToggleButtonGroup
           className="grid grid-cols-2 gap-5 mx-2 py-5"
           sx={{
@@ -60,10 +67,10 @@ const InsulinSensitivity = ({ data, setData }) => {
           exclusive
           onChange={handleInsulinSensitivityUnitChange}
         >
-          <ToggleButton value="mmol/L/1ui" className="rounded-full font-tajawal font-semibold">
+          <ToggleButton value="mmol/L/1ui" className="rounded-full font-tajawal font-semibold text-sm">
             {t("mmol/L/1ui")}
           </ToggleButton>
-          <ToggleButton value="mg/dL/1ui" className="rounded-full font-tajawal font-semibold">
+          <ToggleButton value="mg/dL/1ui" className="rounded-full font-tajawal font-semibold text-sm">
             {t("mg/dL/1ui")}
           </ToggleButton>
         </ToggleButtonGroup>
