@@ -54,11 +54,10 @@ const LogBookItem = ({ log }) => {
   const  {component, handleOpen } = useNotificatoin({
     successMessage: "",
     errorMessage: <div className={"flex"}>
-      <p>Are you sure want to delete this log</p>
+      <p className={"font-rubik mx-1"}>Are you sure want to delete this log</p>
       <Button onClick={() => {
         deleteLog(log)
-      }} className={"text-diaRed"}>Yes</Button>
-      <Button>Undo</Button>
+      }} className={"text-white capitalize bg-diaRed rounded-xl"}>Yes</Button>
     </div>,
     isError: true
   })

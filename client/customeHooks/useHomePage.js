@@ -37,7 +37,8 @@ export const useIndexCharts = (date) => {
         },
         onSuccess: (data) => {
             router.push({ href: "/app", query: { date: date } });
-            navigator.serviceWorker?.controller?.postMessage({ action: "logBook", data: data.logBook });
+            console.log(data)
+            navigator.serviceWorker?.controller?.postMessage({ action: "logBook", data: data.logBooks });
         }
     });
 }

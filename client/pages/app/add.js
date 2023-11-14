@@ -1,15 +1,11 @@
-import { useEffect, useState, useLayoutEffect } from "react";
+import React, { useEffect, useState, useLayoutEffect } from "react";
 import moment from "moment";
-import Button from "@mui/material/Button";
+import {Button, Typography, Alert, Snackbar, Menu, MenuItem,TextField,ToggleButton,ToggleButtonGroup,Switch,Box} from "@mui/material";
 import { Icon } from "@iconify/react";
-import TextField from "@mui/material/TextField";
 import { MobileDateTimePicker } from "@mui/x-date-pickers/MobileDateTimePicker";
 import InputAdornment from "@mui/material/InputAdornment";
-import ToggleButton from "@mui/material/ToggleButton";
-import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 import { NutrationLogInput } from "../../components/NutrationLogInput";
 import { styled } from "@mui/material/styles";
-import Switch from "@mui/material/Switch";
 import { AddMealNameModal } from "../../components/addMealNameModal";
 import { nullLogBook } from "../../utils/nulls";
 import { useTranslation } from "next-i18next";
@@ -21,10 +17,9 @@ import {getNumberFromTextInput, kcalCalculate, renderNumber} from "../../utils/u
 import { useRouter } from "next/router";
 import CalculatingBolus from "../../utils/calculateBolus";
 import { useGetCurrentUserDetailed } from "../../customeHooks/useGetCurrentUser";
-import Box from "@mui/material/Box";
 import { useSearchParams } from "next/navigation";
-import Image from "next/image";
 import {ShowAddedFood} from "../../components/showAddedFood";
+import {useNotificatoin} from "../../customeHooks/useNotificatoin";
 let mealsTime = {
   breakfast: { min: 5, max: 11 },
   lunch: { min: 11, max: 15 },
@@ -137,11 +132,25 @@ export default function NewLogDialog() {
   const { t } = useTranslation("index");
   const { t: tc } = useTranslation("common");
   const { mutate: addNewLogBook, isLoading, isError, notification } = useAddNewLogBook();
-
+  const [anchorEl, setAnchorEl] = useState(null);
+  const { component:SensitivityNotification, handleOpen } = useNotificatoin({
+    errorMessage:"Please Provide Your Insulin Sensitivity In The Settings",
+    isError: true,
+  });
   const handleClickCalculateBolus = () => {
     let bolusDose = CalculatingBolus(data.carbs, user.diabeticDetails.carbsRatio, user.diabeticDetails.insulinSensitivity.value, 0, data.glucose);
-    return setData({ ...data, bolus: bolusDose.toFixed(1) });
+
+    if(isNaN(bolusDose)){
+      return handleOpen()
+    }
+    return setData({ ...data, bolus: bolusDose.toFixed(1) })
   };
+  const handleInsulinDotsClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+  const handleInsulinDotsClose=(event)=>{
+    setAnchorEl(null);
+  }
 
   useEffect(() => {
     let newMacrosBasedOnFoodChange = foods ? calculateMacros(foods) : nullLogBook
@@ -176,6 +185,7 @@ export default function NewLogDialog() {
   };
   return (
     <section className="px-5">
+      {SensitivityNotification}
       <AddMealNameModal
           mealModalOpen={mealModalOpen}
           setMealModalOpen={setMealModalOpen}
@@ -298,8 +308,38 @@ export default function NewLogDialog() {
               <p className="text-white font-rubik font-sm self-center">{tc("insulin")}</p>
             </div>
             <div className="flex justify-around items-center">
-              <Android12Switch defaultChecked={false} />
-              <Icon icon="ri:notification-line" className="bg-diaOrange text-white rounded-full h-7 w-7 p-1" />
+              {/*<Android12Switch defaultChecked={false}/>
+                <Icon icon="ri:notification-line" className="bg-diaOrange text-white rounded-full h-7 w-7 p-1" />*/}
+              <button onClick={handleInsulinDotsClick} className="flex justify-end">
+                <Icon icon="pepicons-pencil:dots-y" className="h-7 w-7 text-white" />
+              </button>
+              <Menu
+                  sx={{
+                    mt: "45px",
+                    "& .MuiPaper-root.MuiMenu-paper": {
+                      borderRadius: "15px",
+                    },
+                  }}
+                  aria-labelledby="demo-positioned-button"
+                  anchorEl={anchorEl}
+                  open={Boolean(anchorEl)}
+                  onClose={handleInsulinDotsClose}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "left",
+                  }}
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "left",
+                  }}
+              >
+                <MenuItem className="flex">
+                  <Typography textAlign="center">Edit Insulin Sensitivity</Typography>
+                </MenuItem>
+                <MenuItem className="flex">
+                  <Typography textAlign="center">Activate a Reminder</Typography>
+                </MenuItem>
+              </Menu>
             </div>
           </div>
           <div className="flex justify-between items-center">
