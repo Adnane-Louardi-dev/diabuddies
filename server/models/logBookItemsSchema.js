@@ -1,7 +1,11 @@
 const mongoose = require("mongoose");
+const {Schema} = require("mongoose");
 
 const logBookItemsSchema = mongoose.Schema({
-  userId: String,
+  userId: {
+    type: Schema.Types.ObjectId,
+    ref: "userSchema"
+  },
   time: Date,
   status: String,
   unit: String,

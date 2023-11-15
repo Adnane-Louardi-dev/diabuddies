@@ -2,7 +2,7 @@ import useLocalStorage from "../customeHooks/useLocalStorage";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { useNotificatoin } from "./useNotificatoin";
-import { isAllEntriesAreNull } from "../utils/utils";
+import {isAllEntriesAreNull, renderNumber} from "../utils/utils";
 import { useState } from "react";
 
 function removeDuplicates(foods,key) {
@@ -48,10 +48,16 @@ export const useAddFood = () => {
       const allItems = JSON.parse(localStorage.getItem(allKey)) ||  {[itemType]: []};
       const addedItemExists = recentItems.find((item) => item[primaryKey] === newItem[primaryKey]);
       if (addedItemExists) {
-          addedItemExists.units += 1;
+          addedItemExists.qty += renderNumber(newItem.qty);
+          if(itemType === "recipes"){
+              addedItemExists.units += 1;
+          }
           localStorage.setItem(recentKey, JSON.stringify([...foods[itemType].filter((food) => food[primaryKey] !== newItem[primaryKey]), addedItemExists]));
       } else {
-          localStorage.setItem(recentKey, JSON.stringify([...foods[itemType], {...newItem, units: 1}]));
+          if(itemType === "recipes"){
+              newItem.units = 1
+          }
+          localStorage.setItem(recentKey, JSON.stringify([...foods[itemType], {...newItem, qty: renderNumber(newItem.qty)}]));
       }
       localStorage.setItem(allKey, JSON.stringify({ [itemType]: removeDuplicates([...allItems[itemType], newItem], primaryKey) }));
     },
