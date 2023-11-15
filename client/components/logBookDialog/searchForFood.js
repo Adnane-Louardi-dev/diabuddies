@@ -80,20 +80,20 @@ export default function SearchForFood({ isSearchForAMealOpen, setIsSearchForAMea
           </AppBar>
         </div>
         <Tabs value={value} variant={"scrollable"} onChange={handleChange} aria-label="product tabs" className={"my-3"}>
-          <Tab className={"text-diaDarkBlue font-rubik font-semibold text-xl capitalize"} label="Products" {...a11yProps(0)} />
-          <Tab className={"text-diaDarkBlue font-rubik font-semibold text-xl capitalize"} label="Recipes" {...a11yProps(1)} />
-          <Tab className={"text-diaDarkBlue font-rubik font-semibold text-xl capitalize"} label="Fruits & Vegetables" {...a11yProps(2)} />
+          <Tab className={"text-diaDarkBlue font-rubik font-semibold text-xl capitalize"} label="Fruits & Vegetables" {...a11yProps(0)} />
+          <Tab className={"text-diaDarkBlue font-rubik font-semibold text-xl capitalize"} label="Products" {...a11yProps(1)} />
+          <Tab className={"text-diaDarkBlue font-rubik font-semibold text-xl capitalize"} label="Recipes" {...a11yProps(2)} />
           <Tab className={"text-diaDarkBlue font-rubik font-semibold text-xl capitalize"} label="Saved Meals" {...a11yProps(3)} />
         </Tabs>
         <Box sx={{ width: '100%' }}>
-          <CustomTabPanel value={value} index={0} className={""}>
+          <CustomTabPanel value={value} index={0}>
+            <SearchForNutritions />
+          </CustomTabPanel>
+          <CustomTabPanel value={value} index={1} className={""}>
             <SearchForProducts />
           </CustomTabPanel>
-          <CustomTabPanel value={value} index={1}>
-            <SearchForRecipe />
-          </CustomTabPanel>
           <CustomTabPanel value={value} index={2}>
-            <SearchForNutritions />
+            <SearchForRecipe />
           </CustomTabPanel>
           <CustomTabPanel value={value} index={3}>
             <SearchSavedMeals handleClose={handleClose}/>
