@@ -44,7 +44,6 @@ const Settings = ({ medications }) => {
     setNotificationOpen(false);
   };
   const updateUserSettings = async (data) => {
-    console.log("create user", data);
     if (data.newPassword) {
       if (data.confirmPassword === data.newPassword) {
         axios.post("/api/user/changePassword", {
@@ -71,11 +70,10 @@ const Settings = ({ medications }) => {
     }
   }, [user]);
 
-  console.log(" fdsafdsagdsags ", modalMedication);
   const UserInput = React.useCallback(({ fieldName, label, ...props }) => {
     return (
       <div className={"flex justify-between align-middle"} dir={"ltr"}>
-        <TextField variant="outlined" label={label} className="rounded-2xl w-full font-inter" {...register(fieldName)} {...props} defaultValue={props.defaultValue || ""} />
+        <TextField variant="outlined" label={label} className="rounded-2xl w-full font-rubik font-semibold" {...register(fieldName)} {...props} defaultValue={props.defaultValue || ""} sx={{}} />
       </div>
     );
   }, []);

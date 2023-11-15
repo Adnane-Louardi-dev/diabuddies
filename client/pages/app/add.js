@@ -20,7 +20,8 @@ import { useGetCurrentUserDetailed } from "../../customeHooks/useGetCurrentUser"
 import { useSearchParams } from "next/navigation";
 import {ShowAddedFood} from "../../components/showAddedFood";
 import {useNotificatoin} from "../../customeHooks/useNotificatoin";
-let mealsTime = {
+import EditFactorsDialog from "../../components/CalculateBolusCompDialog"
+  let mealsTime = {
   breakfast: { min: 5, max: 11 },
   lunch: { min: 11, max: 15 },
   snack: { min: 15, max: 19 },
@@ -334,10 +335,7 @@ export default function NewLogDialog() {
                   }}
               >
                 <MenuItem className="flex">
-                  <Typography textAlign="center">Edit Insulin Sensitivity</Typography>
-                </MenuItem>
-                <MenuItem className="flex">
-                  <Typography textAlign="center">Activate a Reminder</Typography>
+                  <EditFactorsDialog/>
                 </MenuItem>
               </Menu>
             </div>

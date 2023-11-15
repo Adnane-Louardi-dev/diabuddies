@@ -9,7 +9,7 @@ import InputAdornment from "@mui/material/InputAdornment";
 
 const FoodModal = ({ props }) => {
   const { addFood, notification } = useAddFood();
-  const [qty, setQty] = useState(formatQty(props.quantity || "100 g"));
+  const [qty, setQty] = useState(formatQty(props.quantity ?? "100 g"));
   //
   return (
     <div className="flex items-center gap-1 m-2 px-2 py-2 rounded-xl bg-diaDarkBlue">
@@ -28,7 +28,7 @@ const FoodModal = ({ props }) => {
           type="number"
           variant="standard"
           placeholder="0"
-          value={qty || "100"}
+          value={qty ?? "100"}
           sx={{
             marginTop: "4px",
             marginX: "2px",
