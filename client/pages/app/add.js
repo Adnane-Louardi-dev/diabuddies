@@ -135,13 +135,13 @@ export default function NewLogDialog() {
   const { mutate: addNewLogBook, isLoading, isError, notification } = useAddNewLogBook();
   const [anchorEl, setAnchorEl] = useState(null);
   const { component:SensitivityNotification, handleOpen } = useNotificatoin({
-    errorMessage:"Please Provide Your Insulin Sensitivity In The Settings",
+    errorMessage:"Please Provide Your Factors In The Settings",
     isError: true,
   });
   const handleClickCalculateBolus = () => {
     let bolusDose = CalculatingBolus(data.carbs, user.diabeticDetails.carbsRatio, user.diabeticDetails.insulinSensitivity.value, 0, data.glucose);
-
-    if(isNaN(bolusDose)){
+console.log(bolusDose)
+    if(isNaN(bolusDose) || !isFinite(bolusDose)){
       return handleOpen()
     }
     return setData({ ...data, bolus: bolusDose.toFixed(1) })
