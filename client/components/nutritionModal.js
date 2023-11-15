@@ -26,7 +26,7 @@ const NutritionModal = ({ nutrition }) => {
           type="number"
           variant="standard"
           placeholder="0"
-          value={qty || "100"}
+          value={qty ?? "100"}
           sx={{
             marginTop: "4px",
             marginX: "2px",

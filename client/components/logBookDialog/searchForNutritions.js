@@ -92,7 +92,7 @@ export const SearchForNutritions = () => {
         ) : (
             <section className="p-3">
                 {nutritions?.map((nutrition, i) => {
-                    return <NutritionModal key={i}  nutrition={nutrition} />;
+                    return <NutritionModal key={i} nutrition={nutrition} />;
                 })}
             </section>
         )}
