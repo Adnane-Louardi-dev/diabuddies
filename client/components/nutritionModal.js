@@ -8,7 +8,7 @@ import { formatQty } from "../utils/utils";
 import InputAdornment from "@mui/material/InputAdornment";
 
 const NutritionModal = ({ nutrition }) => {
-  const { addFood, notification } = useAddFood();
+  const { addFood, foods, notification } = useAddFood();
   const [qty, setQty] = useState(nutrition.serving_size_g);
   //
   return (
@@ -71,12 +71,12 @@ const NutritionModal = ({ nutrition }) => {
           className="grid mx-1"
           sx={{ minWidth: "30px" }}
           onClick={() => {
-            addFood({
-              newItem: { ...nutrition, qty},
-              itemType: "nutritions",
-              primaryKey: "name"
-          });
-            console.log("added");
+              addFood({
+                  newItem: { ...nutrition, qty},
+                  itemType: "nutritions",
+                  primaryKey: "name"
+              });
+              console.log("added");
           }}
         >
           <Icon icon="material-symbols:add-circle-rounded" className="self-center h-7 w-7 text-white" />

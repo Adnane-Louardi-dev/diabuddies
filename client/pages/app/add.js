@@ -46,9 +46,9 @@ function checkMealValidity(mealHour) {
 function calculateMacros(foods){
   let macros = foods.products.reduce(
       (accum, item) => {
-        accum.carbs += item?.nutriments.carbohydrates_100g/100 * item.qty * item.units;
-        accum.protein += item?.nutriments.proteins_100g/100 * item.qty * item.units;
-        accum.fat += item?.nutriments.fat_100g/100 * item.qty * item.units;
+        accum.carbs += item?.nutriments.carbohydrates_100g/100 * item.qty;
+        accum.protein += item?.nutriments.proteins_100g/100 * item.qty;
+        accum.fat += item?.nutriments.fat_100g/100 * item.qty;
         return accum;
       },
       { ...nullLogBook }
@@ -60,9 +60,9 @@ function calculateMacros(foods){
     return accum
   },macros)
   macros = foods.nutritions.reduce((accum, nutrition)=>{
-    accum.carbs +=nutrition.carbohydrates_total_g * nutrition.units
-    accum.protein +=nutrition.protein_g * nutrition.units
-    accum.fat +=nutrition.fat_total_g * nutrition.units
+    accum.carbs +=nutrition.carbohydrates_total_g/100 * nutrition.qty
+    accum.protein +=nutrition.protein_g/100 * nutrition.qty
+    accum.fat +=nutrition.fat_total_g/100 * nutrition.qty
     return accum
   },macros)
   return {

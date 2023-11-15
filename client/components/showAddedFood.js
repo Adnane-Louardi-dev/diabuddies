@@ -17,15 +17,15 @@ export const ShowAddedFood = () => {
                 <h4 className="font-sourceCode text-diaGray text-xs">Products</h4>
                 <div className="rounded-lg my-3 bg-diaDarkBlue">
                     {foods.products.map((product) => {
-                        const carbsPerUnit = product.nutriments.carbohydrates_100g * product.qty / 100;
+                        const carbsPerUnit = product.nutriments.carbohydrates_100g;
                         return (
                             <div key={product.product_name}
                                  className="relative flex items-center justify-between mx-2 px-2 border-t-2 border-gray-700">
                                 <div className="mx-2 p-2">
                                     <h1 className="text-blue-500 font-poppins">{`${product.product_name}`}</h1>
                                     <p className="text-gray-500 font-poppins">
-                                        {`${product.qty}${product.quantity?.match(/[a-zA-Z]+/g) || ""}
-                           (${carbsPerUnit}g * ${product.units} = ${renderNumber(carbsPerUnit * product.units)}g carbs)`}
+                                        {/*{`${product.qty}${product.quantity?.match(/[a-zA-Z]+/g) || ""}*/}
+                                        {`(${carbsPerUnit}g * ${product.qty/100} = ${renderNumber(carbsPerUnit* product.qty/100)}g carbs)`}
                                     </p>
                                 </div>
                                 <Button
@@ -92,7 +92,7 @@ export const ShowAddedFood = () => {
                                     <h1 className="text-blue-500 font-poppins">{nutrition.name}</h1>
                                     <p className="text-gray-500 font-poppins">
                                         {nutrition.carbohydrates_total_g}g
-                                        * {nutrition.units} = {renderNumber(nutrition.carbohydrates_total_g * nutrition.units)}g
+                                        * {nutrition.qty/100} = {renderNumber(nutrition.carbohydrates_total_g * nutrition.qty/100)}g
                                         carbs
                                     </p>
                                 </div>

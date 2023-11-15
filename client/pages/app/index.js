@@ -63,18 +63,17 @@ function Home() {
 
   const userGreeting = useMemo(() => {
     if (!isUserLoading && user) {
-      const timeNow = moment().format("LT");
-      console.log(timeNow)
-      if (moment(timeNow,"LT") >= moment("12:00 AM", "LT") && moment(timeNow,"LT") < moment("12:00 PM","LT")) {
+      const timeNow = moment();
+      if (moment("12:00 PM","LT").isAfter(timeNow)) {
         return `${i18n.language !== "ar" ? "Good morning" : "صباح الخير"}, ${user.givenName}`;
       }
-      if (moment(timeNow,"LT") >= moment("12:00 PM", "LT") && moment(timeNow,"LT") < ("05:00 PM")) {
+      if (moment("05:00 PM","LT").isAfter(timeNow)) {
         return `${i18n.language !== "ar" ? "Good afternoon" : "مساء الخير"}, ${user.givenName}`;
       }
-      if (moment(timeNow,"LT") >= moment("05:00 PM", "LT") && moment(timeNow,"LT") < ("09:00 PM")) {
+      if (moment("09:00 PM","LT").isAfter(timeNow)) {
         return `${i18n.language !== "ar" ? "Good evening" : "مساء الخير"}, ${user.givenName}`;
       }
-      return `${i18n.language !== "ar" ? "Good night" : "تصبح على خير"}, ${user.givenName}`;
+      return `${i18n.language !== "ar" ? "Good night" : "تصبح(ين) على خير"}, ${user.givenName}`;
     }
   }, [isUserLoading, i18n.language]);
 
