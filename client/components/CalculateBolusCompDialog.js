@@ -15,13 +15,16 @@ import {useProfile} from "../customeHooks/useProfile";
 
 
 export default function EditFactorsDialog() {
-    const {user} = useGetCurrentUserDetailed();
+    const {user, refetch} = useGetCurrentUserDetailed();
     const [notificationOpen, setNotificationOpen] = useState(false);
     const {t, i18n} = useTranslation("index");
     const [open, setOpen] = useState(false);
     const {mutate: updateUser, isError, isLoading: updateUserLoading} = useProfile(setNotificationOpen);
     const [data, setData] = useState({
-        insulinSensitivity: {value: null, unit: user.diabeticDetails.insulinSensitivity.unit}, carbsRatio: null
+        insulinSensitivity: {
+            value: user.diabeticDetails.carbsRatio || null,
+            unit: user.diabeticDetails.insulinSensitivity.unit
+        }, carbsRatio: user.diabeticDetails.carbsRatio || null
     });
 
     const handleClickOpen = () => {
@@ -31,17 +34,22 @@ export default function EditFactorsDialog() {
     const handleClose = () => {
         setOpen(false);
         setNotificationOpen(false);
+        refetch()
     };
     const handleUpdateNewFactors = async () => {
-        await updateUser({
-            ...user,...data
-        });
-        return handleClose()
+        try {
+            await updateUser({
+                ...user, ...data
+            });
+            handleClose()
+        } catch (e) {
+            console.log(e)
+        }
     };
 
     return (<>
         <Snackbar open={notificationOpen} autoHideDuration={3000} onClose={handleClose}>
-            <Alert onClose={handleClose} severity={isError ? "warning" : "success"} sx={{ width: "100%" }}>
+            <Alert onClose={handleClose} severity={isError ? "warning" : "success"} sx={{width: "100%"}}>
                 {isError ? "There was an error while modifying your factors" : "Your factors was modified successfully"}
             </Alert>
         </Snackbar>
