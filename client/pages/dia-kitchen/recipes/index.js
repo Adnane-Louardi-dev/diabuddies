@@ -19,6 +19,8 @@ import {AddRecipeAsLogButton} from "../../../components/dia-kitchen/addRecipeAsL
 import {RecipeComponent} from "../../../components/dia-kitchen/recipeComponent";
 import {useGetRecipes} from "../../../customeHooks/useKitchen";
 import {HomePageSkeleton} from "../../../components/skeleton/homePageSkeleton";
+import ResponsiveAppBar from "../../../components/layout/ResponsiveAppBar";
+import Container from "@mui/material/Container";
 
 
 export const KitchenRecipe = () => {
@@ -30,9 +32,12 @@ export const KitchenRecipe = () => {
     if(isError){
         router.push("/app")
     }
-    return <div className={"grid grid-cols-3"}>
-        {recipes.map(({attributes, id}) => <RecipeComponent recipe={attributes} id={id} key={id} /> )}
+    return <Container maxWidth={"xl"}>
+        <ResponsiveAppBar />
+        <div className="grid gap-12 grid-cols-1 md:grid-cols-2 xl:grid-cols-3">
+            {recipes.map(({attributes, id}) => <RecipeComponent recipe={attributes} id={id}  />)}
         </div>
+    </Container>
 }
 
 export default KitchenRecipe;
