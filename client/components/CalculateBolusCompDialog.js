@@ -22,7 +22,7 @@ export default function EditFactorsDialog() {
     const {mutate: updateUser, isError, isLoading: updateUserLoading} = useProfile(setNotificationOpen);
     const [data, setData] = useState({
         insulinSensitivity: {
-            value: user.diabeticDetails.carbsRatio || null,
+            value: user.diabeticDetails.insulinSensitivity.value || null,
             unit: user.diabeticDetails.insulinSensitivity.unit
         }, carbsRatio: user.diabeticDetails.carbsRatio || null
     });
@@ -38,9 +38,7 @@ export default function EditFactorsDialog() {
     };
     const handleUpdateNewFactors = async () => {
         try {
-            await updateUser({
-                ...user, ...data
-            });
+            await updateUser(data);
             handleClose()
         } catch (e) {
             console.log(e)
