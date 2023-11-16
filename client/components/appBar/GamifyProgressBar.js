@@ -24,9 +24,9 @@ export const GamifyProgressBar = () => {
           <Box sx={{ gridColumn: "span 2 / span 2" }}>
             <Typography variant="body2" className="grid gap-1 justify-items-center items-center text-center">
               {gamify?.dailyLogInClaimed ? (
-                <div className="relative flex justify-center items-center w-20 h-20">
+                <span className="relative flex justify-center items-center w-20 h-20">
                   <Image src={"/reward_badges/lvl1.png"} objectFit="contain" layout="fill" />
-                </div>
+                </span>
               ) : (
                 <Badge
                   color="secondary"

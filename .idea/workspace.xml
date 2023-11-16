@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="47d41590-a06d-4130-8666-cd245f35a61d" name="Changes" comment="fix some details nsithom" />
+    <list default="true" id="47d41590-a06d-4130-8666-cd245f35a61d" name="Changes" comment="fix some details again">
+      <change beforePath="$PROJECT_DIR$/client/components/appBar/GamifyProgressBar.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/components/appBar/GamifyProgressBar.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -121,7 +123,7 @@
       <workItem from="1699854020238" duration="1585000" />
       <workItem from="1699897402406" duration="8904000" />
       <workItem from="1700027625286" duration="37000" />
-      <workItem from="1700049786296" duration="10108000" />
+      <workItem from="1700049786296" duration="11697000" />
     </task>
     <task id="LOCAL-00001" summary="improve UI">
       <created>1692561288369</created>
@@ -193,7 +195,21 @@
       <option name="project" value="LOCAL" />
       <updated>1700061691354</updated>
     </task>
-    <option name="localTasksCounter" value="11" />
+    <task id="LOCAL-00011" summary="fix some details nsithom">
+      <created>1700061987964</created>
+      <option name="number" value="00011" />
+      <option name="presentableId" value="LOCAL-00011" />
+      <option name="project" value="LOCAL" />
+      <updated>1700061987964</updated>
+    </task>
+    <task id="LOCAL-00012" summary="fix some details again">
+      <created>1700062434311</created>
+      <option name="number" value="00012" />
+      <option name="presentableId" value="LOCAL-00012" />
+      <option name="project" value="LOCAL" />
+      <updated>1700062434311</updated>
+    </task>
+    <option name="localTasksCounter" value="13" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -233,6 +249,7 @@
     <MESSAGE value="add insulinSensitivity blog button" />
     <MESSAGE value="fix service workers &amp;&amp; add error notif &quot;no insulin sensitivity&quot; case in add page" />
     <MESSAGE value="fix some details nsithom" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix some details nsithom" />
+    <MESSAGE value="fix some details again" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix some details again" />
   </component>
 </project>

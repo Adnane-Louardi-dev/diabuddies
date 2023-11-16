@@ -8,7 +8,7 @@ export default function ReduceFactors({ setreduceLevel, reduceLevel }) {
   const {t} = useTranslation("index")
   const handleChange = (event, newAlignment) => {
     setAlignment(newAlignment);
-    setreduceLevel(alignment + newAlignment);
+    setreduceLevel(newAlignment);
   };
 
   return (
@@ -22,11 +22,11 @@ export default function ReduceFactors({ setreduceLevel, reduceLevel }) {
           color: "#FFB562",
         },
         "& .MuiButtonBase-root[aria-pressed='true']": {
-          backgroundColor: "#FFD7AA",
+          backgroundColor: "#1e293b",
           color: "white",
         },
       }}
-      value={alignment}
+      value={reduceLevel}
       exclusive
       onChange={handleChange}
       aria-label="Platform"
@@ -40,7 +40,7 @@ export default function ReduceFactors({ setreduceLevel, reduceLevel }) {
         <span className="font-sourceCode text-diaGray text-2xs">{t("moderate_reduce")}</span>
       </ToggleButton>
       <ToggleButton value={30} className="grid gap-2 rounded-full w-full rounded-md normal-case font-rubik text-lg">
-        {t("moderate")}
+        {t("high")}
         <span className="font-sourceCode text-diaGray text-2xs">{t("high_reduce")}</span>
       </ToggleButton>
     </ToggleButtonGroup>

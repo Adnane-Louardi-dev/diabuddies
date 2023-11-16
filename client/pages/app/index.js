@@ -101,13 +101,13 @@ function Home() {
               </>
             )}
             <div className="flex snap-x snap-mandatory px-3 w-full overflow-x-scroll no-scrollbar">
-              <div className="snap-center mr-2 w-full shrink-0">
+              {/*<div className="snap-center mr-2 w-full shrink-0">
                 <BolusAdvisor activeInsulin={activeInsulin} glucose={glucose} lastInjectionTime={lastInjectionTime} />
-              </div>
+              </div>*/}
               <div className="snap-center mr-2 w-full shrink-0">
                 <div className="flex content-end justify-center my-5 h-48 w-full rounded-3xl">
                   <div className="relative flex content-end justify-start p-5 h-full w-full">
-                    <Image src={"/buy_our_products.png"} alt={"image_diabuddies"} layout="fill" objectFit="cover" className="absolute top-0 left-0 bottom-0 right-0 rounded-3xl ring-2 ring-diaBlue" />
+                    <Image src={"/buy_our_products_blue.png"} alt={"image_diabuddies"} layout="fill" objectFit="cover" className="absolute top-0 left-0 bottom-0 right-0 rounded-3xl ring-2 ring-diaBlue" />
                     <div className="self-end">
                       <Link href={"/store"}>
                         <Button variant="filled" className="flex mb-1 text-diaBlue text-md font-rubik bg-white pt-2 rounded-xl shadow-md">

@@ -73,7 +73,7 @@ const Settings = ({ medications }) => {
   const UserInput = React.useCallback(({ fieldName, label, ...props }) => {
     return (
       <div className={"flex justify-between align-middle"} dir={"ltr"}>
-        <TextField variant="outlined" label={label} className="rounded-2xl w-full font-rubik font-semibold" {...register(fieldName)} {...props} defaultValue={props.defaultValue || ""} sx={{}} />
+        <TextField sx={{"& fieldset":{borderRadius:"25px"}}} variant="outlined" label={label} className="w-full font-poppins font-semibold" {...register(fieldName)} {...props} defaultValue={props.defaultValue || ""} />
       </div>
     );
   }, []);
@@ -82,12 +82,13 @@ const Settings = ({ medications }) => {
     return <LoadingCircle />;
   }
   return (
+  <>
+    <ResponsiveAppBar />
     <Container maxWidth={"xl"} dir={i18n.language === "ar" ? "rtl" : "ltr"}>
       <form onSubmit={handleSubmit(updateUserSettings)}>
-        <ResponsiveAppBar />
         <section className={"flex justify-end"} dir={"ltr"}>
-          <Button className={"text-gray-500"}>{tc("cancel")}</Button>
-          <Button type={"submit"} className={"bg-diaBlue text-white"}>
+          <Button className={"text-diaGray capitalize font-rubik"}>{tc("cancel")}</Button>
+          <Button type={"submit"} className={"text-white rounded-full bg-diaDarkBlue p-1 capitalize font-rubik"}>
             {tc("save")}
           </Button>
         </section>
@@ -107,10 +108,10 @@ const Settings = ({ medications }) => {
 
             <SettingsCard sectionTitle={t("profile")}>
               <Grid container columnSpacing={2} rowSpacing={2}>
-                <Grid item xs={12}>
+                <Grid item xs={6}>
                   <UserInput defaultValue={user.detailedUser.givenName} fieldName={"givenName"} label={t("givenNameInput")} />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item xs={6}>
                   <UserInput defaultValue={user.detailedUser.familyName} fieldName={"familyName"} label={t("familyNameInput")} />
                 </Grid>
                 <Grid item xs={12}>
@@ -128,10 +129,11 @@ const Settings = ({ medications }) => {
                 <Grid item xs={6}>
                   <Controller
                     name={tc("gender")}
+
                     control={control}
                     defaultValue={user.diabeticDetails.gender || "gender"}
                     render={({ field }) => (
-                      <Select {...field} className="w-full">
+                      <Select sx={{"& fieldset":{borderRadius:"25px"}}} {...field} className="w-full">
                         {["gender", "male", "female"].map((gender) => (
                           <MenuItem key={"gender-" + gender} value={gender}>
                             {tc(gender)}
@@ -149,13 +151,13 @@ const Settings = ({ medications }) => {
             <SettingsCard sectionTitle={t("myDetails")}>
               <Grid container columnSpacing={2} rowSpacing={2}>
                 {/* diabetes type */}
-                <Grid item xs={12}>
+                <Grid item xs={6}>
                   <Controller
                     name={"diabetesType"}
                     control={control}
                     defaultValue={user.diabeticDetails.diabetesType || "diabetecType"}
                     render={({ field }) => (
-                      <Select {...field} className="w-full">
+                      <Select sx={{"& fieldset":{borderRadius:"25px"}}} {...field} className="w-full">
                         {["diabetecType", "typeOne", "typeTwo", "other"].map((type) => (
                           <MenuItem key={"diabetes" + type} value={type}>
                             {tc(type)}
@@ -163,6 +165,22 @@ const Settings = ({ medications }) => {
                         ))}
                       </Select>
                     )}
+                  />
+                </Grid>
+                {/* dailyCaloriesNeeds */}
+                <Grid item xs={6}>
+                  <UserInput
+                      defaultValue={user.diabeticDetails.dailyCaloriesNeeds}
+                      fieldName={"dailyCaloriesNeeds"}
+                      label={t("dailyCaloriesNeeds")}
+                      type={"number"}
+                      InputProps={{
+                        endAdornment: (
+                            <InputAdornment position="end">
+                              <span className={"font-rubik font-semibold"}>Kcal</span>
+                            </InputAdornment>
+                        ),
+                      }}
                   />
                 </Grid>
                 {/* Height */}
@@ -176,6 +194,7 @@ const Settings = ({ medications }) => {
                       "& .MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-colorPrimary.MuiInputBase-formControl.MuiInputBase-adornedEnd": {
                         padding: 0,
                       },
+                      "& fieldset":{borderRadius:"25px"}
                     }}
                     InputProps={{
                       endAdornment: (
@@ -210,6 +229,7 @@ const Settings = ({ medications }) => {
                       "& .MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-colorPrimary.MuiInputBase-formControl.MuiInputBase-adornedEnd": {
                         padding: 0,
                       },
+                      "& fieldset":{borderRadius:"25px"}
                     }}
                     InputProps={{
                       endAdornment: (
@@ -243,7 +263,7 @@ const Settings = ({ medications }) => {
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="end">
-                          <span>%</span>
+                          <span className={"font-rubik font-semibold"}>g/UI</span>
                         </InputAdornment>
                       ),
                     }}
@@ -259,7 +279,7 @@ const Settings = ({ medications }) => {
                     InputProps={{
                       endAdornment: (
                         <InputAdornment position="end">
-                          <span>%</span>
+                          <span className={"font-rubik font-semibold"}>%</span>
                         </InputAdornment>
                       ),
                     }}
@@ -276,6 +296,7 @@ const Settings = ({ medications }) => {
                       "& .MuiInputBase-root.MuiOutlinedInput-root.MuiInputBase-colorPrimary.MuiInputBase-formControl.MuiInputBase-adornedEnd": {
                         padding: 0,
                       },
+                      "& fieldset":{borderRadius:"25px"}
                     }}
                     InputProps={{
                       endAdornment: (
@@ -285,7 +306,7 @@ const Settings = ({ medications }) => {
                             control={control}
                             defaultValue={user.diabeticDetails.insulinSensitivity?.unit || insulinUnits.default}
                             render={({ field }) => (
-                              <Select {...field} className={"w-full"}>
+                              <Select {...field} className={"w-24"}>
                                 {insulinUnits.options.map((unit) => (
                                   <MenuItem key={"weight" + unit} value={unit}>
                                     {tc(unit)}
@@ -310,22 +331,6 @@ const Settings = ({ medications }) => {
                       endAdornment: (
                         <InputAdornment position="end">
                           <span>%</span>
-                        </InputAdornment>
-                      ),
-                    }}
-                  />
-                </Grid>
-                {/* dailyCaloriesNeeds */}
-                <Grid item xs={12}>
-                  <UserInput
-                    defaultValue={user.diabeticDetails.dailyCaloriesNeeds}
-                    fieldName={"dailyCaloriesNeeds"}
-                    label={t("dailyCaloriesNeeds")}
-                    type={"number"}
-                    InputProps={{
-                      endAdornment: (
-                        <InputAdornment position="end">
-                          <span>Kcal</span>
                         </InputAdornment>
                       ),
                     }}
@@ -434,9 +439,9 @@ const Settings = ({ medications }) => {
           </Grid>
           <Grid item xs={12} md={12}>
             <SettingsCard sectionTitle={t("appearance")}>
-              <h5>{t("appearanceDescription")}</h5>
-              <p>{t("appearanceDescriptionInfo")}</p>
-              <ToggleButtonGroup value={"light"} className={"grid grid-cols-2"} dir={"ltr"}>
+              <h5 className={"font-rubik text-center font-semibold"}>{t("appearanceDescription")}</h5>
+              <p className={"font-rubik text-sm text-center mb-5"}>{t("appearanceDescriptionInfo")}</p>
+              <ToggleButtonGroup value={"light"} className={"grid gap-3 justify-items-center"} dir={"ltr"}>
                 <ToggleButton value={"light"} className={"theme-picker "}>
                   <Icon icon="ph:sun-bold" />
                 </ToggleButton>
@@ -455,6 +460,7 @@ const Settings = ({ medications }) => {
         </Grid>
       </form>
     </Container>
+      </>
   );
 };
 

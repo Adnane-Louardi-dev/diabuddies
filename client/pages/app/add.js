@@ -21,6 +21,7 @@ import { useSearchParams } from "next/navigation";
 import {ShowAddedFood} from "../../components/showAddedFood";
 import {useNotificatoin} from "../../customeHooks/useNotificatoin";
 import EditFactorsDialog from "../../components/CalculateBolusCompDialog"
+import ReduceFactors from "../../components/reduceFactors";
   let mealsTime = {
   breakfast: { min: 5, max: 11 },
   lunch: { min: 11, max: 15 },
@@ -134,17 +135,17 @@ export default function NewLogDialog() {
   const { t: tc } = useTranslation("common");
   const { mutate: addNewLogBook, isLoading, isError, notification } = useAddNewLogBook();
   const [anchorEl, setAnchorEl] = useState(null);
+  const [reduceLevel, setreduceLevel] = useState(0);
   const { component:SensitivityNotification, handleOpen } = useNotificatoin({
     errorMessage:"Please Provide Your Factors In The Settings",
     isError: true,
   });
   const handleClickCalculateBolus = () => {
     let bolusDose = CalculatingBolus(data.carbs, user.diabeticDetails.carbsRatio, user.diabeticDetails.insulinSensitivity.value, 0, data.glucose);
-console.log(bolusDose)
     if(isNaN(bolusDose) || !isFinite(bolusDose)){
       return handleOpen()
     }
-    return setData({ ...data, bolus: bolusDose.toFixed(1) })
+    return setData((data)=>({ ...data, bolus: bolusDose.toFixed(1) }))
   };
   const handleInsulinDotsClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -173,6 +174,12 @@ console.log(bolusDose)
       setData(JSON.parse(editLog));
     }
   }, [searchParams.get("log")]);
+
+  useEffect(()=>{
+    handleClickCalculateBolus()
+    setData((data)=>({ ...data, basal: 0, bolus: data.bolus - (data.bolus/100*reduceLevel) }))
+    console.log(data.bolus - (data.bolus/100*reduceLevel))
+  },[reduceLevel])
 
   const handlePOSTNewLog = () => {
     addNewLogBook({...data, foods: mapFood(foods)});
@@ -311,8 +318,8 @@ console.log(bolusDose)
             <div className="flex justify-around items-center">
               {/*<Android12Switch defaultChecked={false}/>
                 <Icon icon="ri:notification-line" className="bg-diaOrange text-white rounded-full h-7 w-7 p-1" />*/}
-              <button onClick={handleInsulinDotsClick} className="flex justify-end">
-                <Icon icon="pepicons-pencil:dots-y" className="h-7 w-7 text-white" />
+              <button onClick={handleInsulinDotsClick} className="flex justify-end items-center">
+                <Icon icon="material-symbols:settings" className="h-7 w-7 text-white" />
               </button>
               <Menu
                   sx={{
@@ -339,6 +346,7 @@ console.log(bolusDose)
                 </MenuItem>
               </Menu>
             </div>
+
           </div>
           <div className="flex justify-between items-center">
             <TextField
@@ -449,6 +457,8 @@ console.log(bolusDose)
             </ToggleButtonGroup>
           </div>
         </div>
+
+
         <NutrationLogInput
           label={tc("protein")}
           textColor={"text-amber-300"}
@@ -471,6 +481,12 @@ console.log(bolusDose)
             handleOnChange(event, "fat");
           }}
         />
+        <div className={"grid col-span-2 w-full"}>
+          <section className="grid gap-3 rounded-xl py-2 w-full">
+            <h3 className="font-sourceCode text-diaGray">{t("reduceLevel")}</h3>
+            <ReduceFactors setreduceLevel={setreduceLevel} reduceLevel={reduceLevel} />
+          </section>
+        </div>
       </div>
       <section className="my-5">
         <div className="flex justify-between items-center">
