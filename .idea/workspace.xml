@@ -4,8 +4,19 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="47d41590-a06d-4130-8666-cd245f35a61d" name="Changes" comment="fix some details again">
-      <change beforePath="$PROJECT_DIR$/client/components/appBar/GamifyProgressBar.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/components/appBar/GamifyProgressBar.js" afterDir="false" />
+    <list default="true" id="47d41590-a06d-4130-8666-cd245f35a61d" name="Changes" comment="improve /settings a bit, add reduceFactors, remove bolsuAdvisor">
+      <change afterPath="$PROJECT_DIR$/client/utils/joyRides.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/components/CalculateBolusCompDialog.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/components/CalculateBolusCompDialog.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/components/NutrationLogInput.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/components/NutrationLogInput.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/components/activeInsulin.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/components/activeInsulin.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/components/glucose.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/components/glucose.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/components/layout/Footer.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/components/layout/Footer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/components/logBookDialog/searchForFood.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/components/logBookDialog/searchForFood.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/client/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/client/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/pages/app/add.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/pages/app/add.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/client/pages/app/index.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/pages/app/index.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,7 +67,7 @@
     &quot;node.js.selected.package.standard&quot;: &quot;&quot;,
     &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.keymap&quot;,
     &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\WebStorm 2023.1.1\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
@@ -123,7 +134,8 @@
       <workItem from="1699854020238" duration="1585000" />
       <workItem from="1699897402406" duration="8904000" />
       <workItem from="1700027625286" duration="37000" />
-      <workItem from="1700049786296" duration="11697000" />
+      <workItem from="1700049786296" duration="20757000" />
+      <workItem from="1700566199312" duration="1875000" />
     </task>
     <task id="LOCAL-00001" summary="improve UI">
       <created>1692561288369</created>
@@ -209,7 +221,14 @@
       <option name="project" value="LOCAL" />
       <updated>1700062434311</updated>
     </task>
-    <option name="localTasksCounter" value="13" />
+    <task id="LOCAL-00013" summary="improve /settings a bit, add reduceFactors, remove bolsuAdvisor">
+      <created>1700152245705</created>
+      <option name="number" value="00013" />
+      <option name="presentableId" value="LOCAL-00013" />
+      <option name="project" value="LOCAL" />
+      <updated>1700152245705</updated>
+    </task>
+    <option name="localTasksCounter" value="14" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -250,6 +269,7 @@
     <MESSAGE value="fix service workers &amp;&amp; add error notif &quot;no insulin sensitivity&quot; case in add page" />
     <MESSAGE value="fix some details nsithom" />
     <MESSAGE value="fix some details again" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix some details again" />
+    <MESSAGE value="improve /settings a bit, add reduceFactors, remove bolsuAdvisor" />
+    <option name="LAST_COMMIT_MESSAGE" value="improve /settings a bit, add reduceFactors, remove bolsuAdvisor" />
   </component>
 </project>

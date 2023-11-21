@@ -16,12 +16,17 @@ import { useAddFood, useAddNewLogBook } from "../../customeHooks/useAddFood";
 import {getNumberFromTextInput, kcalCalculate, renderNumber} from "../../utils/utils";
 import { useRouter } from "next/router";
 import CalculatingBolus from "../../utils/calculateBolus";
-import { useGetCurrentUserDetailed } from "../../customeHooks/useGetCurrentUser";
+import {useGetCurrentUser, useGetCurrentUserDetailed} from "../../customeHooks/useGetCurrentUser";
 import { useSearchParams } from "next/navigation";
 import {ShowAddedFood} from "../../components/showAddedFood";
 import {useNotificatoin} from "../../customeHooks/useNotificatoin";
 import EditFactorsDialog from "../../components/CalculateBolusCompDialog"
 import ReduceFactors from "../../components/reduceFactors";
+import {addRides} from "../../utils/joyRides";
+import Joyride, { STATUS } from 'react-joyride';
+import axios from "axios";
+import {useQueryClient} from "@tanstack/react-query";
+
   let mealsTime = {
   breakfast: { min: 5, max: 11 },
   lunch: { min: 11, max: 15 },
@@ -121,7 +126,7 @@ const Android12Switch = styled(Switch)(({ theme }) => ({
 export default function NewLogDialog() {
   const router = useRouter();
   const searchParams = useSearchParams()
-  const { user } = useGetCurrentUserDetailed();
+  const { user, isLoading: isUserLoading } = useGetCurrentUserDetailed();
   const [InsulinType, setInsulinType] = useState("bolus");
   const [dateOpen, setDateOpen] = useState(false);
   const [mealModalOpen, setMealModalOpen] = useState(false);
@@ -135,17 +140,21 @@ export default function NewLogDialog() {
   const { t: tc } = useTranslation("common");
   const { mutate: addNewLogBook, isLoading, isError, notification } = useAddNewLogBook();
   const [anchorEl, setAnchorEl] = useState(null);
+  const queryClient = useQueryClient();
   const [reduceLevel, setreduceLevel] = useState(0);
   const { component:SensitivityNotification, handleOpen } = useNotificatoin({
     errorMessage:"Please Provide Your Factors In The Settings",
     isError: true,
   });
   const handleClickCalculateBolus = () => {
-    let bolusDose = CalculatingBolus(data.carbs, user.diabeticDetails.carbsRatio, user.diabeticDetails.insulinSensitivity.value, 0, data.glucose);
-    if(isNaN(bolusDose) || !isFinite(bolusDose)){
-      return handleOpen()
+    if(!isUserLoading){
+      console.log(user)
+      let bolusDose = CalculatingBolus(data.carbs, 15, user.diabeticDetails.insulinSensitivity.value, 0, data.glucose);
+      if(isNaN(bolusDose) || !isFinite(bolusDose)){
+        return handleOpen()
+      }
+      return setData((data)=>({ ...data, bolus: bolusDose.toFixed(1) }))
     }
-    return setData((data)=>({ ...data, bolus: bolusDose.toFixed(1) }))
   };
   const handleInsulinDotsClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -191,8 +200,42 @@ export default function NewLogDialog() {
   const handleOnChange = (event, key) => {
     setData({ ...data, [key]: getNumberFromTextInput(event.target.value)});
   };
+
+  const handleJoyrideCallback=async(data)=>{
+    const { action, index, status, type } = data;
+    if ([STATUS.FINISHED, STATUS.SKIPPED].includes(status)) {
+      await axios
+          .post("/api/user",
+              {newUser: false})
+          .then(() => {
+            queryClient.invalidateQueries(["getCurrentUser"]);
+          })
+          .catch((err) => console.log(err));
+      router.push("/app/setup")
+    }
+  }
+
   return (
     <section className="px-5">
+      {!isUserLoading &&
+          <Joyride
+          callback={handleJoyrideCallback}
+          steps={addRides}
+          run={user.detailedUser.newUser}
+          styles={{
+            options: {
+              arrowColor: '#FFB562',
+              overlayColor: '#00000080',
+              primaryColor: '#FFB562',
+              textColor: '#1e293b',
+              width: 900,
+              zIndex: 1000,
+              beaconSize: 40,
+              spotlightShadow: '0 0 15px rgba(0, 0, 0, 0.5)',
+              fontFamily:"poppins"
+            }
+          }}/>}
+
       {SensitivityNotification}
       <AddMealNameModal
           mealModalOpen={mealModalOpen}
@@ -201,7 +244,7 @@ export default function NewLogDialog() {
           onSave={handlePOSTNewLog} />
       {/* date pickers */}
       <MobileDateTimePicker
-        className="w-full my-5"
+        className="timePicker w-full my-5"
         renderInput={(props) => (
           <TextField
             {...props}
@@ -230,7 +273,7 @@ export default function NewLogDialog() {
         openTo="hours"
       />
       <ToggleButtonGroup
-        className="w-full overflow-scroll no-scrollbar"
+        className="mealPicker w-full overflow-scroll no-scrollbar"
         sx={{
           paddingY: ".5rem",
           "& .MuiButtonBase-root": {
@@ -273,7 +316,7 @@ export default function NewLogDialog() {
       </ToggleButtonGroup>
       <section className="grid grid-cols-2 gap-6 justify-items-center items-center my-4 py-1">
         {/* <Barecode /> */}
-        <Link href={"/app/barecode"} passHref className="w-full">
+        <Link href={"/app/barecode"} passHref className="scanCodeBare w-full">
           <button variant="outlined" className="grid col-span-1 w-full justify-items-center mx-2 py-2 px-3 rounded-lg ring-2 ring-diaDarkBlue bg-slate-300">
             <h2 className="font-rubik text-sm text-diaDarkBlue my-2">{t("scan_barcode")}</h2>
             <Icon icon="material-symbols:barcode" className="h-10 w-10 text-diaDarkBlue" />
@@ -299,17 +342,18 @@ export default function NewLogDialog() {
           }}
         />
         <NutrationLogInput
-          label={tc("carbs")}
-          textColor={"text-gray-400"}
-          bgColor={"bg-gray-400"}
-          icon={"fluent:food-grains-20-regular"}
-          inputAdornmentLabel={"g"}
-          value={data.carbs}
-          onChange={(event) => {
-            handleOnChange(event, "carbs");
-          }}
+            className={"totalCarbs"}
+            label={tc("carbs")}
+            textColor={"text-gray-400"}
+            bgColor={"bg-gray-400"}
+            icon={"fluent:food-grains-20-regular"}
+            inputAdornmentLabel={"g"}
+            value={data.carbs}
+            onChange={(event) => {
+              handleOnChange(event, "carbs");
+            }}
         />
-        <div className={`p-2.5 bg-diaDarkBlue rounded-xl shadow-md col-span-2`}>
+        <div className={`insulinDose p-2.5 bg-diaDarkBlue rounded-xl shadow-md col-span-2`}>
           <div className="flex justify-between items-center">
             <div className="flex">
               <Icon icon={"fluent:syringe-20-regular"} className={`bg-white text-diaDarkBlue rounded-full self-center m-1 p-1 h-7 w-7`} />
@@ -482,16 +526,16 @@ export default function NewLogDialog() {
           }}
         />
         <div className={"grid col-span-2 w-full"}>
-          <section className="grid gap-3 rounded-xl py-2 w-full">
+          <section className="reduceLevel grid gap-3 rounded-xl py-2 w-full">
             <h3 className="font-sourceCode text-diaGray">{t("reduceLevel")}</h3>
             <ReduceFactors setreduceLevel={setreduceLevel} reduceLevel={reduceLevel} />
           </section>
         </div>
       </div>
-      <section className="my-5">
+      <section className="foodAdded my-5">
         <div className="flex justify-between items-center">
           <h3 className="font-sourceCode text-diaGray text-md">Meal's Food Added</h3>
-          <Button disabled={isLoading} onClick={() => setMealModalOpen(true)} variant="filled" className="rounded-full shadow-md bg-diaDarkBlue text-white">
+          <Button disabled={isLoading} onClick={() => setMealModalOpen(true)} variant="filled" className="saveFood rounded-full shadow-md bg-diaDarkBlue text-white">
             <Icon icon="mingcute:bookmark-line" className="h-5 w-5" />
           </Button>
         </div>

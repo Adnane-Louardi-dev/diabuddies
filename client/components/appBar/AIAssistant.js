@@ -56,7 +56,7 @@ export const AIAssistant = () => {
     },
   });
   return (
-    <Box>
+    <Box className={"aiAssistant"}>
       <Tooltip title="Chat with your AI assistant">
         <Button onClick={(event) => setAnchorElChatBot(event.currentTarget)} sx={{ zIndex: 1000 }} className="self-center rounded-full shadow-md bg-diaDarkBlue ring-2 ring-diaLightOrange capitalize text-white font-poppins h-8 mx-3">
           <Icon icon="gg:bot" className="h-6 w-6 mx-1" /> Assistant

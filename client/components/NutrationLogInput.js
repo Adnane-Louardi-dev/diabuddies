@@ -4,10 +4,10 @@ import InputAdornment from "@mui/material/InputAdornment";
 import * as React from "react";
 import { useTranslation } from "next-i18next";
 
-export const NutrationLogInput = ({ onChange, label, bgColor, value, textColor, icon, inputAdornmentLabel }) => {
+export const NutrationLogInput = ({className, onChange, label, bgColor, value, textColor, icon, inputAdornmentLabel }) => {
   const { t } = useTranslation();
   return (
-    <div className={`p-2.5 bg-diaDarkBlue rounded-xl shadow-md`}>
+    <div className={`${className} p-2.5 bg-diaDarkBlue rounded-xl shadow-md`}>
       <div className="flex justify-between items-center">
         <div className="flex">
           <Icon icon={icon} className={`bg-slate-100 ${textColor} rounded-full self-center m-1 p-1 h-7 w-7`} />

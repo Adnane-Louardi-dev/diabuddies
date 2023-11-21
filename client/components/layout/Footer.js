@@ -5,7 +5,7 @@ import { Icon } from "@iconify/react";
 import * as React from "react";
 
 export const Footer = () => (
-  <footer className={"w-full fixed bottom-0 left-0 z-[1000]"}>
+  <footer className={"w-full fixed bottom-0 left-0 z-[100]"}>
     <ToggleButtonGroup
       className={"w-full p-3 bg-diaDarkBlue rounded-t-2xl shadow-md grid grid-cols-5"}
       sx={{
@@ -32,7 +32,7 @@ export const Footer = () => (
       </ToggleButton>
       <ToggleButton className={"relative h-full border-none w-full"}>
         <div className="w-14 h-14 blur-lg bg-diaBlue absolute bottom-0"></div>
-        <Link href={"/app/add"} className={"absolute mb-12 bg-diaBlue rounded-full h-16 w-16 flex justify-center"}>
+        <Link href={"/app/add"} className={"add absolute mb-12 bg-diaBlue rounded-full h-16 w-16 flex justify-center"}>
           <Icon icon="ic:round-add" className={`h-10 w-10 m-auto text-white`} />
         </Link>
       </ToggleButton>
