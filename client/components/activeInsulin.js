@@ -29,7 +29,7 @@ const ActiveInsulin = ({ logs, setActiveInsulin, activeInsulin, lastInjectionTim
   return (
     <>
       {logs ? (
-        <div className="py-2 w-1/2 mx-1">
+        <div className="activeInsulin py-2 w-1/2 mx-1">
           <div className="rounded-3xl bg-diaOrange text-white p-3" style={{ WebkitBoxShadow: "10px 0px 30px 0px rgba(255,181,98,1)", MozBoxShadow: "10px 0px 30px 0px rgba(255,181,98,1)", boxShadow: "10px 0px 30px 0px rgba(255,181,98,1)" }}>
             <div className="flex justify-between w-full items-center mb-3">
               <h3 className="font-inter text-md text-semibold truncate">{t("active_insuling")} </h3>

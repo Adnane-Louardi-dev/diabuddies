@@ -32,6 +32,8 @@ import { HomePageSkeleton } from "../../components/skeleton/homePageSkeleton";
 import {RecipeComponent} from "../../components/dia-kitchen/recipeComponent";
 import {useGetRecipes} from "../../customeHooks/useKitchen";
 import qs from "qs";
+import Joyride, { STATUS } from 'react-joyride';
+import {indexRides} from "../../utils/joyRides.js"
 
 function Home() {
   const router = useRouter();
@@ -55,9 +57,10 @@ function Home() {
   const { data: chartData, isLoading, refetch } = useIndexCharts(date);
 
   useEffect(() => {
-    if (!isUserLoading && router.isReady && user?.newUser) {
+    {/*if (!isUserLoading && router.isReady && user?.newUser) {
       router.push("/app/setup");
-    }
+    }*/}
+    user.newUser=true
     refetch();
   }, [isUserLoading, router.isReady, date]);
 
@@ -77,6 +80,13 @@ function Home() {
     }
   }, [isUserLoading, i18n.language]);
 
+  const handleJoyrideCallback=(data)=>{
+    const { action, index, status, type } = data;
+      if ([STATUS.FINISHED, STATUS.SKIPPED].includes(status)) {
+        router.push("/app/add")
+      }
+  }
+
   return (
     <>
       <Head lang={i18n.language}>
@@ -88,18 +98,37 @@ function Home() {
         <>
           <ResponsiveAppBar />
           <main className="p-4 relative overflow-y-hidden" dir={getDir(i18n.language)}>
+            <Joyride
+                callback={handleJoyrideCallback}
+                steps={indexRides} run={user.newUser}
+                styles={{
+                  options: {
+                    arrowColor: '#FFB562',
+                    overlayColor: '#00000080',
+                    primaryColor: '#FFB562',
+                    textColor: '#1e293b',
+                    width: 900,
+                    zIndex: 1000,
+                    beaconSize: 40,
+                    spotlightShadow: '0 0 15px rgba(0, 0, 0, 0.5)',
+                    fontFamily:"poppins"
+                  }
+            }}/>
             <span className="font-tajawal text-diaDarkBlue text-3xl font-semibold">{userGreeting}</span>
-            {user.newUser ? <CompleteYourProfile /> : null}
-            <DayPicker setDate={setDate} date={date} />
+            {/*{user.newUser ? <CompleteYourProfile /> : null}*/}
+            <div className={"datePicker"}>
+              <DayPicker setDate={setDate} date={date} />
+            </div>
+            <div className={"gamifyProgressBar"}>
             <GamifyProgressBar />
-            {chartData?.logBooks.length > 0 && (
+            </div>
+
               <>
                 <section className="flex justify-around my-5">
-                  <Glucose logs={chartData.logBooks} setGlucose={setGlucose} />
-                  <ActiveInsulin logs={chartData.logBooks} activeInsulin={activeInsulin} setActiveInsulin={setActiveInsulin} lastInjectionTime={lastInjectionTime} setlastInjectionTime={setLastInjectionTime} />
+                    <Glucose logs={chartData.logBooks} setGlucose={setGlucose} />
+                    <ActiveInsulin logs={chartData.logBooks} activeInsulin={activeInsulin} setActiveInsulin={setActiveInsulin} lastInjectionTime={lastInjectionTime} setlastInjectionTime={setLastInjectionTime} />
                 </section>
               </>
-            )}
             <div className="flex snap-x snap-mandatory px-3 w-full overflow-x-scroll no-scrollbar">
               {/*<div className="snap-center mr-2 w-full shrink-0">
                 <BolusAdvisor activeInsulin={activeInsulin} glucose={glucose} lastInjectionTime={lastInjectionTime} />

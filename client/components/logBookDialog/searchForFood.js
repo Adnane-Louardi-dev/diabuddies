@@ -60,7 +60,7 @@ export default function SearchForFood({ isSearchForAMealOpen, setIsSearchForAMea
 
   return (
     <>
-      <button onClick={handleClickOpen} variant="outlined" className="grid col-span-1 w-full justify-items-center mx-2 py-2 px-3 rounded-lg ring-2 ring-diaDarkBlue bg-slate-300">
+      <button onClick={handleClickOpen} variant="outlined" className="searchForMeal grid col-span-1 w-full justify-items-center mx-2 py-2 px-3 rounded-lg ring-2 ring-diaDarkBlue bg-slate-300">
         <h2 className="font-rubik text-sm text-diaDarkBlue my-2">Search for a meal</h2>
         <Icon icon="tabler:search" className="h-10 w-10 text-diaDarkBlue" />
       </button>

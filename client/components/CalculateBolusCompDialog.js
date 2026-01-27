@@ -56,8 +56,8 @@ export default function EditFactorsDialog() {
         </Button>
         <Dialog open={open} onClose={handleClose}>
             <DialogContent>
-                <div className={"flex gap-2"}>
-                    <div className="grid gap-2 rounded-lg shadow-md w-full p-3 mx-1 text-white bg-diaDarkBlue">
+                <div className={"grid grid-cols-2 gap-2"}>
+                    <div className="grid col-span-1 gap-2 shrink-0 rounded-lg shadow-md w-full p-3 text-white bg-diaDarkBlue">
                         <div className="flex justify-between items-center">
                             <div className="flex items-center">
                                 <Icon icon="fluent:ratio-one-to-one-24-regular" className="h-7 w-7"/>
@@ -87,7 +87,7 @@ export default function EditFactorsDialog() {
                             <span className="text-sm">(g) per UI</span>
                         </div>
                     </div>
-                    <div className="grid gap-2 rounded-lg shadow-md w-full p-3 mx-1 text-white bg-diaDarkBlue">
+                    <div className="grid shrink-0 col-span-1 gap-2 rounded-lg shadow-md w-full p-3 text-white bg-diaDarkBlue">
                         <div className="flex justify-between items-center">
                             <div className="flex items-center">
                                 <Icon icon="mdi:feather" className="h-7 w-7"/>
