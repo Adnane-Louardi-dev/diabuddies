@@ -5,7 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="47d41590-a06d-4130-8666-cd245f35a61d" name="Changes" comment="fix some details again">
-      <change beforePath="$PROJECT_DIR$/client/components/appBar/GamifyProgressBar.js" beforeDir="false" afterPath="$PROJECT_DIR$/client/components/appBar/GamifyProgressBar.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,47 +33,52 @@
   <component name="MarkdownSettingsMigration">
     <option name="stateVersion" value="1" />
   </component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 5
+}</component>
   <component name="ProjectId" id="2PRVFHUMNEMIt0TltPvkUyRQkVY" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;ASKED_MARK_IGNORED_FILES_AS_EXCLUDED&quot;: &quot;true&quot;,
-    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/dell/Desktop/demo&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.standard&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.standard&quot;: &quot;&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\WebStorm 2023.1.1\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "ASKED_MARK_IGNORED_FILES_AS_EXCLUDED": "true",
+    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "git-widget-placeholder": "master",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/21260/IdeaProjects/diabuddies",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.standard": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.standard": "",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "npm.dev.executor": "Run",
+    "settings.editor.selected.configurable": "preferences.pluginManager",
+    "ts.external.directory.path": "C:\\Program Files\\JetBrains\\WebStorm 2023.1.1\\plugins\\javascript-impl\\jsLanguageServicesImpl\\external",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\dell\Desktop\diabuddies\client\public" />
     </key>
   </component>
-  <component name="RunManager" selected="npm.devStart">
+  <component name="RunManager" selected="npm.dev">
     <configuration name="dev" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/client/package.json" />
       <command value="run" />
       <scripts>
         <script value="dev" />
       </scripts>
-      <node-interpreter value="$USER_HOME$/node-v18.15.0-linux-x64/bin/node" />
+      <node-interpreter value="node" />
       <envs />
       <method v="2" />
     </configuration>
@@ -90,10 +95,17 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="npm.devStart" />
         <item itemvalue="npm.dev" />
+        <item itemvalue="npm.devStart" />
       </list>
     </recent_temporary>
+  </component>
+  <component name="SharedIndexes">
+    <attachedChunks>
+      <set>
+        <option value="bundled-jdk-9f38398b9061-39b83d9b5494-intellij.indexing.shared.core-IU-241.18034.62" />
+      </set>
+    </attachedChunks>
   </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
@@ -124,6 +136,10 @@
       <workItem from="1699897402406" duration="8904000" />
       <workItem from="1700027625286" duration="37000" />
       <workItem from="1700049786296" duration="11697000" />
+      <workItem from="1730902816404" duration="889000" />
+      <workItem from="1730909730380" duration="1465000" />
+      <workItem from="1731408059246" duration="2000" />
+      <workItem from="1735419310398" duration="110000" />
     </task>
     <task id="LOCAL-00001" summary="improve UI">
       <created>1692561288369</created>
